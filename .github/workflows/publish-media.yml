@@ -1,0 +1,38 @@
+name: publish-pocket-audio
+on:
+  push:
+    branches: [main]
+    paths:
+      - media.sha256
+      - .github/workflows/publish-media.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download all current Pocket WAV files from canonical demo
+        run: python3 scripts/fetch_audio.py --workers 5
+      - name: Verify every downloaded WAV against committed checksums
+        run: python3 scripts/check_audio.py
+      - name: Create independent media package
+        run: |
+          tar -czf lexi-pocket-audio-v1.tar.gz pocket-listening/wav pocket-pronunciation/wav
+          sha256sum lexi-pocket-audio-v1.tar.gz > lexi-pocket-audio-v1.tar.gz.sha256
+      - name: Publish public versioned media asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view audio-v1 >/dev/null 2>&1; then
+            gh release upload audio-v1 lexi-pocket-audio-v1.tar.gz lexi-pocket-audio-v1.tar.gz.sha256 --clobber
+          else
+            gh release create audio-v1 lexi-pocket-audio-v1.tar.gz lexi-pocket-audio-v1.tar.gz.sha256 \
+              --target "$GITHUB_SHA" --title "Lexi Pocket TTS audio v1" \
+              --notes "Pre-rendered, checksum-verified synthetic Greek audio for self-hosting. Model credit: Myned AI / Kyutai (CC BY 4.0). See CONTENT_RIGHTS.md."
+          fi

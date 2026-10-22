@@ -11,3 +11,5 @@ This repository captures application source code, educational content tables, tr
 The live service was not restarted or changed for this backup.
 
 **Known missing source file:** `vocab_curated_1700.tsv` was not transferred to GitHub and remains on Core VPS. The repository is therefore not independently sufficient to restore this vocabulary module. The snapshot manifest explicitly records its hash and size.
+
+**2026-10-22 follow-up:** this note documents the initial import only. The missing vocabulary TSV is included in the subsequent community/self-hosting commit, along with deployment and contribution tooling. Use the repository main branch rather than the initial snapshot for full current source.

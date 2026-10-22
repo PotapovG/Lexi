@@ -1,0 +1,20 @@
+name: smoke
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  selfhost:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Import, isolated HTTP and HTTP origin tests
+        run: python3 tests/test_selfhost.py
+      - name: Validate Docker Compose
+        run: docker compose config --quiet
+      - name: Build container
+        run: docker compose build

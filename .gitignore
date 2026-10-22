@@ -30,3 +30,11 @@ editorial-*/
 *pre-*
 *.bak
 *.bak-*
+
+# Community local dev state
+local-data/
+media.sha256.tmp
+.env
+.venv/
+
+!.env.example

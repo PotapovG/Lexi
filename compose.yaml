@@ -1,0 +1,24 @@
+services:
+  lexi:
+    build: .
+    restart: unless-stopped
+    environment:
+      GREEK_HOST: 0.0.0.0
+      GREEK_PORT: 18560
+      GREEK_ORIGIN: ${LEXI_ORIGIN:-http://localhost:18560}
+      GREEK_DB: /data/progress.sqlite3
+      GREEK_PEPPER: /data/login-pepper
+      GREEK_LISTENING: auto
+    ports:
+      - "127.0.0.1:18560:18560"
+    volumes:
+      - lexi_data:/data
+      - ./pocket-listening/wav:/app/pocket-listening/wav:ro
+      - ./pocket-pronunciation/wav:/app/pocket-pronunciation/wav:ro
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+volumes:
+  lexi_data:

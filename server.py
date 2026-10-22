@@ -77,12 +77,17 @@ def book_or_audio_card(cid):
 
 ROOT = Path(__file__).parent
 DB = os.environ.get("GREEK_DB", "/var/lib/greek-trainer/progress.sqlite3")
-ORIGIN = "https://potapovfamily.com"
+ORIGIN = os.environ.get("GREEK_ORIGIN", "https://potapovfamily.com").rstrip("/")
 COOKIE = "greek_session"
 KINDS = ("word", "number", "letter", "phrase", "plural", "sentence", "accent", "verb", "dialogue", "article", "order", "syllable", "enclitic", "grammar", "listening")
 DIRECTIONS = ("mixed", "gr-ru", "ru-gr")
 COUNT_MAX = 60
-LISTENING_ENABLED=True # approved complete six-voice offline audio set
+# No audio files in a fresh clone: hide listening mode until both complete
+# offline libraries have been installed (never fall back to device TTS).
+_MEDIA_COMPLETE = (len(LISTEN_CARDS) == 717 and len(listening.AUDIO) == 1266)
+LISTENING_ENABLED = _MEDIA_COMPLETE and os.environ.get("GREEK_LISTENING", "auto").lower() != "off"
+if os.environ.get("GREEK_LISTENING", "auto").lower() == "on" and not _MEDIA_COMPLETE:
+    raise RuntimeError("GREEK_LISTENING=on but Pocket TTS audio is missing or incomplete")
 
 def conn():
     db = sqlite3.connect(DB, timeout=10)
@@ -866,6 +871,13 @@ def leaderboard(user_id):
                 joined=user_id in joined_users,rows=ranked[:40],me=mine,
                 updatedAt=now.isoformat(timespec="seconds"))
 
+def request_path(target):
+    """Accept direct /greek/* requests and stripped reverse-proxy paths."""
+    path = urlparse(target).path
+    if path in ("/greek", "/greek/"):
+        return "/"
+    return path[len("/greek"):] if path.startswith("/greek/") else path
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version="HTTP/1.1"
     def log_message(self, *args):
@@ -897,7 +909,7 @@ class Handler(BaseHTTPRequestHandler):
         self.respond(status,json.dumps(payload,ensure_ascii=False).encode("utf-8"),
                      "application/json; charset=utf-8",fresh_cookie,user_id)
     def do_HEAD(self):
-        path = urlparse(self.path).path
+        path = request_path(self.path)
         if path=="/tts-demo/pocket-short" or path.startswith("/tts-demo/pocket-short/"):
             return self.serve_pocket_short_demo("/tts-demo/pocket-short/" if path=="/tts-demo/pocket-short" else path,head=True)
         if path=="/tts-demo/pocket-long" or path.startswith("/tts-demo/pocket-long/"):
@@ -1071,7 +1083,7 @@ class Handler(BaseHTTPRequestHandler):
         if not head:self.wfile.write(source.read_bytes())
 
     def do_GET(self):
-        path=urlparse(self.path).path
+        path=request_path(self.path)
         if path=="/tts-demo/pocket-short" or path.startswith("/tts-demo/pocket-short/"):
             return self.serve_pocket_short_demo("/tts-demo/pocket-short/" if path=="/tts-demo/pocket-short" else path)
         if path=="/tts-demo/pocket-long" or path.startswith("/tts-demo/pocket-long/"):
@@ -1186,7 +1198,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.respond(200,b,mimetype,new,uid,cache=False)
         self.send_json(404,{"error":"not found"},new,uid)
     def do_POST(self):
-        path=urlparse(self.path).path
+        path=request_path(self.path)
         if path not in ("/api/answer","/api/leaderboard/join","/api/leaderboard/leave",
                          "/api/auth/register","/api/auth/login","/api/auth/logout",
                          "/api/vocab/answer","/api/session"):
@@ -1249,5 +1261,5 @@ class Handler(BaseHTTPRequestHandler):
 if __name__=="__main__":
     init_db()
     port=int(os.environ.get("GREEK_PORT","18560"))
-    ThreadingHTTPServer(("127.0.0.1",port),Handler).serve_forever()
+    ThreadingHTTPServer((os.environ.get("GREEK_HOST","127.0.0.1"),port),Handler).serve_forever()
 

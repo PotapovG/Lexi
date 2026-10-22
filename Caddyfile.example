@@ -1,0 +1,8 @@
+# Replace learn.example.com with your own hostname and set
+# LEXI_ORIGIN=https://learn.example.com in .env before starting Compose.
+learn.example.com {
+    redir / /greek/
+    handle_path /greek/* {
+        reverse_proxy 127.0.0.1:18560
+    }
+}
