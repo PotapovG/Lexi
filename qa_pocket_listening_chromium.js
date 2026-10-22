@@ -1,0 +1,56 @@
+'use strict';
+const {chromium}=require('playwright');
+(async()=>{
+ const browser=await chromium.launch({args:['--no-sandbox','--disable-dev-shm-usage']});
+ try{
+  const ctx=await browser.newContext({viewport:{width:320,height:760},isMobile:true,hasTouch:true,ignoreHTTPSErrors:true});
+  const page=await ctx.newPage();page.setDefaultTimeout(12000);
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('https://localhost:18443/greek/',{waitUntil:'networkidle'});
+  await page.locator('#auth-name').fill('Pocket Listening Chrome QA');
+  await page.locator('#auth-submit').tap();
+  await page.locator('#auth-enter').tap();await page.locator('#auth-gate').waitFor({state:'hidden'});
+  await page.locator('input[name="scope"][value="listening"]').evaluate(el=>el.disabled=false); // isolated QA server only
+  await page.locator('label:has(input[name="scope"][value="listening"]) span').tap();
+  await page.locator('#chapter-grid input').evaluateAll(xs=>xs.forEach(x=>x.checked=['1','2','3','4'].includes(x.value)));
+  if(await page.locator('#chapter-grid input').count()!==20)throw Error('Printed units not 20');
+  const response=page.waitForResponse(r=>r.url().includes('/api/quiz?'));
+  await page.locator('#start').tap();
+  const q=(await (await response).json()).questions[0];
+  if(q.kind!=='listening'||q.audioUrl.includes('model')||q.transcript||q.gr)throw Error('Greek leaked or wrong mode');
+  await page.locator('#quiz:not([hidden])').waitFor();
+  if(!await page.locator('#listening-controls').isVisible())throw Error('No audio player');
+  if(!await page.locator('#answers .answer').first().isDisabled())throw Error('Answers available before listening');
+  const audioResponse=page.waitForResponse(r=>r.url().includes('/greek/audio/')&&r.status()===200);
+  await page.locator('#listen-play').tap();
+  const stream=await audioResponse;
+  if(!stream.headers()['content-type']?.includes('audio/wav'))throw Error('Audio content type wrong');
+  await page.waitForFunction(()=>[...document.querySelectorAll('#answers .answer')].every(x=>!x.disabled));
+  await page.locator('#listen-slow').tap();
+  await page.waitForFunction(()=>document.querySelector('#listening-audio').playbackRate===0.8);
+  await page.locator('#answers .answer').first().tap();
+  await page.locator('#next:not([hidden])').waitFor();
+  const transcription=await page.locator('#listening-reveal').textContent();
+  if(!/[Α-Ωα-ωά-ώ]/u.test(transcription))throw Error('Transcript absent after answer');
+  await page.locator('#finish-now').tap();
+  await page.locator('#finished:not([hidden])').waitFor();
+  await page.locator('#again').tap();
+  await page.locator('#lang').selectOption('ar');
+  if(await page.evaluate(()=>document.documentElement.dir)!=='rtl')throw Error('Arabic RTL not activated');
+  const arQuiz=page.waitForResponse(r=>r.url().includes('/api/quiz?'));
+  await page.locator('#start').tap();
+  const arabic=(await (await arQuiz).json()).questions[0];
+  await page.locator('#quiz:not([hidden])').waitFor();
+  if(arabic.kind!=='listening'||!arabic.choices.length)throw Error('Arabic listening missing');
+  await page.locator('#listen-play').tap();
+  await page.waitForFunction(()=>[...document.querySelectorAll('#answers .answer')].every(b=>!b.disabled));
+  await page.locator('#answers .answer').first().tap();
+  await page.locator('#next:not([hidden])').waitFor();
+  if(!await page.locator('#listening-reveal').isVisible())throw Error('Arabic transcript not visible');
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+  if(overflow>2)throw Error('Horizontal overflow '+overflow);
+  if(errors.length)throw Error('JS errors '+errors.join('|'));
+  console.log('PASS pre-release Pocket Greek live WAV 320px, 20 units, word/phrase/sentence, Arabic RTL, normal/slow audio, graded reveal');
+  await ctx.close();
+ }finally{await browser.close();}
+})().catch(e=>{console.error('FAIL '+e.stack);process.exitCode=1});

@@ -1,0 +1,559 @@
+# A1 original headword|Russian gloss|English gloss; topic is one of 13 course themes.
+everyday|η αγάπη|любовь|love (noun)
+everyday|η ζωή|жизнь|life
+everyday|ο άνθρωπος|человек|person
+everyday|ο κόσμος|мир, люди|world
+everyday|το όνομα|имя|name
+everyday|το επίθετο|фамилия|surname
+everyday|η λέξη|слово|word
+everyday|η φράση|фраза|phrase
+everyday|η πρόταση|предложение|sentence
+everyday|η συζήτηση|разговор|conversation
+everyday|η ιστορία|история|story
+everyday|το παράδειγμα|пример|example
+everyday|το πράγμα|вещь|thing
+everyday|η θέση|место, положение|place or position
+everyday|το μέρος|часть, место|part or place
+everyday|ο τρόπος|способ|way
+everyday|ο λόγος|причина, слово|reason or word
+everyday|η ιδέα|идея|idea
+everyday|η γνώμη|мнение|opinion
+everyday|η αλήθεια|правда|truth
+everyday|το ψέμα|ложь|lie (noun)
+everyday|το πρόβλημα|проблема|problem
+everyday|η λύση|решение проблемы|solution
+everyday|η ανάγκη|потребность|need (noun)
+everyday|η ευκαιρία|возможность, шанс|opportunity
+everyday|η τύχη|удача|luck
+everyday|το κέφι|хорошее настроение|good mood
+everyday|η χαρά|радость|joy
+everyday|η λύπη|печаль|sadness
+everyday|ο φόβος|страх|fear
+everyday|το γέλιο|смех|laughter
+everyday|το χαμόγελο|улыбка|smile
+everyday|η φωνή|голос|voice
+everyday|ο ήχος|звук|sound
+everyday|η σιωπή|тишина|silence
+everyday|η αρχή|начало|beginning
+everyday|ο αριθμός|число|number
+everyday|το γράμμα|буква, письмо|letter
+everyday|το κείμενο|текст|text
+everyday|η εικόνα|картинка|picture
+everyday|η φωτογραφία|фотография|photograph
+everyday|το χρώμα|цвет|colour
+everyday|το σχήμα|форма, фигура|shape
+everyday|η διαφορά|разница|difference
+everyday|η σειρά|порядок, очередь|order or turn
+everyday|η επιλογή|выбор|choice
+everyday|η προσπάθεια|попытка, усилие|effort
+everyday|η βοήθεια|помощь|help (noun)
+everyday|το δίκιο|правота|being right
+everyday|η ελευθερία|свобода|freedom
+everyday|η ελπίδα|надежда|hope (noun)
+everyday|η συνήθεια|привычка|habit
+everyday|η αλλαγή|изменение|change (noun)
+everyday|η ευθύνη|ответственность|responsibility
+everyday|ο λόγος μου|моё слово|my word
+everyday|ευχαριστώ|спасибо|thank you
+everyday|παρακαλώ|пожалуйста|please or you are welcome
+everyday|συγγνώμη|извините|sorry or excuse me
+everyday|καλημέρα|доброе утро|good morning
+everyday|καλησπέρα|добрый вечер|good evening
+everyday|καληνύχτα|спокойной ночи|good night
+everyday|αντίο|до свидания|goodbye
+everyday|γεια μας|за наше здоровье|cheers
+everyday|μάλιστα|да, конечно|certainly
+everyday|βεβαίως|конечно|of course
+everyday|σίγουρα|наверняка|certainly
+everyday|πραγματικά|действительно|really
+everyday|πολύ|очень|very
+everyday|λίγο|немного|a little
+everyday|αρκετά|довольно, достаточно|quite or enough
+everyday|περισσότερο|больше|more
+everyday|λιγότερο|меньше|less
+everyday|όλα|всё|everything
+everyday|κάτι|что-то|something
+everyday|τίποτα|ничего|nothing
+everyday|κάποιος|кто-то|someone
+everyday|εγώ|я|I
+everyday|εσύ|ты|you (singular)
+everyday|αυτός|он, этот|he or this
+everyday|αυτή|она, эта|she or this
+everyday|αυτό|оно, это|it or this
+everyday|εμείς|мы|we
+everyday|εσείς|вы|you (plural)
+everyday|αυτοί|они (муж.)|they (masculine)
+everyday|αυτές|они (жен.)|they (feminine)
+everyday|δικός μου|мой собственный|my own
+everyday|δικός σου|твой собственный|your own
+everyday|δικός του|его собственный|his own
+everyday|ένας|один, неопределённый артикль|one or a (masculine)
+everyday|μία|одна, неопределённый артикль|one or a (feminine)
+everyday|ένα|одно, неопределённый артикль|one or a (neuter)
+everyday|ο|определённый артикль мужского рода|the (masculine)
+everyday|η|определённый артикль женского рода|the (feminine)
+everyday|το|определённый артикль среднего рода|the (neuter)
+everyday|και|и|and
+everyday|ή|или|or
+everyday|αλλά|но|but
+everyday|επειδή|потому что|because
+everyday|αν|если|if
+everyday|όταν|когда|when (conjunction)
+everyday|όμως|однако|however
+everyday|με|с|with
+everyday|χωρίς|без|without
+everyday|σε|в, на, к|in or to
+everyday|από|из, от|from
+everyday|για|для, ради|for
+everyday|μέχρι|до|until
+everyday|πριν|перед, до|before
+everyday|μετά|после|after
+everyday|ανάμεσα|между|between
+everyday|δίπλα|рядом|next to
+everyday|μπροστά|спереди|in front
+everyday|πίσω|позади|behind
+everyday|κοντά|близко|near
+everyday|μακριά|далеко|far
+everyday|μέσα|внутри|inside
+everyday|έξω|снаружи|outside
+everyday|πάνω|наверху|above
+everyday|κάτω|внизу|below
+everyday|δεξιά|направо|right
+everyday|αριστερά|налево|left
+everyday|κεντρικός|центральный|central
+everyday|ωραίος|красивый, приятный|nice
+everyday|νέος|новый, молодой|new or young
+everyday|ηλικιωμένος|пожилой|elderly
+everyday|σωστός|правильный|correct
+everyday|λάθος|неправильный, ошибка|wrong
+everyday|πλούσιος|богатый|rich
+everyday|φτωχός|бедный|poor
+everyday|βαρύς|тяжёлый|heavy
+everyday|ελαφρύς|лёгкий по весу|light (weight)
+everyday|χοντρός|толстый|fat
+everyday|λεπτός|тонкий|thin
+everyday|δυνατός|сильный|strong
+everyday|ήρεμος|спокойный|calm
+everyday|ευτυχισμένος|счастливый|happy
+everyday|θυμωμένος|сердитый|angry
+everyday|φιλικός|дружелюбный|friendly
+everyday|γνωστός|знакомый, известный|familiar
+everyday|ξένος|иностранный, незнакомый|foreign or strange
+everyday|φρέσκος|свежий|fresh
+everyday|νόστιμος|вкусный|tasty
+everyday|γλυκός|сладкий|sweet
+everyday|αλμυρός|солёный|salty
+everyday|άσπρος|белый|white
+everyday|μαύρος|чёрный|black
+everyday|κόκκινος|красный|red
+everyday|μπλε|синий|blue
+everyday|πράσινος|зелёный|green
+everyday|κίτρινος|жёлтый|yellow
+everyday|πορτοκαλί|оранжевый|orange
+everyday|ροζ|розовый|pink
+everyday|καφέ|коричневый|brown
+everyday|γκρι|серый|grey
+everyday|μωβ|фиолетовый|purple
+everyday|φτιάχνω|делаю, создаю|make
+everyday|γνωρίζω|знаю, знакомлюсь|know or meet
+everyday|μιλώ|говорю|speak
+everyday|ρωτώ|спрашиваю|ask
+everyday|απαντώ|отвечаю|answer
+everyday|περπατώ|иду пешком|walk
+everyday|χορεύω|танцую|dance
+everyday|τραγουδάω|пою|sing
+everyday|γελάω|смеюсь|laugh
+everyday|κλαίω|плачу|cry
+everyday|κοιτάζω|смотрю|look
+everyday|δείχνω|показываю|show
+everyday|ζητάω|прошу, запрашиваю|request
+everyday|στέλνω|отправляю|send
+everyday|μιλάω|говорю|speak (colloquial)
+everyday|επιστρέφω|возвращаюсь|return
+everyday|μπαίνω|вхожу|enter
+everyday|βγαίνω|выхожу|go out
+everyday|φεύγω|ухожу, уезжаю|leave
+everyday|αφήνω|оставляю|leave something
+everyday|προσέχω|обращаю внимание|pay attention
+everyday|αρέσω|нравлюсь|be liked
+everyday|αλλάζω|меняю|change
+everyday|ελέγχω|проверяю|check
+everyday|κάνω μπάνιο|принимаю ванну, купаюсь|take a bath
+everyday|φοράω|ношу одежду|wear
+everyday|βγάζω βόλτα|выгуливаю|take for a walk
+everyday|περνάω|провожу время, прохожу|pass or spend time
+family|ο θείος|дядя|uncle
+family|η θεία|тётя|aunt
+family|ο ανιψιός|племянник|nephew
+family|η ανιψιά|племянница|niece
+family|ο πεθερός|тесть, свёкор|father-in-law
+family|η πεθερά|тёща, свекровь|mother-in-law
+family|ο γαμπρός|жених, зять|groom or son-in-law
+family|η νύφη|невеста, сноха|bride or daughter-in-law
+family|ο σύζυγος|супруг|husband
+family|η σύζυγος|супруга|wife
+family|ο αρραβωνιαστικός|жених, помолвленный|fiancé
+family|η αρραβωνιαστικιά|невеста, помолвленная|fiancée
+family|το εγγόνι|внук или внучка|grandchild
+family|οι παππούδες|бабушка и дедушка|grandparents
+family|ο γνωστός|знакомый человек|acquaintance
+family|η γνωστή|знакомая|female acquaintance
+family|ο επισκέπτης|гость, посетитель|visitor
+family|η επισκέπτρια|гостья, посетительница|female visitor
+family|το επώνυμο|фамилия|last name
+family|η πατρίδα|родина|homeland
+family|η οικογένεια|семья|family
+family|ο γάτος|кот|tomcat
+family|το κατοικίδιο|домашний питомец|pet
+family|η συντροφιά|компания, общение|company or companionship
+food|το μήλο|яблоко|apple
+food|το πορτοκάλι|апельсин|orange (fruit)
+food|η μπανάνα|банан|banana
+food|η φράουλα|клубника|strawberry
+food|το κεράσι|черешня, вишня|cherry
+food|το ροδάκινο|персик|peach
+food|το αχλάδι|груша|pear
+food|ο ανανάς|ананас|pineapple
+food|το ακτινίδιο|киви|kiwifruit
+food|το μανταρίνι|мандарин|mandarin orange
+food|το λάχανο|капуста|cabbage
+food|το κρεμμύδι|лук|onion
+food|το σκόρδο|чеснок|garlic
+food|το μαρούλι|салат-латук|lettuce
+food|το σπανάκι|шпинат|spinach
+food|το μανιτάρι|гриб|mushroom
+food|το μπρόκολο|брокколи|broccoli
+food|το κολοκύθι|кабачок|courgette
+food|η πιπεριά|перец|pepper (vegetable)
+food|ο αρακάς|зелёный горошек|peas
+food|το ρύζι|рис|rice
+food|το ζυμαρικό|макаронное изделие|pasta
+food|το αυγό|яйцо|egg
+food|το βούτυρο|сливочное масло|butter
+food|το λάδι|масло|oil
+food|το ελαιόλαδο|оливковое масло|olive oil
+food|η ζάχαρη|сахар|sugar
+food|το αλάτι|соль|salt
+food|το πιπέρι|перец молотый|pepper (spice)
+food|το κέικ|кекс|cake
+food|το μπισκότο|печенье|biscuit
+food|η σοκολάτα|шоколад|chocolate
+food|το παγωτό|мороженое|ice cream
+food|ο χυμός πορτοκάλι|апельсиновый сок|orange juice
+food|το ανθρακούχο νερό|газированная вода|sparkling water
+food|η λεμονάδα|лимонад|lemonade
+food|το πρωινό|завтрак|breakfast
+food|το μεσημεριανό|обед|lunch
+food|το βραδινό|ужин|dinner
+food|η όρεξη|аппетит|appetite
+food|το μαχαίρι|нож|knife
+food|το πιρούνι|вилка|fork
+food|το κουτάλι|ложка|spoon
+food|το ποτήρι|стакан, бокал|glass
+food|το φλιτζάνι|чашка|cup
+food|το πιάτο|тарелка|plate
+food|η χαρτοπετσέτα|салфетка|napkin
+food|ο σερβιτόρος|официант|waiter
+food|η σερβιτόρα|официантка|waitress
+food|η ταβέρνα|таверна|tavern
+food|το εστιατόριο|ресторан|restaurant
+food|η καφετέρια|кафе|café
+home|η ντουλάπα|шкаф для одежды|wardrobe
+home|η βιβλιοθήκη|книжный шкаф|bookcase
+home|το ράφι|полка|shelf
+home|το χαλί|ковёр|carpet
+home|η κουρτίνα|занавеска|curtain
+home|το παράθυρο|окно|window
+home|η πόρτα|дверь|door
+home|το πάτωμα|пол|floor
+home|το κρεβάτι|кровать|bed
+home|ο νεροχύτης|кухонная раковина|kitchen sink
+home|το πλυντήριο|стиральная машина|washing machine
+home|το πλυντήριο πιάτων|посудомоечная машина|dishwasher
+home|η τηλεόραση|телевизор|television
+home|το τηλεχειριστήριο|пульт|remote control
+home|ο φορτιστής|зарядное устройство|charger
+home|η μπαταρία|батарейка|battery
+home|η πρίζα|розетка|power socket
+home|η λάμπα|лампа|lamp
+home|ο καναπές-κρεβάτι|диван-кровать|sofa bed
+home|η πολυθρόνα|кресло|armchair
+home|η τραπεζαρία|столовая комната|dining room
+home|η είσοδος|вход, прихожая|entrance
+home|η έξοδος|выход|exit
+home|ο διάδρομος|коридор|corridor
+home|ο όροφος|этаж|storey
+home|το υπόγειο|подвал|basement
+home|η αποθήκη|кладовая|storage room
+home|ο κήπος|сад|garden
+home|το γκαράζ|гараж|garage
+home|η γωνία|угол|corner
+home|το κουτί|коробка|box
+home|το σαπούνι|мыло|soap
+home|το σαμπουάν|шампунь|shampoo
+home|η οδοντόβουρτσα|зубная щётка|toothbrush
+home|η οδοντόκρεμα|зубная паста|toothpaste
+home|η χτένα|расчёска|comb
+home|το ντους|душ|shower
+home|η μπανιέρα|ванна|bathtub
+home|ο κάδος|ведро, мусорный бак|bin or bucket
+home|το σκουπίδι|мусор|rubbish
+home|τα σκουπίδια|мусор, отходы|rubbish (collective)
+work|ο αστυνομικός|полицейский|police officer
+work|ο πυροσβέστης|пожарный|firefighter
+work|ο νοσηλευτής|медбрат|male nurse
+work|η νοσηλεύτρια|медсестра|female nurse
+work|ο δικηγόρος|адвокат|lawyer
+work|ο μάγειρας|повар|cook
+work|η μαγείρισσα|повар-женщина|female cook
+work|ο υπάλληλος γραφείου|офисный работник|office worker
+work|ο ταμίας|кассир|cashier
+work|ο αγρότης|фермер|farmer
+work|ο ψαράς|рыбак|fisherman
+work|ο κηπουρός|садовник|gardener
+work|ο ηλεκτρολόγος|электрик|electrician
+work|ο υδραυλικός|сантехник|plumber
+work|ο αρχιτέκτονας|архитектор|architect
+work|ο δημοσιογράφος|журналист|journalist
+work|ο πιλότος|пилот|pilot
+work|η αεροσυνοδός|стюардесса|flight attendant
+work|ο ιδιοκτήτης καταστήματος|владелец магазина|shop owner
+work|ο διευθυντής|директор|manager
+work|η διευθύντρια|директор-женщина|female manager
+work|ο εργάτης|рабочий|labourer
+work|το εργοστάσιο|фабрика|factory
+work|η εταιρεία|компания|company
+work|ο συνεργάτης|партнёр по работе|work partner
+work|ο πελάτης|клиент|customer
+work|το αφεντικό|начальник|boss
+work|η συνάδελφος|коллега-женщина|female colleague
+work|η ομάδα|команда|team
+work|το αρχείο|файл, архив|file or archive
+work|το πληκτρολόγιο|клавиатура|keyboard
+work|το ποντίκι υπολογιστή|компьютерная мышь|computer mouse
+work|η οθόνη|экран|screen
+work|ο εκτυπωτής|принтер|printer
+work|το στυλό|ручка|pen
+work|το μολύβι|карандаш|pencil
+work|η γόμα|ластик|eraser
+work|ο χάρακας|линейка|ruler
+work|το βιβλιοπωλείο|книжный магазин|bookshop
+work|η εργασία για το σπίτι|домашнее задание|homework
+road|το ταξί|такси|taxi
+road|το τρένο|поезд|train
+road|το ποδήλατο|велосипед|bicycle
+road|το φορτηγό|грузовик|lorry
+road|το πλοίο|корабль|ship
+road|το φανάρι|светофор|traffic light
+road|η γέφυρα|мост|bridge
+road|το τούνελ|тоннель|tunnel
+road|η διασταύρωση|перекрёсток|junction
+road|το βενζινάδικο|заправка|petrol station
+road|η βενζίνη|бензин|petrol
+road|ο αυτοκινητόδρομος|автомагистраль|motorway
+road|το ταξίμετρο|таксометр|taximeter
+road|το πατίνι|самокат|scooter
+road|η ρόδα|колесо|wheel
+road|το τιμόνι|руль|steering wheel
+road|η ζώνη ασφαλείας|ремень безопасности|seat belt
+road|το κράνος|шлем|helmet
+road|η λεωφόρος|проспект|avenue
+road|το πεζοδρόμιο|тротуар|pavement
+road|ο κυκλικός κόμβος|круговая развязка|roundabout
+road|η πινακίδα στάσης|знак остановки|stop sign
+city|ο κινηματογράφος|кинотеатр|cinema
+city|η εκκλησία|церковь|church
+city|η αγορά|рынок|market
+city|η παιδική χαρά|детская площадка|playground
+city|το γυμναστήριο|спортзал|gym
+city|το κολυμβητήριο|бассейн|swimming pool
+city|το αστυνομικό τμήμα|полицейский участок|police station
+city|ο σταθμός λεωφορείων|автовокзал|bus station
+city|το πανεπιστήμιο|университет|university
+city|η στάση ταξί|стоянка такси|taxi rank
+city|το περίπτερο|киоск|kiosk
+city|ο φούρνος ψωμιού|булочная|bakery
+city|το ανθοπωλείο|цветочный магазин|florist
+city|το κομμωτήριο|парикмахерская|hairdresser's
+city|το γήπεδο|стадион, поле|stadium or playing field
+city|ο πεζόδρομος|пешеходная улица|pedestrian street
+city|το συντριβάνι|фонтан|fountain
+city|το πάρκινγκ|парковка|car park
+city|η στάση λεωφορείου|автобусная остановка|bus stop
+city|το σιντριβάνι|фонтан|fountain (variant)
+city|η γειτονιά|район, окрестность|neighbourhood
+city|η πολυκατοικία|многоквартирный дом|apartment building
+city|το δημαρχείο|мэрия|town hall
+health|το δέρμα|кожа|skin
+health|τα μαλλιά|волосы|hair
+health|το πρόσωπο|лицо|face
+health|το μέτωπο|лоб|forehead
+health|το φρύδι|бровь|eyebrow
+health|το μάγουλο|щека|cheek
+health|το χείλος|губа|lip
+health|η γλώσσα|язык (орган)|tongue
+health|ο αγκώνας|локоть|elbow
+health|το γόνατο|колено|knee
+health|το δάχτυλο|палец|finger
+health|ο αντίχειρας|большой палец|thumb
+health|το νύχι|ноготь|nail
+health|η παλάμη|ладонь|palm
+health|ο αστράγαλος|лодыжка|ankle
+health|ο καρπός|запястье|wrist
+health|το στήθος|грудь|chest
+health|ο στομάχος|желудок|stomach
+health|το συκώτι|печень|liver
+health|ο εγκέφαλος|мозг|brain
+health|η αρρώστια|болезнь|illness
+health|το κρυολόγημα|простуда|common cold
+health|η γρίπη|грипп|flu
+health|η πληγή|рана|wound
+health|το χάπι|таблетка|pill
+health|η ένεση|укол|injection
+health|ο επίδεσμος|бинт|bandage
+health|η εξέταση|обследование|examination
+health|το ασθενοφόρο|скорая помощь|ambulance
+health|η ξεκούραση|отдых|rest
+shopping|η απόδειξη|чек|receipt
+shopping|το ταμείο|касса|checkout
+shopping|τα ρέστα|сдача|change (money)
+shopping|το νούμερο|размер или номер|size or number
+shopping|η ετικέτα|этикетка|label
+shopping|ο κωδικός|код|code
+shopping|το καλάθι|корзина|basket
+shopping|το καρότσι|тележка|trolley
+shopping|η βιτρίνα|витрина|shop window
+shopping|το ρούχο|одежда|garment
+shopping|το καπέλο|шляпа|hat
+shopping|το παλτό|пальто|coat
+shopping|το μπουφάν|куртка|jacket
+shopping|το πουκάμισο|рубашка|shirt
+shopping|η φούστα|юбка|skirt
+shopping|το μπλουζάκι|футболка|T-shirt
+shopping|η κάλτσα|носок|sock
+shopping|το εσώρουχο|нижнее бельё|underwear
+shopping|το μαγιό|купальник|swimsuit
+shopping|η ζακέτα|кардиган|cardigan
+shopping|η γραβάτα|галстук|tie
+shopping|το γάντι|перчатка|glove
+shopping|το φουλάρι|шарф|scarf
+shopping|το σκουλαρίκι|серьга|earring
+shopping|το δαχτυλίδι|кольцо|ring
+time|ο Ιανουάριος|январь|January
+time|ο Φεβρουάριος|февраль|February
+time|ο Μάρτιος|март|March
+time|ο Απρίλιος|апрель|April
+time|ο Μάιος|май|May
+time|ο Ιούνιος|июнь|June
+time|ο Ιούλιος|июль|July
+time|ο Αύγουστος|август|August
+time|ο Σεπτέμβριος|сентябрь|September
+time|ο Οκτώβριος|октябрь|October
+time|ο Νοέμβριος|ноябрь|November
+time|ο Δεκέμβριος|декабрь|December
+time|το σήμερα|сегодняшний день|today
+time|το αύριο|завтрашний день|tomorrow
+time|το χθες|вчерашний день|yesterday
+time|αύριο|завтра|tomorrow
+time|χθες|вчера|yesterday
+time|σήμερα|сегодня|today
+time|μεθαύριο|послезавтра|the day after tomorrow
+time|προχθές|позавчера|the day before yesterday
+time|καθημερινά|ежедневно|daily
+time|εβδομαδιαία|еженедельно|weekly
+time|μηνιαία|ежемесячно|monthly
+time|η εβδομάδα|неделя|week
+time|ο μήνας|месяц|month
+time|ο χρόνος|год, время|year or time
+time|η χρονιά|год|year
+time|η εποχή|время года|season
+time|το ημερολόγιο|календарь|calendar
+time|η ημερομηνία|дата|date
+time|το ρολόι|часы|clock or watch
+time|η μέρα|день|day
+travel|ο τουρίστας|турист|tourist
+travel|η τουρίστρια|туристка|female tourist
+travel|ο ταξιδιώτης|путешественник|traveller
+travel|το αεροπορικό εισιτήριο|авиабилет|plane ticket
+travel|το δωμάτιο ξενοδοχείου|гостиничный номер|hotel room
+travel|ο χάρτης διαδρομής|карта маршрута|route map
+travel|η πτήση|авиарейс|flight
+travel|το αεροδρόμιο αναχώρησης|аэропорт вылета|departure airport
+travel|η πύλη|выход на посадку|gate
+travel|η θέση στο αεροπλάνο|место в самолёте|aeroplane seat
+travel|το λεωφορείο αεροδρομίου|автобус в аэропорт|airport shuttle
+travel|το ταξιδιωτικό γραφείο|туристическое агентство|travel agency
+travel|το κατάλυμα|жильё на время поездки|accommodation
+travel|το μονοπάτι|тропа|path or trail
+travel|η περιήγηση|экскурсия|tour
+travel|το μνημείο|памятник|monument
+travel|ο ξεναγός|экскурсовод|tour guide
+travel|η βαλίτσα χειρός|ручная кладь|carry-on bag
+leisure|το παιχνίδι|игра|game
+leisure|ο παίκτης|игрок|player
+leisure|η παίκτρια|игрок (жен.)|female player
+leisure|το τένις|теннис|tennis
+leisure|η ποδηλασία|езда на велосипеде|cycling
+leisure|το σκάκι|шахматы|chess
+leisure|το βόλεϊ|волейбол|volleyball
+leisure|το πινγκ πονγκ|настольный теннис|table tennis
+leisure|το παζλ|пазл|jigsaw puzzle
+leisure|η κούκλα|кукла|doll
+leisure|το παραμύθι|сказка|fairy tale
+leisure|το ανέκδοτο|анекдот|joke
+leisure|το αστείο|шутка|joke
+leisure|η κωμωδία|комедия|comedy
+leisure|το δράμα|драма|drama
+leisure|η μουσική σκηνή|музыкальная сцена|music scene
+leisure|το ραδιόφωνο|радио|radio
+leisure|η εφημερίδα|газета|newspaper
+leisure|το περιοδικό|журнал|magazine
+leisure|το μυθιστόρημα|роман|novel
+leisure|η κιθάρα|гитара|guitar
+leisure|το πιάνο|пианино|piano
+leisure|το βιολί|скрипка|violin
+leisure|το τύμπανο|барабан|drum
+leisure|η ζωγραφιά|рисунок|drawing
+leisure|η εκδρομή|поездка, вылазка|excursion
+nature|ο ήλιος|солнце|sun
+nature|η βροχή|дождь|rain
+nature|ο αέρας|воздух, ветер|air or wind
+nature|ο άνεμος|ветер|wind
+nature|το σύννεφο|облако|cloud
+nature|η ομίχλη|туман|fog
+nature|το βουνό|гора|mountain
+nature|ο λόφος|холм|hill
+nature|η πεδιάδα|равнина|plain
+nature|το ποτάμι|река|river
+nature|το ρέμα|ручей|stream
+nature|ο ωκεανός|океан|ocean
+nature|η πέτρα|камень|stone
+nature|ο βράχος|скала|rock
+nature|η γη|земля|earth
+nature|το χώμα|почва, земля|soil
+nature|το δέντρο|дерево|tree
+nature|το φύλλο|лист растения|leaf
+nature|το λουλούδι|цветок|flower
+nature|το κλαδί|ветка|branch
+nature|η ρίζα|корень|root
+nature|το χορτάρι|трава|grass
+nature|το πεύκο|сосна|pine tree
+nature|η ελιά|оливковое дерево|olive tree
+nature|η λεμονιά|лимонное дерево|lemon tree
+nature|η πορτοκαλιά|апельсиновое дерево|orange tree
+nature|το ψάρι|рыба|fish
+nature|το κουνέλι|кролик|rabbit
+nature|το ποντίκι|мышь|mouse
+nature|το φίδι|змея|snake
+nature|η αράχνη|паук|spider
+nature|το μυρμήγκι|муравей|ant
+nature|η μύγα|муха|fly
+nature|το κουνούπι|комар|mosquito
+nature|το έντομο|насекомое|insect
+nature|ο βάτραχος|лягушка|frog
+nature|το λιοντάρι|лев|lion
+nature|η αρκούδα|медведь|bear
+nature|ο λύκος|волк|wolf
+nature|το ζώο|животное|animal
+nature|η ζούγκλα|джунгли|jungle
+nature|η φάρμα|ферма|farm

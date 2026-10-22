@@ -1,0 +1,369 @@
+:root{--bg:#0a1220;--panel:#101d30;--line:#26364b;--text:#f3f1e9;--muted:#94a4b7;--accent:#dbbc75;--accent-text:#141c25;--ok:#7fd3a4;--bad:#f09996;font-synthesis:none}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}button,select{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}[hidden]{display:none!important}.background-ornament{pointer-events:none;position:fixed;z-index:-1;right:3%;top:4%;font:12vw Georgia,serif;letter-spacing:-.1em;color:#16243a;opacity:.3;max-width:65vw;overflow:hidden}.site{max-width:1180px;margin:0 auto;padding:0 32px}.site-header{height:105px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #233147}.brand{display:flex;align-items:center;gap:13px;color:var(--text);text-decoration:none}.brand-mark{width:46px;height:46px;background:var(--accent);color:#13202d;display:grid;place-items:center;border-radius:15px;font:36px Georgia,serif;line-height:1;padding-bottom:5px}.brand strong{display:block;font:28px Georgia,serif;letter-spacing:-.045em;line-height:1.1}.brand small{color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase}.header-level{font-size:13px;letter-spacing:.08em;color:#b6c2cf}.header-level b{color:var(--accent);margin:0 4px}.intro{display:grid;grid-template-columns:1.65fr 1fr;gap:36px;align-items:end;padding:67px 0 55px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.19em;color:var(--accent);text-transform:uppercase}.intro h1{font:clamp(39px,5vw,66px)/1.12 Georgia,"Times New Roman",serif;letter-spacing:-.045em;margin:21px 0}.intro h1 em,.weak-panel h2 em{font-weight:400;color:var(--accent)}.intro p{color:var(--muted);max-width:560px;font-size:16px;margin:0}.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hero-stats>div{border:1px solid var(--line);background:linear-gradient(140deg,#17263b,#101a2b);border-radius:18px;padding:25px 19px}.hero-stats span,.hero-stats small{display:block;color:var(--muted);font-size:12px}.hero-stats strong{font:45px Georgia,serif;display:block;margin:7px 0;color:var(--text)}.tabs{display:flex;gap:12px;border-bottom:1px solid #26364b;margin:0 0 27px;overflow-x:auto}.tab{background:none;border:0;border-bottom:2px solid transparent;padding:18px 20px;color:var(--muted);white-space:nowrap}.tab.active{color:var(--accent);border-color:var(--accent)}.bubble{display:inline-flex;align-items:center;justify-content:center;margin-left:5px;background:#26374b;color:#eef2f6;border-radius:20px;padding:0 7px;font-size:11px;min-width:23px}.panel{border:1px solid #2a3b53;border-radius:22px;background:linear-gradient(135deg,#14233a 0%,#0f1b2d 95%);padding:38px;box-shadow:0 20px 50px #0002}.panel-heading h2,.stat-panel h2,.weak-panel h2,.finished h2{font:37px Georgia,serif;letter-spacing:-.03em;margin:11px 0 10px}.panel-heading p,.weak-panel>p,.finished>p{color:var(--muted);margin:0 0 30px}.config{display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;margin:28px 0}.config label{display:block;font-size:12px;letter-spacing:.08em;color:#b3c0cc;margin-bottom:10px}.config select{width:100%;padding:14px 16px;border:1px solid #3a4b63;background:#15253a;color:var(--text);border-radius:11px;color-scheme:dark;min-height:54px}.primary,.secondary{border:0;border-radius:11px;min-height:53px;padding:13px 24px;display:inline-flex;align-items:center;justify-content:center;gap:30px;font-weight:700}.primary{background:var(--accent);color:var(--accent-text)}.primary:hover{background:#efd396}.secondary{background:transparent;border:1px solid #42526a;color:var(--text)}.primary:disabled{opacity:.5;cursor:default}.notice{padding:12px 17px;border:1px solid #584c2e;color:#dfc88d;background:#332b1d55;border-radius:9px;font-size:13px;max-width:830px}.notice span{padding-right:8px}.quiz{max-width:870px;margin:0 auto;padding:35px 45px}.quiz-top,.quiz-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px}.quiz-top{font-size:12px;letter-spacing:.15em;color:var(--muted)}.quiz-top span:first-child{color:var(--accent)}.progress-track{height:6px;margin:19px 0 40px;background:#2b3c50;border-radius:20px;overflow:hidden}.progress-track div{height:100%;width:0;background:var(--accent);transition:width .25s}.question-subtitle{color:var(--muted);margin:14px 0 2px;font-size:14px}.question-text{font:clamp(29px,4vw,46px)/1.2 Georgia,"Times New Roman",serif;letter-spacing:-.012em;margin:10px 0 34px;min-height:67px;overflow-wrap:anywhere}.answers{display:grid;grid-template-columns:1fr 1fr;gap:11px}.answer{width:100%;background:#1b2d43;color:#edf2fa;border:1px solid #34465c;border-radius:12px;display:flex;align-items:center;gap:15px;text-align:left;min-height:70px;padding:14px 17px;font-size:15px;line-height:1.35}.answer:hover:not(:disabled){background:#28405b;border-color:#70829b}.answer .key{display:flex;flex:none;align-items:center;justify-content:center;width:29px;height:29px;border:1px solid #667890;border-radius:7px;color:#b8c7d9;font-size:12px}.answer:disabled{cursor:default;opacity:.65}.answer.is-correct{border-color:#5abd90;background:#173c38;color:#d1ffe4;opacity:1}.answer.is-wrong{border-color:#d97574;background:#462b37;color:#ffe1de;opacity:1}.feedback{border-top:1px solid #384d65;margin-top:24px;padding:21px 4px 0;font-size:15px;color:var(--muted)}.feedback.good{color:var(--ok)}.feedback.bad{color:var(--bad)}.feedback strong{color:var(--text)}.quiz-bottom{min-height:76px;margin-top:9px}.kbd-hint{font-size:12px;color:#768ba1}.compact{min-height:45px;padding:8px 17px}.finished{text-align:center;max-width:760px;margin:0 auto;padding:66px 30px}.end-icon{margin:0 auto 25px;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;border:1px solid #b3a174;font-size:38px;color:var(--accent)}.finish-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:0 0 22px}.tile{border:1px solid var(--line);background:#132137;border-radius:15px;padding:26px}.tile span{font-size:13px;color:var(--muted);display:block}.tile strong{font:38px Georgia,serif;color:var(--text);display:block;margin-top:10px}.stats-layout{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}.stat-panel h2{font-size:28px}.metric{margin:22px 0}.metric-label{display:flex;justify-content:space-between;color:#c9d3dd;gap:10px;font-size:14px}.metric-label span:last-child{color:var(--accent)}.bar{height:7px;border-radius:10px;background:#2a3d55;overflow:hidden;margin-top:9px}.bar span{display:block;height:100%;border-radius:10px;background:#d9bb77}.privacy{color:var(--muted);font-size:12px;margin:22px 2px}.weak-panel{max-width:900px}.weak-panel h2{font-size:clamp(29px,4vw,42px)}.weak-counter{display:flex;align-items:center;gap:20px;margin:32px 0}.weak-counter strong{font:70px Georgia,serif;color:var(--accent)}.weak-counter span{max-width:170px;color:#b2c0d0}.quiet{margin:13px 0;color:var(--muted);font-size:13px}.daily-row{display:grid;grid-template-columns:100px 1fr 82px;align-items:center;gap:13px;font-size:13px;margin:13px 0;color:var(--muted)}.daily-bar{height:10px;border-radius:8px;background:#27374c;overflow:hidden}.daily-bar div{height:100%;background:var(--accent);border-radius:8px}footer{display:flex;justify-content:space-between;gap:25px;border-top:1px solid var(--line);margin-top:55px;padding:22px 0 45px;color:#73859a;font-size:12px}@media(max-width:760px){.site{padding:0 17px}.site-header{height:82px}.header-level{font-size:11px}.intro{display:block;padding:43px 0 30px}.intro h1{font-size:41px}.intro p{font-size:15px}.hero-stats{margin-top:29px}.hero-stats>div{padding:18px}.hero-stats strong{font-size:35px}.tabs{gap:0}.tab{padding:15px 12px;font-size:13px}.panel{padding:23px 19px}.panel-heading h2{font-size:32px}.config,.stats-layout{grid-template-columns:1fr}.config{gap:14px}.quiz{padding:25px 18px}.question-text{font-size:33px;min-height:0;margin-bottom:27px}.answers{gap:8px}.answer{min-height:85px;flex-direction:column;align-items:flex-start;padding:12px 11px;font-size:13px;gap:8px}.answer .key{width:22px;height:22px;font-size:11px}.kbd-hint{display:none}.quiz-bottom{justify-content:flex-end}.stats-grid{grid-template-columns:1fr 1fr;gap:10px}.tile{padding:18px}.tile strong{font-size:30px}.daily-row{grid-template-columns:72px 1fr 65px}.finished{padding:45px 18px}footer{display:block}footer span{display:block;margin-bottom:8px}}
+
+/* v2: course, language and time controls */
+.header-tools{display:flex;align-items:center;gap:17px}
+.language-switch select{background:#17283e;color:var(--text);border:1px solid #3a506d;border-radius:9px;padding:10px 12px;min-width:92px;cursor:pointer}
+.language-switch select:disabled{opacity:.55}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.scope-panel{border:1px solid #2d4059;background:#0e1b2b;border-radius:17px;padding:26px;margin-top:27px}
+.subheading{font-weight:750;color:#e9dfcb;margin:0 0 17px;letter-spacing:.03em}
+.segmented{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 24px}
+.segmented label,.session-times label,.checkgrid label{cursor:pointer}
+.segmented input,.session-times input{position:absolute;opacity:0;pointer-events:none}
+.segmented span,.session-times span{display:inline-flex;border:1px solid #33495f;border-radius:10px;background:#1b2c40;color:#c3cfdb;padding:12px 19px;min-height:46px;align-items:center;justify-content:center;gap:5px}
+.segmented input:checked+span,.session-times input:checked+span{background:#403922;border-color:var(--accent);color:#ffe3a3;font-weight:700}
+.segmented input:focus-visible+span,.session-times input:focus-visible+span{outline:2px solid #fff;outline-offset:3px}
+.page-controls{display:flex;align-items:end;gap:15px;flex-wrap:wrap}
+.page-controls label{display:block;color:var(--muted);font-size:13px;margin:0 0 8px}
+.page-controls input{width:125px;border:1px solid #455976;border-radius:11px;padding:13px 16px;background:#172b41;color:#f0f4ff;color-scheme:dark;font-size:20px}
+.page-controls input:focus-visible{outline:2px solid var(--accent)}
+.page-dash{padding:0 1px 15px;font-size:25px;color:var(--muted)}
+.scope-summary{font-weight:700;padding:0 0 16px;color:var(--accent);margin-left:12px}
+.chapter-actions{display:flex;justify-content:flex-end;gap:18px;margin:-3px 0 15px}
+.text-button{border:0;background:transparent;color:var(--accent);font-size:13px;padding:4px;cursor:pointer}
+.text-button:hover{text-decoration:underline}
+.chapter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:420px;overflow:auto;padding-right:6px}
+.chapter-option{display:flex;align-items:center;gap:12px;background:#1a2b40;border:1px solid #2b4058;border-radius:10px;padding:10px}
+.chapter-option .chapter-name{flex:1;display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer;color:#e4edf7;font-size:13px}
+.chapter-option input{accent-color:#dbbc75;flex:none;width:17px;height:17px}
+.chapter-page{color:#92a4bd;font-size:12px;white-space:nowrap}
+.chapter-option .only{flex:none;font-size:11px}
+.scope-panel .quiet{margin-top:20px;line-height:1.55}
+.config-v2{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;margin:31px 0 18px}
+.config-group{background:#0d1a2a;border:1px solid #293e56;border-radius:16px;padding:24px}
+.checkgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.checkgrid label{display:flex;align-items:center;gap:10px;border:1px solid #30445a;background:#1b2b40;border-radius:11px;padding:13px;color:#e4ebf5;font-size:14px}
+.checkgrid label:has(input:checked){background:#282f36;border-color:#b1a071}
+.checkgrid input{appearance:auto;accent-color:#ddbe7c;width:19px;height:19px;flex:none}
+.session-times{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.session-times span{width:100%;padding:12px 8px;font-size:18px}
+.session-times small{font-size:11px}
+.config-group .quiet{margin:17px 0 0}
+.start-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:25px}
+.timer-remaining{font-size:20px;font-variant-numeric:tabular-nums;color:#ffe1a2!important;letter-spacing:.04em}
+.quiz-top{gap:15px}
+.quiz-top span:first-child{margin-right:auto}
+.quiz-bottom{flex-wrap:wrap}
+@media(max-width:900px){.config-v2{grid-template-columns:1fr}.chapter-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.header-tools{gap:8px}.header-level{display:none}.language-switch select{min-width:84px;padding:9px}
+.scope-panel{padding:15px;margin-top:20px}.chapter-grid{max-height:390px}
+.chapter-option{gap:6px;padding:10px 6px}.chapter-option .chapter-name{font-size:12px}
+.chapter-option .only{font-size:10px}.config-group{padding:18px}
+.page-controls input{width:108px}.page-controls{gap:9px}
+.scope-summary{margin-left:0}.session-times{grid-template-columns:repeat(3,1fr)}
+.start-actions .primary{width:100%}.start-actions{gap:12px}
+.quiz-top{flex-wrap:wrap}.timer-remaining{font-size:18px}}
+
+
+/* Tonos placement: choose the exact letter carrying the acute accent. */
+.answers.accent-letters{display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:10px;margin:5px 0 12px}
+.answers.accent-letters .answer.accent-letter{display:flex;flex:0 0 auto;width:auto;max-width:100%;justify-content:center;align-items:center;min-width:60px;min-height:76px;padding:10px 14px;border-radius:12px;font:36px/1 Georgia,"Times New Roman",serif;text-align:center;color:var(--text)}
+.answers.accent-letters .answer.accent-letter.is-correct{color:#d1ffe4}
+.answers.accent-letters .answer.accent-letter.is-wrong{color:#ffe1de}
+.question-text.unaccented-word{text-align:center;font-size:clamp(42px,6vw,67px);letter-spacing:.035em}
+@media(max-width:760px){.answers.accent-letters{gap:7px}.answers.accent-letters .answer.accent-letter{min-width:48px;min-height:64px;font-size:29px;padding:8px 11px}}
+@media(max-width:390px){.answers.accent-letters .answer.accent-letter{min-width:42px;min-height:59px;font-size:26px;padding:7px 9px}}
+\n
+/* Mobile-first refinement, verified with 320/360/375/390/430/768px Chromium viewports. */
+button,select,input{touch-action:manipulation}
+.answer{overflow-wrap:anywhere;min-width:0}
+.answer>span:last-child{min-width:0;overflow-wrap:anywhere}
+.chapter-option .chapter-name{overflow-wrap:anywhere}
+@media(max-width:760px){
+  .intro h1{font-size:clamp(32px,9vw,41px);overflow-wrap:anywhere}
+  .tab{flex:1 1 auto;padding:13px 8px;font-size:12px;min-height:48px}
+  .tab .bubble{padding:0 5px;min-width:19px;margin-left:2px}
+  .header-tools select{max-width:122px}
+  .checkgrid label{min-height:53px;overflow-wrap:anywhere;line-height:1.35}
+  .scope-panel .quiet{font-size:12px}
+  .chapter-option{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;row-gap:3px;padding:12px}
+  .chapter-option .chapter-name{grid-row:1;grid-column:1 / -1;font-size:13px;line-height:1.4}
+  .chapter-option .chapter-page{grid-row:3;grid-column:1;align-self:center;font-size:12px}
+  .chapter-option .only{grid-row:3;grid-column:2;min-height:42px;min-width:74px;font-size:12px;text-align:right}
+  .session-times span{min-height:66px;flex-direction:column;gap:0}
+  .session-times small{font-size:11px;line-height:1.3}
+  .answers.wide-choices{grid-template-columns:1fr}
+  .answers.wide-choices .answer{min-height:58px;display:flex;flex-direction:row;align-items:center;gap:14px;padding:12px 14px;font-size:14px}
+  .answers.wide-choices .answer .key{width:26px;height:26px}
+  .answers:not(.wide-choices):not(.accent-letters) .answer{min-height:72px}
+  .question-text{overflow-wrap:anywhere;word-break:normal}
+  .quiz-bottom{position:sticky;bottom:0;z-index:2;background:linear-gradient(180deg,rgba(16,29,48,.95),#101d30);padding:12px 2px max(12px,env(safe-area-inset-bottom));margin:20px -2px 0;border-top:1px solid var(--line)}
+  .quiz-bottom .primary,.quiz-bottom .secondary{min-height:48px}
+  .start-actions .primary{min-height:56px}
+  .finished h2{overflow-wrap:anywhere}
+}
+@media(max-width:390px){
+  .site{padding:0 13px}
+  .site-header{height:75px}
+  .brand{gap:8px}
+  .brand strong{font-size:26px}
+  .brand-mark{width:42px;height:42px;font-size:32px}
+  .tab{padding:12px 5px;font-size:11px}
+  .tab .bubble{font-size:10px}
+  .panel{padding:20px 15px}
+  .page-controls input{width:94px}
+  .page-controls .page-dash{padding-bottom:13px}
+  .scope-summary{width:100%;padding:0;margin-top:-3px}
+  .session-times{gap:6px}
+  .config-group{padding:13px}
+  .checkgrid{gap:7px}
+  .checkgrid label{padding:10px 7px;font-size:12px}
+  .checkgrid input{width:18px;height:18px}
+  .quiz{padding:20px 15px}
+  .answers:not(.wide-choices):not(.accent-letters) .answer{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.progress-track div{transition:none}}
+[lang=zh] .intro h1,[lang=zh] .question-text,[lang=zh] .panel-heading h2,[lang=zh] .finished h2{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif}
+
+/* Minimum touch targets and control spacing for smartphone use. */
+@media(max-width:760px){
+ .language-switch select{min-height:44px}
+ .chapter-actions .text-button{min-height:44px;padding:9px 5px}
+ .chapter-option .only{min-height:44px}
+}
+@media(max-width:390px){.answers.accent-letters .answer.accent-letter{min-width:44px}}
+
+/* Student handle and privacy-safe rolling-seven-day leaderboard. */
+.student-identity{display:flex;align-items:center;gap:12px;background:#142238;border:1px solid #31465f;border-radius:13px;padding:11px 15px;margin:14px 0 20px;min-width:0}
+.identity-avatar{font-size:27px;flex:0 0 auto}
+.identity-name{display:flex;flex-direction:column;gap:2px;min-width:0}
+.identity-name .eyebrow{font-size:10px;color:#adc0d5;letter-spacing:.06em}
+.identity-name strong{font-size:16px;color:#f6db9a;overflow-wrap:anywhere}
+.leaderboard-panel{padding:26px}
+.leader-heading h2{margin:10px 0}
+.leader-heading p{color:var(--muted);max-width:67ch;line-height:1.5}
+.leader-overview{display:flex;flex-wrap:wrap;gap:10px;margin:23px 0;color:#e4cc92}
+.leader-overview span{padding:9px 12px;background:#1c2e44;border-radius:8px;font-size:13px}
+.leader-list{display:flex;flex-direction:column;gap:10px}
+.leader-item{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.5fr);align-items:center;gap:18px;border:1px solid #2d4157;background:#192a40;padding:14px 18px;border-radius:13px;min-width:0}
+.leader-item.me{border-color:#c8a765;background:#272d39}
+.leader-person{display:flex;align-items:center;gap:12px;min-width:0}
+.leader-rank{font-weight:800;color:#d6b874;font-variant-numeric:tabular-nums;min-width:32px}
+.leader-avatar{font-size:23px;flex:none}
+.leader-who{display:flex;flex-direction:column;gap:4px;min-width:0}
+.leader-who strong{font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.leader-me{font-size:11px;color:#ead08f;font-weight:700}
+.leader-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;min-width:0}
+.leader-metric{display:flex;flex-direction:column;gap:5px;min-width:0}
+.leader-metric>span{color:#b5c2d2;font-size:11px;line-height:1.25;overflow-wrap:anywhere}
+.leader-metric strong{color:#ecf4ff;font-size:16px;font-variant-numeric:tabular-nums}
+.leader-explanation{margin-top:20px;font-size:12px;line-height:1.5}
+@media(max-width:900px){
+.leader-item{grid-template-columns:1fr;gap:13px}
+.leader-metrics{padding-left:44px}
+}
+@media(max-width:760px){
+.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;overflow:visible}
+.tabs .tab{width:100%;min-width:0;min-height:46px;justify-content:center}
+.student-identity{margin:12px 0 17px;padding:10px 12px}
+.leaderboard-panel{padding:17px 13px}
+.leader-item{padding:12px}
+.leader-person{gap:10px}
+.leader-rank{min-width:28px}
+.leader-metrics{padding-left:0;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px}
+.leader-metric>span{font-size:11px}
+.leader-metric strong{font-size:17px}
+}
+@media(max-width:390px){
+.tabs{gap:6px}
+.tabs .tab{font-size:12px;min-height:48px}
+.identity-name strong{font-size:14px}
+.leader-who strong{font-size:13px}
+.leader-metric strong{font-size:16px}
+}
+
+
+/* Enrollment is deliberate: prevent QA cookie sessions from appearing as people. */
+.leader-enrollment{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:20px 0;padding:15px 16px;border:1px solid #455773;border-radius:12px;background:#16263a}
+.leader-enrollment p{color:#cddbeb;font-size:13px;line-height:1.5;margin:0}
+.leader-enrollment button{min-height:46px}
+@media(max-width:760px){.leader-enrollment{padding:12px}.leader-enrollment button{width:100%;min-height:50px}}
+
+/* Authentication gate: mobile-first, no external providers, only private HTTPS sessions. */
+.auth-overlay[hidden],.auth-input-wrap[hidden],#auth-success[hidden]{display:none!important}
+.auth-overlay{position:fixed;z-index:2000;inset:0;background:rgba(5,10,20,.94);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-panel{width:min(100%,460px);max-height:min(94vh,900px);overflow-y:auto;border:1px solid #49617d;border-radius:22px;background:#12213a;color:#eff7ff;box-shadow:0 15px 60px #050814;padding:26px;display:flex;flex-direction:column;gap:13px}
+.auth-panel .brand-mark{margin:0 auto 5px}
+.auth-panel .eyebrow{text-align:center}
+.auth-panel h2{font-size:28px;text-align:center;margin:0}
+.auth-panel p{line-height:1.5;margin:0}
+.auth-panel input{width:100%;box-sizing:border-box;background:#0a1728;color:#fff;border:1px solid #526781;border-radius:12px;padding:13px 15px;min-height:50px;font-size:18px}
+.auth-panel label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.auth-panel form{display:flex;flex-direction:column;gap:18px}
+.auth-panel form .primary{width:100%;min-height:52px}
+.auth-panel .auth-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:3px 0}
+.auth-modes button{min-height:45px;white-space:normal}
+.auth-modes button.active{background:#d6bb79;color:#192434}
+.auth-panel .auth-security{font-size:12px;color:#bacbe0;border-top:1px solid #37516a;padding-top:13px}
+.auth-secret-code{font-size:clamp(33px,11vw,50px);letter-spacing:.14em;color:#ff6368;font-weight:850;font-variant-numeric:tabular-nums;text-align:center;margin:14px auto}
+#auth-success{display:flex;flex-direction:column;gap:15px}
+#auth-success button{min-height:48px;width:100%}
+.student-identity{flex-wrap:wrap}
+.account-tools{display:flex;align-items:center;gap:12px;margin-left:auto;flex-wrap:wrap;min-width:0}
+.account-secret{display:flex;flex-direction:column;gap:1px}
+.account-secret span{font-size:10px;color:#a4b8cd}
+.account-secret strong{color:#ff747b;letter-spacing:.13em;font-size:19px;font-variant-numeric:tabular-nums}
+.account-tools .text-button{min-height:44px;color:#d7dfe7;font-size:12px}
+.topic-option{background:#1a2b40;border:1px solid #395170;border-radius:11px;padding:15px 12px;display:flex;align-items:center;gap:11px;cursor:pointer;min-height:52px}
+.topic-option:has(input:checked){background:#263338;border-color:#dbc080}
+.topic-option input{flex:none;width:19px;height:19px;accent-color:#d4b36b}
+.topic-option span{flex:1;min-width:0;overflow-wrap:anywhere;font-size:14px}
+.topic-option small{color:#c8d4e4;font-size:12px}
+#level-controls,#verb-controls,#topic-controls{margin:20px 0 0}
+.verb-reference{border-top:1px solid #35516d;margin-top:22px;padding-top:13px}
+.verb-reference summary{cursor:pointer;color:#e1c38d;font-weight:700;min-height:43px}
+.verb-ref-group{margin:10px 0 18px}
+.verb-reveal{padding:17px;margin:15px 0;border:1px solid #506782;background:#172940;border-radius:14px}
+.conjugation-heading{display:block;font-size:19px;color:#e9ce92;margin-bottom:14px}
+.conjugation-table{width:100%;border-collapse:collapse;font-size:16px}
+.conjugation-table th,.conjugation-table td{border-bottom:1px solid #3a4c60;padding:10px 14px;text-align:left}
+.conjugation-table th{color:#bdcadb;font-weight:500;width:46%}
+.conjugation-table .active{background:#374337}
+#verb-reference-table{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media(max-width:900px){#verb-reference-table{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .auth-overlay{padding:12px}
+ .auth-panel{padding:19px 16px;max-height:95dvh}
+ .auth-panel h2{font-size:24px}
+ .account-tools{gap:9px;width:100%;margin-left:42px;justify-content:flex-start}
+ .account-tools .text-button{padding:5px}
+ .account-secret strong{font-size:17px}
+ .conjugation-table th,.conjugation-table td{padding:10px 7px;font-size:14px}
+ .topic-option{padding:13px 11px}
+ #topic-controls .chapter-grid{max-height:440px;overflow:auto}
+ .segmented{gap:8px}
+ .segmented span{padding:10px 12px;min-height:48px;font-size:12px}
+}
+
+
+/* Browse learned A1/A2 topic words before attempting multiple choice. */
+.topic-preview-toggle{width:100%;margin:15px 0 4px;min-height:50px}
+.topic-study-list{margin-top:12px;border:1px solid #41536b;background:#132239;border-radius:12px;max-height:460px;overflow:auto;padding:12px}
+.topic-study-list[hidden]{display:none}
+.topic-study-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) auto;gap:8px;padding:9px 3px;border-bottom:1px solid #34465b;align-items:center}
+.topic-study-row strong{font-size:15px;overflow-wrap:anywhere}
+.topic-study-row span{font-size:13px;color:#dbe5f1;overflow-wrap:anywhere}
+.topic-study-row small{font-size:11px;color:#e1c58c}
+@media(max-width:390px){.topic-study-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:6px}.topic-study-row span{font-size:12px}}
+
+/* Vocabulary lesson, 6-language auth selector and Arabic layout */
+.auth-panel .auth-language-select{width:100%;display:block;padding:8px 0}
+.auth-language-select select{width:100%;min-height:48px;background:#0a1728;color:#fff;border:1px solid #526781;border-radius:11px;padding:10px 14px;font-size:16px}
+.vocab-panel{max-width:980px;margin:auto}
+.vocab-panel h2{font:clamp(31px,4vw,42px) Georgia,serif;letter-spacing:-.03em;margin:12px 0}
+.vocab-settings{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin:24px 0 10px}
+.vocab-settings label{display:block;color:var(--muted);font-size:13px;margin-bottom:8px}
+.vocab-settings select{width:100%;min-height:54px;background:#17283e;color:var(--text);border:1px solid #3d526c;border-radius:12px;padding:10px 13px}
+#vocab-word-preview h3,#vocab-card h3{font:clamp(24px,3vw,34px)/1.25 Georgia,serif;margin:20px 0}
+#vocab-preview-list{margin:20px 0 25px;max-height:unset;overflow:visible}
+#vocab-card .eyebrow{margin:30px 0 10px}
+#vocab-card h3{font-size:clamp(28px,4vw,40px);overflow-wrap:anywhere}
+#vocab-next{margin-top:23px}
+.vocab-back{display:block;margin:22px 0 0;color:var(--accent)}
+#vocab-message{color:var(--accent)}
+[lang=ar] .vocab-panel p,[lang=ar] .auth-panel p,[lang=ar] .auth-panel h2,[lang=ar] .auth-language-select,[lang=ar] .vocab-panel h2{font-family:Tahoma,Arial,sans-serif}
+@media(max-width:760px){.vocab-settings{grid-template-columns:1fr;gap:11px}.vocab-panel .start-actions{display:flex;flex-direction:column;gap:12px}.vocab-panel .start-actions button{width:100%}#vocab-card .answers{grid-template-columns:1fr 1fr}}
+/* Two clearly separated training strategies and Greek-only dialogue gap drills */
+.training-modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.training-mode{display:flex;align-items:center;gap:12px;padding:15px 18px;border-radius:14px;border:1px solid #475c77;background:#13253b;cursor:pointer;min-height:66px;font-weight:700}
+.training-mode:has(input:checked){border-color:var(--accent);background:#222b39;color:var(--accent)}
+.training-mode input{accent-color:var(--accent);width:18px;height:18px;flex-shrink:0}
+#personalized-status{color:var(--accent)}
+.dialogue-lines{display:flex;flex-direction:column;gap:10px;padding:16px 20px;background:#0c1a2a;border:1px solid #3e556b;border-radius:13px;margin:14px 0 25px;direction:ltr;text-align:left}
+.dialogue-line{font-size:clamp(16px,2.3vw,21px);line-height:1.65;margin:0;font-weight:500;color:#eef4fa;overflow-wrap:anywhere}
+.dialogue-blank{display:inline-block;padding:1px 8px;border-radius:6px;border-bottom:2px solid #7889a2;color:#c8d5e5;white-space:normal}
+.dialogue-blank.current{border:1px solid var(--accent);background:#55462466;color:#ffe4a3;font-weight:700}
+.dialogue-blank.filled{color:#8ee0b1;border-color:#57a77f}
+@media(max-width:760px){.training-modes{grid-template-columns:1fr;gap:8px}.training-mode{min-height:58px;padding:12px 15px}.dialogue-lines{padding:15px 12px}.dialogue-line{font-size:16px}}
+
+/* Mobile QA (Chromium touch, 320–430 px): full-width translated answer choices.
+   The old #vocab-card .answers 2-column override was too specific and squeezed
+   bilingual prompts to ~110 px. Keep 8 comfortable, readable touch targets. */
+.vocab-back{display:inline-flex;align-items:center;min-height:44px;padding:8px 0;max-width:100%;overflow-wrap:anywhere}
+@media(max-width:760px){
+  #vocab-card .answers{grid-template-columns:minmax(0,1fr)}
+  #vocab-card .answer{display:flex;flex-direction:row;align-items:center;gap:12px;min-height:56px;padding:12px 14px;font-size:14px;line-height:1.4}
+  #vocab-card .answer .key{flex:none;width:26px;height:26px}
+  #vocab-card .answer>span:last-child{flex:1;min-width:0;overflow-wrap:anywhere}
+}
+
+/* Short RTL action labels still need a 44px wide finger target. */
+.account-tools .text-button{min-width:44px}
+
+
+/* Printed-book curriculum: concise authentic Greek grammar/usage focus by
+ * unit. These are navigational learning labels, not an image of the book. */
+.chapter-focus{display:block;grid-column:1 / -1;color:var(--muted);font-size:.76rem;line-height:1.5;
+  overflow-wrap:anywhere;direction:ltr;text-align:start;margin-block-start:3px}
+
+/* Greek sentence building: mobile-friendly tap targets and visible progress. */
+.order-draft{min-height:66px;background:#10283a;border:1px solid #5d6a78;border-radius:12px;
+  padding:15px 18px;color:#f6e6b8;font-size:clamp(18px,2.5vw,24px);line-height:1.65;
+  overflow-wrap:anywhere;word-break:normal;text-align:left}
+.order-builder{margin:10px 0 20px}
+.answers.order-tokens{display:flex;flex-wrap:wrap;gap:9px;align-items:stretch}
+.answers.order-tokens .answer.order-word{width:auto;min-height:54px;padding:10px 14px;
+  flex-direction:row;font-size:18px;white-space:normal;word-break:break-word}
+.answers.order-tokens .answer.order-word:disabled{opacity:.25}
+.order-tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:15px}
+.order-tools button:disabled{opacity:.4;cursor:default}
+@media(max-width:500px){.order-tools button{flex:1 1 auto;font-size:12px;padding:9px}
+  .answers.order-tokens .answer.order-word{font-size:15px;min-height:48px}}
+
+/* Optional written final -ν in feminine accusative: correctness stays green,
+   textbook-preferred spelling is annotated subtly, never marked as wrong. */
+.answer.is-preferred{outline:1px solid var(--accent);outline-offset:1px}
+.preferred-form-label{font-size:11px;font-weight:500;letter-spacing:0;color:var(--accent);margin-inline-start:auto;line-height:1.25}
+.spelling-guidance{font-size:13px;color:#cad6e2;line-height:1.6;margin:12px 0 0;border-inline-start:2px solid var(--accent);padding-inline-start:12px}
+.spelling-guidance strong{color:var(--accent);font-weight:600}
+@media(max-width:390px){.preferred-form-label{font-size:10px}}
+
+/* Accent only on vowels; non-vowels stay visible as word skeleton */
+.answer.accent-letter.unaccentable{opacity:.25!important;cursor:default;border-color:transparent;background:transparent;box-shadow:none}
+.stage-select{margin-top:5px;padding:11px 15px;background:#1b2b40;color:#fff;border:1px solid #475f78;border-radius:10px;max-width:180px;min-height:43px;color-scheme:dark}
+#verb-stage-summary{color:var(--accent);margin-top:9px}
+
+#capacity-result{line-height:1.6;max-width:710px}
+
+/* Desktop correction: chapter focus was erroneously a flex item with
+   grid-column ignored, squeezing lesson titles into single letters. */
+@media(min-width:761px){
+  #chapter-grid .chapter-option{display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:center;align-items:center;gap:5px 14px;min-height:102px;padding:13px 15px}
+  #chapter-grid .chapter-option .chapter-name{grid-row:1;grid-column:1 / -1;min-width:0;display:flex;align-items:center;overflow-wrap:normal;word-break:normal;line-height:1.5;font-size:14px}
+  #chapter-grid .chapter-option .chapter-focus{grid-row:2;grid-column:1 / -1;min-width:0;margin:0;line-height:1.5;overflow-wrap:break-word;word-break:normal}
+  #chapter-grid .chapter-option .chapter-page{grid-row:3;grid-column:1;min-width:0;white-space:normal}
+  #chapter-grid .chapter-option .only{grid-row:3;grid-column:2;min-width:48px;justify-self:end;white-space:nowrap}
+}
+.segmented input:disabled+span{cursor:not-allowed;opacity:.57;border-style:dashed;background:#242838;color:#e1cfa5}
+
+/* All three listening difficulty levels; chapter vs page selection */
+.listening-filter{margin:12px 0 20px;padding:16px;border:1px solid var(--line);border-radius:13px;background:var(--surface,#162434)}
+.listening-filter .subheading{margin:8px 0 10px}
+#listening-range{margin:6px 0 14px;min-width:170px}
+#listening-difficulty{gap:9px}
+@media(max-width:480px){.listening-filter{padding:12px}#listening-range{width:100%;max-width:none}}
+
+
+.learning-engine-options{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0}
+.learning-engine-options>label{display:flex;align-items:flex-start;gap:.6rem;line-height:1.5}
+.learning-engine-options input{flex:0 0 auto;margin-top:.25rem}
+.learning-engine-options .quiet{margin:.15rem 0}
+.mastery-heatmap{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.5rem}
+.mastery-chip{display:grid;place-items:center;min-height:2.3rem;border-radius:.55rem;font-weight:700;background:#344053;color:#fff;border:1px solid #617087}
+.mastery-chip.early{background:#54476c}
+.mastery-chip.review{background:#884b4b}
+.mastery-chip.developing{background:#79652b}
+.mastery-chip.strong{background:#235c50}
+@media(max-width:500px){.mastery-heatmap{grid-template-columns:repeat(5,minmax(0,1fr))}}
+
+
+/* Pronunciation playback is opt-in and never records users. */
+.pronounce-controls{display:flex;flex-wrap:wrap;align-items:center;gap:9px 12px;margin:11px 0 20px}
+.pronounce-controls button{min-height:43px;padding:9px 14px;font-size:13px;gap:5px}
+.pronounce-controls .quiet{flex-basis:100%;font-size:12px;min-height:1.3em;margin:0}
+.topic-study-row{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) auto auto}
+.topic-study-row .vocab-audio-btn{min-height:40px;min-width:45px;border:1px solid #566880;border-radius:9px;
+ background:#1b2a3d;color:#f2dfb4;padding:5px 9px;justify-self:end}
+.topic-study-row .vocab-audio-btn:hover{background:#33445b}
+#vocab-preview-audio-status{min-height:18px;font-size:12px;margin:12px 0}
+@media(max-width:390px){.topic-study-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto auto;gap:5px}.topic-study-row .vocab-audio-btn{min-width:40px;padding:5px}}

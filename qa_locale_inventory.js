@@ -1,0 +1,22 @@
+'use strict';
+const fs=require('fs'),vm=require('vm');
+const html=fs.readFileSync('/app/index.html','utf8');
+const js=fs.readFileSync('/app/app.js','utf8');
+const vjs=fs.readFileSync('/app/vocab.js','utf8');
+const blob=js.slice(js.indexOf('const I18N='),js.indexOf('const kindIds='));
+const scope={};vm.runInNewContext(blob.replace('const I18N=','globalThis.I18N='),scope);
+const tr=scope.I18N;
+const langs=['ru','en','zh','ar','es','pt'];
+const usage=[...js.matchAll(/\bt\(\s*["']([^"']+)["']/g)].map(m=>m[1]);
+const attributes=[...html.matchAll(/data-i18n="([^"]+)"/g)].map(m=>m[1]);
+const used=new Set([...usage,...attributes]);
+const allKeys=new Set(Object.values(tr).flatMap(x=>Object.keys(x)));
+const missing=Object.fromEntries(langs.map(l=>[l,[...allKeys].filter(k=>!tr[l]?.[k])]));
+const missingUsed=Object.fromEntries(langs.map(l=>[l,[...used].filter(k=>!tr[l]?.[k])]));
+console.log(JSON.stringify({i18nKeys:allKeys.size,usedKeys:[...used].length,missingByLocale:missing,missingUsedByLocale:missingUsed,unknownUsed:[...used].filter(k=>!allKeys.has(k)),allShared:[...used].filter(k=>langs.every(l=>tr[l]?.[k]))},null,2));
+const termBlock=vjs.slice(vjs.indexOf('const terms='),vjs.indexOf('let meta='));
+const local={};vm.runInNewContext(termBlock.replace('const terms=','globalThis.terms='),local);
+const t=local.terms;const allTermKeys=new Set(Object.values(t).flatMap(x=>Object.keys(x)));
+console.log('VOCAB_LOCALES',JSON.stringify(Object.fromEntries(langs.map(l=>[l,{total:Object.keys(t[l]).length,missing:[...allTermKeys].filter(k=>!t[l][k])}])),null,2));
+
+if(Object.values(missing).some(x=>x.length)||[...used].some(k=>!allKeys.has(k)))process.exitCode=1;

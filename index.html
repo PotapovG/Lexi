@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a1220">
+<title>Λέξη — Greek practice</title>
+<link rel="stylesheet" href="/greek/styles.css?v=34">
+<script src="/greek/greek_word_audio.js?v=4" defer></script>
+<script src="/greek/app.js?v=42" defer></script>
+<script src="/greek/vocab.js?v=7" defer></script>
+</head>
+<body>
+<div class="background-ornament" aria-hidden="true">α β γ δ ε ζ η θ</div>
+<div class="auth-overlay" id="auth-gate" hidden>
+  <div class="auth-panel" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <span class="brand-mark">λ</span>
+    <div class="eyebrow">Λέξη · Greek practice</div>
+    <h2 id="auth-title" data-i18n="authWelcome">Добро пожаловать!</h2>
+    <p id="auth-description" data-i18n="authInfo">Зарегистрируйся или войди, чтобы сохранить прогресс между устройствами.</p>
+    <label class="auth-language-select" for="auth-lang"><span data-i18n="language">Язык интерфейса и перевода</span>
+      <select id="auth-lang" aria-label="Language / اللغة"><option value="ru">🇷🇺 Русский</option><option value="en">🇬🇧 English</option><option value="zh">🇨🇳 中文</option><option value="ar">🇸🇦 العربية</option><option value="es">🇪🇸 Español</option><option value="pt">🇵🇹 Português</option></select>
+    </label>
+    <div class="segmented auth-modes" id="auth-modes">
+      <button type="button" class="secondary active" id="mode-register" data-i18n="authRegister">Регистрация</button>
+      <button type="button" class="secondary" id="mode-login" data-i18n="authLogin">Вход</button>
+    </div>
+    <form id="auth-form" autocomplete="off">
+      <div class="auth-input-wrap" id="auth-name-wrap">
+        <label for="auth-name" data-i18n="authNickname">Придумай никнейм (3–28 символов)</label>
+        <input id="auth-name" type="text" minlength="3" maxlength="28" placeholder="Сонный Академик" autocomplete="nickname">
+      </div>
+      <div class="auth-input-wrap" id="auth-code-wrap" hidden>
+        <label for="auth-input-code" data-i18n="authCodeLogin">Твой восьмизначный код</label>
+        <input id="auth-input-code" type="text" inputmode="numeric" maxlength="8" pattern="[0-9]{8}" placeholder="12345678" autocomplete="off">
+      </div>
+      <div id="auth-error" class="feedback bad" role="alert" hidden></div>
+      <button class="primary" type="submit" id="auth-submit" data-i18n="authCreate">Зарегистрироваться</button>
+    </form>
+    <div id="auth-success" hidden>
+      <p data-i18n="authKeep">Это твой ключ ко всем устройствам. Запиши его: без кода восстановить аккаунт невозможно.</p>
+      <div class="auth-secret-code" id="auth-created-code"></div>
+      <button type="button" class="secondary" id="auth-copy" data-i18n="authCopy">Скопировать код</button>
+      <button type="button" class="primary" id="auth-enter" data-i18n="authContinue">Перейти к занятиям →</button>
+    </div>
+    <p class="quiet auth-security" data-i18n="authSecurity">Восемь цифр — слабее обычного пароля. Не показывай код другим и не публикуй его в чатах.</p>
+  </div>
+</div>
+<div class="site">
+ <header class="site-header">
+  <a class="brand" href="/greek/" aria-label="Λέξη — home"><span class="brand-mark">λ</span><span><strong>Λέξη</strong><small data-i18n="brand">Мой греческий</small></span></a>
+  <div class="header-tools"><span class="header-level">Ελληνικά Α΄ <b>·</b> 312 <span data-i18n="pagesLabel">страниц</span></span>
+    <label class="language-switch"><span class="sr-only" data-i18n="language">Язык интерфейса и перевода</span><select id="lang" aria-label="Interface and translation language"><option value="ru">🇷🇺 RU</option><option value="en">🇬🇧 EN</option><option value="zh">🇨🇳 中文</option><option value="ar">🇸🇦 العربية</option><option value="es">🇪🇸 Español</option><option value="pt">🇵🇹 Português</option></select></label>
+  </div>
+ </header>
+ <main>
+  <section class="intro">
+   <div class="intro-copy">
+    <span class="eyebrow" data-i18n="eyebrow">ВАШ ЛИЧНЫЙ ТРЕНАЖЁР</span>
+    <h1><span data-i18n="headline1">Знания</span><br><em data-i18n="headline2">на всю жизнь.</em></h1>
+    <p data-i18n="intro">Греческие слова и формы, устойчивые фразы и предложения. Выбирай пройденные страницы или главы — ошибки станут следующей тренировкой.</p>
+   </div>
+   <div class="hero-stats">
+    <div><span data-i18n="accuracy">Точность</span><strong id="hero-accuracy">—</strong><small data-i18n="allAnswers">все ответы</small></div>
+    <div><span data-i18n="reviewDue">К повторению</span><strong id="hero-weak">—</strong><small data-i18n="cards">карточек</small></div>
+   </div>
+  </section>
+  <nav class="tabs" aria-label="Sections">
+   <button class="tab active" data-page="practice" aria-current="page" data-i18n="practice">Занятие</button>
+   <button class="tab" data-page="vocab" data-i18n="vocabTab">Словарь A1/A2</button>
+   <button class="tab" data-page="weak"><span data-i18n="myMistakes">Мои ошибки</span> <span class="bubble" id="weak-bubble">0</span></button>
+   <button class="tab" data-page="stats" data-i18n="statistics">Статистика</button>
+   <button class="tab" data-page="leaderboard" data-i18n="leaders">Рейтинг</button>
+  </nav>
+  <div class="student-identity" id="student-identity">
+    <span id="student-avatar" class="identity-avatar">🎓</span>
+    <div class="identity-name"><span class="eyebrow" data-i18n="studentName">Твой учебный псевдоним</span><strong id="student-nickname">...</strong></div>
+    <div class="account-tools"><div class="account-secret"><span data-i18n="authAccessCode">Код входа</span><strong id="account-code">••••••••</strong></div>
+      <button type="button" class="text-button" id="account-copy" data-i18n="authCopyShort">Копировать</button>
+      <button type="button" class="text-button" id="account-logout" data-i18n="authExit">Выйти</button>
+    </div>
+  </div>
+  <section id="practice-view">
+   <div id="setup" class="panel">
+    <div class="panel-heading"><span class="eyebrow" data-i18n="settings">НАСТРОЙКА ЗАНЯТИЯ</span><h2 data-i18n="whatPractice">Что учим сегодня?</h2>
+      <p data-i18n="chooseInfo">Можно выбрать страницы или конкретные главы. В каждом вопросе — восемь вариантов, перевод всегда в обе стороны.</p>
+    </div>
+    <div class="training-modes" role="group" aria-label="Training mode">
+      <label class="training-mode"><input type="radio" name="training" value="textbook" checked>
+        <span data-i18n="textbookTraining">Тренировка учебника</span></label>
+      <label class="training-mode"><input type="radio" name="training" value="personalized">
+        <span data-i18n="personalizedTraining">Персонализированная тренировка</span></label>
+    </div>
+    <p class="quiet" id="training-description" data-i18n="textbookTrainingInfo">Только упражнения по выбранным страницам или главам учебника.</p>
+    <p class="quiet" id="personalized-status" hidden></p>
+    <div class="scope-panel">
+      <div class="subheading" data-i18n="scope">Охват учебника</div>
+      <div class="segmented" role="group" aria-label="Book selection mode">
+       <label><input type="radio" name="scope" value="pages" checked><span data-i18n="pagesMode">По страницам</span></label>
+       <label><input type="radio" name="scope" value="chapters"><span data-i18n="chaptersMode">По главам</span></label>
+       <label><input type="radio" name="scope" value="listening"><span data-i18n="listenMode">🎧 Аудирование</span></label>
+       <label id="verb-scope-option"><input type="radio" name="scope" value="verbs"><span data-i18n="verbsMode">Спряжение Α / Β1 / Β2</span></label>
+      </div>
+      <div id="listening-filter" hidden class="listening-filter">
+        <div class="subheading" data-i18n="listenRangeTitle">Выбор материала для аудирования</div>
+        <label for="listening-range" data-i18n="listenRangeLabel">Искать упражнения</label>
+        <select id="listening-range" class="stage-select">
+          <option value="chapters" data-i18n="listenByChapters">По главам</option>
+          <option value="pages" data-i18n="listenByPages">По страницам</option>
+        </select>
+        <div class="subheading" data-i18n="listenDifficultyTitle">Сложность аудирования</div>
+        <div class="checkgrid" id="listening-difficulty">
+          <label><input type="checkbox" value="word" checked><span data-i18n="listenLevelWords">1 · Отдельные слова</span></label>
+          <label><input type="checkbox" value="phrase" checked><span data-i18n="listenLevelPhrases">2 · Фразы</span></label>
+          <label><input type="checkbox" value="sentence" checked><span data-i18n="listenLevelSentences">3 · Предложения</span></label>
+        </div>
+        <p class="quiet" data-i18n="listenDifficultyNotice">Сложность определяется длиной задания, а не официальной маркировкой CEFR.</p>
+        <p class="quiet" id="listening-credit"><span data-i18n="listenCredit">Озвучка: Pocket TTS Greek (myned-ai), CC BY 4.0.</span> <a href="https://huggingface.co/myned-ai/pocket-tts-greek" target="_blank" rel="noopener noreferrer">Hugging Face ↗</a></p>
+      </div>
+      <div id="page-controls" class="page-controls">
+        <div><label for="page-from" data-i18n="fromPage">Со страницы</label><input id="page-from" type="number" min="1" max="312" step="1" value="1"></div>
+        <span class="page-dash" aria-hidden="true">—</span>
+        <div><label for="page-to" data-i18n="toPage">По страницу</label><input id="page-to" type="number" min="1" max="312" step="1" value="56"></div>
+        <div class="scope-summary" id="range-summary">1–56 / 312</div>
+      </div>
+      <div id="chapter-controls" hidden>
+        <p class="quiet" id="listen-scope-help" hidden data-i18n="listenScopeHelp">Выбери пройденные главы. Греческий текст будет скрыт до ответа.</p>
+        <div class="chapter-actions"><button class="text-button" type="button" id="all-chapters" data-i18n="selectAll">Выбрать все</button><button class="text-button" type="button" id="clear-chapters" data-i18n="clearAll">Снять выбор</button></div>
+        <div id="chapter-grid" class="chapter-grid"></div>
+      </div>
+      <div id="topic-controls" hidden>
+        <div class="subheading" data-i18n="selectTopics">Выбери темы</div>
+        <div class="chapter-grid" id="topic-grid"></div>
+        <button type="button" class="secondary topic-preview-toggle" id="preview-topic-words" data-i18n="previewWords">Показать слова и переводы</button>
+        <div class="topic-study-list" id="study-word-list" hidden></div>
+      </div>
+      <div id="level-controls" hidden>
+        <div class="subheading" data-i18n="levelTitle">Уровень</div>
+        <div class="checkgrid" id="level-options">
+          <label><input type="checkbox" value="A1" checked><span>A1 · βασικό</span></label>
+          <label><input type="checkbox" value="A2" checked><span>A2 · συνέχεια</span></label>
+        </div>
+      </div>
+      <div id="verb-controls" hidden>
+        <div class="subheading" data-i18n="verbGroups">Группы глаголов</div>
+        <div class="checkgrid" id="verb-group-options">
+          <label><input type="checkbox" value="A" checked><span>Α΄ — γράφω</span></label>
+          <label><input type="checkbox" value="B1" checked><span>Β1 — μιλάω</span></label>
+          <label><input type="checkbox" value="B2" checked><span>Β2 — μπορώ</span></label>
+        </div>
+        <label for="verb-max-unit" class="quiet" data-i18n="verbStageLabel">Спрягать глаголы, изученные до главы</label>
+        <select id="verb-max-unit" class="stage-select" aria-label="Глава учебника">
+          <option value="2">2</option><option value="3">3</option>
+          <option value="4" selected>4</option><option value="6">6</option>
+          <option value="7">7</option><option value="8">8</option>
+          <option value="9">9</option><option value="11">11</option>
+          <option value="12">12</option><option value="14">14</option>
+          <option value="16">16</option><option value="17">17</option>
+          <option value="19">19</option><option value="20">20</option>
+        </select>
+        <p class="quiet" data-i18n="verbStageNotice">Этап обучения ограничивает набор глаголов; это не утверждение, что каждый глагол впервые встречается на указанной странице.</p>
+        <p class="quiet" id="verb-stage-summary" aria-live="polite"></p>
+        <p class="quiet" data-i18n="verbNotice">Выбирай правильную форму глагола для лица. После ответа увидишь все шесть форм.</p>
+        <details class="verb-reference"><summary data-i18n="verbReference">Посмотреть таблицы спряжения</summary><div id="verb-reference-table"></div></details>
+      </div>
+      <p id="page-disclaimer" class="quiet" data-i18n="pageDisclaimer">Карточки — авторские упражнения по темам учебника. Номера страниц у отдельных карточек ориентировочные, а границы глав соответствуют оглавлению.</p>
+    </div>
+    <div id="listen-mix-setting" class="learning-engine-options">
+      <label><input type="checkbox" id="listen-mix" checked><span data-i18n="mixListeningLabel">Добавлять аудирование в обычные занятия (около 20%)</span></label>
+    </div>
+    <div class="config-v2" id="config-material">
+      <div class="config-group" id="material-config-group">
+        <div class="subheading" data-i18n="material">Материал</div>
+        <div class="checkgrid" id="kind-options">
+         <label><input type="checkbox" value="word" checked><span data-i18n="words">Слова</span></label>
+         <label><input type="checkbox" value="number" checked><span data-i18n="numbers">Числа</span></label>
+         <label><input type="checkbox" value="phrase" checked><span data-i18n="phrases">Фразы</span></label>
+         <label><input type="checkbox" value="sentence" checked><span data-i18n="sentences">Предложения</span></label>
+         <label><input type="checkbox" value="dialogue" checked><span data-i18n="dialogues">Диалоги · вставить реплики</span></label>
+         <label><input type="checkbox" value="plural"><span data-i18n="plurals">Число существительных</span></label>
+         <label><input type="checkbox" value="letter"><span data-i18n="alphabet">Алфавит</span></label>
+         <label><input type="checkbox" value="accent"><span data-i18n="accent">Ударения</span></label>
+         <label><input type="checkbox" value="syllable"><span data-i18n="syllableMode">Ударный слог</span></label>
+         <label><input type="checkbox" value="enclitic" checked><span data-i18n="encliticMode">Двойное ударение</span></label>
+         <label><input type="checkbox" value="grammar" checked><span data-i18n="grammarMode">Грамматика 2.0</span></label>
+         <label><input type="checkbox" value="article"><span data-i18n="articlesMode">Артикли и предлоги</span></label>
+         <label><input type="checkbox" value="order"><span data-i18n="orderMode">Собрать предложение</span></label>
+        </div>
+      </div>
+      <div class="config-group">
+       <div class="subheading" data-i18n="sessionLength">Продолжительность</div>
+       <div class="session-times" role="group" aria-label="Session duration" id="duration-options">
+        <label><input type="radio" name="duration" value="10"><span>10 <small data-i18n="minutes">мин</small></span></label>
+        <label><input type="radio" name="duration" value="15"><span>15 <small data-i18n="minutes">мин</small></span></label>
+        <label><input type="radio" name="duration" value="20" checked><span>20 <small data-i18n="minutes">мин</small></span></label>
+        <label><input type="radio" name="duration" value="30"><span>30 <small data-i18n="minutes">мин</small></span></label>
+        <label><input type="radio" name="duration" value="45"><span>45 <small data-i18n="minutes">мин</small></span></label>
+        <label><input type="radio" name="duration" value="60"><span>60 <small data-i18n="minutes">мин</small></span></label>
+       </div>
+       <div class="learning-engine-options">
+        <label><input type="checkbox" id="adaptive-mode"><span data-i18n="adaptiveMode">Адаптивная сложность</span></label>
+        <label><input type="checkbox" id="srs-optin"><span data-i18n="srsOptIn">Включить интервальные повторы новых ответов</span></label>
+        <p class="quiet" data-i18n="srsNotice">Новая функция включается по желанию; старые ответы остаются без изменений.</p>
+        <button type="button" class="secondary compact" id="srs-due-start" disabled data-i18n="srsStart">Карточки по расписанию</button>
+        <p class="quiet" id="srs-status" aria-live="polite"></p>
+       </div>
+       <p class="quiet"><span data-i18n="mixedDirections">Направление: греческий ↔ перевод (автоматически)</span></p>
+       <p class="quiet" data-i18n="sessionUniqueNote">Без повторов: одна учебная единица показывается один раз за обычную тренировку. Ошибки повторяются отдельно.</p>
+       <button type="button" id="estimate-capacity" class="secondary compact" data-i18n="capacityButton">Проверить запас карточек</button>
+       <p id="capacity-result" class="quiet" aria-live="polite"></p>
+      </div>
+    </div>
+    <p class="notice" data-i18n="pluralNotice">ⓘ Формы множественного числа входят как отдельная дополнительная практика, даже когда встречаются позже пройденных страниц.</p>
+    <p class="notice" id="translation-note" hidden></p>
+    <div id="setup-error" class="feedback bad" hidden></div>
+    <div class="start-actions"><button class="primary" id="start"><span data-i18n="start">Начать тренировку</span> <span>↗</span></button><span class="quiet" id="catalog-summary"></span></div>
+   </div>
+   <section class="panel quiz" id="quiz" hidden aria-live="polite">
+    <div class="quiz-top"><span id="quiz-mode">ТРЕНИРОВКА</span><span class="timer-remaining" id="time-left">20:00</span><span id="question-num">1</span></div>
+    <div class="progress-track"><div id="progress-fill"></div></div>
+    <span class="eyebrow" id="question-topic">УРОК 1</span>
+    <p class="question-subtitle" id="question-note">Выбери перевод</p>
+    <h2 class="question-text" id="question-prompt"></h2>
+    <div id="word-pronounce-controls" class="pronounce-controls" hidden>
+      <button class="secondary compact" type="button" id="word-pronounce" data-i18n="wordListen">🔊 Послушать слово</button>
+      <button class="secondary compact" type="button" id="word-pronounce-slow" data-i18n="wordListenSlow">0,8× Медленно</button>
+      <p class="quiet" id="word-audio-status" role="status" aria-live="polite"></p>
+    </div>
+    <div class="dialogue-lines" id="dialogue-lines" lang="el" dir="ltr" hidden></div>
+    <div class="listening-controls" id="listening-controls" hidden>
+      <audio id="listening-audio" preload="none"></audio>
+      <div class="listening-buttons">
+        <button type="button" class="primary" id="listen-play" data-i18n="listenPlay">▶ Прослушать</button>
+        <button type="button" class="secondary" id="listen-slow" data-i18n="listenSlow">0,8× Медленнее</button>
+      </div>
+      <p class="quiet" id="listening-status" aria-live="polite"></p>
+    </div>
+    <p id="listening-reveal" class="listening-reveal" lang="el" dir="ltr" hidden></p>
+    <div id="order-builder" class="order-builder" hidden>
+      <p id="order-draft-label" class="quiet">Твоя фраза</p>
+      <div id="order-draft" class="order-draft" lang="el" dir="ltr" aria-live="polite">…</div>
+    </div>
+    <div class="answers" id="answers"></div>
+    <div id="order-tools" class="order-tools" hidden>
+      <button type="button" class="secondary compact" id="order-undo">Назад</button>
+      <button type="button" class="secondary compact" id="order-reset">Сбросить</button>
+      <button type="button" class="primary compact" id="order-check">Проверить предложение</button>
+    </div>
+    <div class="verb-reveal" id="verb-reveal" hidden></div>
+    <div class="feedback" id="feedback" hidden></div>
+    <p id="recovery-note" class="quiet" hidden></p>
+    <button id="retry-answer" class="secondary compact" type="button" data-i18n="retryAnswer" hidden>Повторить отправку ответа</button>
+    <p class="quiet" id="resume-message" role="status"></p>
+    <div class="quiz-bottom"><span class="kbd-hint" data-i18n="keyboard">Клавиши 1–8 · Enter — дальше</span>
+       <button class="secondary compact" id="finish-now" data-i18n="finishNow">Завершить</button>
+       <button class="primary compact" id="next" hidden data-i18n="next">Следующая →</button>
+    </div>
+   </section>
+   <section class="panel finished" id="finished" hidden>
+    <span class="end-icon">✓</span><span class="eyebrow" data-i18n="complete">ЗАНЯТИЕ ЗАВЕРШЕНО</span>
+    <h2 id="finish-title">Πολύ καλά!</h2><p id="finish-copy"></p>
+    <div class="finish-actions"><button class="primary" id="again" data-i18n="anotherSession">Новое занятие ↗</button><button class="secondary" id="review" data-i18n="reviewMistakes">Повторить ошибки</button></div>
+   </section>
+  </section>
+  <section id="vocab-view" hidden>
+    <div class="panel vocab-panel">
+      <span class="eyebrow">Λέξη · A1 / A2</span>
+      <h2 id="vocab-title">Словарь A1 / A2</h2>
+      <p id="vocab-subtitle" class="quiet"></p>
+      <p id="vocab-source" class="quiet"></p>
+      <div id="vocab-controls">
+        <div class="vocab-settings">
+          <div><label for="vocab-topic" id="vocab-topic-label">Тема</label><select id="vocab-topic"></select></div>
+          <div><label for="vocab-level" id="vocab-level-label">Уровень</label><select id="vocab-level"><option value="A1">A1</option><option value="A2">A2</option><option value="all">A1 + A2</option></select></div>
+        </div>
+        <p class="quiet" id="vocab-total"></p>
+        <p class="quiet" id="vocab-progress"></p>
+        <div class="start-actions"><button class="primary" id="vocab-new">Изучить 10 новых слов</button><button class="secondary" id="vocab-review">Повторить ошибки</button></div>
+        <p class="quiet" id="vocab-message" hidden></p>
+      </div>
+      <section id="vocab-lesson" hidden>
+        <div id="vocab-word-preview" hidden>
+          <h3 id="vocab-preview-heading">Запомни эти слова</h3>
+          <div id="vocab-preview-list" class="topic-study-list"></div><p id="vocab-preview-audio-status" class="quiet" role="status" aria-live="polite"></p>
+          <button type="button" class="primary" id="vocab-begin">Начать карточки →</button>
+        </div>
+        <div id="vocab-card" hidden>
+          <div class="quiz-top"><span id="vocab-card-heading">УРОК СЛОВ</span><span id="vocab-question-count"></span></div>
+          <div class="eyebrow" id="vocab-direction"></div>
+          <h3 id="vocab-prompt" lang="el"></h3>
+          <div class="pronounce-controls" id="vocab-pronounce-controls">
+            <button class="secondary compact" type="button" id="vocab-pronounce">🔊 Послушать слово</button>
+            <button class="secondary compact" type="button" id="vocab-pronounce-slow">0,8× Медленно</button>
+            <p id="vocab-audio-status" class="quiet" role="status" aria-live="polite"></p>
+          </div>
+          <div class="answers" id="vocab-choices"></div>
+          <p class="quiet" id="vocab-fallback"></p>
+          <div class="feedback" id="vocab-feedback" hidden></div>
+          <button type="button" class="primary" id="vocab-next" hidden>Следующее слово →</button>
+        </div>
+        <div id="vocab-summary" hidden><h3 id="vocab-complete"></h3><button type="button" class="primary" id="vocab-again">Следующие 10 слов →</button></div>
+        <button type="button" class="text-button vocab-back" id="vocab-back">Назад к темам</button>
+      </section>
+    </div>
+  </section>
+  <section id="stats-view" hidden>
+   <div class="stats-grid">
+    <div class="tile"><span data-i18n="answers">Ответов</span><strong id="stat-attempts">0</strong></div>
+    <div class="tile"><span data-i18n="correctAnswers">Верных</span><strong id="stat-correct">0</strong></div>
+    <div class="tile"><span data-i18n="accuracy">Точность</span><strong id="stat-accuracy">0%</strong></div>
+    <div class="tile"><span data-i18n="streak">Серия</span><strong id="stat-streak">0</strong></div>
+   </div>
+   <div class="stats-layout">
+    <div class="panel stat-panel"><span class="eyebrow" data-i18n="byChapter">ПО ГЛАВАМ</span><h2 data-i18n="whereStrong">Что уже получается</h2><div id="unit-stats"></div></div>
+    <div class="panel stat-panel"><span class="eyebrow" data-i18n="byType">ПО ТИПАМ</span><h2 data-i18n="whereWeak">Что стоит повторить</h2><div id="kind-stats"></div></div>
+   </div>
+   <div class="panel stat-panel"><span class="eyebrow" data-i18n="masteryTitle">КАРТА ОСВОЕНИЯ</span><h2 data-i18n="masteryHeading">Главы</h2><p class="quiet" data-i18n="masteryNotice">Цвет зависит от правильности ответов. Меньше 8 ответов — предварительная оценка.</p><div class="mastery-heatmap" id="mastery-heatmap"></div></div>
+   <div class="stats-layout">
+    <div class="panel stat-panel">
+     <span class="eyebrow" data-i18n="skillMasteryTitle">НАВЫКИ</span>
+     <h2 data-i18n="skillMasteryHeading">Грамматические упражнения</h2>
+     <p class="quiet" data-i18n="skillMasteryNotice">Точность ответов на конкретные упражнения. Сюжетные примеры не подтверждают освоение всей грамматики.</p>
+     <div id="skill-stats"></div>
+    </div>
+    <div class="panel stat-panel">
+     <span class="eyebrow" data-i18n="pageMasteryTitle">ПО СТРАНИЦАМ</span>
+     <h2 data-i18n="pageMasteryHeading">Страницы, требующие повторения</h2>
+     <p class="quiet" data-i18n="pageMasteryNotice">Ориентировочные страницы авторских карточек, не точное совпадение с упражнениями книги. Показываются страницы с тремя и более ответами.</p>
+     <div id="page-stats"></div>
+    </div>
+   </div>
+   <div class="stats-layout">
+    <div class="panel stat-panel"><span class="eyebrow" data-i18n="topicEvidenceTitle">ТЕМЫ</span><h2 data-i18n="topicEvidenceHeading">Словарные темы</h2><p class="quiet" data-i18n="topicEvidenceNotice">Точность в словарных темах, не оценка официального уровня.</p><div id="topic-mastery"></div></div>
+    <div class="panel stat-panel"><span class="eyebrow" data-i18n="grammarEvidenceTitle">ГРАММАТИКА</span><h2 data-i18n="grammarEvidenceHeading">Конструкции</h2><p class="quiet" data-i18n="grammarEvidenceNotice">Только прямые упражнения; малые выборки отмечены.</p><div id="grammar-mastery"></div></div>
+   </div>
+   <div class="panel stat-panel"><span class="eyebrow" data-i18n="vocabEvidenceTitle">СЛОВАРЬ A1/A2</span><h2 data-i18n="vocabEvidenceHeading">Освоение тем отдельного словаря</h2><p class="quiet" data-i18n="vocabEvidenceNotice">Отдельная статистика по десятисловным урокам; не смешивается с тренировкой учебника.</p><div id="vocab-topic-mastery"></div></div>
+   <div class="panel stat-panel"><span class="eyebrow" data-i18n="last14">ПОСЛЕДНИЕ 14 ДНЕЙ</span><h2 data-i18n="history">История занятий</h2><div id="daily"></div></div>
+   <p class="privacy" data-i18n="privacy">История хранится в SQLite на сервере и привязана к анонимному cookie браузера. На другом устройстве статистика отдельная.</p>
+  </section>
+  <section id="leaderboard-view" hidden>
+    <div class="panel leaderboard-panel">
+      <div class="leader-heading"><span class="eyebrow" data-i18n="leaderDays">за 7 дней</span><h2 data-i18n="leaderTitle">Лидеры недели</h2><p data-i18n="leaderIntro">Последние 7 дней. Время — оценка активных ответов, простои не учитываются.</p></div>
+      <div class="leader-enrollment" id="leader-enrollment">
+        <p id="leader-enrollment-hint">Участие в публичном рейтинге добровольное. Без вступления личные занятия остаются приватными.</p>
+        <button type="button" class="secondary" id="leader-toggle">Вступить в рейтинг</button>
+      </div>
+      <div class="leader-overview"><span id="leader-members"></span><span id="leader-mine"></span></div>
+      <div id="leader-list" class="leader-list"></div>
+      <p class="quiet leader-explanation" data-i18n="leaderEstimate">Время оценивается по интервалам между ответами, долгие паузы не учитываются.</p>
+    </div>
+  </section>
+  <section id="weak-view" hidden>
+   <div class="panel weak-panel">
+    <span class="eyebrow" data-i18n="weakHeading">РАБОТА НАД ОШИБКАМИ</span>
+    <h2 data-i18n="weakTitle">Повторяем то, <em>что не получилось.</em></h2>
+    <p data-i18n="weakInfo">Карточки, где были ошибки, появляются здесь. Два верных ответа закрывают ошибку; направления и языки перевода учитываются отдельно. Действует выбранный диапазон и типы материала.</p>
+    <div class="weak-counter"><strong id="weak-count">0</strong><span data-i18n="weakCount">ошибочных карточек всего</span></div>
+    <button class="primary" id="weak-start" data-i18n="weakStart">Тренировать ошибки →</button>
+    <p class="quiet" id="weak-empty"></p>
+   </div>
+  </section>
+  <footer><span data-i18n="footerBrand">Λέξη · Greek practice</span><span data-i18n="footer">Авторская практика по темам Ελληνικά Α΄ · 20 разделов · 312 страниц</span></footer>
+ </main>
+</div>
+</body>
+</html>

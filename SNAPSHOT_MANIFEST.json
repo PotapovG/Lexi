@@ -1,0 +1,934 @@
+{
+  "captured_utc": "2026-10-22T07:03:19.093384+00:00",
+  "source": "/opt/greek-trainer",
+  "files": [
+    {
+      "path": ".gitignore",
+      "size": 570,
+      "sha256": "75dc17c53873209fb828a3cdd4c24a1295847feba6208c92fe8b43fb7e425fdf"
+    },
+    {
+      "path": "BACKUP_NOTES.md",
+      "size": 1013,
+      "sha256": "bb83b6adf80024acbc7eecf3f59ac25e908808f95f4e0de57d4c68ed5bb7c95c"
+    },
+    {
+      "path": "Dockerfile.tts",
+      "size": 83,
+      "sha256": "efcecb476cde3f77a15b023688b731bb3294cc7dcdd8c57eaefe9303d6867660"
+    },
+    {
+      "path": "PEDAGOGY_ROADMAP.md",
+      "size": 77275,
+      "sha256": "9b195a6fc894420231a43b9811c6b23fad7e7ff956d8dd25e5367c2397080cc9"
+    },
+    {
+      "path": "README.md",
+      "size": 78477,
+      "sha256": "3c64c7d89d7a49769f7a1c32f1445533f8abd1ed146168315554cf864ee17f98"
+    },
+    {
+      "path": "accent_guidance.py",
+      "size": 2559,
+      "sha256": "0908d5acc4b987ff5a5c8c594b45fe33bf825bf66053ea15f6721970f9dec7d7"
+    },
+    {
+      "path": "accepted_glosses.py",
+      "size": 4881,
+      "sha256": "50b4c6a4f2c33ef0cc6013a98ffd5f26f417517cf89c38a3ebef47f2374213c4"
+    },
+    {
+      "path": "advanced_syllables.py",
+      "size": 3078,
+      "sha256": "2f169df6579ca4f9797da43b3f037b0f71fa5aad22e3e6df25a9540ebeafcdc9"
+    },
+    {
+      "path": "answer_idempotency.py",
+      "size": 2059,
+      "sha256": "034f182ff055070cd3cd1580988b2bc2c8d505c6077612678b9f62239a807f0a"
+    },
+    {
+      "path": "app.js",
+      "size": 172523,
+      "sha256": "4f038403d43b7411a7d0fcfb9876eedd10acb0ea4fbf4db5e99d29b6677cac9c"
+    },
+    {
+      "path": "apply_reviewed_locales.py",
+      "size": 941,
+      "sha256": "6a48c785c0eec25994870d2350735a75cddad8f737a56478aa62de84c04047b7"
+    },
+    {
+      "path": "auth_v1.py",
+      "size": 5283,
+      "sha256": "7dd07fbaaae0337fb9e83f317be8542cc6266cfb335e3a5dd22a2493a39ba905"
+    },
+    {
+      "path": "build_context_locales.py",
+      "size": 2029,
+      "sha256": "5bed32c5c40c20e6d20510580ace61700a0ea164d07ab5857e284e00f7cbdde0"
+    },
+    {
+      "path": "build_curated_vocab.py",
+      "size": 7138,
+      "sha256": "0e6a845f98c5700e7530a48c37c3ec5e0538c88caa3facab8f27e61d45df58be"
+    },
+    {
+      "path": "build_patakis_context_locales.py",
+      "size": 2038,
+      "sha256": "dc0b57e5bbb500b5460210935cd8cd732f8db206b639a1c78ba6322279e479b2"
+    },
+    {
+      "path": "catalog_v2.py",
+      "size": 14766,
+      "sha256": "01482ecf60d406064e7569706530526dc20d316ac0e173517d4aff45373a4410"
+    },
+    {
+      "path": "curate_verb_phrase_locales.py",
+      "size": 4983,
+      "sha256": "f863c03b22385a32b84a46695e360acc1ada90dd4fe445041b68bd09907310d0"
+    },
+    {
+      "path": "curriculum.py",
+      "size": 27336,
+      "sha256": "7d1cd8df99d8caeafbce08a161cc433abec111c07ed5c79d20db1dbbf06daeab"
+    },
+    {
+      "path": "data.py",
+      "size": 19262,
+      "sha256": "0dabfb462b34cb1fee960666f54820aeaf43761f207adfa4c4453e912bef2ae4"
+    },
+    {
+      "path": "dialogue_quality.py",
+      "size": 6465,
+      "sha256": "c6ef4c9e985476481ea5c989b5eb1bea5f7165e947dd95917e4ad1103ec09a4a"
+    },
+    {
+      "path": "dialogue_versioning.py",
+      "size": 1815,
+      "sha256": "eab4b9b400f1124e6a5c6ced051ec4717965890dfa96a533f1f710837b6f6784"
+    },
+    {
+      "path": "dialogues.py",
+      "size": 10108,
+      "sha256": "6e0bb18959162fdfeabefe735bd264cb43d34379e3cbfc2a2c281a5039ce5cb7"
+    },
+    {
+      "path": "dialogues_extra.py",
+      "size": 29823,
+      "sha256": "fb53514f8c67b0f2baea2ee7dc5bcb2b67e77aa3ab97098709c36de785b2e983"
+    },
+    {
+      "path": "distractor_quality.py",
+      "size": 2945,
+      "sha256": "f0450395ff6b4491c990aa8728a7ec67408d2ffeb9f863cf31438ffd6052bc5b"
+    },
+    {
+      "path": "editorial_audit.py",
+      "size": 4375,
+      "sha256": "22934a04da1c2fb005f1302348d112a79febf31d72a65330d253852b1e9a04b5"
+    },
+    {
+      "path": "editorial_localization.py",
+      "size": 5293,
+      "sha256": "ff7ce5168069e794c50eec630c153a5ffb3083b6078e1309facf3dc813c7c8fd"
+    },
+    {
+      "path": "editorial_localization_round2.py",
+      "size": 7642,
+      "sha256": "469c722efd7d67fe0e48715662d0f6532666578b2947768ee4dbc4d18a510289"
+    },
+    {
+      "path": "enclitic_stress.py",
+      "size": 6570,
+      "sha256": "1af71cc70f22531eb88b95a9473cd7b81bf8f6c4cedcea33e85fccb12d61bcb0"
+    },
+    {
+      "path": "english_legacy.py",
+      "size": 5744,
+      "sha256": "5c43bc8e7058ed14ecd30e8741d51eb380b5475bfecdba2cd7ce062ead30aab3"
+    },
+    {
+      "path": "extra_sentences_20261021.py",
+      "size": 10497,
+      "sha256": "34551bca7f240de96ce686e7f2c42f650cc3cd9f851ad9acd64c64e96d1f11a3"
+    },
+    {
+      "path": "fill_vocab_locales.py",
+      "size": 4983,
+      "sha256": "98e34a049a4d0bce710c6defe84748974d8245e6a409a6c0eacfccf48a5b0503"
+    },
+    {
+      "path": "final_n_guidance.py",
+      "size": 2484,
+      "sha256": "cf14502d20d9b77847d2caf62c37afd3054c0bdeef5cdb5f310221a0eab37452"
+    },
+    {
+      "path": "form_exercises.py",
+      "size": 5550,
+      "sha256": "8db9311329a37e4a356fcf8622ee9c51ad88864ffc553f668d1c7ed91ca52dcd"
+    },
+    {
+      "path": "full_source_audit.py",
+      "size": 4802,
+      "sha256": "e0d90d820e9aaf06cc36e9b1d7dbe9054548525943147efbc02c580b3678525e"
+    },
+    {
+      "path": "generate_listening_audio.py",
+      "size": 2599,
+      "sha256": "572e3cc68bcc164c2d710960323a645e069c70be93b2c995c2cc64008d459ceb"
+    },
+    {
+      "path": "grammar2_cards.py",
+      "size": 10788,
+      "sha256": "5b0ed0f56951b5a5ab35eb4b02f526f73bb17cff7b7c4b0a51de4ae4e023d932"
+    },
+    {
+      "path": "grammar_scope_guard.py",
+      "size": 2318,
+      "sha256": "fd16292e5aa76192a9b616d682427f49b18cd683e4c2a13f5cfdffebcbe75c28"
+    },
+    {
+      "path": "greek_variants.py",
+      "size": 2187,
+      "sha256": "b49f2c6f7f5452f5c25b1e71d4611675ce942a265069bbf48188b9f452af3b26"
+    },
+    {
+      "path": "greek_word_audio.js",
+      "size": 1298,
+      "sha256": "832907a9eed8a9d7fa1c227c1952d2a166c61037c0284b96737a486f5bf6febf"
+    },
+    {
+      "path": "index.html",
+      "size": 33092,
+      "sha256": "c7aa94265b584d96ee9cd0310bc2d46af44eb9ee1073fa322b70c7bb5c565120"
+    },
+    {
+      "path": "learning_engine.py",
+      "size": 13538,
+      "sha256": "7f3e3ff19280685e39adaea191b79984b27fa32efe9963cd60b1936a670f897e"
+    },
+    {
+      "path": "learning_upgrade.py",
+      "size": 13492,
+      "sha256": "04fae1601d84b48c39cd507a0784234c60a4795322ab8c31f821a3385e88c3d0"
+    },
+    {
+      "path": "lesson_audio_mix.py",
+      "size": 1932,
+      "sha256": "6c9e4ee93ad6a6813d07c66327a9beea155acd13b4ed18057e1ebd7a5507d93d"
+    },
+    {
+      "path": "lesson_session_sync.py",
+      "size": 6838,
+      "sha256": "8f3dc005a7aab31922b7a4ced307cc59af1daa4b9a12f877329c89c50ed64f18"
+    },
+    {
+      "path": "listening_audio_manifest.json",
+      "size": 34666,
+      "sha256": "986aba47a8ee8f70fc74a8da28c2f4571ac9eade6f5d6f129881c57a13035786"
+    },
+    {
+      "path": "listening_catalog.py",
+      "size": 3380,
+      "sha256": "09aa579df238c13b8690ea5becd69f7c6992a33ef971b4b1486b6638b506e2cb"
+    },
+    {
+      "path": "order2_cards.py",
+      "size": 2321,
+      "sha256": "51cbaa1de359b1af7aa8859cb44b0fa20596f92e68871b4b7cb4e243d7462fa3"
+    },
+    {
+      "path": "order_translation_sync.py",
+      "size": 1388,
+      "sha256": "030f2f9c8fc62416b993e24873f0cbba968d32fa24b33cbca9eafb3a97d110c9"
+    },
+    {
+      "path": "order_valid_permutations.py",
+      "size": 5377,
+      "sha256": "03d2f14839f5af8b6a94abcb606186fb96ee3029acd26f01bc078c24f84a0b6f"
+    },
+    {
+      "path": "patakis_context_cards.py",
+      "size": 2008,
+      "sha256": "4b6b841fb0b9d8f542226cca0c5ae3bb5b1490fcaae78b5d2c21357b6fbb3f0e"
+    },
+    {
+      "path": "patakis_context_locales.json",
+      "size": 25037,
+      "sha256": "2110dcf8eb435a34ed0569d670acf1ad21bbf1aec494117cb5cf22cc89eade6b"
+    },
+    {
+      "path": "patakis_context_manual.json",
+      "size": 950,
+      "sha256": "059095c0d8c81dbd1f239a51c6c2bafd80626db7c7f2194fe1585ec006cf5fdf"
+    },
+    {
+      "path": "patakis_context_original.tsv",
+      "size": 13011,
+      "sha256": "395b22dec98b149ede44b2ec4f49f7c590a18df1a6dc5f302fb0a50ceba7fd92"
+    },
+    {
+      "path": "pedagogy_rules.py",
+      "size": 5033,
+      "sha256": "9f9982ddd18261493db591ad42a00bbcb3c40320d3e42783564072771bc4292c"
+    },
+    {
+      "path": "personalized.py",
+      "size": 1848,
+      "sha256": "81d7130ded2d4a39a364fde31c77a57912a7d2508607c18996867a82ba15cbef"
+    },
+    {
+      "path": "pocket-listening/manifest.json",
+      "size": 151737,
+      "sha256": "9283030c425949f197fd87289728aab5466686a0937f20955ccc9e5c4838e3b9"
+    },
+    {
+      "path": "pocket-listening/source.json",
+      "size": 49814,
+      "sha256": "af32e0f32a36bcdb88d0911c4e937aa9d87481ed43710ce5725506f57853cb2e"
+    },
+    {
+      "path": "pocket-pronunciation/manifest.json",
+      "size": 198891,
+      "sha256": "b755d8dd8128fe37260e20b66fbd007a8cfa6f14134d396f7d608e82cc398296"
+    },
+    {
+      "path": "pronunciation_audio.py",
+      "size": 1505,
+      "sha256": "0e120f60b843e3eefd931d8056716dc3fc2bc51f6abdc7219cafc18edf28f6c0"
+    },
+    {
+      "path": "qa_all_pocket_audio.py",
+      "size": 2687,
+      "sha256": "fbc381beae1ec57c2411ce34f5bea2b7e99455980bbe4a35f9fff17b90dc9bfa"
+    },
+    {
+      "path": "qa_alpha_desktop.js",
+      "size": 1798,
+      "sha256": "0a492796d8cef2e228324159d16ce05f8174a4360a39f194a94c9b793631048b"
+    },
+    {
+      "path": "qa_answer_http.py",
+      "size": 4091,
+      "sha256": "d94e9f778b0aeb53d1da39f9aa44db21734df1b3f3923b80b72b38bb8cbb9813"
+    },
+    {
+      "path": "qa_audio_alpha.py",
+      "size": 1287,
+      "sha256": "2c40dcb8e3df966efb14000654177d9bce236045cf3cd1cc41c2757fb23f9742"
+    },
+    {
+      "path": "qa_cross_device.py",
+      "size": 3583,
+      "sha256": "bd44f4156b66dfd1829af86ad3ac6305340e319516b48cc53992141e4612e84c"
+    },
+    {
+      "path": "qa_cross_device_http.py",
+      "size": 5972,
+      "sha256": "42d9131a46367e2bcd1807bbd1f9983ee0a24e6f05ba1cfb11b1848c3c489878"
+    },
+    {
+      "path": "qa_dialogue_curated.py",
+      "size": 2223,
+      "sha256": "d0b3df4b6e88fdd6b227e3263441a7179988dbb49f70b6a9c5bc018830a5afa3"
+    },
+    {
+      "path": "qa_dialogues_100.py",
+      "size": 5451,
+      "sha256": "f5e4531b60e49ab4dbf6ebffa58d4163342ad68e3f397500ec84d9bebb3df4ca"
+    },
+    {
+      "path": "qa_dialogues_2gap_dom.js",
+      "size": 6663,
+      "sha256": "34479b15899bb0a2e0e163d4edff024a5e45e634325c6712eb5e4ecc325344ad"
+    },
+    {
+      "path": "qa_dialogues_dom.js",
+      "size": 6363,
+      "sha256": "4a8cd84f709d0c7ed74bb7609fa6053255320feab5f7aee8ddfc96459714f115"
+    },
+    {
+      "path": "qa_distractor2.py",
+      "size": 2337,
+      "sha256": "4be4e4a67882136d8a1a36e04d2267c7ea3679d470e11526ed5b8f7c51238d0b"
+    },
+    {
+      "path": "qa_dom_test.js",
+      "size": 5121,
+      "sha256": "7f3ac8714492529e220621226f5a2ba678c3ce113b9553dd4af6e3e93dc31d3a"
+    },
+    {
+      "path": "qa_editorial_localization.py",
+      "size": 3336,
+      "sha256": "b87747e73d3d09f7379e3141cbb82a40b39de608d34c412f430328c5ab480993"
+    },
+    {
+      "path": "qa_editorial_localization_round2.py",
+      "size": 3669,
+      "sha256": "b9cf177a0fcf15f0b2884f206cf6db677b0e52506aeee23fe3af7f934f20bd33"
+    },
+    {
+      "path": "qa_enclitic_listening_mix.py",
+      "size": 5322,
+      "sha256": "7c4f437932ce3b739ac9f8c24b1276ab7fa010b63489e4c22df5e59457d4a888"
+    },
+    {
+      "path": "qa_enclitic_mix_http.py",
+      "size": 4719,
+      "sha256": "b3cbefdcef5b9a065b673e341be2e002801181355147ca09385bae9b84caa8f5"
+    },
+    {
+      "path": "qa_final_n.py",
+      "size": 4414,
+      "sha256": "adc59c9008ce8b09b0d7c7e63ed2f173cb83b51155a0f423a6057ff67543c858"
+    },
+    {
+      "path": "qa_final_n_dom.js",
+      "size": 5198,
+      "sha256": "1fb58b72d7fb9e67247b6457531eb8b9c7f9ff88b9464425045633e77b7c8c89"
+    },
+    {
+      "path": "qa_form_exercises.py",
+      "size": 4459,
+      "sha256": "5252456fb0e909264f77d1112276d284f736271f2ab0f1a3a802f7b626b521e3"
+    },
+    {
+      "path": "qa_forms_chromium.js",
+      "size": 4709,
+      "sha256": "55c6b059e83b0dfa6bedbfec9c53a20603ed24757eda0d49c4e5b48ff7d5f9cc"
+    },
+    {
+      "path": "qa_forms_dom.js",
+      "size": 6708,
+      "sha256": "1bcf51df71d184720f549dd1829649939890ee98a8c17d5b483e40eb9b4fced3"
+    },
+    {
+      "path": "qa_full_card_structure.py",
+      "size": 2847,
+      "sha256": "054339816186aa6849e640084163efe186e1c38fc10b055a45cee52729d2d99d"
+    },
+    {
+      "path": "qa_full_source_audit.py",
+      "size": 1691,
+      "sha256": "92a5fed4591bbc0988423ae1214d556e3a1667648136ae03946cff604caf0558"
+    },
+    {
+      "path": "qa_grammar2.py",
+      "size": 3324,
+      "sha256": "5c362c8413bc88c4be9c46178f248b415c1ed8eed9c5473a20bbd9f47b79cc04"
+    },
+    {
+      "path": "qa_grammar2_http.py",
+      "size": 2974,
+      "sha256": "e9d8523c757b1d30f49420b837909cba569450f186197bf9a704dc31dc56afee"
+    },
+    {
+      "path": "qa_greek_variants.py",
+      "size": 5396,
+      "sha256": "efdaeb9ac0c76a9c4a866ccf5d8a624a8d1def147c43a335a45c455e0e3f7662"
+    },
+    {
+      "path": "qa_learning_http.py",
+      "size": 3722,
+      "sha256": "efe584ed691b45ceacadb786d396f6199cf6e1b3c2c527188aeb654f2b63a363"
+    },
+    {
+      "path": "qa_learning_ui_contract.py",
+      "size": 1394,
+      "sha256": "0eb67298199a4d93afede0678f9e04fa53606b3bb784f9214c7d9956bee60230"
+    },
+    {
+      "path": "qa_learning_upgrade.py",
+      "size": 6391,
+      "sha256": "16fdf7af419bb995cb30e87648324006f67319ab4e64c5171c9a94c7a465fac4"
+    },
+    {
+      "path": "qa_listening.py",
+      "size": 504,
+      "sha256": "3a8b5a74baac58a92a7e49f87c528bc7c872835273bf07eb05e9819ccaa4767c"
+    },
+    {
+      "path": "qa_listening_chromium.js",
+      "size": 3742,
+      "sha256": "21dac870ef0a2c95e695e14270507c0355db29b540a1f4cdb1f4a0fd74cd54ad"
+    },
+    {
+      "path": "qa_listening_dom.js",
+      "size": 4986,
+      "sha256": "5dad782c96f7056dac34879577015e57857affed4d34a22cdb1b758d79c007c4"
+    },
+    {
+      "path": "qa_listening_legacy_piper.py",
+      "size": 3371,
+      "sha256": "622410758dcabd1acc030d6c2a2b9bc6d42e3ce58d00ba8cbdda45abad9a7b99"
+    },
+    {
+      "path": "qa_locale_inventory.js",
+      "size": 1669,
+      "sha256": "50811e9da7ac2e5605bb7803cac6a12b618250bdc96a9fc930c554a6d05a1a31"
+    },
+    {
+      "path": "qa_localizations_1700.py",
+      "size": 5742,
+      "sha256": "6f3bcd065e501f3e0a4e9249406e5b7c7e5e525e83640c9b6c4ef217e2fff7fb"
+    },
+    {
+      "path": "qa_mobile_chromium.js",
+      "size": 13011,
+      "sha256": "6083614de703f279e3ee2b30717571f5be31514fe1f4bb884346ba1d6419aed2"
+    },
+    {
+      "path": "qa_mobile_tls_proxy.py",
+      "size": 1799,
+      "sha256": "a496f767a6afcc73b5378330271913f02ceef0e147afe39002aa78f6dabf8670"
+    },
+    {
+      "path": "qa_new_dom.js",
+      "size": 8211,
+      "sha256": "234618b3ef6226d0c02703a1215e9d59bc7918a5e3d24bac352ad772bec98a5f"
+    },
+    {
+      "path": "qa_new_features.py",
+      "size": 5920,
+      "sha256": "bd834df096e03a2037c0f148287ec481d20ac19bb170cd0b1a05c2786a22725a"
+    },
+    {
+      "path": "qa_next_learning_cycle.py",
+      "size": 5116,
+      "sha256": "6304ce56939539b63b131224f7ec0af6d475e7f7329dbf056450fecbaf860318"
+    },
+    {
+      "path": "qa_order2.py",
+      "size": 3236,
+      "sha256": "f2aae4cc05b6ff1ab9e3e921dd26a5bdb9ac3c5a9506f6de471d269d4e303703"
+    },
+    {
+      "path": "qa_order2_http.py",
+      "size": 2859,
+      "sha256": "79af599098ae9c8ac7abdfa1abc491e816531602706f67a76ac0063995d95547"
+    },
+    {
+      "path": "qa_patakis_alignment.py",
+      "size": 7767,
+      "sha256": "b86ea59d062b7ffcbab85c3bdc9557a6dc3fa2d6253a10029e85d32e083b82ff"
+    },
+    {
+      "path": "qa_patakis_dom.js",
+      "size": 5894,
+      "sha256": "2ea600af29e0282c833c975ff64c65897d2001c14c97a0c73ea24477413a149b"
+    },
+    {
+      "path": "qa_pedagogy_upgrade.py",
+      "size": 4786,
+      "sha256": "a6b2c63e6a72f22f57c1cfc5e731aa3c000c946f683dc3776562aeb4bf53c24c"
+    },
+    {
+      "path": "qa_pocket_curriculum.py",
+      "size": 6428,
+      "sha256": "df753dc3a91256c0be741e21df58e8ec247a9d2183ae854b2acfb1cc04331bf1"
+    },
+    {
+      "path": "qa_pocket_listening_chromium.js",
+      "size": 3996,
+      "sha256": "7d208c43833c6f7c20a26def72c1559dff64298d8c6995240f9c1097d943914b"
+    },
+    {
+      "path": "qa_pocket_media_audit.py",
+      "size": 2359,
+      "sha256": "979ba38ce563f156171778ed1073d137c3cf357c903a97cfb2525144512cc24c"
+    },
+    {
+      "path": "qa_pocket_partial.py",
+      "size": 1903,
+      "sha256": "c44fee1644fa1754c37e84220b78ddeb1fdeb3492f2c3cc1bf0c3976322bfc4b"
+    },
+    {
+      "path": "qa_pocket_selection_chromium.js",
+      "size": 3230,
+      "sha256": "218dbeb15b96236e2fdf045ed2521caf2675154712e2ffec4db37d3302a104db"
+    },
+    {
+      "path": "qa_pronunciation.py",
+      "size": 1631,
+      "sha256": "c00fa356ffcc2ed5195ade0799e263ab297222aa2906c34f0b8861fdfbefd246"
+    },
+    {
+      "path": "qa_pronunciation_http.py",
+      "size": 2077,
+      "sha256": "bed8719914b64e31a6805bb23c73c7568e452403de1de595029618a1dfa6b258"
+    },
+    {
+      "path": "qa_resilient_learning.py",
+      "size": 5725,
+      "sha256": "bb732b2ddbc6da809bbe89c594bca99bec334c0e37bb33604b1d17de846a0af1"
+    },
+    {
+      "path": "qa_semantic_pronouns.py",
+      "size": 1322,
+      "sha256": "5ef883b7b84326e087e3ff44ce6a2d958a9d7e61ca91a7f0772c6457f2f1a9f8"
+    },
+    {
+      "path": "qa_sixcycle_chromium.js",
+      "size": 3173,
+      "sha256": "add90baeb821614934b3aacf393f87635afc59c7d391b75ede239fad195eb110"
+    },
+    {
+      "path": "qa_source_page_batch001.py",
+      "size": 3743,
+      "sha256": "c6a21919dae61c5af1e153ba4e23f00b0ab14e6b0c3055a27014b24757172f3b"
+    },
+    {
+      "path": "qa_source_page_batch002.py",
+      "size": 3255,
+      "sha256": "ad37c721c6389ec0e6bf079f1e2e47cb0af8b3731e0483a2ccd4bde6b17226fc"
+    },
+    {
+      "path": "qa_source_page_batch003.py",
+      "size": 4249,
+      "sha256": "84d60ba507d9e7631572cba98a30549adb9686d80a0f428b350ddc9c118195e8"
+    },
+    {
+      "path": "qa_source_page_batch004.py",
+      "size": 2556,
+      "sha256": "4bde5fae443b029f471c1763cbe592b54624b3881cfce22bc420b864eb9d18d8"
+    },
+    {
+      "path": "qa_source_page_batch005.py",
+      "size": 3367,
+      "sha256": "7584a5f00e52a3e067e537baaf02ec390979efe2b683d19be269604273f6e006"
+    },
+    {
+      "path": "qa_source_page_batch006.py",
+      "size": 4294,
+      "sha256": "1e2a49eb1350fcbdfa77c2b42d61aa3965ed5ac1035e1eec3036595b10d5128c"
+    },
+    {
+      "path": "qa_source_page_batch007.py",
+      "size": 4472,
+      "sha256": "d5e8448eff4fa8fb4124be9f53627c26a4be5dae4d459d27258c7e75cc5a9ef2"
+    },
+    {
+      "path": "qa_source_page_batch008.py",
+      "size": 4009,
+      "sha256": "6b2e604dcc3fcd62e4d0c83e94399e6e33e8d3ad43731ec37ffed3af58ec056a"
+    },
+    {
+      "path": "qa_stage3.py",
+      "size": 3972,
+      "sha256": "d472bb95ed74ac054cb0421a589ca18df49687cf692435075d8152ef0b66a227"
+    },
+    {
+      "path": "qa_stage3_chromium.js",
+      "size": 1245,
+      "sha256": "dda54733f3a70a3a28c241360ca4d5dedeefa60a9ce24b441270a91eff3a4ccd"
+    },
+    {
+      "path": "qa_stage3_dom.js",
+      "size": 6184,
+      "sha256": "28f7e5c9e741243123d9dfcb58eb6129559738751904ae804c17a7dd45efedb5"
+    },
+    {
+      "path": "qa_syllable_http.py",
+      "size": 4193,
+      "sha256": "cfcb8959348a3d664875af821a96b286b7dabce29f96c2262f434f36148c4f7e"
+    },
+    {
+      "path": "qa_ui_locale_chromium.js",
+      "size": 3409,
+      "sha256": "aac5b6c775ce86b1456ee96cdbd2a2063819d9dabd375d350ef6312712130b2d"
+    },
+    {
+      "path": "qa_ui_locales_dom.js",
+      "size": 6551,
+      "sha256": "e65c3c17cd72d9f26fe1158927fcd34329b0b40f151320abd6a9e03f4783ab26"
+    },
+    {
+      "path": "qa_verified_lesson_pages.py",
+      "size": 1409,
+      "sha256": "3c9ea47fd294428be1b3947cdbccab412122e4deefb4e47dcb9df7a7ff1b0409"
+    },
+    {
+      "path": "qa_vocab_1700.py",
+      "size": 4229,
+      "sha256": "8405ce3e556ca16c871a36c5b2a8d30e635f617bcda2716878ef40b3ca4326a7"
+    },
+    {
+      "path": "qa_vocab_all7.py",
+      "size": 6237,
+      "sha256": "fe29ccd2e90d3878bb20b92a2a331ef05ac8b65368bee433d4eb2d2bd47a4a40"
+    },
+    {
+      "path": "qa_vocab_batch001.py",
+      "size": 3278,
+      "sha256": "0693b97a20ef167d589ccc158a0a7518308f5b0fcccacb91cf0403ae6a7d372f"
+    },
+    {
+      "path": "qa_vocab_batch002.py",
+      "size": 3586,
+      "sha256": "eeda5f2b28afcadf5105277654477a7200f99d7b55c0e96becf0d2386953cfc4"
+    },
+    {
+      "path": "qa_vocab_batch003.py",
+      "size": 3704,
+      "sha256": "7a9f58513484b376ad03cb2060f63a75829297a70c6b554f8fd17a16aef139b5"
+    },
+    {
+      "path": "qa_vocab_batch004.py",
+      "size": 3933,
+      "sha256": "4aeea48ea62869af15ec185821d88863fb041dcabb53e528d6b4ad7e716fa313"
+    },
+    {
+      "path": "qa_vocab_batch005.py",
+      "size": 5133,
+      "sha256": "a657b5340e465c8b18a964fd6cc5d1c5c8749dd6917d78b8eaa603ed079868c0"
+    },
+    {
+      "path": "qa_vocab_batch006.py",
+      "size": 5846,
+      "sha256": "05ddb6e882a79c8b1430403f88b4059295be18ceea53add5e3956e76666f2a74"
+    },
+    {
+      "path": "qa_vocab_exact_sync.py",
+      "size": 1127,
+      "sha256": "3e5c3890ca5d7804dbcdf50f819fc914022432eb0e4b7c9ba1fca276dca33767"
+    },
+    {
+      "path": "qa_weak_global.py",
+      "size": 4677,
+      "sha256": "9d773ec89a9b8228d52432459a53867e51e97d73948ce0dcf8580a87aa5a7763"
+    },
+    {
+      "path": "qa_weak_global_dom.js",
+      "size": 5347,
+      "sha256": "fabaa022d60eef65e70671e801ed9f597df1afffa41e8d85ef49d688eb6d93be"
+    },
+    {
+      "path": "qa_word_audio.py",
+      "size": 3834,
+      "sha256": "c6d9199b02ee7c112e11ada76ca2bcf060ab9f54bde8d9f7227ca176139dcc1e"
+    },
+    {
+      "path": "qa_word_audio_client.js",
+      "size": 2612,
+      "sha256": "5af696c55363fcd22a529fced870a3119ae41fb64cc7391ae19c574645c79d40"
+    },
+    {
+      "path": "qa_word_audio_http.py",
+      "size": 4211,
+      "sha256": "f70a916b93a361f74c557cd03e347b483dfc722f8dad4f3306fa999689a22707"
+    },
+    {
+      "path": "release_pocket_listening.py",
+      "size": 3931,
+      "sha256": "330bffc6e7f874c0af482fcd2fdca2673811479719c9f1ef81b90908a893fcdb"
+    },
+    {
+      "path": "server.py",
+      "size": 72978,
+      "sha256": "bac4d5555c4f93d2cf6a21c6cb3542dd61320c5cfeae993d9533107389d33d59"
+    },
+    {
+      "path": "sixcycle_frontend_patch.py",
+      "size": 12263,
+      "sha256": "7680a3c1a78b44db3e8e2835cf09a92896b8e02847dea75ecf394a43bdebf824"
+    },
+    {
+      "path": "sixcycle_server_patch.py",
+      "size": 5202,
+      "sha256": "9e62c00d7e3b2034c40a96a67c7051ad6dcedec36465afdfad1e6a7baa50a6ce"
+    },
+    {
+      "path": "source_page_batch001.py",
+      "size": 10401,
+      "sha256": "4804a90cbd928bd993941009c2aa2bc97bc065aa4490d9dca6e4b21ee2d03bf9"
+    },
+    {
+      "path": "source_page_batch002.py",
+      "size": 11564,
+      "sha256": "ba46842b01104145161280b7646afb4d3a7a9e8f23bdacb875abc98b36b167c3"
+    },
+    {
+      "path": "source_page_batch003.py",
+      "size": 9549,
+      "sha256": "96736425a894c7232308c2e8f30d72243bd588109d04b09f4d1f5df9d1ad5692"
+    },
+    {
+      "path": "source_page_batch005.py",
+      "size": 5889,
+      "sha256": "d7023bb6daff952b6a91fd59ee400c5fe056b54061eed99a9a381fba04a3cf85"
+    },
+    {
+      "path": "source_page_batch006.py",
+      "size": 8900,
+      "sha256": "f70dd27f28dce69b1b05f59963e555bdb2b00661fd46fba318d538bbc84aeed9"
+    },
+    {
+      "path": "source_page_batch007.py",
+      "size": 6544,
+      "sha256": "6915675b6da637b96d1db4f1fca9554232df469f0630c509b1beb1306d6eb447"
+    },
+    {
+      "path": "source_page_batch008.py",
+      "size": 6124,
+      "sha256": "00ffa5943f6163d10143146ee37df55d127a33136f5af2a857ebed81d5970966"
+    },
+    {
+      "path": "styles.css",
+      "size": 35096,
+      "sha256": "7c0d2a3cf2e1f0bedd809ab53eb5a5285752fa8c6ba3141aeb4c4d0a9c893191"
+    },
+    {
+      "path": "textbook_alignment.py",
+      "size": 10461,
+      "sha256": "ed31c7a631f1c6a0e4522417ea6c6675519db25ec4cb93c558acaf872f9b2486"
+    },
+    {
+      "path": "textbook_ar_complete.json",
+      "size": 26496,
+      "sha256": "13350064227e2371f13ddea59f89b60896be3a78b25e47bf11177f575ead56a0"
+    },
+    {
+      "path": "textbook_evidence.py",
+      "size": 3782,
+      "sha256": "a3791299f1d5e6c12f9bea399f1c948f5e83196c6c1ca94fa59f2437a8cadecf"
+    },
+    {
+      "path": "topic_translations.json",
+      "size": 10421,
+      "sha256": "4741da2ed608861128e5bb03b8a91a912992049d73adbe4429ba9eb562da7b12"
+    },
+    {
+      "path": "topics_verbs.py",
+      "size": 12106,
+      "sha256": "f4ae1c795663028a772122ba6f9ee86c05c552f66524a40f0fad13b8630451c3"
+    },
+    {
+      "path": "translations_ar.json",
+      "size": 12613,
+      "sha256": "76116d5e34a290f335fff06508a74ab045787f558fe218952603e35c5e1a4055"
+    },
+    {
+      "path": "translations_es_pt.json",
+      "size": 47591,
+      "sha256": "0f40bbe2acee47dce519e174cd419ef79de96ca7371e26e3d2708e295ff2caf5"
+    },
+    {
+      "path": "translations_zh_so.json",
+      "size": 48631,
+      "sha256": "daec24f341cade374b55f2987fc847efe3f238f050f650e769941a524e668381"
+    },
+    {
+      "path": "tts-evaluation-pocket/build_roster_gallery.py",
+      "size": 6428,
+      "sha256": "2bd199721eb466b655200362d8d7b2366e31f5685d9f66992ae0ba38071daf3c"
+    },
+    {
+      "path": "tts-evaluation-pocket/build_short_gallery.py",
+      "size": 4462,
+      "sha256": "37a538d032f372c36316a3bb48fcd5f656bb64c16a42e5ecae9cb314625a1227"
+    },
+    {
+      "path": "tts-evaluation-pocket/generate_course_audio.py",
+      "size": 4940,
+      "sha256": "c1682d7b77690279ddfbf36ae349e1c413d02c5fae9c4addb4bb9bfedd453dac"
+    },
+    {
+      "path": "tts-evaluation-pocket/generate_pronunciation_audio.py",
+      "size": 5746,
+      "sha256": "5900fd98381aa67a1fc4121cf9ffa3b02c00789571bce67fcf519ba10605f79c"
+    },
+    {
+      "path": "tts-evaluation-pocket/test_candidates.py",
+      "size": 2851,
+      "sha256": "ec066aac8a49212e2034c3fe0cecdffeca46ae394095316ab8832710528604f1"
+    },
+    {
+      "path": "tts-evaluation-pocket/test_long.py",
+      "size": 2765,
+      "sha256": "b85b4bb8c31766626d6e5c2f1e506b90934cd851bc0ad7e47fb6dcf643ddbc31"
+    },
+    {
+      "path": "tts-evaluation-pocket/test_short_cards.py",
+      "size": 1994,
+      "sha256": "b658b7a270faf805c0dc75e1706d682235058e74d8a76af34d7629db50e66b47"
+    },
+    {
+      "path": "tts-evaluation-pocket/voice_roster.py",
+      "size": 625,
+      "sha256": "5cf6c573081d33251cc3e7decea601ae301cbcd2641a61a82a803380d71f0fa7"
+    },
+    {
+      "path": "verb_curriculum.py",
+      "size": 956,
+      "sha256": "8b9c02c5126ea335edc2782ba6a36103b1f0f0512d8e373e12916536b53134b3"
+    },
+    {
+      "path": "verb_phrase.py",
+      "size": 5666,
+      "sha256": "72fbe962ad85f13ffe42e66a428dcc804b44c056d91bd752da7b949afa7fae65"
+    },
+    {
+      "path": "verb_phrase_locales.json",
+      "size": 14641,
+      "sha256": "38152f765c9651d4de20b0faaaadd812c2cdffd5b74c26cf1ddb0db1bd7c7d54"
+    },
+    {
+      "path": "verb_phrases_ar.json",
+      "size": 4769,
+      "sha256": "86c0373c844c3a3e3a4229c167626e1c33a35b5cd66c91665dcdbde7cc9cfcd5"
+    },
+    {
+      "path": "verified_lesson_pages.py",
+      "size": 2517,
+      "sha256": "9fd63930349d54f75d2e6b23c6fe57953615cdc9b6c5e22080eca8137b18585d"
+    },
+    {
+      "path": "vocab.js",
+      "size": 19815,
+      "sha256": "988d92a31c28ffeda40b4f7d25a20e2703a85cc3b7ede7a7d56d20347537daa2"
+    },
+    {
+      "path": "vocab_expansion_a1.tsv",
+      "size": 29112,
+      "sha256": "7333e49c8971fa463e8294bb8d6c27e4ae352e7d394d0575a4c94084c72c7404"
+    },
+    {
+      "path": "vocab_expansion_a2.tsv",
+      "size": 113491,
+      "sha256": "0b1245e4f341447dd75fd738663583bf6c607a6489dfc6a26c4497894f789b34"
+    },
+    {
+      "path": "vocab_lessons.py",
+      "size": 22755,
+      "sha256": "e777b971aaae27eba65043714d653a0d8839ab1566248ff6cfcde0ce257f4c85"
+    },
+    {
+      "path": "vocab_manual_corrections.json",
+      "size": 5349,
+      "sha256": "f01ee43551e276ec0b293eff138609daba1293d4c3b8973fb8fb7cdb163d84ba"
+    },
+    {
+      "path": "vocab_more.tsv",
+      "size": 14035,
+      "sha256": "6af729ad22854c540d51a6e78a4c3e30a4f0cd3e3079b5b9ae613eef6c84a84a"
+    },
+    {
+      "path": "vocab_translations_1700.json",
+      "size": 277246,
+      "sha256": "681d211869749fe50509da1b132809e1195618e5f686c7573f93af78d0460fa8"
+    },
+    {
+      "path": "word_audio.py",
+      "size": 1382,
+      "sha256": "b604826cfaecd3697ab7366a4fc17de9cb41cf16e24ebcfe94b2cc336a9b7f79"
+    }
+  ],
+  "backup_status": "source-only, incomplete: one curriculum TSV not transferred",
+  "not_uploaded_source_files": [
+    {
+      "path": "vocab_curated_1700.tsv",
+      "size": 52062,
+      "sha256": "bd53b38e7b9bddf19fddf853cae71d06f03c537960064ed7ca258b337ce6fb8e"
+    }
+  ]
+}
