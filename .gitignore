@@ -1,0 +1,32 @@
+# Runtime and personal data
+*.sqlite
+*.sqlite3
+*.db
+.env
+.env.*
+*.pem
+*.key
+*credentials*
+*secrets*
+**/backups/
+**/__pycache__/
+*.py[cod]
+.qa-runtime/
+# Generated Pocket TTS audio and models, not included in code-only snapshot
+audio/
+pocket-listening/wav/
+pocket-pronunciation/wav/
+tts-deps/
+tts-evaluation-mms/
+tts-evaluation-pocket/deps/
+tts-evaluation-pocket/model/
+tts-evaluation-pocket/samples/
+tts-evaluation-pocket/short-tests/
+tts-evaluation-pocket/long-tests/
+voice-model/
+# Staging and historical working directories
+editorial-*/
+*-stage/
+*pre-*
+*.bak
+*.bak-*
