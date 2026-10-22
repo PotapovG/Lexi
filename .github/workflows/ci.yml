@@ -14,6 +14,8 @@ jobs:
           python-version: '3.11'
       - name: Import, isolated HTTP and HTTP origin tests
         run: python3 tests/test_selfhost.py
+      - name: Originality regression guard (without private textbook)
+        run: python3 tests/test_content_guard.py
       - name: Validate Docker Compose
         run: docker compose config --quiet
       - name: Build container

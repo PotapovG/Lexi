@@ -100,6 +100,9 @@ The original development notes remain in
 **Privacy:** never commit your SQLite database, login pepper, user
 data, access tokens, or runtime files.
 
-**Licensing:** MIT for original application software. Check
-[CONTENT_RIGHTS.md](CONTENT_RIGHTS.md) before reusing or redistributing
-curriculum text, translations or generated voices/audio.
+**Licensing:** MIT for original application software. This does not license
+publisher materials or automatically authorize reuse of all educational data.
+See [CONTENT_RIGHTS.md](CONTENT_RIGHTS.md),
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and
+[our content originality audit](docs/CONTENT_AUDIT.md).
+Greek Pocket TTS model credits are also linked from the application footer.

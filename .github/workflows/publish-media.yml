@@ -30,9 +30,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if gh release view audio-v1 >/dev/null 2>&1; then
-            gh release upload audio-v1 lexi-pocket-audio-v1.tar.gz lexi-pocket-audio-v1.tar.gz.sha256 --clobber
+            gh release upload audio-v1 lexi-pocket-audio-v1.tar.gz lexi-pocket-audio-v1.tar.gz.sha256 THIRD_PARTY_NOTICES.md --clobber
+            gh release edit audio-v1 --notes-file THIRD_PARTY_NOTICES.md
           else
-            gh release create audio-v1 lexi-pocket-audio-v1.tar.gz lexi-pocket-audio-v1.tar.gz.sha256 \
+            gh release create audio-v1 lexi-pocket-audio-v1.tar.gz lexi-pocket-audio-v1.tar.gz.sha256 THIRD_PARTY_NOTICES.md \
               --target "$GITHUB_SHA" --title "Lexi Pocket TTS audio v1" \
-              --notes "Pre-rendered, checksum-verified synthetic Greek audio for self-hosting. Model credit: Myned AI / Kyutai (CC BY 4.0). See CONTENT_RIGHTS.md."
+              --notes-file THIRD_PARTY_NOTICES.md
           fi

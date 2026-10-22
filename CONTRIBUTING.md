@@ -32,3 +32,17 @@ Public deployment must use HTTPS and a restricted upstream listener.
 
 PR review emphasizes learner correctness, accessibility, privacy, security,
 migration safety and zero production dependency for self-hosting.
+
+## Authorship affirmation for teaching-content PRs
+
+Every contribution adding educational text must state in the PR that:
+- its Greek sentences/dialogues/exercises were written independently,
+  **not copied or minimally paraphrased** from any commercial textbook;
+- examples follow topic/grammar objectives only (not publisher exercises);
+- the contributor has authority to license their original submitted work
+  under the repository's applicable content terms when those are specified;
+- no uploaded/private textbook PDF, images, or answer sheets are included.
+
+Where the reviewer owns the commercial reference personally, they can run
+`scripts/audit_textbook_overlap.py` locally. No commercial book goes into CI.
+See `docs/CONTENT_AUDIT.md`.

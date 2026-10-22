@@ -209,6 +209,13 @@ ALL.extend(_form.CARDS)
 # question type. This is metadata; never overwrites user progress keys.
 import pedagogy_rules as _pedagogy
 for _c in ALL:_pedagogy.tag(_c)
+# dlg064's housing question was independently rewritten after a commercial
+# textbook overlap review. Preserve the learner-facing semantic identity so
+# existing error/revision history survives this wording-only correction.
+for _c in ALL:
+    if _c.get("id") == "dlg064":
+        _c["semanticId"] = "lex_961c9af921492376"
+
 # Final stage-aware option banks: correct gaps and stable ids remain unchanged.
 import dialogue_quality as _dialogue_quality
 ORIGINAL_DIALOGUE_SNAPSHOT={c["id"]:dict(gaps=list(c["gaps"]),gr=c["gr"],bank=list(c["bank"])) for c in ALL if c["kind"]=="dialogue"}
