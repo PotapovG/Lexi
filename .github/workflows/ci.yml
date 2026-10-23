@@ -20,6 +20,10 @@ jobs:
         run: python3 qa_pedagogy_upgrade.py
       - name: Originality regression guard (without private textbook)
         run: python3 tests/test_content_guard.py
+      - name: Validate guarded Core GitOps scripts
+        run: |
+          bash -n ops/lexi-core-deploy.sh ops/lexi-gitops-pull.sh
+          sh -n ops/lexi-instance.sh
       - name: Validate Docker Compose
         run: docker compose config --quiet
       - name: Build container
