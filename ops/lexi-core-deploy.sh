@@ -34,20 +34,34 @@ fi
 [[ -d "$root/releases/$old_primary" ]] || { echo 'old release missing' >&2; exit 11; }
 tmp=$(mktemp -d "$root/.staging-$sha.XXXXXXXX")
 cleanup() { rm -rf -- "$tmp"; }
+changed_secondary=0
+changed_primary=0
 rollback() {
     echo 'Deploy failed. Restoring prior slot pointers and restarting affected slot(s).' >&2
     printf '%s\n' "$old_secondary" >"$state/slots/secondary.tmp"
     mv -f "$state/slots/secondary.tmp" "$state/slots/secondary"
     printf '%s\n' "$old_primary" >"$state/slots/primary.tmp"
     mv -f "$state/slots/primary.tmp" "$state/slots/primary"
-    systemctl restart greek-trainer-secondary.service || true
-    systemctl restart greek-trainer.service || true
+    if [[ "$changed_secondary" == 1 ]]; then systemctl restart greek-trainer-secondary.service || true; fi
+    if [[ "$changed_primary" == 1 ]]; then systemctl restart greek-trainer.service || true; fi
 }
 trap cleanup EXIT
-# Reject absolute paths and traversal; archive is created with git archive on main.
-if tar -tzf "$archive" | grep -Eq '(^/|(^|/)\.\.(/|$))'; then
-    echo 'unsafe archive member' >&2; exit 12
-fi
+# Defense in depth: only regular files and directories inside the archive.
+# Forbid symbolic links, hard links, special files, absolute and parent paths
+# even if a future contributor attempts to sneak them into a commit.
+python3 - "$archive" <<'PY'
+import pathlib,sys,tarfile
+with tarfile.open(sys.argv[1],"r:gz") as t:
+    members=t.getmembers()
+    if len(members)>10000: raise SystemExit("archive has too many members")
+    total=0
+    for m in members:
+        p=pathlib.PurePosixPath(m.name)
+        if p.is_absolute() or '..' in p.parts or not (m.isfile() or m.isdir()):
+            raise SystemExit("unsafe archive member: "+m.name)
+        total += m.size
+        if total > 100*1024*1024: raise SystemExit("archive unexpectedly large")
+PY
 tar -xzf "$archive" --no-same-owner --no-same-permissions -C "$tmp"
 test -s "$tmp/server.py"; test -s "$tmp/catalog_v2.py"
 # WAVs are private-ish large immutable host assets, not part of the Git archive.
@@ -59,7 +73,12 @@ done
 chmod -R a+rX "$tmp"
 find "$tmp" -name '*.py' -type f -print0 | xargs -0 -r /usr/bin/python3 -m py_compile
 release="$root/releases/$sha"
-mv -T "$tmp" "$release"
+if [[ -d "$release" ]]; then
+    echo "reusing staged release $sha"
+    rm -rf -- "$tmp"
+else
+    mv -T "$tmp" "$release"
+fi
 trap - EXIT
 # Online SQLite backup, not a raw WAL copy. Never upload progress or login pepper.
 backup="$state/backups/$(date -u +%Y%m%dT%H%M%SZ)-$old_primary"
@@ -83,12 +102,14 @@ trap 'rollback' ERR
 printf '%s\n' "$sha" >"$state/slots/secondary.tmp"
 chmod 0644 "$state/slots/secondary.tmp"
 mv -f "$state/slots/secondary.tmp" "$state/slots/secondary"
+changed_secondary=1
 systemctl restart greek-trainer-secondary.service
 health 18561
 # During primary restart, Caddy's active/passive upstream fallback serves secondary.
 printf '%s\n' "$sha" >"$state/slots/primary.tmp"
 chmod 0644 "$state/slots/primary.tmp"
 mv -f "$state/slots/primary.tmp" "$state/slots/primary"
+changed_primary=1
 systemctl restart greek-trainer.service
 health 18560
 curl --connect-timeout 2 --max-time 6 -fsS https://potapovfamily.com/greek/ >/dev/null
