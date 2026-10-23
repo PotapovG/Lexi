@@ -8,6 +8,18 @@ Contributor fork/branch → PR → structural/HTTP/originality checks → mainta
 
 The GitHub job is gated on repository variable **`LEXI_DEPLOY_ENABLED=true`** and the GitHub `production` environment. Until configured it is skipped, including after normal merges. Pull requests never get deploy secrets.
 
+## GitHub account/plan security gate
+
+As of October 2026, GitHub's official documentation states:
+- Personal-account **private** repositories give collaborators **write** access, not read-only access.
+- Enforced branch protection/rules on private repositories requires GitHub Pro, Team or Enterprise (GitHub Free supports protection on public repositories).
+
+Therefore, **do not invite the collaborator into this private personal repository while an unprotected main can trigger production deploys**. Confirm the current GitHub plan and actually enforce required PR review by the maintainer, required `smoke / selfhost` status and blocked direct/force pushes. `CODEOWNERS` and an `AGENTS.md` request are advisory without the GitHub rule.
+
+A safe alternative is an organization with appropriate permission controls, or a separate sanitized *content-only* contribution repository where incoming PRs are reviewed and manually imported into the private Lexi repo. Do not enable `LEXI_DEPLOY_ENABLED` as a substitute for real branch protection.
+
+Reference: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches and https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/permission-levels-for-a-personal-account-repository
+
 ## One-time Core migration (operator task, not automatic)
 
 1. Confirm the repository's latest code matches expected live behaviour (the historical Core tree diverged from GitHub even when first backed up); record a safe baseline commit and test it on a temporary port with a copy of the database, not the live state.
