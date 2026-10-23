@@ -10,7 +10,8 @@ state=/var/lib/lexi-deploy
 archive="$state/incoming/lexi-$sha.tar.gz"
 ready=/etc/lexi-deploy/ready
 [[ -f "$ready" && -f "$archive" ]] || { echo 'not bootstrapped/armed or artifact missing' >&2; exit 3; }
-install -d -m 0700 "$state" "$state/backups"
+install -d -m 0755 "$state"
+install -d -m 0700 "$state/backups" "$state/incoming"
 exec 9>"$state/deploy.lock"; flock -n 9 || { echo 'deploy locked' >&2; exit 4; }
 echo "$digest  $archive" | sha256sum -c --status || { echo 'artifact checksum failed' >&2; exit 5; }
 for slot in primary secondary; do
