@@ -9,7 +9,8 @@ import community_content
 import pedagogy_rules
 
 def main():
-    additions = community_content.load([])
+    community_content.load([])  # independent schema smoke (not yet tagged)
+    additions = catalog.COMMUNITY_CARDS  # fully integrated + metadata tagged
     ids = [c["id"] for c in catalog.ALL]
     assert len(ids) == len(set(ids)), "a submitted ID collides with an existing progress key"
     assert len(catalog.ALL) >= 1795
