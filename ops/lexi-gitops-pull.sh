@@ -5,7 +5,8 @@ umask 077
 [[ "$EUID" -eq 0 ]] || { echo "root required" >&2; exit 2; }
 root=/var/lib/lexi-deploy
 [[ -f /etc/lexi-deploy/ready ]] || { echo "not armed"; exit 0; }
-install -d -m 0700 "$root" "$root/incoming"
+install -d -m 0755 "$root"
+install -d -m 0700 "$root/incoming"
 exec 8>"$root/poll.lock"
 flock -n 8 || { echo "poll already in progress"; exit 0; }
 url=https://api.github.com/repos/PotapovG/Lexi
