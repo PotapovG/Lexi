@@ -1,69 +1,57 @@
-# Lexi GitOps rollout — Core (pre-activation)
+# Lexi on Core — protected-main pull GitOps
 
-**Status: scaffolded, not yet activated.** Merging into `main` must not touch the existing live app until the prerequisites below are explicitly completed and tested. The current Core path `/opt/greek-trainer` is **not** a Git checkout. This is a deliberately separate deployment from the self-hostable Docker Compose example.
+**Installed 2026-10-23 on Core.** Core's `lexi-gitops-pull.timer` polls every two minutes. Production is currently pinned to the reviewed GitHub `main` commit. **The polling job will not deploy any new commit until GitHub `main` is protected AND that exact commit has a successful `selfhost` GitHub Actions check.** On an unprotected branch it logs `SKIP: main is not protected`.
 
-## Intended data flow
+No GitHub secret, write token, webhook, privileged CI runner, or SSH key is needed. A contributor forks the public repository, opens a PR, CI validates it, the maintainer merges, and Core eventually deploys the precise merged SHA.
 
-Contributor fork/branch → PR → structural/HTTP/originality checks → maintainer review/merge → GitHub Action packages the **exact merged SHA** using `git archive` → SSH upload with a dedicated low-privilege deploy account → root-owned `lexi-core-deploy` applicator on Core → immutable release → health-gated secondary then primary rollout → optional automatic code rollback, retaining private backup.
+## Owner action — required in GitHub UI
 
-The GitHub job is gated on repository variable **`LEXI_DEPLOY_ENABLED=true`** and the GitHub `production` environment. Until configured it is skipped, including after normal merges. Pull requests never get deploy secrets.
+Open https://github.com/PotapovG/Lexi/settings/branches and create a branch protection rule for `main`.
 
-## GitHub public repo permissions and branch protection
+1. **Require a pull request before merging**.
+2. **Require status checks to pass before merging**; select the GitHub Actions check **`selfhost`**, from workflow **`smoke`**.
+3. **Require conversation resolution**; disable force-push and deletion.
+4. **Do not allow bypassing the above settings** (where available).
+5. Only turn on "Require approvals" when a *second trusted maintainer with write access* can review owner-authored PRs: GitHub does not permit authors to approve their own PRs.
 
-As of 2026-10-23 Lexi is **public** and GitHub Free allows branch protection. Outside contributors should fork the repository and submit PRs — do **not** invite them as write-capable collaborators. No Core credentials or production GitHub environment secrets are ever available in their PR.
+Outsiders should use **Fork → PR**, with no write access to `main`. CODEOWNERS alone does not enforce approval. The puller checks `branches/main.protected=true`; this is a necessary fail-closed prerequisite, but it cannot verify every detail of the protection rule, so also audit the UI settings.
 
-Owner action: Settings → Branches → Add classic branch protection rule → branch `main`:
-- Require a pull request before merging
-- Require status checks to pass; select the GitHub Actions job named **`selfhost`** (workflow `smoke`)
-- Require branches to be up to date before merging, if desired
-- Require conversation resolution before merging
-- Do not allow bypassing the above settings
-- Disable force pushes and deletions
+## Production wiring (installed)
 
-**Required approving reviews:** do not set `1` on a personal repo unless you have another trusted person with write access who can review **owner-authored** PRs: GitHub won't let a PR author approve their own PR. This policy may be turned on once that reviewer exists. With only the owner allowed to merge external fork PRs, the owner must manually inspect and merge them after CI.
+- App: `https://potapovfamily.com/greek/`
+- Primary: `greek-trainer.service`, port `18560`
+- Standby: `greek-trainer-secondary.service`, port `18561`
+- Canonical Caddy: `/opt/potapov-family/core/templates/Caddyfile.tmpl`
+- Live generated Caddy: `/opt/potapov-family/core/generated/Caddyfile`
+- Caddy upstream ordering: primary first, active health checks and standby fallback (primary-down test produced HTTP 200).
+- Services use `/usr/local/libexec/lexi-instance {primary|secondary}` with root-owned slot pointers `/var/lib/lexi-deploy/slots/*`.
+- Release archives: `/opt/lexi-deploy/releases/<40-hex-sha>`
+- Poller: `/usr/local/sbin/lexi-gitops-pull`, systemd `lexi-gitops-pull.timer`
+- Applicator: `/usr/local/sbin/lexi-core-deploy`
+- Applied SHA: `/var/lib/lexi-deploy/deployed.sha`
+- SQLite + pepper remain under `/var/lib/greek-trainer/` and are **never** packaged, uploaded, or reset. Root-only online database backups and pepper copies are stored under `/var/lib/lexi-deploy/backups/`.
+- Approved WAV libraries remain on Core and are linked into each immutable release. The old `/opt/greek-trainer` installation remains intact as the emergency legacy fallback.
 
-Check `https://api.github.com/repos/PotapovG/Lexi/branches/main`: `protected` must be true. Merely adding `CODEOWNERS` isn't enforcement. Keep `LEXI_DEPLOY_ENABLED` off until enforced branch rules and all Core prerequisites are verified.
+The applicator verifies SHA-256, rejects unsafe archive members (including symlinks), compiles Python, retains release folders, backs up SQLite online, restarts secondary and checks it, then restarts primary and tests both local health plus the public site/catalog. On failures during service rollover it restores old slot pointers and restarts affected instances. **Schema migrations are not automatically reversible**: verify backward compatibility before merging schema-changing PRs.
 
-Reference: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
+## Status and troubleshooting
 
-## One-time Core migration (operator task, not automatic)
+```bash
+systemctl is-active greek-trainer.service greek-trainer-secondary.service
+systemctl list-timers lexi-gitops-pull.timer --no-pager
+journalctl -u lexi-gitops-pull.service -n 40 --no-pager
+cat /var/lib/lexi-deploy/deployed.sha
+curl -fsS http://127.0.0.1:18560/health
+curl -fsS http://127.0.0.1:18561/health
+curl -fsS -o /dev/null -w '%{http_code}\n' https://potapovfamily.com/greek/
+```
 
-1. Confirm the repository's latest code matches expected live behaviour (the historical Core tree diverged from GitHub even when first backed up); record a safe baseline commit and test it on a temporary port with a copy of the database, not the live state.
-2. Make Caddy's `/greek/` reverse proxy **fail over** from `127.0.0.1:18560` to `127.0.0.1:18561`. Use `lb_policy first`, active `health_uri /health` and `lb_try_duration` to mask the failover window. Update the **Potapov Family canonical GitOps template** and generated Caddy config together, validate and reload Caddy, and exercise an actual controlled upstream outage before arming deployment. Do not hand-edit only the generated config (it would drift).
-3. Install `ops/lexi-instance.sh` as root-owned `/usr/local/libexec/lexi-instance` (mode 0755) and `ops/lexi-core-deploy.sh` as `/usr/local/sbin/lexi-core-deploy` (mode 0755). Both are host scripts, not served by Lexi.
-4. Create root-owned immutable releases under `/opt/lexi-deploy/releases/<sha>`; provide the approved media WAV directories as symlinks under each release's `pocket-*/wav`. Create `/var/lib/lexi-deploy/slots/{primary,secondary}` with the same verified baseline SHA (0644) and the baseline `deployed.sha`.
-5. Add systemd **drop-ins** to existing services, preserving `DynamicUser=yes`, `StateDirectory=greek-trainer`, the live DB/pepper paths, network/privilege sandboxing, and their distinct ports:
+To suspend automated rollouts without touching the running app: `systemctl disable --now lexi-gitops-pull.timer` or remove the root-owned `/etc/lexi-deploy/ready` gate. The currently served release continues unaffected. Before manual rollback, preserve the database, verify code/schema compatibility, then restore the desired pinned slot pointers and restart standby before primary. Do not blindly restore old DB over active users.
 
-   Primary:
-   ```ini
-   [Service]
-   ExecStart=
-   ExecStart=/usr/local/libexec/lexi-instance primary
-   ```
+## Verified vs outstanding
 
-   Secondary:
-   ```ini
-   [Service]
-   ExecStart=
-   ExecStart=/usr/local/libexec/lexi-instance secondary
-   ```
+**Verified:** isolated GitHub-main canary with temporary SQLite and both host audio libraries; Core's baseline-to-git-main rollout, HTTP 200 on both ports, public catalog, real Caddy primary-down failover, all nine accounts and 2,194 existing attempts preserved; unprotected-main poll blocked. **Not yet verified:** induced malformed-release rollback drill (must be done in a controlled maintenance/test window); end-to-end automatic rollout after owner enables protection; future schema migration compatibility. Do not claim those tests were completed.
 
-   Run `systemctl daemon-reload`; restart the **secondary** first, verify 18561, then verify Caddy fallback, then restart the primary and verify 18560. Never perform this cutover as part of an unknown contributor PR.
-6. Create unprivileged `lexideploy` account with SSH key access for Actions. Only that account may upload to `/var/lib/lexi-deploy/incoming`. Give it passwordless sudo for the **single audited deploy script**, not general shell/root capabilities; keep the scripts and slot pointers root-owned. Ideally restrict SSH key with a forced command; verify the actual transport before using it. Keep backups directory root-only 0700.
-7. Create root-only `/etc/lexi-deploy/ready` **only after** testing proxy fallback, both slot launchers, backup, success and forced-failure rollback. No file = fail closed.
+## Educational content and intellectual property
 
-## GitHub owner-only settings
-
-- Enable PR checks and require review + status checks on `main`; block direct push and force-push, restrict who can merge. `CODEOWNERS` alone does **not** enforce review; branch rules do.
-- Configure `production` environment controls as supported by the account/plan.
-- Repository variables: `LEXI_DEPLOY_HOST` = Core SSH hostname, `LEXI_DEPLOY_USER` = restricted deploy account, `LEXI_DEPLOY_ENABLED` = `true` **last**.
-- Secrets: `LEXI_DEPLOY_SSH_KEY` = dedicated deploy private key for that account; `LEXI_DEPLOY_KNOWN_HOSTS` = independently verified, pinned SSH host key (never accept an unverified runtime `ssh-keyscan`).
-- Do **not** give the contributor server credentials, Actions secrets, GitHub admin permissions or the ability to bypass approvals.
-
-## Rollback and data
-
-`lexi-core-deploy` verifies the artifact SHA-256, refuses an unarmed host, validates release paths, takes a **SQLite online backup plus the existing login pepper**, keeps the previous release, then rolls the secondary and primary slots forward with health gates. On a failed restart or HTTP check it restores the previous pointers and attempts service rollback. This is a **code rollback**, not an automatic SQL schema downgrade. If a new release changes migrations, check backward compatibility in advance; recovering from an incompatible migration needs an explicitly planned data restore, not blind downgrade.
-
-After activation, the operator can check `/var/lib/lexi-deploy/deployed.sha`, GitHub Actions runs, both local `/health` endpoints, and the public `/greek/api/catalog` before declaring a release healthy.
-
-**Never** put login codes, SQLite WAL/database, password pepper, purchased course PDF or private audio source in GitHub or Actions artifacts. Never turn on auto-deploy on a Core instance whose Caddy fallback or historical source drift has not been resolved.
+The commercial source textbook is not shipped. New exercises must be independently authored and reviewed under `CONTENT_RIGHTS.md`; the MIT code license is not a blanket license for educational data. Pocket TTS attribution is in `THIRD_PARTY_NOTICES.md`.
