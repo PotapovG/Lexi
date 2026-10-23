@@ -43,7 +43,9 @@ params={'scope':['chapters'],'chapters':['1,2,3,4,5'],
         'types':['word,number,phrase,sentence,dialogue,accent'],
         'count':['60'],'lang':['ru'],'mode':['all']}
 with tempfile.TemporaryDirectory() as tmp:
-    server.DB=str(Path(tmp)/'qa.sqlite3');server.init_db()
+    server.DB=str(Path(tmp)/'qa.sqlite3')
+    server.auth.SECRET_FILE=Path(tmp)/'login-pepper'
+    server.init_db()
     seen=set()
     for page in range(4):
         batch=server.make_quiz('user',dict(params,exclude=[','.join(seen)]))

@@ -205,6 +205,10 @@ import patakis_context_cards as _patk
 ALL.extend(_patk.CARDS)
 import form_exercises as _form
 ALL.extend(_form.CARDS)
+# Independent contributor content. Only new, validated stable IDs are admitted.
+import community_content as _community
+COMMUNITY_CARDS = _community.load(ALL)
+ALL.extend(COMMUNITY_CARDS)
 # Shared semantic identities and source-backed grammar readiness on EVERY
 # question type. This is metadata; never overwrites user progress keys.
 import pedagogy_rules as _pedagogy
@@ -276,5 +280,5 @@ VERB_REFERENCE=[dict(group=g,level=level,lemma=lemma,ru=ru,en=en,forms=forms,
                 for g,level,lemma,ru,en,forms in _tv.VERBS]
 BY_ID={c["id"]:c for c in ALL}
 BY_ID.update(ARCHIVED_DIALOGUES)
-assert len(ALL)==1795 and len(BY_ID)==1796
+assert len(ALL) >= 1795 and len(BY_ID) == len(ALL) + 1
 assert all("en" in c for c in ALL)

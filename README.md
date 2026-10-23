@@ -76,6 +76,12 @@ then `docker compose up -d --build`. Keep the app published only on
 
 ### Contributing
 
+Community-authored cards belong in `content/community/*.json` and are checked
+by `tests/test_community_content.py`. See [the AI contributor instructions](AGENTS.md)
+and [authoring guide](docs/CONTENT_AUTHORING.md). Core runs the [guarded GitOps puller](docs/GITOPS.md):
+merges become production releases only after `main` branch protection and green CI are verified.
+
+
 Read [CONTRIBUTING.md](CONTRIBUTING.md), [CONTENT_RIGHTS.md](CONTENT_RIGHTS.md)
 and the [deployment guide](docs/DEPLOYMENT.md). Run isolated smoke tests:
 

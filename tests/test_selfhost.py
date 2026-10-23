@@ -31,7 +31,7 @@ def main():
     # Imports must work when no WAV files have been provisioned.
     sys.path.insert(0, str(ROOT))
     import server
-    assert len(server.ALL) == 1795 and len(server.vocab.VOCAB) == 1700
+    assert len(server.ALL) >= 1795 and len(server.vocab.VOCAB) == 1700
     assert not server.LISTENING_ENABLED or (
         len(server.LISTEN_CARDS) == 717 and len(server.listening.AUDIO) == 1266)
     with tempfile.TemporaryDirectory(prefix="lexi-open-source-test-") as folder:
