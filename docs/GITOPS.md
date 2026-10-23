@@ -8,17 +8,23 @@ Contributor fork/branch → PR → structural/HTTP/originality checks → mainta
 
 The GitHub job is gated on repository variable **`LEXI_DEPLOY_ENABLED=true`** and the GitHub `production` environment. Until configured it is skipped, including after normal merges. Pull requests never get deploy secrets.
 
-## GitHub account/plan security gate
+## GitHub public repo permissions and branch protection
 
-As of October 2026, GitHub's official documentation states:
-- Personal-account **private** repositories give collaborators **write** access, not read-only access.
-- Enforced branch protection/rules on private repositories requires GitHub Pro, Team or Enterprise (GitHub Free supports protection on public repositories).
+As of 2026-10-23 Lexi is **public** and GitHub Free allows branch protection. Outside contributors should fork the repository and submit PRs — do **not** invite them as write-capable collaborators. No Core credentials or production GitHub environment secrets are ever available in their PR.
 
-Therefore, **do not invite the collaborator into this private personal repository while an unprotected main can trigger production deploys**. Confirm the current GitHub plan and actually enforce required PR review by the maintainer, required `smoke / selfhost` status and blocked direct/force pushes. `CODEOWNERS` and an `AGENTS.md` request are advisory without the GitHub rule.
+Owner action: Settings → Branches → Add classic branch protection rule → branch `main`:
+- Require a pull request before merging
+- Require status checks to pass; select the GitHub Actions job named **`selfhost`** (workflow `smoke`)
+- Require branches to be up to date before merging, if desired
+- Require conversation resolution before merging
+- Do not allow bypassing the above settings
+- Disable force pushes and deletions
 
-A safe alternative is an organization with appropriate permission controls, or a separate sanitized *content-only* contribution repository where incoming PRs are reviewed and manually imported into the private Lexi repo. Do not enable `LEXI_DEPLOY_ENABLED` as a substitute for real branch protection.
+**Required approving reviews:** do not set `1` on a personal repo unless you have another trusted person with write access who can review **owner-authored** PRs: GitHub won't let a PR author approve their own PR. This policy may be turned on once that reviewer exists. With only the owner allowed to merge external fork PRs, the owner must manually inspect and merge them after CI.
 
-Reference: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches and https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/permission-levels-for-a-personal-account-repository
+Check `https://api.github.com/repos/PotapovG/Lexi/branches/main`: `protected` must be true. Merely adding `CODEOWNERS` isn't enforcement. Keep `LEXI_DEPLOY_ENABLED` off until enforced branch rules and all Core prerequisites are verified.
+
+Reference: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
 
 ## One-time Core migration (operator task, not automatic)
 
