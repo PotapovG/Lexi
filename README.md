@@ -76,6 +76,12 @@ then `docker compose up -d --build`. Keep the app published only on
 
 ### Contributing
 
+Community-authored cards belong in `content/community/*.json` and are checked
+by `tests/test_community_content.py`. See [the AI contributor instructions](AGENTS.md)
+and [authoring guide](docs/CONTENT_AUTHORING.md). The [GitOps rollout plan](docs/GITOPS.md)
+is separately gated; merging code alone does not yet authorize live deployment.
+
+
 Read [CONTRIBUTING.md](CONTRIBUTING.md), [CONTENT_RIGHTS.md](CONTENT_RIGHTS.md)
 and the [deployment guide](docs/DEPLOYMENT.md). Run isolated smoke tests:
 

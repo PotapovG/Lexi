@@ -46,3 +46,12 @@ Every contribution adding educational text must state in the PR that:
 Where the reviewer owns the commercial reference personally, they can run
 `scripts/audit_textbook_overlap.py` locally. No commercial book goes into CI.
 See `docs/CONTENT_AUDIT.md`.
+
+## AI-assisted lesson batches
+
+For content-only additions, follow [AGENTS.md](AGENTS.md) and
+[the independent authoring guide](docs/CONTENT_AUTHORING.md). Add new records
+to `content/community/*.json` rather than editing legacy indexed question arrays.
+Keep PRs small and show per-chapter counts. Automatic checks catch structure,
+not subtle translation errors or third-party copyrights. Production deployment
+and merge rights remain with the maintainer.

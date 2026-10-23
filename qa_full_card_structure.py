@@ -1,4 +1,4 @@
-"""Non-linguistic pre-release audit of 1,795 stable IDs and language metadata.
+"""Non-linguistic pre-release audit of stable IDs and language metadata.
 
 Passing this audit does NOT certify textbook exact-page proof or natural Greek.
 """
@@ -27,7 +27,7 @@ for c in book:
     if kind in ('word','phrase','sentence','number','verb','article','order','accent','letter'):
         for l in lang:
             if not isinstance(c.get(l),str) or not c[l].strip():issues.append((cid,'missing_'+l))
-assert len(book)==1795
+assert len(book)>=1795
 assert len({c['id'] for c in book})==len(book)
 assert counts['dialogue']==100
 assert len(__import__('catalog_v2').CURATED_DIALOGUE_BANKS)==35
@@ -39,5 +39,5 @@ report={'checked_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(
  'issue_count':len(issues),'issues':issues[:250],
  'remaining_work':['Human lexical inventory first four units','Native Greek+6 locale content reading','Real page evidence per lemma','Meaning-specific correct synonyms across 6 languages','Versioned replacement for ambiguous dlg024']}
 path=Path('editorial-audit/full-card-structure-20261020.json');path.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-print('FULL_1795_CARD_STRUCTURE',dict(counts),'issues',len(issues),'saved',path)
+print('FULL_CARD_STRUCTURE',dict(counts),'issues',len(issues),'saved',path)
 assert not issues,issues[:20]
