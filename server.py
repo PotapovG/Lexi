@@ -36,6 +36,7 @@ import extra_sentences_20261021 as _extra_sentences
 import order2_cards as _order2
 import order_valid_permutations as _order_variants
 import answer_idempotency
+import dialogue_translations as _dialogue_glosses
 import lesson_session_sync as _lesson_sync
 for _card in ALL:
     # New book-syllabus supplements ship with reviewed Arabic glosses.
@@ -68,6 +69,7 @@ ENCLITIC_ALL=_enclitic.CARDS
 ENCLITIC_BY_ID=_enclitic.BY_ID
 ORDER2_ALL=_order2.build(ALL)
 ORDER2_BY_ID={c["id"]:c for c in ORDER2_ALL}
+DIALOGUE_TRANSLATION_COUNT=_dialogue_glosses.validate(ALL)
 GRAMMAR2_ALL=_grammar2.CARDS
 GRAMMAR2_BY_ID=_grammar2.BY_ID
 PRACTICE_ALL=ALL+EXTRA_ALL+SYLLABLE_ALL+ENCLITIC_ALL+GRAMMAR2_ALL+ORDER2_ALL
@@ -334,7 +336,8 @@ def format_question(card,direction,lang,weak=False,variant_index=None):
     # Greek variant metadata never replaces canonical printed spelling or stable ID.
     # Accent task tests a letter position on printed spelling only; its
     # lexical alternative is displayed AFTER answering, not as a score index.
-    canonical_greek=(card.get('accented') if card['kind']=='accent' else
+    canonical_greek=(None if card['kind']=='dialogue' else
+                     card.get('accented') if card['kind']=='accent' else
                      card.get('sg') if card['kind']=='plural' and direction=='pl-sg' else
                      card.get('pl') if card['kind']=='plural' else card.get('gr',''))
     item['greekVariants']=greek_variants.variants(canonical_greek)
@@ -705,6 +708,15 @@ def mark(user_id,body,injected_db=None):
     if dialogue_valid is not None:
         result['acceptedAnswers']=list(dialogue_valid)
         result['acceptedVariant']=bool(correct and selected!=correct_answer)
+    if card['kind']=='accent':
+        result['translation']=card[lang]
+        result['translationLang']=lang
+        result['translationGreek']=card['accented']
+    if card['kind']=='dialogue':
+        gloss,gloss_language=_dialogue_glosses.lookup(card,direction,lang,shown_answer if correct else None)
+        result['translation']=gloss
+        result['translationLang']=gloss_language
+        result['translationGreek']=shown_answer
     if card['kind']=='order':
         result['acceptedOrderCount']=len(_order_variants.all_valid(card))
         result['formattedOrder']=_order_variants.formatted(card,selected) if correct else card['gr']
@@ -725,7 +737,8 @@ def mark(user_id,body,injected_db=None):
     if direction in ('gr-ru','ru-gr','sg-pl','pl-sg'):
         result['acceptedAnswers']=accepted_glosses.accepted(card,direction,lang,correct_answer)
     # Expose variants after scoring, including accent and listening prompts.
-    source_greek=(card.get('accented') if card['kind']=='accent' else
+    source_greek=(shown_answer if card['kind']=='dialogue' else
+                  card.get('accented') if card['kind']=='accent' else
                   correct_answer if card['kind']=='plural' else card.get('gr',''))
     variants=greek_variants.variants(source_greek)
     if variants:result['greekVariants']=variants

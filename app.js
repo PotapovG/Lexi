@@ -1201,6 +1201,9 @@
 
   // Older restored quiz snapshots only have tokens (with punctuation).
   // New quiz payloads have aligned choiceTokens without punctuation.
+  const REVEAL_LABELS={
+    ru:"Перевод",en:"Translation",zh:"翻译",ar:"الترجمة",es:"Traducción",pt:"Tradução"
+  };
   const orderWord=word=>word.replace(/^[.,!?;:··…«»“”()]+|[.,!?;:··…«»“”()]+$/g,"");
   const orderWords=q=>q.choiceTokens?.length===q.tokens.length
     ?q.choiceTokens:q.tokens.map(orderWord);
@@ -1380,6 +1383,21 @@
         const note=document.createElement("p");note.className="spelling-guidance";
         const label=document.createElement("strong");label.textContent=t(q.kind==="enclitic"?"encliticExplanation":q.kind==="syllable"?"syllableExplanation":"accentExplanationTitle")+": ";
         note.append(label,document.createTextNode(result.tonosHint));$("feedback").append(note);
+      }
+      // Show meaning after scoring, for correct AND incorrect answers.
+      if(result.translation && (q.kind==="accent"||q.kind==="dialogue")){
+        const note=document.createElement("p");
+        note.className="answer-translation";
+        const heading=document.createElement("strong");
+        const language=result.translationLang||answerLang;
+        heading.textContent=(REVEAL_LABELS[answerLang]||REVEAL_LABELS.en)+
+          (language!==answerLang?" (EN)":"")+": ";
+        const meaning=document.createElement("span");
+        meaning.textContent=result.translation;
+        meaning.lang=language;
+        meaning.dir=language==="ar"?"rtl":"auto";
+        note.append(heading,meaning);
+        $("feedback").append(note);
       }
       if(result.greekVariants?.length){
         const variantNote=document.createElement("p");variantNote.className="spelling-guidance";

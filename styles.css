@@ -367,3 +367,17 @@ button,select,input{touch-action:manipulation}
 .topic-study-row .vocab-audio-btn:hover{background:#33445b}
 #vocab-preview-audio-status{min-height:18px;font-size:12px;margin:12px 0}
 @media(max-width:390px){.topic-study-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto auto;gap:5px}.topic-study-row .vocab-audio-btn{min-width:40px;padding:5px}}
+
+/* Translation appears only after scoring an accent or dialogue response. */
+.feedback .answer-translation{
+  margin:13px 0 0;
+  padding:11px 14px;
+  border:1px solid #42546a;
+  border-radius:10px;
+  background:#152b3d;
+  color:#ecf3fa;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+.feedback .answer-translation strong{color:var(--accent);margin-inline-end:5px}
+.feedback .answer-translation span{unicode-bidi:plaintext}
