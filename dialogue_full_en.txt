@@ -1,0 +1,100 @@
+001|A: Good morning! What's your name?|B: [[0]]! My name is Maria.|A: Where are you from?|B: [[1]].
+002|A: Hi, Anna! [[0]]?|B: I'm fine, thank you. And you?|A: [[1]], thank you.
+003|A: [[0]]?|B: I live in Nicosia. And you?|A: [[1]].
+004|A: Who is this?|B: [[0]].|A: And where is he from?|B: [[1]].
+005|A: [[0]]?|B: Yes, I have a brother.|A: How old is he?|B: [[1]].
+006|A: What does your mother do?|B: [[0]].|A: And your father?|B: [[1]].
+007|A: Good morning. What will you have?|B: [[0]], please.|A: With sugar?|B: [[1]].
+008|A: Please, [[0]]?|B: I want two kilos of potatoes.|A: Here you are. Anything else?|B: [[1]].
+009|A: Where is the book?|B: [[0]].|A: And where are the keys?|B: [[1]].
+010|A: What time does the lesson start?|B: [[0]].|A: And when does it end?|B: [[1]].
+011|A: Excuse me, where is the bank?|B: [[0]].|A: Is it far?|B: [[1]].
+012|A: Good morning. [[0]]?|B: One ticket to Limassol.|A: One way or return?|B: [[1]], please.
+013|A: Have you decided what you want?|B: [[0]].|A: What will you drink?|B: [[1]].
+014|A: Hello?|B: [[0]]?|A: Yes, that's me. Who is speaking?|B: [[1]].
+015|A: Good morning. What's the problem?|B: [[0]].|A: Do you need anything else?|B: [[1]].
+016|A: Can we meet tomorrow?|B: [[0]].|A: At six in the evening?|B: [[1]].
+017|A: Good evening. Do you have a reservation?|B: [[0]].|A: For how many nights?|B: [[1]].
+018|A: Have you finished the work?|B: [[0]].|A: When will you send it?|B: [[1]].
+019|A: Where will you travel in summer?|B: [[0]].|A: Have you bought the tickets?|B: [[1]].
+020|A: How is your new home?|B: [[0]].|A: And the neighbourhood?|B: [[1]].
+021|A: Hello! [[0]]?|B: My name is Alexandra. And yours?|A: [[1]]. Nice to meet you!
+022|A: Excuse me, are you Mr Andreou?|B: [[0]]. I'm Mr Georgiou.|A: [[1]].
+023|A: Welcome to our class!|B: [[0]]!|A: Are you a new student?|B: [[1]].
+024_v2|A: This is my friend Maria.|B: [[0]], Maria!|C: Nice to meet you too, Giorgos.|B: [[1]], Maria?|C: I live in Nicosia.
+025|A: [[0]], Eleni!|B: Good morning, Giannis!
+026|A: Do you live in Nicosia?|B: [[0]], in Strovolos.|A: I live in Engomi.
+027|A: Which country are you from?|B: [[0]].|A: And which city do you live in?|B: [[1]].
+028|A: Where does Anna live?|B: [[0]].|A: Is she from Greece?|B: [[1]], she's from Cyprus.
+029|A: Do you live on Kyprou Street?|B: [[0]]. And you?|A: I live on Ellados Street.
+030|A: Are you from Italy?|B: [[0]].|A: And do you speak Italian?|B: [[1]].
+031|A: Who is this gentleman?|B: [[0]].|A: Is he a teacher?|B: [[1]], he's an engineer.
+032|A: Do you have children?|B: [[0]].|A: How many children do you have?|B: [[1]].
+033|A: What do you do for work?|B: [[0]]. And you?|A: [[1]].
+034|A: Does your sister work?|B: [[0]].|A: Is she married?|B: [[1]].
+035|A: How many brothers and sisters do you have?|B: [[0]].
+036|A: [[0]]?|B: Yes, a little. I'm learning Greek.|A: Great! I'm learning too.
+037|A: Do you understand the question?|B: [[0]]. Can you say it again?|A: [[1]].
+038|A: How do you spell your name?|B: [[0]].|A: Thank you!
+039|A: Which languages do you speak?|B: [[0]].|A: Are you learning Greek too?|B: [[1]].
+040|A: Excuse me, [[0]]?|B: Yes, the word is "kalimera".|A: Thank you. [[1]]?|B: It starts with kappa.
+041|A: Excuse me, where are you going?|B: [[0]].|A: By bus?|B: [[1]].
+042|A: Does this bus go to Larnaca?|B: [[0]], it goes to Limassol.|A: Thank you for the information.
+043|A: Is the school nearby?|B: [[0]].|A: Good, let's walk.
+044|A: Good evening, where shall we go?|B: [[0]], please.|A: To the main entrance?|B: [[1]].
+045|A: Will you go to the park this afternoon?|B: [[0]].|A: Can I come too?|B: [[1]]!|A: Then let's go at five.|B: [[2]].
+046|A: What time do you wake up?|B: [[0]].|A: And when do you have breakfast?|B: [[1]].
+047|A: What do you do on Saturday?|B: [[0]].|A: And on Sunday?|B: [[1]].
+048|A: Do we have class today?|B: [[0]]. Class is tomorrow.
+049|A: Which day do we have an appointment?|B: [[0]].|A: And at what time?|B: [[1]].
+050|A: How often do you go to the gym?|B: [[0]].|A: I go three times too.
+051|A: Good morning. How much does this bread cost?|B: [[0]].|A: I'll take two.
+052|A: How much is everything together?|B: [[0]].|A: Here is twenty euros.|B: [[1]].
+053|A: What would you like, please?|B: [[0]].|A: Anything else?|B: [[1]].
+054|A: This jacket is very expensive.|B: [[0]].|A: Good, I'll try it on.
+055|A: Can I pay by card?|B: [[0]].|A: Thank you. I need a receipt too.|B: [[1]].
+056|A: What size do you wear?|B: [[0]].|A: Shall I bring a pair?|B: [[1]], please.
+057|A: Do you like this dress?|B: [[0]], but it's too big.|A: We have a smaller one.|B: [[1]].
+058|A: Would you like apples or oranges?|B: [[0]].|A: How many kilos?|B: [[1]].
+059|A: Good morning. I'd like to exchange this shirt.|B: [[0]]?|A: It's too small.|B: [[1]].
+060|A: Do you want to buy a gift for Nikos?|B: [[0]]. What does he like?|A: He likes books.|B: [[1]].|A: From the neighbourhood bookshop.|B: [[2]].
+061|A: I'm looking for a two-room apartment.|B: [[0]].|A: Is it near the centre?|B: [[1]].
+062|A: How much is the rent per month?|B: [[0]].|A: Does that include electricity?|B: [[1]].
+063|A: Does the house have a big kitchen?|B: [[0]].|A: And does it have a balcony?|B: [[1]].
+064|A: Where is the new apartment located?|B: [[0]].|A: Is there an elevator?|B: [[1]].
+065|A: When are you moving?|B: [[0]].|A: Do you want help with your things?|B: [[1]]!|A: Shall I come in the morning?|B: [[2]].
+066|A: Which city do you want a ticket to?|B: [[0]].|A: For what date?|B: [[1]].
+067|A: Where is the boarding gate?|B: [[0]].|A: Is it far?|B: [[1]].
+068|A: How many suitcases do you have?|B: [[0]].|A: Is this small one yours?|B: [[1]].
+069|A: Good evening. Do you have a reservation?|B: [[0]].|A: May I have your passport?|B: [[1]].
+070|A: Is the plane delayed?|B: [[0]].|A: Do you know when it will leave?|B: [[1]].
+071|A: Did you like school when you were little?|B: [[0]].|A: Which subject did you like most?|B: [[1]].
+072|A: Where did you use to work?|B: [[0]].|A: And now?|B: [[1]].
+073|A: Have you known Kostas for many years?|B: [[0]].|A: Since school?|B: [[1]].
+074|A: Where were you yesterday afternoon?|B: [[0]].|A: Were you alone?|B: [[1]].
+075|A: Who is in this photo?|B: [[0]].|A: How old were you?|B: [[1]].
+076|A: What will you do tomorrow morning?|B: [[0]].|A: Can I come with you?|B: [[1]].
+077|A: Do you want to go to the cinema tonight?|B: [[0]].|A: At eight?|B: [[1]].
+078|A: Can you come at five?|B: [[0]].|A: And tomorrow?|B: [[1]].
+079|A: Hi, Anna. Do you have a moment?|B: [[0]].|A: I want to tell you something.|B: [[1]].
+080|A: What shall we do first?|B: [[0]].|A: And then?|B: [[1]].|A: Will we go home at the end?|B: [[2]].
+081|A: Do you want to go for coffee?|B: [[0]].|A: Where shall we go?|B: [[1]].
+082|A: What time does the museum open?|B: [[0]].|A: Is there an admission fee?|B: [[1]].
+083|A: Have you seen this play?|B: [[0]].|A: Shall we go together?|B: [[1]].
+084|A: Where would you like to walk today?|B: [[0]].|A: And then?|B: [[1]].
+085|A: Is Maria coming with us too?|B: [[0]].|A: Is Nikos coming?|B: [[1]].|A: Good, how many will we be?|B: [[2]].
+086|A: What time is our meeting?|B: [[0]].|A: In which room?|B: [[1]].
+087|A: Did you send the message to the client?|B: [[0]].|A: Did you get a reply?|B: [[1]].
+088|A: Can you help me with this work?|B: [[0]].|A: Thank you!
+089|A: Will you be in the office tomorrow?|B: [[0]].|A: Can we talk at eleven?|B: [[1]].
+090|A: The program won't open on my computer.|B: [[0]]?|A: Yes, but it still doesn't work.|B: [[1]].|A: Shall I message you when I can?|B: [[2]].
+091|A: Good morning. Where does it hurt?|B: [[0]].|A: Since when?|B: [[1]].
+092|A: Do you need something?|B: [[0]].|A: Do you have a prescription?|B: [[1]].
+093|A: Are you feeling better today?|B: [[0]].|A: Do you need anything?|B: [[1]].
+094|A: Do you have an appointment with the doctor?|B: [[0]].|A: What's your name?|B: [[1]].|A: Wait a moment, please.|B: [[2]].
+095|A: Do you have any allergies?|B: [[0]].|A: Thank you, I'll make a note of that.
+096|A: Excuse me, who's last in line?|B: [[0]].|A: Thank you, I'll wait behind you.
+097|A: Good morning. What would you like to send?|B: [[0]].|A: To which country?|B: [[1]].
+098|A: Have you filled in the application?|B: [[0]].|A: May I see your ID?|B: [[1]].
+099|A: Excuse me, is this office number three?|B: [[0]].|A: Where is office number three?|B: [[1]].
+100|A: Good morning, I have an appointment at ten.|B: [[0]]?|A: Papadopoulou.|B: [[1]].|A: Should I wait here?|B: [[2]].

@@ -1204,6 +1204,11 @@
   const REVEAL_LABELS={
     ru:"Перевод",en:"Translation",zh:"翻译",ar:"الترجمة",es:"Traducción",pt:"Tradução"
   };
+  const FULL_DIALOGUE_LABELS={
+    ru:"Перевод всего диалога",en:"Complete dialogue translation",
+    zh:"完整对话翻译",ar:"ترجمة الحوار بالكامل",
+    es:"Traducción del diálogo completo",pt:"Tradução do diálogo completo"
+  };
   const orderWord=word=>word.replace(/^[.,!?;:··…«»“”()]+|[.,!?;:··…«»“”()]+$/g,"");
   const orderWords=q=>q.choiceTokens?.length===q.tokens.length
     ?q.choiceTokens:q.tokens.map(orderWord);
@@ -1446,7 +1451,32 @@
         }
         const anotherGap=state.dialogueStep<q.gapIndices.length-1;
         txt("next",t(anotherGap?"dialogueNext":"dialogueContinue"));
-        if(!anotherGap)txt("question-note",t("dialogueComplete"));
+        if(!anotherGap){
+          txt("question-note",t("dialogueComplete"));
+          // Reveal the complete translation only after the learner finishes
+          // the card. Replace every translated gap by the accepted response
+          // that actually appeared in the finished conversation.
+          if(Array.isArray(result.dialogueFullTemplate)){
+            const panel=document.createElement("div");
+            panel.className="dialogue-full-translation";
+            const title=document.createElement("strong");
+            const shownLang=result.dialogueFullLang||answerLang;
+            title.textContent=(FULL_DIALOGUE_LABELS[answerLang]||FULL_DIALOGUE_LABELS.en)+
+              (shownLang!==answerLang?" (EN)":"");
+            panel.append(title);
+            for(const template of result.dialogueFullTemplate){
+              const line=document.createElement("p");
+              line.textContent=template.replace(/\[\[(\d+)\]\]/g,(_,n)=>{
+                const greek=state.dialogueFilled[Number(n)]||q.dialogueGaps[Number(n)]||"";
+                return result.dialogueFullGlosses?.[greek]||"";
+              });
+              line.lang=shownLang;
+              line.dir=shownLang==="ar"?"rtl":"auto";
+              panel.append(line);
+            }
+            $("feedback").append(panel);
+          }
+        }
       }
       persistActiveSession();
     }catch(err){

@@ -37,6 +37,7 @@ import order2_cards as _order2
 import order_valid_permutations as _order_variants
 import answer_idempotency
 import dialogue_translations as _dialogue_glosses
+import dialogue_full as _full_dialogues
 import lesson_session_sync as _lesson_sync
 for _card in ALL:
     # New book-syllabus supplements ship with reviewed Arabic glosses.
@@ -70,6 +71,7 @@ ENCLITIC_BY_ID=_enclitic.BY_ID
 ORDER2_ALL=_order2.build(ALL)
 ORDER2_BY_ID={c["id"]:c for c in ORDER2_ALL}
 DIALOGUE_TRANSLATION_COUNT=_dialogue_glosses.validate(ALL)
+FULL_DIALOGUE_TRANSLATION_COUNT=_full_dialogues.validate(ALL)
 GRAMMAR2_ALL=_grammar2.CARDS
 GRAMMAR2_BY_ID=_grammar2.BY_ID
 PRACTICE_ALL=ALL+EXTRA_ALL+SYLLABLE_ALL+ENCLITIC_ALL+GRAMMAR2_ALL+ORDER2_ALL
@@ -217,11 +219,13 @@ def generate_options(card,direction,answer,lang):
         pool.sort(key=lambda c:(c['chapter']!=card['chapter'],
                                  c['sourceKind']!=card['sourceKind'],
                                  abs(len(c['gr'])-len(card['gr']))))
-        pairs=[(answer,card['en'])];seen=set(accepted)
+        pairs=[(answer,card['en'])]
+        seen={_distractors.norm(x) for x in accepted}
         for other in pool:
             value=other[lang]
-            if value in seen:continue
-            seen.add(value);pairs.append((value,other['en']))
+            key=_distractors.norm(value)
+            if not key or key in seen:continue
+            seen.add(key);pairs.append((value,other['en']))
             if len(pairs)==8:break
         if len(pairs)!=8:raise ValueError('listening distractors unavailable')
         random.shuffle(pairs)
@@ -237,11 +241,14 @@ def generate_options(card,direction,answer,lang):
     pool.sort(key=lambda c:_distractors.rank(card,c,lang,current_unit,random.random()))
     pairs=[(answer,card.get('en',''))]
     allowed=accepted_glosses.accepted(card,direction,lang,answer)
-    if len(allowed)>1:
-        # Some language questions really have more than one correct gloss.
-        # Render one documented alternate in the bank and accept *either*.
-        pairs.append((allowed[1],card.get('en','')))
+    # Display a distinct alternate only if its meaning/spelling is not merely
+    # the same answer with different capitalization or punctuation.
     seen={_distractors.norm(value) for value in allowed}
+    primary_key=_distractors.norm(answer)
+    for alternate in allowed[1:]:
+        if _distractors.norm(alternate) and _distractors.norm(alternate)!=primary_key:
+            pairs.append((alternate,card.get('en','')))
+            break
     for other in pool:
         # Same publisher gloss or curated Greek spelling alternatives are
         # not correct "wrong" answers and must not be shown as decoys.
@@ -717,6 +724,7 @@ def mark(user_id,body,injected_db=None):
         result['translation']=gloss
         result['translationLang']=gloss_language
         result['translationGreek']=shown_answer
+        result.update(_full_dialogues.after_score(card,lang))
     if card['kind']=='order':
         result['acceptedOrderCount']=len(_order_variants.all_valid(card))
         result['formattedOrder']=_order_variants.formatted(card,selected) if correct else card['gr']
