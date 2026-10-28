@@ -438,8 +438,8 @@
     pt:{grammarMode:"Gramática 2.0",grammarExplanation:"Forma gramatical"}
   };
   for(const [lang,strings] of Object.entries(GRAMMAR2_I18N))Object.assign(I18N[lang],strings);
-  const kindIds=["word","number","phrase","sentence","dialogue","plural","letter","accent","syllable","enclitic","grammar","verb","article","order","listening"];
-  const kinds={word:"words",number:"numbers",phrase:"phrases",sentence:"sentences",dialogue:"dialogues",plural:"plurals",letter:"alphabet",accent:"accent",syllable:"syllableMode",enclitic:"encliticMode",grammar:"grammarMode",verb:"verbsMode",article:"articlesMode",order:"orderMode",listening:"listenMode"};
+  const kindIds=["word","number","phrase","sentence","dialogue","clock","plural","letter","accent","syllable","enclitic","grammar","verb","article","order","listening"];
+  const kinds={word:"words",number:"numbers",phrase:"phrases",sentence:"sentences",dialogue:"dialogues",clock:"clockMode",plural:"plurals",letter:"alphabet",accent:"accent",syllable:"syllableMode",enclitic:"encliticMode",grammar:"grammarMode",verb:"verbsMode",article:"articlesMode",order:"orderMode",listening:"listenMode"};
   const CROSS_DEVICE_I18N={
     ru:{continueRemotePrompt:"У тебя есть незавершённое занятие на другом устройстве. Продолжить его здесь? Другое устройство прекратит отправку новых ответов.",resumeRemoteNotice:"Занятие перенесено с другого устройства.",handoffStopped:"Занятие продолжено на другом устройстве. Здесь оно остановлено.",sessionSyncUnavailable:"Серверная синхронизация временно недоступна; занятие сохраняется в этом браузере."},
     en:{continueRemotePrompt:"An unfinished lesson exists on another device. Continue here? The other device will no longer submit new answers.",resumeRemoteNotice:"Lesson transferred from another device.",handoffStopped:"This lesson moved to another device and is now stopped here.",sessionSyncUnavailable:"Server sync temporarily unavailable; the lesson is saved in this browser."},
@@ -449,6 +449,15 @@
     pt:{continueRemotePrompt:"Tens uma lição por terminar noutro dispositivo. Continuar aqui? O outro deixará de enviar novas respostas.",resumeRemoteNotice:"Lição transferida de outro dispositivo.",handoffStopped:"A lição foi transferida para outro dispositivo e parou aqui.",sessionSyncUnavailable:"Sincronização temporariamente indisponível; a lição fica guardada neste navegador."}
   };
   for(const [lang,strings] of Object.entries(CROSS_DEVICE_I18N))Object.assign(I18N[lang],strings);
+  const CLOCK_UI={
+    ru:{clockMode:"Часы и время"},
+    en:{clockMode:"Clock · tell the time"},
+    zh:{clockMode:"认识时钟"},
+    ar:{clockMode:"قراءة الساعة"},
+    es:{clockMode:"El reloj y la hora"},
+    pt:{clockMode:"Ler as horas"},
+  };
+  for(const [lang,items] of Object.entries(CLOCK_UI))Object.assign(I18N[lang],items);
   const SESSION_STORAGE_KEY="greek-active-session-v2";
   const SESSION_TEXT={
     ru:{resumeNotice:"Занятие восстановлено после перезагрузки.",retryAnswer:"Повторить отправку ответа",recoveryInfo:"Ответ мог сохраниться на сервере. Повторная отправка безопасна и не начислит вторую попытку.",resumeExpired:"Время сохранённого занятия истекло."},
@@ -683,7 +692,7 @@
   }
   function saveSettings(){
     try {localStorage.setItem(STORAGE,JSON.stringify({
-       chapterNumberingVersion:2,kindSchemaVersion:5,
+       chapterNumberingVersion:2,kindSchemaVersion:6,
        lang:$("lang").value,scope:mode(),training:training(),from:$("page-from").value,to:$("page-to").value,
        chapters:state.bookChapters||selectedChapters(),listeningChapters:state.listeningChapters||[1,2,3,4],types:selectedKinds(),duration:duration(),
        topics:selectedTopics(),levels:selectedLevels(),groups:selectedGroups(),maxUnit:verbMaxUnit(),
@@ -716,6 +725,7 @@
       // double-stress skill without erasing any prior selected material types.
       if(!o.kindSchemaVersion)types.add("enclitic");
       if((Number(o.kindSchemaVersion)||0)<5)types.add("grammar");
+      if((Number(o.kindSchemaVersion)||0)<6)types.add("clock");
       $("kind-options").querySelectorAll('input').forEach(x=>x.checked=types.has(x.value));
     }
     if([10,15,20,30,45,60].includes(Number(o.duration)))document.querySelector('input[name=duration][value="'+o.duration+'"]').checked=true;
@@ -1130,6 +1140,8 @@
       (q.greekVariants?.length?" · "+greekVariantLabels.more:"");
     txt("question-note",(q.kind==="accent"?t("accentChoiceHelp"):q.kind==="syllable"?t("syllableHelp"):q.note)+(q.articleSpellingVariant?" · "+t("articleVariantHint"):(q.multipleValid&&q.direction!=="ru-gr"?" · "+t("manyCorrect"):""))+greekVariantHint);
     txt("question-prompt",q.promptEn?hint(q.prompt,q.promptEn):q.prompt);
+    show("clock-face",q.kind==="clock");
+    if(q.kind==="clock")renderClock(q);
     show("feedback",false);show("next",false);show("verb-reveal",false);
     show("listening-controls",q.kind==="listening");
     show("listening-reveal",false);
@@ -1152,7 +1164,7 @@
     answers.classList.toggle("accent-letters",isAccent);
     // Readable answer choices: long phrases/sentences and very long translations
     // are full width on mobile, instead of squeezing into two tiny columns.
-    const longChoices=!isAccent && (["phrase","sentence","enclitic","grammar"].includes(q.kind) ||
+    const longChoices=!isAccent && (["phrase","sentence","enclitic","grammar","clock"].includes(q.kind) ||
       q.choices.some((x,i)=>x.length>36||(q.choicesEn?.[i]&&hint(x,q.choicesEn[i]).length>42)));
     answers.classList.toggle("wide-choices",longChoices);
     if(isAccent)$("question-prompt").classList.add("unaccented-word");
@@ -1178,6 +1190,44 @@
       }else b.addEventListener("click",()=>choose(i));
       answers.append(b);
     });
+  }
+
+  function renderClock(q){
+    const host=$("clock-face");host.replaceChildren();
+    const svgNS="http://www.w3.org/2000/svg";
+    const element=(tag,attrs={})=>{
+      const node=document.createElementNS(svgNS,tag);
+      for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));
+      return node;
+    };
+    const svg=element("svg",{viewBox:"0 0 240 240",width:220,height:220,
+      role:"img","aria-label":`Clock showing ${String(q.clockHour).padStart(2,"0")}:${String(q.clockMinute).padStart(2,"0")}`});
+    const pos=(degrees,radius)=>{
+      const radians=degrees*Math.PI/180;
+      return {x:120+Math.sin(radians)*radius,y:120-Math.cos(radians)*radius};
+    };
+    svg.append(element("circle",{cx:120,cy:120,r:109,fill:"#122a40",stroke:"#b7c6d9","stroke-width":3}));
+    for(let i=0;i<60;i++){
+      const start=pos(i*6,i%5===0?92:99);
+      const end=pos(i*6,103);
+      svg.append(element("line",{x1:start.x,y1:start.y,x2:end.x,y2:end.y,
+        stroke:i%5===0?"#c3d5e5":"#637f95","stroke-width":i%5===0?2.4:1.1}));
+    }
+    for(let n=1;n<=12;n++){
+      const p=pos(n*30,78);
+      const label=element("text",{x:p.x,y:p.y+5,"font-size":17,
+        "font-weight":600,"text-anchor":"middle",fill:"#f1f1e9"});
+      label.textContent=String(n);svg.append(label);
+    }
+    const hourDegrees=((q.clockHour%12)+q.clockMinute/60)*30;
+    const hour=pos(hourDegrees,53);
+    svg.append(element("line",{x1:120,y1:120,x2:hour.x,y2:hour.y,
+      stroke:"#f1d496","stroke-width":8,"stroke-linecap":"round"}));
+    const minute=pos(q.clockMinute*6,77);
+    svg.append(element("line",{x1:120,y1:120,x2:minute.x,y2:minute.y,
+      stroke:"#eef4fc","stroke-width":5,"stroke-linecap":"round"}));
+    svg.append(element("circle",{cx:120,cy:120,r:5,fill:"#f1d496"}));
+    host.append(svg);
   }
 
   async function playListening(slow=false){
@@ -1374,6 +1424,12 @@
       if(q.kind==="verb"&&result.conjugation){
         renderParadigm($("verb-reveal"),result.conjugation);
         show("verb-reveal",true);
+      }
+      if(q.kind==="clock"&&result.clockTime){
+        const line=document.createElement("p");
+        line.className="clock-result";
+        line.textContent=result.clockLabel+": "+result.clockTime+" · "+result.answer;
+        $("feedback").append(line);
       }
       if(q.kind==="accent"||q.kind==="enclitic"||q.kind==="grammar" || !result.correct){
         const bold=document.createElement("strong");

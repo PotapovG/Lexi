@@ -34,6 +34,7 @@ import lesson_audio_mix as _listen_mix
 import grammar_scope_guard as _grammar_guard
 import extra_sentences_20261021 as _extra_sentences
 import order2_cards as _order2
+import clock_cards as _clock
 import order_valid_permutations as _order_variants
 import answer_idempotency
 import dialogue_translations as _dialogue_glosses
@@ -70,20 +71,23 @@ ENCLITIC_ALL=_enclitic.CARDS
 ENCLITIC_BY_ID=_enclitic.BY_ID
 ORDER2_ALL=_order2.build(ALL)
 ORDER2_BY_ID={c["id"]:c for c in ORDER2_ALL}
+CLOCK_ALL=_clock.CARDS
+CLOCK_BY_ID=_clock.BY_ID
+CLOCK_COUNT=_clock.validate()
 DIALOGUE_TRANSLATION_COUNT=_dialogue_glosses.validate(ALL)
 FULL_DIALOGUE_TRANSLATION_COUNT=_full_dialogues.validate(ALL)
 GRAMMAR2_ALL=_grammar2.CARDS
 GRAMMAR2_BY_ID=_grammar2.BY_ID
-PRACTICE_ALL=ALL+EXTRA_ALL+SYLLABLE_ALL+ENCLITIC_ALL+GRAMMAR2_ALL+ORDER2_ALL
+PRACTICE_ALL=ALL+EXTRA_ALL+SYLLABLE_ALL+ENCLITIC_ALL+GRAMMAR2_ALL+ORDER2_ALL+CLOCK_ALL
 _ORDER_VARIANT_COUNT=_order_variants.validate({**BY_ID,**ORDER2_BY_ID})
 def book_or_audio_card(cid):
-    return BY_ID.get(cid) or EXTRA_BY_ID.get(cid) or SYLLABLE_BY_ID.get(cid) or ENCLITIC_BY_ID.get(cid) or GRAMMAR2_BY_ID.get(cid) or ORDER2_BY_ID.get(cid) or LISTEN_BY_ID.get(cid)
+    return BY_ID.get(cid) or EXTRA_BY_ID.get(cid) or SYLLABLE_BY_ID.get(cid) or ENCLITIC_BY_ID.get(cid) or GRAMMAR2_BY_ID.get(cid) or ORDER2_BY_ID.get(cid) or CLOCK_BY_ID.get(cid) or LISTEN_BY_ID.get(cid)
 
 ROOT = Path(__file__).parent
 DB = os.environ.get("GREEK_DB", "/var/lib/greek-trainer/progress.sqlite3")
 ORIGIN = os.environ.get("GREEK_ORIGIN", "https://potapovfamily.com").rstrip("/")
 COOKIE = "greek_session"
-KINDS = ("word", "number", "letter", "phrase", "plural", "sentence", "accent", "verb", "dialogue", "article", "order", "syllable", "enclitic", "grammar", "listening")
+KINDS = ("word", "number", "letter", "phrase", "plural", "sentence", "accent", "verb", "dialogue", "article", "order", "syllable", "enclitic", "grammar", "listening", "clock")
 DIRECTIONS = ("mixed", "gr-ru", "ru-gr")
 COUNT_MAX = 60
 # No audio files in a fresh clone: hide listening mode until both complete
@@ -141,10 +145,13 @@ def allowed_kinds(s):
 
 def card_key(card, direction, lang="ru"):
     # Keep original keys stable to preserve Russian learning history.
-    suffix="" if (lang=="ru" or card["kind"] in ("accent","dialogue","article","order","syllable","enclitic","grammar")) else ":"+lang
+    suffix="" if (lang=="ru" or card["kind"] in ("accent","dialogue","article","order","syllable","enclitic","grammar","clock")) else ":"+lang
     return card["id"]+":"+direction+suffix
 
 def shape(card, direction, lang="ru"):
+    if card['kind']=='clock':
+        if direction!='read':raise ValueError('invalid clock direction')
+        return 'Τι ώρα είναι;',card['gr'],_clock.HELP[lang]
     if card['kind']=='listening':
         if direction!='listen':raise ValueError('invalid listening direction')
         prompt,note=listening.LABELS[lang]
@@ -310,6 +317,7 @@ def valid_weak_entries(user_id, display_lang="ru"):
             if not card:continue
             if card['kind']=='listening' and not LISTENING_ENABLED:continue
             elif card['kind']=='listening':allowed={'listen'}
+            elif card['kind']=='clock':allowed={'read'}
             elif card['kind']=='article':allowed={'fill'}
             elif card['kind']=='order':allowed={'arrange'}
             elif card["kind"]=="dialogue":
@@ -378,6 +386,10 @@ def format_question(card,direction,lang,weak=False,variant_index=None):
         item['note']=card[lang]
         if len(card.get('acceptedForms',[]))>1:
             item['articleSpellingVariant']=True
+    elif card['kind']=='clock':
+        item['clockHour']=card['hour']
+        item['clockMinute']=card['minute']
+        item['choices']=_clock.options(card)
     elif card['kind']=='order':
         item['alternativeOrderCount']=len(_order_variants.VARIANTS.get(card['id'],()))
         item['tokens']=list(card['tokens'])
@@ -562,7 +574,7 @@ def make_quiz(user_id,params):
             continue
         directions=(tuple(f"gap{i}" for i in range(len(card["gaps"]))) if card["kind"]=="dialogue" else
                     ("conjugate",) if card["kind"]=="verb" else ("grammar_fill",) if card["kind"]=="grammar" else ("stress_enclitic",) if card["kind"]=="enclitic" else ("stress_syllable",) if card["kind"]=="syllable" else ("accent",) if card["kind"]=="accent" else
-                    ("listen",) if card['kind']=='listening' else
+                    ("listen",) if card['kind']=='listening' else ("read",) if card["kind"]=="clock" else
                 ("fill",) if card['kind']=='article' else ("arrange",) if card['kind']=='order' else
                     (("sg-pl","pl-sg") if card["kind"]=="plural" else ("gr-ru","ru-gr")))
         if mode=="weak":
@@ -608,14 +620,14 @@ def make_quiz(user_id,params):
         choices=mix
     questions=[]
     for index,(card,direction,score) in enumerate(choices[:count]):
-        if mode!="weak" and card["kind"] not in ("plural","accent","syllable","enclitic","grammar","verb","dialogue","article","order","listening"):
+        if mode!="weak" and card["kind"] not in ("plural","accent","syllable","enclitic","grammar","verb","dialogue","article","order","listening","clock"):
             direction=("gr-ru","ru-gr")[index%2]  # guaranteed mixed translation directions per batch
         if mode!="weak" and card["kind"]=="plural":
             direction=("sg-pl","pl-sg")[index%2]
         key=card_key(card,direction,lang)
         if key in exclude:
             # Previous-session exclusions apply to the final direction too.
-            if card["kind"] in ("accent","syllable","enclitic","grammar","verb","dialogue","article","order","listening"):continue
+            if card["kind"] in ("accent","syllable","enclitic","grammar","verb","dialogue","article","order","listening","clock"):continue
             other=("ru-gr" if direction=="gr-ru" else "gr-ru") if card["kind"]!="plural" else ("pl-sg" if direction=="sg-pl" else "sg-pl")
             if card_key(card,other,lang) in exclude:continue
             direction=other
@@ -655,12 +667,14 @@ def mark(user_id,body,injected_db=None):
     if not card or not isinstance(selected,str) or len(selected)>500:
         raise ValueError("invalid answer")
     directions=(tuple(f"gap{i}" for i in range(len(card["gaps"]))) if card["kind"]=="dialogue" else ("conjugate","translate") if card["kind"]=="verb" else ("grammar_fill",) if card["kind"]=="grammar" else ("stress_enclitic",) if card["kind"]=="enclitic" else ("stress_syllable",) if card["kind"]=="syllable" else ("accent",) if card["kind"]=="accent" else
-                ("listen",) if card['kind']=='listening' else
+                ("listen",) if card['kind']=='listening' else ("read",) if card["kind"]=="clock" else
                 ("fill",) if card['kind']=='article' else ("arrange",) if card['kind']=='order' else
                 (("sg-pl","pl-sg") if card["kind"]=="plural" else ("gr-ru","ru-gr")))
     if direction not in directions:raise ValueError("invalid direction")
     correct_answer=shape(card,direction,lang)[1]
-    if card['kind']=='grammar':
+    if card['kind']=='clock':
+        correct=selected==correct_answer
+    elif card['kind']=='grammar':
         if selected not in card['options']:raise ValueError('invalid grammar form')
         correct=selected==correct_answer
     elif card['kind']=='enclitic':
@@ -715,6 +729,9 @@ def mark(user_id,body,injected_db=None):
     if dialogue_valid is not None:
         result['acceptedAnswers']=list(dialogue_valid)
         result['acceptedVariant']=bool(correct and selected!=correct_answer)
+    if card['kind']=='clock':
+        result['clockTime']=f"{card['hour']:02d}:{card['minute']:02d}"
+        result['clockLabel']=_clock.AFTER[lang]
     if card['kind']=='accent':
         result['translation']=card[lang]
         result['translationLang']=lang

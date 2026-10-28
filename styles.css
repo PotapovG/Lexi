@@ -394,3 +394,12 @@ button,select,input{touch-action:manipulation}
 .feedback .dialogue-full-translation p{
   margin:5px 0;line-height:1.65;overflow-wrap:anywhere;
 }
+
+/* A1 analogue clock: hands and numerals are generated from scored card data. */
+.clock-face{display:flex;justify-content:center;align-items:center;max-width:260px;
+ margin:-18px auto 25px;padding:12px;border-radius:18px;
+ background:linear-gradient(150deg,#192e46,#0e1c2f);border:1px solid #415b70}
+.clock-face svg{display:block;width:min(100%,220px);height:auto;max-height:220px}
+.feedback .clock-result{margin:14px 0 0;padding:10px 14px;background:#132d3c;
+ border:1px solid #42556b;border-radius:10px;color:#e8eef6;font-size:14px;line-height:1.6}
+@media(max-width:760px){.clock-face{max-width:235px;margin:-8px auto 18px}}
