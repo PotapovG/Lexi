@@ -38,9 +38,11 @@ const {chromium}=require('playwright');
  await done();
  const q=await start('order',17);
  if(!await page.locator('#order-builder').isVisible())throw Error('Order composer invisible');
- const tokens='Γεια σου, είμαι ο Μάριος και αυτή είναι η Λένα.'.split(' ');
+ const tokens='Γεια σου, είμαι ο Μάριος και αυτή είναι η Λένα.'.split(' ').map(w=>w.replace(/[.,;:!?]+$/g,''));
+ const displayed=await page.locator('#answers .answer.order-word').allTextContents();
+ if(displayed.some(t=>/[.,;:!?]$/.test(t)))throw Error('Punctuation must not appear as word choices');
  let indices=[];
- for(const word of tokens){const index=q.tokens.findIndex((w,i)=>w===word&&!indices.includes(i));if(index<0)throw Error('Missing word '+word);indices.push(index);}
+ for(const word of tokens){const index=q.choiceTokens.findIndex((w,i)=>w===word&&!indices.includes(i));if(index<0)throw Error('Missing word '+word);indices.push(index);}
  await page.locator('#answers .answer.order-word').nth(indices[0]).tap();
  await page.locator('#order-undo').tap();
  if(await page.locator('#order-draft').textContent()!=='…')throw Error('Undo did not clear');
@@ -49,6 +51,7 @@ const {chromium}=require('playwright');
  await page.locator('#order-check').tap();
  await page.locator('#next:not([hidden])').waitFor();
  if(!(await page.locator('#feedback').getAttribute('class')).includes('good'))throw Error('Composed Greek rejected');
+ if(await page.locator('#order-draft').textContent()!=='Γεια σου, είμαι ο Μάριος και αυτή είναι η Λένα.')throw Error('Automatic punctuation missing');
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
  if(overflow>2)throw Error('Horizontal scroll '+overflow);
  await done();

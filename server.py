@@ -372,6 +372,9 @@ def format_question(card,direction,lang,weak=False,variant_index=None):
         item['alternativeOrderCount']=len(_order_variants.VARIANTS.get(card['id'],()))
         item['tokens']=list(card['tokens'])
         random.shuffle(item['tokens'])
+        # Compatibility: keep original tokens for old sessions/tests, while
+        # choiceTokens strips punctuation for the actual learner interaction.
+        item['choiceTokens']=[_order_variants.choice_token(x) for x in item['tokens']]
         item['note']=shape(card,direction,lang)[2]
         if lang!='en':item['promptEn']=card['en']
     elif card["kind"]=="accent":
@@ -704,6 +707,7 @@ def mark(user_id,body,injected_db=None):
         result['acceptedVariant']=bool(correct and selected!=correct_answer)
     if card['kind']=='order':
         result['acceptedOrderCount']=len(_order_variants.all_valid(card))
+        result['formattedOrder']=_order_variants.formatted(card,selected) if correct else card['gr']
     if srs_info:result.update(srs_info)
     if not correct:
         result['explanation']=learning_upgrade.selected_explanation(card,direction,lang,correct_answer,selected)

@@ -47,6 +47,23 @@ def words(s):
     return re.findall(r'[\w\u0370-\u03ff\u1f00-\u1fff]+',unicodedata.normalize('NFC',s.casefold()),re.UNICODE)
 def normalized(s):
     return ' '.join(words(s))
+
+# The learner selects words, not typographical variants of the same word.
+# Punctuation belongs to the finished sentence; apostrophes inside a word
+# are retained. Existing card.tokens and user progress keys remain untouched.
+CHOICE_EDGE_PUNCT = '.,!?;:··…«»“”()'
+def choice_token(token):
+    return token.strip(CHOICE_EDGE_PUNCT)
+
+def formatted(card, selected):
+    # For a completed grammatical variant, restore that variant's punctuation,
+    # not necessarily the original author's word order.
+    normal = normalized(selected)
+    for text in all_valid(card):
+        if normalized(text) == normal:
+            return text
+    return card['gr']
+
 def matches(card,selected):
     if normalized(selected)==normalized(card['gr']):
         return True

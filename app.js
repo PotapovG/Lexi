@@ -289,8 +289,8 @@
   };
   for(const [locale,msg] of Object.entries(SESSION_UNIQUE_NOTE))I18N[locale].sessionUniqueNote=msg;
   const GRAMMAR_UI={
-    ru:{articlesMode:"Артикли и предлоги",orderMode:"Собрать предложение",orderDraft:"Твоя фраза",orderUndo:"Назад",orderReset:"Сбросить",orderCheck:"Проверить предложение",orderInstruction:"Нажимай на греческие слова по порядку, чтобы восстановить исходную фразу.",manyCorrect:"Может быть несколько правильных переводов."},
-    en:{articlesMode:"Articles and cases",orderMode:"Build a sentence",orderDraft:"Your sentence",orderUndo:"Undo",orderReset:"Clear",orderCheck:"Check sentence",orderInstruction:"Tap Greek words in order to reconstruct the sample sentence.",manyCorrect:"More than one translation may be correct."},
+    ru:{articlesMode:"Артикли и предлоги",orderMode:"Собрать предложение",orderDraft:"Твоя фраза",orderUndo:"Назад",orderReset:"Сбросить",orderCheck:"Проверить предложение",orderInstruction:"Нажимай на слова в нужном порядке. Пунктуация добавится автоматически после проверки.",manyCorrect:"Может быть несколько правильных переводов."},
+    en:{articlesMode:"Articles and cases",orderMode:"Build a sentence",orderDraft:"Your sentence",orderUndo:"Undo",orderReset:"Clear",orderCheck:"Check sentence",orderInstruction:"Tap Greek words in order. Punctuation will be added automatically after checking.",manyCorrect:"More than one translation may be correct."},
     zh:{articlesMode:"冠词和格",orderMode:"组装句子",orderDraft:"你的句子",orderUndo:"撤销",orderReset:"清空",orderCheck:"检查句子",orderInstruction:"按顺序点击希腊语单词，还原示例句子。",manyCorrect:"可能有不止一个正确翻译。"},
     ar:{articlesMode:"أدوات التعريف وحالات الإعراب",orderMode:"تركيب جملة",orderDraft:"جملتك",orderUndo:"تراجع",orderReset:"مسح",orderCheck:"تحقق من الجملة",orderInstruction:"اضغط الكلمات اليونانية بالترتيب لإعادة تركيب الجملة النموذجية.",manyCorrect:"قد توجد أكثر من ترجمة صحيحة."},
     es:{articlesMode:"Artículos y casos",orderMode:"Construir una frase",orderDraft:"Tu frase",orderUndo:"Deshacer",orderReset:"Borrar",orderCheck:"Comprobar frase",orderInstruction:"Toca las palabras griegas en orden para reconstruir la frase modelo.",manyCorrect:"Puede haber más de una traducción correcta."},
@@ -1199,6 +1199,12 @@
     }
   }
 
+  // Older restored quiz snapshots only have tokens (with punctuation).
+  // New quiz payloads have aligned choiceTokens without punctuation.
+  const orderWord=word=>word.replace(/^[.,!?;:··…«»“”()]+|[.,!?;:··…«»“”()]+$/g,"");
+  const orderWords=q=>q.choiceTokens?.length===q.tokens.length
+    ?q.choiceTokens:q.tokens.map(orderWord);
+
   function renderOrder(){
     const q=state.current;
     if(!q||q.kind!=="order")return;
@@ -1208,11 +1214,12 @@
     txt("order-reset",t("orderReset"));
     txt("order-check",t("orderCheck"));
     const selected=state.orderIndices||[];
-    txt("order-draft",selected.map(i=>q.tokens[i]).join(" ")||"…");
+    const words=orderWords(q);
+    txt("order-draft",selected.map(i=>words[i]).join(" ")||"…");
     $("order-draft").lang="el";
     const answers=$("answers");answers.replaceChildren();
     answers.classList.remove("accent-letters");answers.classList.add("order-tokens");
-    q.tokens.forEach((word,i)=>{
+    words.forEach((word,i)=>{
       const b=document.createElement("button");b.type="button";b.className="answer order-word";
       b.lang="el";b.dir="ltr";b.textContent=word;
       b.disabled=selected.includes(i)||state.answered;
@@ -1237,7 +1244,7 @@
   function submitOrder(){
     const q=state.current;
     if(!q||q.kind!=="order"||state.answered||state.orderIndices.length!==q.tokens.length)return;
-    choose(-1,state.orderIndices.map(i=>q.tokens[i]).join(" "));
+    choose(-1,state.orderIndices.map(i=>orderWords(q)[i]).join(" "));
   }
 
   function renderDialogueGap(){
@@ -1403,6 +1410,9 @@
       show("feedback",true);show("next",true);
       if(q.kind==="order"){
         $("order-check").disabled=true;$("order-undo").disabled=true;$("order-reset").disabled=true;
+        // Automatic punctuation is added only once the learner has chosen
+        // the complete word order; never quiz comma/colon/period variants.
+        if(result.correct)txt("order-draft",result.formattedOrder||result.answer);
         show("order-builder",true);
       }
       if(q.kind==="verb"&&!isTranslation)txt("next",t("verbTranslate"));
