@@ -82,6 +82,15 @@ def apply(cards):
         assert all(x for x in bank),(cid,bank)
         card['bank']=bank
         card['bank_source']='curated-stage-safe-20261020'
+        # The two people have not disclosed their occupations or genders.
+        # Both profession replies are equally valid at either blank, and
+        # either profession may legitimately be repeated by the other person.
+        if cid == 'dlg033':
+            card['acceptedByGap'] = {
+                'gap0': list(correct),
+                'gap1': list(correct),
+            }
+            card['allowRepeatChoices'] = True
         edited.append(cid)
     assert len(edited)==len(EARLY)+len(LATER_IDS),(len(edited),len(EARLY),len(LATER_IDS))
     return edited

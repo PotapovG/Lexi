@@ -1273,7 +1273,7 @@
     answers.classList.remove("accent-letters");answers.classList.add("wide-choices");
     q.choices.forEach((choice,i)=>{
       const b=document.createElement("button");b.type="button";b.className="answer";
-      if(Object.values(state.dialogueFilled).includes(choice))b.disabled=true;
+      if(!q.allowRepeatChoices&&Object.values(state.dialogueFilled).includes(choice))b.disabled=true;
       const n=document.createElement("span");n.className="key";n.textContent=String(i+1);
       const val=document.createElement("span");val.lang="el";val.dir="ltr";val.textContent=choice;
       b.append(n,val);b.addEventListener("click",()=>choose(i));answers.append(b);

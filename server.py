@@ -382,6 +382,7 @@ def format_question(card,direction,lang,weak=False,variant_index=None):
     elif card["kind"]=="dialogue":
         item["dialogueLines"]=card["lines"]
         item["dialogueGaps"]=card["gaps"]
+        item["allowRepeatChoices"]=bool(card.get("allowRepeatChoices",False))
         # Every student sees a new order; no answer-position leak from the
         # historically ordered bank (some original correct entries were first).
         item["choices"]=random.sample(card["bank"],k=len(card["bank"]))
@@ -670,6 +671,10 @@ def mark(user_id,body,injected_db=None):
         correct=_order_variants.matches(card,selected)
     if card["kind"]=="dialogue" and card["id"]=="dlg024":
         correct=selected in [x for x in card["bank"] if x.casefold()==correct_answer.casefold()]
+    dialogue_valid = (card.get("acceptedByGap", {}).get(direction)
+                      if card["kind"]=="dialogue" else None)
+    if dialogue_valid is not None:
+        correct=selected in dialogue_valid
     key=card_key(card,direction,lang)
     now=dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     if injected_db is None:
@@ -690,7 +695,13 @@ def mark(user_id,body,injected_db=None):
                   VALUES(?,?,?,?,?,?)""",(user_id,key,card["kind"],card["unit"],int(correct),now))
     srs_info=(learning_engine.update(db,user_id,key,correct,now)
               if body.get('srsOptIn') is True else None)
-    result=dict(correct=correct,answer=correct_answer,missDebt=miss_debt)
+    # For genuine alternatives, return the student's accepted wording.
+    # The client fills the dialogue with result.answer after scoring.
+    shown_answer = selected if dialogue_valid is not None and correct else correct_answer
+    result=dict(correct=correct,answer=shown_answer,missDebt=miss_debt)
+    if dialogue_valid is not None:
+        result['acceptedAnswers']=list(dialogue_valid)
+        result['acceptedVariant']=bool(correct and selected!=correct_answer)
     if card['kind']=='order':
         result['acceptedOrderCount']=len(_order_variants.all_valid(card))
     if srs_info:result.update(srs_info)
