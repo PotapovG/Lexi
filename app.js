@@ -1401,6 +1401,9 @@
         txt("question-prompt",result.answer);
         $("question-prompt").classList.remove("unaccented-word");
       }
+      if(result.clozeGreek && (q.kind==="article"||q.kind==="grammar")){
+        txt("question-prompt",result.clozeGreek);
+      }
       if(q.kind==="listening"&&result.transcript){
         const panel=$("listening-reveal");panel.replaceChildren();
         const prefix=document.createElement("strong");prefix.textContent=t("listenText")+" ";
@@ -1455,6 +1458,20 @@
           (language!==answerLang?" (EN)":"")+": ";
         const meaning=document.createElement("span");
         meaning.textContent=result.translation;
+        meaning.lang=language;
+        meaning.dir=language==="ar"?"rtl":"auto";
+        note.append(heading,meaning);
+        $("feedback").append(note);
+      }
+      if(result.clozeTranslation && (q.kind==="article"||q.kind==="grammar")){
+        const note=document.createElement("p");
+        note.className="answer-translation";
+        const heading=document.createElement("strong");
+        const language=result.clozeTranslationLang||answerLang;
+        heading.textContent=(REVEAL_LABELS[answerLang]||REVEAL_LABELS.en)+
+          (language!==answerLang?" (EN)":"")+": ";
+        const meaning=document.createElement("span");
+        meaning.textContent=result.clozeTranslation;
         meaning.lang=language;
         meaning.dir=language==="ar"?"rtl":"auto";
         note.append(heading,meaning);

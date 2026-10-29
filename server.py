@@ -29,6 +29,7 @@ import learning_upgrade
 import advanced_syllables as _syllables
 import enclitic_stress as _enclitic
 import grammar2_cards as _grammar2
+import cloze_meanings as _cloze_meanings
 import distractor_quality as _distractors
 import lesson_audio_mix as _listen_mix
 import grammar_scope_guard as _grammar_guard
@@ -77,6 +78,7 @@ CLOCK_COUNT=_clock.validate()
 DIALOGUE_TRANSLATION_COUNT=_dialogue_glosses.validate(ALL)
 FULL_DIALOGUE_TRANSLATION_COUNT=_full_dialogues.validate(ALL)
 GRAMMAR2_ALL=_grammar2.CARDS
+CLOZE_TRANSLATION_COUNT=_cloze_meanings.validate()
 GRAMMAR2_BY_ID=_grammar2.BY_ID
 PRACTICE_ALL=ALL+EXTRA_ALL+SYLLABLE_ALL+ENCLITIC_ALL+GRAMMAR2_ALL+ORDER2_ALL+CLOCK_ALL
 _ORDER_VARIANT_COUNT=_order_variants.validate({**BY_ID,**ORDER2_BY_ID})
@@ -729,6 +731,16 @@ def mark(user_id,body,injected_db=None):
     if dialogue_valid is not None:
         result['acceptedAnswers']=list(dialogue_valid)
         result['acceptedVariant']=bool(correct and selected!=correct_answer)
+    if card['kind'] in ('article','grammar'):
+        sentence_gloss,sentence_lang=_cloze_meanings.translation(card,lang)
+        # Never leak translations through format_question; show only after
+        # the server has scored the submitted answer.
+        chosen_form=selected if correct else correct_answer
+        result['clozeGreek']=card['prompt'].replace('___',chosen_form)
+        result['clozeTranslation']=sentence_gloss
+        result['clozeTranslationLang']=sentence_lang
+        explanation=_cloze_meanings.explanation(card,lang)
+        if explanation:result['clozeFormHint']=explanation
     if card['kind']=='clock':
         result['clockTime']=f"{card['hour']:02d}:{card['minute']:02d}"
         result['clockLabel']=_clock.AFTER[lang]
@@ -768,8 +780,11 @@ def mark(user_id,body,injected_db=None):
     variants=greek_variants.variants(source_greek)
     if variants:result['greekVariants']=variants
     if card['kind']=='grammar':
-        result['grammarTip']=card[lang]
-        if not correct:result['explanation']=card[lang]+' → '+correct_answer
+        # The original generic instruction is not an explanation.
+        # Show an actual case/morphology reason when editorially available.
+        result['grammarTip']=result.get('clozeFormHint')
+        if not correct and result.get('clozeFormHint'):
+            result['explanation']=result['clozeFormHint']
     if card['kind']=='enclitic':
         result['hasExtraStress']=card['hasExtraStress']
         result['tonosHint']=_enclitic.explanation(card,lang)
