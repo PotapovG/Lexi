@@ -36,6 +36,7 @@ import grammar_scope_guard as _grammar_guard
 import extra_sentences_20261021 as _extra_sentences
 import order2_cards as _order2
 import clock_cards as _clock
+import quiz_clock_balance as _clock_balance
 import order_valid_permutations as _order_variants
 import answer_idempotency
 import dialogue_translations as _dialogue_glosses
@@ -597,6 +598,8 @@ def make_quiz(user_id,params):
         choices.sort(key=lambda x:-x[2]+random.uniform(-15,15))
     if mode!="weak" and params.get("adaptive",["0"])[0]=="1":
         with conn() as db:learning_engine.adaptive_order(db,user_id,choices)
+    # Return the actual number of available candidates, not the capped
+    # display batch size (capacity and UI should remain meaningful).
     if mode!="weak":
         unique=[]
         used=set()
@@ -606,6 +609,10 @@ def make_quiz(user_id,params):
             used.add(fingerprint)
             unique.append((card,direction,score))
         choices=unique
+        available_candidates=len(choices)
+        # Cap one high-volume subtype in mixed lessons, while retaining enough
+        # material for a full session and preserving all weak/SRS review cards.
+        choices=_clock_balance.balance(choices,count)
     # Guarantee that mastered course words aren't crowded out by fresh textbook cards.
     if personal_cards and mode!="weak":
         learned=[x for x in choices if x[0].get("curriculum")=="personalized"]
@@ -620,6 +627,8 @@ def make_quiz(user_id,params):
             elif learned:mix.append(learned.pop(0))
             else:break
         choices=mix
+    if mode=="weak":
+        available_candidates=len(choices)
     questions=[]
     for index,(card,direction,score) in enumerate(choices[:count]):
         if mode!="weak" and card["kind"] not in ("plural","accent","syllable","enclitic","grammar","verb","dialogue","article","order","listening","clock"):
@@ -639,7 +648,7 @@ def make_quiz(user_id,params):
         if scope not in ("listening","topics","verbs") and params.get('listenMix',['0'])[0]=='1'
         and mode not in ('weak','weak_all','srs_due') and LISTENING_ENABLED else [])
     mixed_count=_listen_mix.mix(questions,audio_options,book_or_audio_card,format_question,lang)
-    return dict(questions=questions,available=len(choices),count=len(questions),mode=mode,
+    return dict(questions=questions,available=available_candidates,count=len(questions),mode=mode,
                 mixedListening=mixed_count,mixedListeningAvailable=len(audio_options),
                 grammarDeferred=deferred_for_grammar,grammarGate="curriculum_ready_unit",
                 pagePrecision="approximate",lang=lang)
