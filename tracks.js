@@ -70,11 +70,11 @@
     return data;
   }
   function message(msg,bad=false){
-    const el=$("track-message");if(!el)return;
+    const el=$(mode==="anki"?"track-message":"life-message");if(!el)return;
     el.hidden=!msg;el.textContent=msg||"";el.className="track-message"+(bad?" bad":"");
   }
   async function reload(){
-    if(!$("tracks-view")||$("tracks-view").hidden)return;
+    if(!$(mode==="anki"?"tracks-view":"life-view")||$(mode==="anki"?"tracks-view":"life-view").hidden)return;
     if(busy)return;
     language=lang();
     $("track-title").textContent=t("title");
@@ -181,7 +181,7 @@
     host.append(svg);return host;
   }
   function renderRoute(){
-    const root=$("track-content");root.replaceChildren();
+    const root=$("life-content");root.replaceChildren();
     root.append(text("div",t("routeLesson"),"track-eyebrow"));
     root.append(text("h3",t("routeTitle"),"track-subtitle"));
     if(!["ru","en"].includes(lang()))root.append(text("p","Stops: EN translation","track-small"));
@@ -217,7 +217,8 @@
           const input=form.elements.namedItem(key);
           input.classList.toggle("track-invalid",!result.fields[key]);
           if(!result.fields[key])
-            feedback.append(text("p",t(key)+": "+result.expected[key],"track-error"));
+            feedback.append(text("p",t(key)+": "+result.expected[key]+
+              (result.explanations?.[key]?" — "+result.explanations[key]:""),"track-error"));
         }
         feedback.append(text("p",result.greek,"track-greek-summary"));
         feedback.append(text("p",result.translation,"track-small"));
@@ -233,7 +234,7 @@
   }
 
   function renderLikes(){
-    const root=$("track-content");root.replaceChildren();
+    const root=$("life-content");root.replaceChildren();
     root.append(text("div","Γραμματική · A1/A2","track-eyebrow"));
     root.append(text("h3",t("likeTitle"),"track-subtitle"));
     root.append(text("p",t("likeHelp"),"track-small"));
@@ -251,7 +252,7 @@
     const form=document.createElement("form");form.className="track-like-form";box.append(form);
     const input=document.createElement("input");input.type="text";input.lang="el";
     input.dir="ltr";input.maxLength=180;input.autocomplete="off";
-    input.placeholder="… μου αρέσει να …";
+    input.placeholder=likes.requiresNa?"… μου αρέσει να …":"… μου αρέσει …";
     form.append(input);
     const submit=document.createElement("button");
     submit.type="submit";submit.className="primary track-button";
@@ -266,6 +267,7 @@
         result.replaceChildren();
         result.append(text("p",data.feedback.correct?t("correct"):t("wrong"),
           data.feedback.correct?"track-success":"track-error"));
+        if(data.feedback.explanation)result.append(text("p",data.feedback.explanation,"track-error"));
         result.append(text("p",data.feedback.expected,"track-greek-summary"));
         if(data.feedback.correct){
           input.disabled=true;submit.hidden=true;
@@ -275,7 +277,7 @@
     });
   }
   function renderShop(){
-    const root=$("track-content");root.replaceChildren();
+    const root=$("life-content");root.replaceChildren();
     root.append(text("div","Περίπτερο · Μίνι μάρκετ","track-eyebrow"));
     root.append(text("h3",t("shopTitle")+" · "+shop.round,"track-subtitle"));
     root.append(text("p",t("shopHelp"),"track-small"));
@@ -291,7 +293,7 @@
       const form=document.createElement("form");form.className="shop-form";row.append(form);
       const input=document.createElement("input");input.type="text";input.lang="el";
       input.dir="ltr";input.maxLength=250;input.autocomplete="off";
-      input.placeholder=t("shopPlaceholder");input.setAttribute("aria-label",t("shopLabel")+" "+item.name);
+      input.placeholder=(shop.requestPrefix||"Θέλω")+" …, παρακαλώ.";input.setAttribute("aria-label",t("shopLabel")+" "+item.name);
       form.append(input);
       const btn=document.createElement("button");
       btn.type="submit";btn.className="secondary track-button";
@@ -306,6 +308,7 @@
           else{
             note.replaceChildren();
             note.append(text("p",t("wrong")+" "+data.feedback.expected,"track-error"));
+            if(data.feedback.explanation)note.append(text("p",data.feedback.explanation,"track-small"));
             btn.disabled=false;
           }
         }).finally(()=>{if(!busy)btn.disabled=false;});
@@ -321,13 +324,15 @@
   }
 
   function switchMode(next){
-    if(busy||mode===next)return;
-    mode=next;reload();
+    if(busy)return;
+    mode=next;window.lexiLife?.showSimulation?.();reload();
   }
   $("track-anki-mode")?.addEventListener("click",()=>switchMode("anki"));
   $("track-route-mode")?.addEventListener("click",()=>switchMode("route"));
   $("track-likes-mode")?.addEventListener("click",()=>switchMode("likes"));
   $("track-periptero-mode")?.addEventListener("click",()=>switchMode("periptero"));
-  window.lexiTracks={onOpen:()=>{if(language!==lang()||!anki&&!route)reload();
-    else reload();}};
+  window.lexiTracks={
+    onOpen:()=>{mode="anki";reload();},
+    openLife:(selected)=>{mode=selected;reload();}
+  };
 })();

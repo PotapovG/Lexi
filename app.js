@@ -459,11 +459,13 @@
   };
   for(const [lang,items] of Object.entries(CLOCK_UI))Object.assign(I18N[lang],items);
   const TRACK_NAV={
-    ru:"Карточки и маршруты",en:"Cards & routes",
-    zh:"卡片与路线",ar:"البطاقات والمسارات",
-    es:"Tarjetas y rutas",pt:"Cartões e percursos"
+    ru:"Карточки · 30",en:"30-word cards",
+    zh:"30词卡片",ar:"بطاقات 30 كلمة",
+    es:"Tarjetas · 30",pt:"Cartões · 30"
   };
   for(const [lang,label] of Object.entries(TRACK_NAV))I18N[lang].tracksTab=label;
+  const LIFE_NAV={ru:"Ελληνική Ζωή",en:"Greek Life",zh:"希腊生活",ar:"الحياة اليونانية",es:"Vida griega",pt:"Vida grega"};
+  for(const [lang,label] of Object.entries(LIFE_NAV))I18N[lang].lifeTab=label;
   const SESSION_STORAGE_KEY="greek-active-session-v2";
   const SESSION_TEXT={
     ru:{resumeNotice:"Занятие восстановлено после перезагрузки.",retryAnswer:"Повторить отправку ответа",recoveryInfo:"Ответ мог сохраниться на сервере. Повторная отправка безопасна и не начислит вторую попытку.",resumeExpired:"Время сохранённого занятия истекло."},
@@ -1019,7 +1021,7 @@
     finally{button.disabled=false;}
   }
   function setPage(page){
-    for(const id of ["practice","vocab","weak","stats","leaderboard","tracks"])show(id+"-view",id===page);
+    for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life"])show(id+"-view",id===page);
     document.querySelectorAll(".tab").forEach(button=>{
       const active=button.dataset.page===page;
       button.classList.toggle("active",active);
@@ -1027,6 +1029,7 @@
     });
     if(page==="leaderboard")refreshLeaderboard();
     else if(page==="vocab")window.lexiVocab?.onOpen();
+    else if(page==="life")window.lexiLife?.onOpen();
     else if(page==="tracks")window.lexiTracks?.onOpen();
     else if(page!=="practice")refreshStats();
   }

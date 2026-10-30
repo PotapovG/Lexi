@@ -56,6 +56,14 @@ with tempfile.TemporaryDirectory() as folder:
         # manually attach the returned session cookie without weakening it.
         session=next(x.value for x in jar if x.name=="greek_session")
         opener.addheaders=[("Cookie","greek_session="+session)]
+        cfg,_=open_req(opener,"/life?lang=ru")
+        assert cfg["maxChapter"]==6
+        try:
+            open_req(opener,"/tracks/periptero?lang=ru")
+            raise AssertionError("market accessible before chapter 8")
+        except urllib.error.HTTPError as e:assert e.code in (400,403)
+        cfg,_=open_req(opener,"/life",{"lang":"ru","revision":cfg["revision"],"maxChapter":16})
+        assert cfg["maxChapter"]==16
         for route in ("anki","route","likes","periptero"):
             state,status=open_req(opener,"/tracks/"+route+"?lang=ru")
             assert status==200 and state["revision"]==0

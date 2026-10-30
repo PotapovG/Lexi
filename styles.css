@@ -445,3 +445,28 @@ button,select,input{touch-action:manipulation}
  .track-word-card{min-height:230px;padding:20px 12px}
  .route-map svg{width:550px}
 }
+
+/* Greek Life: curriculum-gated, account-personalized real-life scenes. */
+.life-scope{margin:20px 0 18px;max-width:440px}
+.life-scope label{display:block;font-weight:650;color:#dbe4ef;margin-bottom:8px}
+.life-scope select{width:100%;max-width:350px;padding:10px 13px;min-height:48px;
+ border:1px solid #61738a;border-radius:10px;background:#15283a;color:#fff}
+.life-scenes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}
+.life-scene{padding:16px;border:1px solid #41546b;border-radius:13px;
+ background:#12263a;min-width:0}
+.life-scene strong{font-size:17px;color:#f2f2f0}
+.life-scene p{margin:7px 0}
+.life-scene button{margin-top:8px}
+.life-prompt{font:clamp(23px,3vw,34px)/1.28 Georgia,serif;color:#f2f4f7;
+ margin:18px 0}
+.life-hint{color:#e5c985;border-inline-start:2px solid #dcb973;padding-inline-start:14px;
+ margin:10px 0;font-size:14px}
+.life-form{display:flex;flex-direction:column;align-items:flex-start;gap:13px;max-width:790px}
+.life-form textarea{width:100%;background:#102338;color:#eef3fc;
+ border:1px solid #576e87;border-radius:12px;padding:14px;
+ font:18px/1.6 system-ui,sans-serif;resize:vertical;min-height:100px}
+.life-form textarea:focus{outline:2px solid #edcf85}
+.life-feedback{width:100%;padding:10px 0;line-height:1.6}
+.life-feedback-heading{display:block;color:#e5c985;margin:13px 0 4px}
+@media(max-width:700px){.life-scenes{grid-template-columns:1fr}
+ .life-form textarea{min-height:90px}.life-scene{padding:14px}}

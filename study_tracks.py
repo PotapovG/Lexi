@@ -221,50 +221,54 @@ def anki_action(db,uid,lang,body):
 # Routes are fictional but internally consistent map diagrams. All landmarks
 # have an unambiguous school-level Greek phrase and Russian/English name.
 LANDMARKS=(
-    ("Σχολείο","το σχολείο","Школа","School"),
-    ("Πάρκο","το πάρκο","Парк","Park"),
-    ("Νοσοκομείο","το νοσοκομείο","Больница","Hospital"),
-    ("Κέντρο","το κέντρο","Центр","Centre"),
-    ("Μουσείο","το μουσείο","Музей","Museum"),
-    ("Ταχυδρομείο","το ταχυδρομείο","Почта","Post office"),
-    ("Πανεπιστήμιο","το πανεπιστήμιο","Университет","University"),
-    ("Δημαρχείο","το δημαρχείο","Мэрия","Town hall"),
-    ("Στάδιο","το στάδιο","Стадион","Stadium"),
-    ("Θέατρο","το θέατρο","Театр","Theatre"),
+    ("Σχολείο","το σχολείο","Школа","School",6),
+    ("Κέντρο","το κέντρο","Центр","Centre",6),
+    ("Πανεπιστήμιο","το πανεπιστήμιο","Университет","University",6),
+    ("Σπίτι","το σπίτι","Дом","Home",2),
+    ("Τράπεζα","την τράπεζα","Банк","Bank",6),
+    ("Πάρκο","το πάρκο","Парк","Park",16),
+    ("Μουσείο","το μουσείο","Музей","Museum",16),
+    ("Θέατρο","το θέατρο","Театр","Theatre",16),
+    ("Νοσοκομείο","το νοσοκομείο","Больница","Hospital",18),
+    ("Ταχυδρομείο","το ταχυδρομείο","Почта","Post office",19),
 )
+
 NUMBERS=(("55","πενήντα πέντε"),("24","είκοσι τέσσερα"),
          ("18","δεκαοκτώ"),("31","τριάντα ένα"),("42","σαράντα δύο"),
          ("16","δεκαέξι"),("63","εξήντα τρία"),("70","εβδομήντα"),
          ("88","ογδόντα οκτώ"),("90","ενενήντα"),("25","είκοσι πέντε"),
          ("36","τριάντα έξι"))
-def _scene(index):
+def _scene(index,stage=20):
     number,spelled=NUMBERS[index%len(NUMBERS)]
-    steps=[LANDMARKS[(index*3+j)%len(LANDMARKS)] for j in range(5)]
+    available=[x for x in LANDMARKS if x[4]<=stage]
+    if len(available)<5:raise ValueError("chapter_not_unlocked")
+    steps=[available[(index*3+j)%len(available)] for j in range(5)]
     keys=("number","origin","via1","via2","stop","destination")
     expected=(spelled,steps[0][1],steps[1][1],steps[2][1],steps[3][0],steps[4][1])
     return {"bus":number,"stops":[{"name":x[0],"ru":x[2],"en":x[3]} for x in steps],
             "expected":dict(zip(keys,expected))}
 
 def _route_initial():return {"index":0,"misses":0}
-def route_get(db,uid,lang):
+def route_get(db,uid,lang,stage=20):
     if lang not in LANGUAGES:raise ValueError("invalid_language")
     state,rev=_load(db,uid,"route",lang,_route_initial)
-    scene=_scene(state["index"])
+    scene=_scene(state["index"],stage)
     return {"revision":rev,"completed":state["index"],"misses":state["misses"],
             "bus":scene["bus"],"stops":scene["stops"],"chapter":6,
             "fields":["number","origin","via1","via2","stop","destination"]}
 
-def route_action(db,uid,lang,body):
+def route_action(db,uid,lang,body,stage=20):
     if lang not in LANGUAGES:raise ValueError("invalid_language")
     db.execute("BEGIN IMMEDIATE")
     state,rev=_load(db,uid,"route",lang,_route_initial)
     if body.get("revision")!=rev:raise ValueError("stale_track")
     fields=body.get("answers")
     if not isinstance(fields,dict):raise ValueError("bad_answers")
-    scene=_scene(state["index"])
+    scene=_scene(state["index"],stage)
     expected=scene["expected"]
     if set(fields)!=set(expected):raise ValueError("bad_answers")
     results={}
+    notes={}
     for key,wanted in expected.items():
         value=fields[key]
         if not isinstance(value,str) or len(value)>160:raise ValueError("bad_answer")
@@ -272,20 +276,33 @@ def route_action(db,uid,lang,body):
         # Name in Greek, or a full natural phrase including the prompt.
         if key=="number":
             normalized=normalized.removeprefix(_normalized("το λεωφορείο")).strip()
-        elif key=="stop":
-            normalized=normalized.removeprefix(_normalized("στη στάση")).strip()
+        else:
+            for prefix in ("ξεκινάει από","περνάει από","μετά περνάει από",
+                           "σταματάει στη στάση","πηγαίνει προς"):
+                if normalized.startswith(_normalized(prefix)+" "):
+                    normalized=normalized[len(_normalized(prefix))+1:]
         results[key]=(normalized==_normalized(wanted))
+        if not results[key]:
+            if not normalized:notes[key]="Напиши название или номер автобуса по-гречески." if lang=="ru" else "Enter the Greek place name or bus number."
+            elif key=="number":notes[key]="Проверь греческие числительные и их порядок." if lang=="ru" else "Check the Greek number words."
+            elif _normalized(wanted).split()[-1:] == normalized.split()[-1:]:
+                notes[key]="Проверь предлог и артикль перед названием." if lang=="ru" else "Check the preposition and article."
+            else:notes[key]="Сверь название с указанной остановкой на схеме." if lang=="ru" else "Check the stop name on the map."
     complete=all(results.values())
     if complete:state["index"]+=1
     else:state["misses"]+=1
     _save(db,uid,"route",lang,state,rev)
-    response=route_get(db,uid,lang)
+    response=route_get(db,uid,lang,stage)
     response["feedback"]={
         "correct":complete,"fields":results,
+        "explanations":notes,
         "expected":expected,
         "greek":("Το λεωφορείο "+expected["number"]+". Ξεκινάει από "+expected["origin"]+
                  ". Περνάει από "+expected["via1"]+" και "+expected["via2"]+
-                 ". Σταματάει στη στάση «"+expected["stop"]+"». Πηγαίνει στο "+expected["destination"].removeprefix("το ")+"."),
+                 ". Σταματάει στη στάση «"+expected["stop"]+"». Πηγαίνει "+(
+                    "στην "+expected["destination"].removeprefix("την ")
+                    if expected["destination"].startswith("την ") else
+                    "στο "+expected["destination"].removeprefix("το "))+ "."),
         "translation":(
             "Автобус "+scene["bus"]+": от «"+scene["stops"][0]["ru"]+
             "» через «"+scene["stops"][1]["ru"]+"» и «"+scene["stops"][2]["ru"]+

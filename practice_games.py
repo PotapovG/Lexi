@@ -82,10 +82,10 @@ def likes_get(db,uid,lang):
                 "misses":state["misses"]}
     data=_like_scene(state["index"])
     return {"revision":rev,"step":state["index"]+1,"total":LIKES_TOTAL,
-            "misses":state["misses"],"chapter":6,
+            "misses":state["misses"],"chapter":8,
             "prompt":data["promptRU"] if lang=="ru" else data["promptEN"],
             "promptLang":"ru" if lang=="ru" else "en",
-            "lemma":data["lemma"]}
+            "lemma":data["lemma"],"requiresNa":" να " in data["expected"]}
 def likes_action(db,uid,lang,body):
     if lang not in tracks.LANGUAGES:raise ValueError("invalid_language")
     db.execute("BEGIN IMMEDIATE")
@@ -103,7 +103,23 @@ def likes_action(db,uid,lang,body):
         if not isinstance(answer,str) or len(answer)>180:raise ValueError("invalid_answer")
         expected=_like_scene(state["index"])["expected"]
         correct=tracks._normalized(answer)==tracks._normalized(expected)
-        feedback={"correct":correct,"expected":expected}
+        explanation=None
+        if not correct:
+            words=tracks._normalized(answer).split()
+            wanted=tracks._normalized(expected).split()
+            if "να" in wanted and "να" not in words:
+                explanation="Пропущена частица να перед глаголом." if lang=="ru" else "Missing να before the verb."
+            elif "δεν" in wanted and "δεν" not in words:
+                explanation="Пропущено отрицание δεν." if lang=="ru" else "Missing negative δεν."
+            elif "αρεσουν" in wanted and "αρεσει" in words:
+                explanation="Для нескольких предметов требуется αρέσουν, не αρέσει." if lang=="ru" else "Plural things take αρέσουν."
+            elif "αρεσει" in wanted and "αρεσουν" in words:
+                explanation="Для одного предмета требуется αρέσει." if lang=="ru" else "Singular things take αρέσει."
+            elif not any(x in words for x in ("μου","σου","του","της","μας","σας","τους")):
+                explanation="Пропущено местоимение: кому нравится?" if lang=="ru" else "Missing pronoun: who likes it?"
+            else:
+                explanation="Проверь местоимение и форму глагола после να." if lang=="ru" else "Check the pronoun and verb form after να."
+        feedback={"correct":correct,"expected":expected,"explanation":explanation}
         if correct:state["index"]+=1
         else:state["misses"]+=1
     tracks._save(db,uid,"likes",lang,state,rev)
@@ -113,49 +129,63 @@ def likes_action(db,uid,lang,body):
     return view
 
 PRODUCTS=(
- ("apple","одно яблоко","one apple","ένα μήλο","🍎"),
- ("milk","один литр молока","one litre of milk","ένα λίτρο γάλα","🥛"),
- ("water","одну бутылку воды","one bottle of water","ένα μπουκάλι νερό","💧"),
- ("beef","полкило говядины","half a kilo of beef","μισό κιλό μοσχάρι","🥩"),
- ("bread","одну буханку хлеба","one loaf of bread","ένα ψωμί","🍞"),
- ("cheese","полкило сыра","half a kilo of cheese","μισό κιλό τυρί","🧀"),
- ("tomato","килограмм помидоров","one kilo of tomatoes","ένα κιλό ντομάτες","🍅"),
- ("orange","два килограмма апельсинов","two kilos of oranges","δύο κιλά πορτοκάλια","🍊"),
- ("eggs","шесть яиц","six eggs","έξι αυγά","🥚"),
- ("banana","три банана","three bananas","τρεις μπανάνες","🍌"),
- ("sugar","килограмм сахара","one kilo of sugar","ένα κιλό ζάχαρη","🛍️"),
- ("juice","один апельсиновый сок","one orange juice","έναν χυμό πορτοκάλι","🧃"),
+ ("apple","одно яблоко","one apple","ένα μήλο","🍎",8),
+ ("milk","один литр молока","one litre of milk","ένα λίτρο γάλα","🥛",8),
+ ("water","одну бутылку воды","one bottle of water","ένα μπουκάλι νερό","💧",8),
+ ("beef","полкило говядины","half a kilo of beef","μισό κιλό μοσχάρι","🥩",14),
+ ("bread","одну буханку хлеба","one loaf of bread","ένα ψωμί","🍞",8),
+ ("cheese","полкило сыра","half a kilo of cheese","μισό κιλό τυρί","🧀",8),
+ ("tomato","килограмм помидоров","one kilo of tomatoes","ένα κιλό ντομάτες","🍅",8),
+ ("orange","два килограмма апельсинов","two kilos of oranges","δύο κιλά πορτοκάλια","🍊",8),
+ ("eggs","шесть яиц","six eggs","έξι αυγά","🥚",8),
+ ("banana","три банана","three bananas","τρεις μπανάνες","🍌",8),
+ ("sugar","килограмм сахара","one kilo of sugar","ένα κιλό ζάχαρη","🛍️",8),
+ ("juice","один апельсиновый сок","one orange juice","έναν χυμό πορτοκάλι","🧃",14),
 )
 REQUESTS=("θα ήθελα ","θέλω ","μπορώ να έχω ","θα πάρω ")
+def _requests(stage):
+    forms=["θέλω "]
+    if stage>=14:forms+=["θα ήθελα ","θα πάρω "]
+    if stage>=16:forms.append("μπορώ να έχω ")
+    return forms
+
 def _store_init():return {"round":0,"bought":[],"misses":0}
-def _shopping_scene(round):
+def _shopping_scene(round,stage=20):
     # Stable sets of four, starting with the items explicitly requested.
-    offset=(round*3)%len(PRODUCTS)
-    return [PRODUCTS[(offset+i)%len(PRODUCTS)] for i in range(4)]
+    pool=[p for p in PRODUCTS if p[5]<=stage]
+    if len(pool)<4:raise ValueError("chapter_not_unlocked")
+    offset=(round*3)%len(pool)
+    return [pool[(offset+i)%len(pool)] for i in range(4)]
 def _items(scene,lang):
     return [{"id":p[0],"name":p[1] if lang=="ru" else p[2],
              "icon":p[4]} for p in scene]
-def store_get(db,uid,lang):
+def store_get(db,uid,lang,stage=20):
     if lang not in tracks.LANGUAGES:raise ValueError("invalid_language")
     state,rev=tracks._load(db,uid,"periptero",lang,_store_init)
-    scene=_shopping_scene(state["round"])
+    active_stage=min(state.get("activeStage",stage),stage)
+    scene=_shopping_scene(state["round"],active_stage)
+    bought=[x for x in state["bought"] if x in {p[0] for p in scene}]
     return {"revision":rev,"round":state["round"]+1,
-            "items":_items(scene,lang),"bought":list(state["bought"]),
-            "misses":state["misses"],"chapter":6,
+            "items":_items(scene,lang),"bought":bought,
+            "requestPrefix":_requests(active_stage)[0].strip(),
+            "misses":state["misses"],"chapter":8,
             "translationLang":"ru" if lang=="ru" else "en",
-            "stage":"complete" if len(state["bought"])==4 else "shopping"}
-def store_action(db,uid,lang,body):
+            "stage":"complete" if len(bought)==4 else "shopping"}
+def store_action(db,uid,lang,body,stage=20):
     if lang not in tracks.LANGUAGES:raise ValueError("invalid_language")
     db.execute("BEGIN IMMEDIATE")
     state,rev=tracks._load(db,uid,"periptero",lang,_store_init)
     if body.get("revision")!=rev:raise ValueError("stale_track")
-    scene=_shopping_scene(state["round"])
+    active_stage=min(state.get("activeStage",stage),stage)
+    scene=_shopping_scene(state["round"],active_stage)
+    state["bought"]=[x for x in state["bought"] if x in {p[0] for p in scene}]
     action=body.get("action")
     feedback=None
     if action=="next":
         if len(state["bought"])!=4:raise ValueError("not_finished")
-        state.update(round=state["round"]+1,bought=[])
+        state.update(round=state["round"]+1,bought=[],activeStage=stage)
     elif action=="buy":
+        state["activeStage"]=active_stage
         if len(state["bought"])==4:raise ValueError("already_finished")
         product=next((p for p in scene if p[0]==body.get("productId")),None)
         if product is None or product[0] in state["bought"]:raise ValueError("invalid_item")
@@ -164,14 +194,23 @@ def store_action(db,uid,lang,body):
         normalized=tracks._normalized(phrase)
         correct=any(normalized==tracks._normalized(start+product[3]) or
                     normalized==tracks._normalized(start+product[3]+" παρακαλώ")
-                    for start in REQUESTS)
-        feedback={"correct":correct,"expected":"Θα ήθελα "+product[3]+", παρακαλώ.",
-                  "productId":product[0]}
+                    for start in _requests(active_stage))
+        example=("Θα ήθελα " if active_stage>=14 else "Θέλω ")+product[3]+", παρακαλώ."
+        explanation=None
+        if not correct:
+            if not any(normalized.startswith(tracks._normalized(prefix)) for prefix in REQUESTS):
+                explanation="Начни просьбу с «Θέλω»." if lang=="ru" else "Start the request with «Θέλω»."
+            elif not any(tracks._normalized(prefix) in normalized for prefix in (product[3].split()[-1],)):
+                explanation="Неверный товар или его название." if lang=="ru" else "Check the product name."
+            elif not any(normalized.startswith(tracks._normalized(prefix)) for prefix in _requests(active_stage)):
+                explanation="Эта конструкция изучается позже. Пока используй «Θέλω»." if lang=="ru" else "That request form is introduced later. Use «Θέλω»."
+            else:explanation="Проверь количество и артикль." if lang=="ru" else "Check the quantity and article."
+        feedback={"correct":correct,"expected":example,"explanation":explanation,"productId":product[0]}
         if correct:state["bought"].append(product[0])
         else:state["misses"]+=1
     else:raise ValueError("invalid_track_action")
     tracks._save(db,uid,"periptero",lang,state,rev)
-    return {**store_get(db,uid,lang),"feedback":feedback}
+    return {**store_get(db,uid,lang,stage),"feedback":feedback}
 
 def validate():
     assert LIKES_TOTAL==280

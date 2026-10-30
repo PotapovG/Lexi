@@ -19,6 +19,7 @@ import auth_v1 as auth
 import vocab_lessons as vocab
 import study_tracks as _tracks
 import practice_games as _games
+import greek_life as _life
 import verb_phrase
 import personalized
 import accepted_glosses
@@ -1006,7 +1007,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith('/pronunciation/'):
             return self.send_pronunciation(path[len('/pronunciation/'):],head=True)
         files = {"/":"index.html","/index.html":"index.html",
-                 "/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+                 "/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/life.js":"life.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
         filename = files.get(path)
         if filename:
             file = ROOT / filename
@@ -1188,7 +1189,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200,dict(registered=bool(account),
                  nickname=account["nickname"] if account else None,
                  avatar=pseudonym(uid)["avatar"] if account else None),new,token)
-        if path in ("/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero") and not account:
+        if path in ("/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene") and not account:
             return self.send_json(401,{"error":"login_required"},new,token)
         if path=="/api/session":
             with conn() as db:result=_lesson_sync.read(db,uid)
@@ -1199,15 +1200,34 @@ class Handler(BaseHTTPRequestHandler):
         if path=="/api/personalized/status":
             with conn() as db:summary=personalized.progress_summary(db,uid)
             return self.send_json(200,summary,new,token)
+        if path in ("/api/life","/api/life/scene"):
+            qp=parse_qs(urlparse(self.path).query)
+            language=qp.get("lang",["ru"])[0]
+            if language not in _tracks.LANGUAGES:
+                return self.send_json(400,{"error":"invalid_language"},new,token)
+            try:
+                with conn() as db:
+                    result=(_life.current_settings(db,uid,language) if path=="/api/life"
+                            else _life.scene_get(db,uid,language,qp.get("id",[""])[0]))
+            except ValueError as e:return self.send_json(403,{"error":str(e)},new,uid)
+            return self.send_json(200,result,new,uid)
         if path in ("/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
             language=parse_qs(urlparse(self.path).query).get("lang",["ru"])[0]
             if language not in _tracks.LANGUAGES:
                 return self.send_json(400,{"error":"invalid_language"},new,token)
-            with conn() as db:
-                if path.endswith("/anki"):result=_tracks.anki_get(db,uid,language)
-                elif path.endswith("/route"):result=_tracks.route_get(db,uid,language)
-                elif path.endswith("/likes"):result=_games.likes_get(db,uid,language)
-                else:result=_games.store_get(db,uid,language)
+            try:
+                with conn() as db:
+                    if path.endswith("/anki"):result=_tracks.anki_get(db,uid,language)
+                    elif path.endswith("/route"):
+                        _life.ensure(db,uid,language,"route")
+                        result=_tracks.route_get(db,uid,language,_life.ensure(db,uid,language,"route"))
+                    elif path.endswith("/likes"):
+                        _life.ensure(db,uid,language,"likes")
+                        result=_games.likes_get(db,uid,language)
+                    else:
+                        _life.ensure(db,uid,language,"periptero")
+                        result=_games.store_get(db,uid,language,_life.ensure(db,uid,language,"periptero"))
+            except ValueError as e:return self.send_json(403,{"error":str(e)},new,uid)
             return self.send_json(200,result,new,uid)
         if path=="/api/vocab/meta":
             groups=[dict(**t, count=sum(t["id"] in w["topics"] for w in vocab.VOCAB),
@@ -1281,7 +1301,7 @@ class Handler(BaseHTTPRequestHandler):
                  listeningByChapter={str(n):sum(x["chapter"]==n for x in LISTEN_CARDS) for n in range(1,21)},
                  printedUnits=20,reviewUnits=[5,10,15,20],pdfOffset=2,
                  pagePrecision="approximate",source="Verified printed unit start/end and pedagogy from uploaded Patakis PDF; independently authored practice questions, approximate within-unit page anchors"),new,uid)
-        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/life.js":"life.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
         file=files.get(path)
         if file:
             b=(ROOT/file).read_bytes()
@@ -1293,7 +1313,7 @@ class Handler(BaseHTTPRequestHandler):
         path=request_path(self.path)
         if path not in ("/api/answer","/api/leaderboard/join","/api/leaderboard/leave",
                          "/api/auth/register","/api/auth/login","/api/auth/logout",
-                         "/api/vocab/answer","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
+                         "/api/vocab/answer","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene"):
             self.close_connection=True  # Avoid leaving unread POST bodies on reused HTTP/1.1 connections.
             return self.send_json(404,{"error":"not found"})
         if self.headers.get("Origin") != ORIGIN:
@@ -1330,13 +1350,24 @@ class Handler(BaseHTTPRequestHandler):
             if path=="/api/session":
                 with conn() as db:result=_lesson_sync.action(db,uid,body)
                 return self.send_json(200,result,new,uid)
+            if path in ("/api/life","/api/life/scene"):
+                language=body.get("lang","ru")
+                with conn() as db:
+                    response=(_life.update_settings(db,uid,language,body) if path=="/api/life" else _life.scene_answer(db,uid,language,body))
+                return self.send_json(200,response,new,uid)
             if path in ("/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
                 language=body.get("lang","ru")
                 with conn() as db:
                     if path.endswith("/anki"):response=_tracks.anki_action(db,uid,language,body)
-                    elif path.endswith("/route"):response=_tracks.route_action(db,uid,language,body)
-                    elif path.endswith("/likes"):response=_games.likes_action(db,uid,language,body)
-                    else:response=_games.store_action(db,uid,language,body)
+                    elif path.endswith("/route"):
+                        _life.ensure(db,uid,language,"route")
+                        response=_tracks.route_action(db,uid,language,body,_life.ensure(db,uid,language,"route"))
+                    elif path.endswith("/likes"):
+                        _life.ensure(db,uid,language,"likes")
+                        response=_games.likes_action(db,uid,language,body)
+                    else:
+                        _life.ensure(db,uid,language,"periptero")
+                        response=_games.store_action(db,uid,language,body,_life.ensure(db,uid,language,"periptero"))
                 return self.send_json(200,response,new,uid)
             if path=="/api/vocab/answer":
                 with conn() as db:return self.send_json(200,vocab.answer(db,uid,body),new,uid)
