@@ -47,6 +47,44 @@
       periptero:"Minimercado",likeTitle:"Gostos e preferências",likeAction:"Verificar frase",
       buy:"Adicionar ao cesto",basket:"No cesto",nextBasket:"Lista seguinte"}
   };
+  const AUDIO={
+    ru:{play:"🔊 Послушать",slow:"0,8× Медленно",unavailable:"Запись для этого слова ещё не готова.",pocket:"Воспроизводится Pocket TTS.",done:"Прослушано.",error:"Не удалось воспроизвести запись."},
+    en:{play:"🔊 Listen",slow:"0.8× Slower",unavailable:"This word has no recording yet.",pocket:"Playing Pocket TTS recording.",done:"Finished.",error:"Could not play the audio."},
+    zh:{play:"🔊 听发音",slow:"0.8× 慢速",unavailable:"该词还没有录音。",pocket:"正在播放 Pocket TTS 录音。",done:"播放结束。",error:"无法播放录音。"},
+    ar:{play:"🔊 استمع",slow:"0.8× ببطء",unavailable:"لا يتوفر تسجيل لهذه الكلمة بعد.",pocket:"تشغيل تسجيل Pocket TTS.",done:"انتهى.",error:"تعذّر تشغيل التسجيل."},
+    es:{play:"🔊 Escuchar",slow:"0,8× Más lento",unavailable:"Aún no hay grabación de esta palabra.",pocket:"Reproduciendo Pocket TTS.",done:"Finalizado.",error:"No se pudo reproducir."},
+    pt:{play:"🔊 Ouvir",slow:"0,8× Devagar",unavailable:"Ainda não há gravação desta palavra.",pocket:"A reproduzir Pocket TTS.",done:"Terminou.",error:"Não foi possível reproduzir."}
+  };
+  const audioText=key=>(AUDIO[lang()]||AUDIO.en)[key]||AUDIO.en[key]||key;
+  function renderAnkiAudio(panel,card){
+    const meta=card?.wordAudio;
+    const status=text("p","","track-audio-status");
+    status.setAttribute("role","status");
+    status.setAttribute("aria-live","polite");
+    const controls=document.createElement("div");
+    controls.className="track-audio-controls";
+    const available=window.LexiWordAudio?.available(meta)===true;
+    if(!available){
+      status.textContent=audioText("unavailable");
+    }else{
+      for(const slow of [false,true]){
+        const b=control(audioText(slow?"slow":"play"),async()=>{
+          if(anki?.card?.id!==card.id)return;
+          await window.LexiWordAudio.play(meta,{slow,onStatus:state=>{
+            if(anki?.card?.id===card.id&&$("tracks-view")&&!$("tracks-view").hidden)
+              status.textContent=audioText(state);
+          }});
+        },"secondary");
+        b.classList.add("track-audio-button");
+        b.setAttribute("aria-label",(slow?audioText("slow"):audioText("play"))+" · "+card.gr);
+        controls.append(b);
+      }
+    }
+    const wrap=document.createElement("div");
+    wrap.className="track-audio-block";
+    wrap.append(controls,status);
+    panel.append(wrap);
+  }
   const labels={number:"Το λεωφορείο",origin:"Ξεκινάει από",via1:"Περνάει από",via2:"Μετά περνάει από",
     stop:"Σταματάει στη στάση",destination:"Πηγαίνει προς"};
   let mode="anki",anki=null,route=null,likes=null,shop=null,busy=false,language=null;
@@ -115,11 +153,13 @@
     root.append(text("p",t("known")+": "+anki.learned+" · "+t("retry")+": "+anki.misses,"track-meta"));
   }
   function renderAnki(){
+    window.LexiWordAudio?.stop();
     const root=$("track-content");root.replaceChildren();ankiHeader(root);
     const panel=document.createElement("div");panel.className="track-word-card";root.append(panel);
     if(anki.phase==="preview"){
       panel.append(text("div",t("preview")+" · "+anki.at+"/"+anki.cohortSize,"track-small"));
       panel.append(text("h3",anki.card.gr,"track-greek"));
+      renderAnkiAudio(panel,anki.card);
       panel.append(text("p",anki.card.translation,"track-meaning"));
       panel.append(text("p",t("study"),"track-small"));
       panel.append(control(t("next"),()=>action("anki",{action:"advance",revision:anki.revision},
@@ -127,6 +167,7 @@
     }else if(anki.phase==="quiz"||anki.phase==="review"){
       panel.append(text("div",(anki.phase==="review"?t("review"):t("test"))+" · "+anki.done+"/"+anki.target,"track-small"));
       panel.append(text("h3",anki.card.gr,"track-greek"));
+      renderAnkiAudio(panel,anki.card);
       const options=document.createElement("div");options.className="track-choices";panel.append(options);
       anki.options.forEach((value,i)=>{
         const b=control((i+1)+". "+value,()=>action("anki",{

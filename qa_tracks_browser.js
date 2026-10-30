@@ -10,6 +10,24 @@ const {chromium}=require("/app/qa_deps/node_modules/playwright");
    const errors=[];page.on("pageerror",err=>errors.push(err.message));
    await page.goto("http://127.0.0.1:18632/greek/",{waitUntil:"networkidle"});
    await page.locator("#auth-gate").waitFor({state:"hidden",timeout:12000});
+   const audioRequests=[];
+   page.on("request",request=>{
+     if(/\/greek\/(?:audio|pronunciation)\/[a-f0-9]{32}\.wav$/.test(new URL(request.url()).pathname))
+       audioRequests.push(request.url());
+   });
+   await page.locator('[data-page="tracks"]').click();
+   await page.locator(".track-word-card .track-greek").getByText("το όνομα").waitFor();
+   const soundButtons=page.locator(".track-audio-button");
+   if(await soundButtons.count()!==2)throw Error("Expected two recorded-audio buttons");
+   if(await soundButtons.first().isDisabled())throw Error("Pocket TTS button disabled despite recording");
+   await soundButtons.first().click();
+   await page.getByText("Воспроизводится Pocket TTS.",{exact:true}).waitFor({timeout:12000});
+   await soundButtons.last().click();
+   await page.getByText("Воспроизводится Pocket TTS.",{exact:true}).waitFor({timeout:12000});
+   if(audioRequests.length<1)throw Error("Pocket WAV request was not made for each playback");
+   await page.locator(".track-word-card button.primary").click();
+   await page.getByText("2/30",{exact:false}).first().waitFor();
+   if(await page.locator(".track-audio-button").count()!==2)throw Error("Next card missing playback");
    await page.locator('[data-page="life"]').click();
    await page.locator(".life-adventure-card").waitFor();
    await page.waitForFunction(()=>document.querySelector("#life-max-chapter").value==="6");
@@ -108,7 +126,7 @@ const {chromium}=require("/app/qa_deps/node_modules/playwright");
      if(layout.extra>3||layout.overflow>3)throw Error("Horizontal overflow "+width+" "+JSON.stringify(layout));
    }
    if(errors.length)throw Error("Browser runtime errors: "+JSON.stringify(errors));
-   console.log("PASS Greek Life one-button mobile journey, illustration, automatic next, meaningful grammar feedback, chapter gate and responsive 320–1200px");
+   console.log("PASS Anki Pocket WAV normal/slow playback, then Greek Life adaptive journey and 320–1200px");
    await ctx.close();
  }finally{await browser.close();}
 })().catch(err=>{console.error("FAIL "+err.stack);process.exitCode=1});

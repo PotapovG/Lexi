@@ -12,6 +12,8 @@ from collections import defaultdict
 
 import vocab_lessons as vocab
 import topics_verbs
+import word_audio as _word_audio
+import listening_catalog as _listening
 
 LANGUAGES=("ru","en","zh","ar","es","pt")
 BATCH=30
@@ -146,11 +148,13 @@ def _anki_view(s,rev,lang):
         if ids:
             card=BY_ID[ids[s["at"]]]
             view.update(at=s["at"]+1,card={"id":card["id"],"gr":card["gr"],
-                        "translation":card[lang],"level":card["level"]})
+                        "translation":card[lang],"level":card["level"],
+                        "wordAudio":_word_audio.lookup(card["gr"],_listening)})
     elif phase in ("quiz","review"):
         if not s["queue"]:raise ValueError("invalid_track_queue")
         card=BY_ID[s["queue"][0]]
-        view.update(card={"id":card["id"],"gr":card["gr"],"level":card["level"]},
+        view.update(card={"id":card["id"],"gr":card["gr"],"level":card["level"],
+                          "wordAudio":_word_audio.lookup(card["gr"],_listening)},
                     options=_options(card,lang,rev),done=len(s["known"]),
                     target=len(_cohort(s)) if phase=="quiz" else min(60,len(s["mastered"])),
                     remaining=len(s["queue"]))
