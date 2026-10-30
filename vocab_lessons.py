@@ -1,4 +1,5 @@
 import greek_variants
+import lexical_overlap
 """Independent authored A1/A2 vocabulary lessons; never injected into book exercises.
 CEFR descriptors do not prescribe exact word counts. Levels are editorial estimates.
 """
@@ -376,8 +377,8 @@ def lesson(db,user,topic,level,lang,review=False):
     output=[]
     for i,w in enumerate(selected):
         translation,missing=visible_translation(w,lang)
-        candidates=[v for v in words if v["id"]!=w["id"] and visible_translation(v,lang)[0]!=translation]
-        if len(candidates)<7:candidates=[v for v in VOCAB if v["id"]!=w["id"] and visible_translation(v,lang)[0]!=translation]
+        candidates=[v for v in words if v["id"]!=w["id"] and visible_translation(v,lang)[0]!=translation and not lexical_overlap.overlaps(w,v)]
+        if len(candidates)<7:candidates=[v for v in VOCAB if v["id"]!=w["id"] and visible_translation(v,lang)[0]!=translation and not lexical_overlap.overlaps(w,v)]
         rand=random.Random(user+w["id"]+lang)
         rand.shuffle(candidates)
         direction="gr-target" if i%2==0 else "target-gr"
@@ -410,7 +411,7 @@ def answer(db,user,body):
     expected=text if direction=="gr-target" else w["gr"]
     selected=body.get("selected")
     if not isinstance(selected,str) or len(selected)>500:raise ValueError("invalid answer")
-    accepted=greek_variants.accepted(expected) if direction=="target-gr" else [expected]
+    accepted=list(dict.fromkeys((greek_variants.accepted(expected) if direction=="target-gr" else [expected]) + lexical_overlap.alternatives(w,direction,lang)))
     correct=selected in accepted
     now=dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     row=db.execute("SELECT miss_debt FROM vocab_progress WHERE user_id=? AND word_id=?",(user,wid)).fetchone()

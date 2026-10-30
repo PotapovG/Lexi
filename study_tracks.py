@@ -12,6 +12,7 @@ from collections import defaultdict
 
 import vocab_lessons as vocab
 import topics_verbs
+import lexical_overlap
 import word_audio as _word_audio
 import listening_catalog as _listening
 
@@ -120,7 +121,8 @@ def _options(word,lang,revision):
     source=word[lang]
     candidates=[w[lang] for w in WORDS if w["id"]!=word["id"] and
                 w["level"]==word["level"] and
-                _word_class(w)==_word_class(word)]
+                _word_class(w)==_word_class(word) and
+                not lexical_overlap.overlaps(word,w)]
     seen={_normalized(source)}
     alternatives=[]
     for value in _shuffle(candidates,f"{word['id']}:{lang}:{revision}"):
@@ -130,6 +132,7 @@ def _options(word,lang,revision):
         if len(alternatives)==3:break
     if len(alternatives)<3:
         for w in WORDS:
+            if lexical_overlap.overlaps(word,w):continue
             value=w[lang];key=_normalized(value)
             if key and key not in seen:
                 seen.add(key);alternatives.append(value)
@@ -188,8 +191,10 @@ def anki_action(db,uid,lang,body):
         selected=body.get("selected")
         if not isinstance(selected,str) or len(selected)>250:raise ValueError("bad_answer")
         offered=_options(card,lang,rev)
-        if selected not in offered:raise ValueError("invalid_choice")
-        correct=_normalized(selected)==_normalized(card[lang])
+        if selected not in offered and selected not in lexical_overlap.alternatives(card,"gr-target",lang):
+            raise ValueError("invalid_choice")
+        accepted=[card[lang]]+lexical_overlap.alternatives(card,"gr-target",lang)
+        correct=_normalized(selected) in {_normalized(x) for x in accepted}
         feedback={"correct":correct,"greek":card["gr"],"translation":card[lang]}
         s["queue"].pop(0)
         if correct:

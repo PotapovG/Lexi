@@ -8,6 +8,7 @@ from difflib import SequenceMatcher
 import re
 import unicodedata
 import greek_variants
+import lexical_overlap
 import pedagogy_rules
 
 ARTICLE={'ο','η','το','οι','τα','τον','την','τη','τους','τις'}
@@ -33,7 +34,8 @@ def same_sense_or_variant(target,other):
     a=greek(target)
     b=greek(other)
     if not a or not b:return False
-    return norm(b) in {norm(x) for x in greek_variants.accepted(a)}
+    return (lexical_overlap.overlaps(target,other) or
+            norm(b) in {norm(x) for x in greek_variants.accepted(a)})
 
 def same_english_meaning(target,other):
     return bool(target.get('en') and other.get('en') and

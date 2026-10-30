@@ -7,6 +7,7 @@ Avoid inserting guesses for Arabic/Chinese/Spanish/Portuguese.
 """
 from unicodedata import normalize
 import greek_variants
+import lexical_overlap
 
 _ALIASES={
  'p001':{'ru':['Как тебя зовут','Как твоё имя?'], 'en':["What's your name? (informal)"]},
@@ -68,9 +69,11 @@ for (_cid,_lang),_phrases in _VALID_OLD_EDITED.items():
 
 def accepted(card,direction,lang,correct):
     if direction in ('ru-gr','sg-pl','pl-sg'):
-        return greek_variants.accepted(correct)
+        return list(dict.fromkeys(greek_variants.accepted(correct)+
+                                  lexical_overlap.alternatives(card,direction,lang)))
     if direction!='gr-ru':return [correct]
-    return list(dict.fromkeys([correct]+_ALIASES.get(card['id'],{}).get(lang,[])))
+    return list(dict.fromkeys([correct]+_ALIASES.get(card['id'],{}).get(lang,[])+
+                              lexical_overlap.alternatives(card,direction,lang)))
 
 def is_accepted(card,direction,lang,selected,correct):
     return selected in accepted(card,direction,lang,correct)

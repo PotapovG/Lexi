@@ -24,6 +24,7 @@ import board_course as _board
 import verb_phrase
 import personalized
 import accepted_glosses
+import lexical_overlap
 import greek_variants
 import final_n_guidance
 import verb_curriculum
@@ -260,7 +261,7 @@ def generate_options(card,direction,answer,lang):
     # the same answer with different capitalization or punctuation.
     seen={_distractors.norm(value) for value in allowed}
     primary_key=_distractors.norm(answer)
-    for alternate in allowed[1:]:
+    for alternate in ([] if lexical_overlap.is_paired_word(card) else allowed[1:]):
         if _distractors.norm(alternate) and _distractors.norm(alternate)!=primary_key:
             pairs.append((alternate,card.get('en','')))
             break
