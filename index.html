@@ -4,9 +4,10 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1220">
 <title>Λέξη — Greek practice</title>
-<link rel="stylesheet" href="/greek/styles.css?v=34">
+<link rel="stylesheet" href="/greek/styles.css?v=35">
 <script src="/greek/greek_word_audio.js?v=4" defer></script>
-<script src="/greek/app.js?v=42" defer></script>
+<script src="/greek/app.js?v=43" defer></script>
+<script src="/greek/tracks.js?v=1" defer></script>
 <script src="/greek/vocab.js?v=7" defer></script>
 </head>
 <body>
@@ -67,6 +68,7 @@
   <nav class="tabs" aria-label="Sections">
    <button class="tab active" data-page="practice" aria-current="page" data-i18n="practice">Занятие</button>
    <button class="tab" data-page="vocab" data-i18n="vocabTab">Словарь A1/A2</button>
+   <button class="tab" data-page="tracks" data-i18n="tracksTab">Карточки и маршруты</button>
    <button class="tab" data-page="weak"><span data-i18n="myMistakes">Мои ошибки</span> <span class="bubble" id="weak-bubble">0</span></button>
    <button class="tab" data-page="stats" data-i18n="statistics">Статистика</button>
    <button class="tab" data-page="leaderboard" data-i18n="leaders">Рейтинг</button>
@@ -262,6 +264,23 @@
     <h2 id="finish-title">Πολύ καλά!</h2><p id="finish-copy"></p>
     <div class="finish-actions"><button class="primary" id="again" data-i18n="anotherSession">Новое занятие ↗</button><button class="secondary" id="review" data-i18n="reviewMistakes">Повторить ошибки</button></div>
    </section>
+  </section>
+  <section id="tracks-view" hidden>
+    <div class="panel tracks-panel">
+      <div class="panel-heading">
+        <span class="eyebrow">Λέξη · A1/A2</span>
+        <h2 id="track-title">Новые режимы Lexi</h2>
+        <p id="track-description">Карточки по 30 и автобусные маршруты с вводом текста.</p>
+      </div>
+      <div class="track-mode-row">
+        <button class="secondary track-button active" id="track-anki-mode" type="button">Карточки · 30 слов</button>
+        <button class="secondary track-button" id="track-route-mode" type="button">Автобусные маршруты</button>
+        <button class="secondary track-button" id="track-likes-mode" type="button">Μου αρέσει να</button>
+        <button class="secondary track-button" id="track-periptero-mode" type="button">Περίπτερο</button>
+      </div>
+      <p class="track-message" id="track-message" role="status" hidden></p>
+      <div id="track-content" class="track-content"></div>
+    </div>
   </section>
   <section id="vocab-view" hidden>
     <div class="panel vocab-panel">

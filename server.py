@@ -17,6 +17,8 @@ from urllib.parse import urlparse, parse_qs
 from catalog_v2 import ALL, BY_ID, CHAPTERS, INDEX, TOPICS, VERB_GROUPS, VERB_REFERENCE
 import auth_v1 as auth
 import vocab_lessons as vocab
+import study_tracks as _tracks
+import practice_games as _games
 import verb_phrase
 import personalized
 import accepted_glosses
@@ -140,6 +142,7 @@ def init_db():
         _lesson_sync.schema(db)
         auth.schema(db)
         vocab.schema(db)
+        _tracks.schema(db)
         learning_engine.schema(db)
 
 def allowed_kinds(s):
@@ -610,13 +613,13 @@ def make_quiz(user_id,params):
             unique.append((card,direction,score))
         choices=unique
         available_candidates=len(choices)
-        # Cap one high-volume subtype in mixed lessons, while retaining enough
-        # material for a full session and preserving all weak/SRS review cards.
-        choices=_clock_balance.balance(choices,count)
     # Guarantee that mastered course words aren't crowded out by fresh textbook cards.
+    # Apply clock cap to textbook candidates, not to the combined pool before
+    # selecting learned personal cards (which could silently discard them).
     if personal_cards and mode!="weak":
         learned=[x for x in choices if x[0].get("curriculum")=="personalized"]
         textbook=[x for x in choices if x[0].get("curriculum")!="personalized"]
+        textbook=_clock_balance.balance(textbook,count)
         random.shuffle(learned)
         slots=max(1,min(len(learned),count//3))
         mix=[]
@@ -627,6 +630,8 @@ def make_quiz(user_id,params):
             elif learned:mix.append(learned.pop(0))
             else:break
         choices=mix
+    elif mode!="weak":
+        choices=_clock_balance.balance(choices,count)
     if mode=="weak":
         available_candidates=len(choices)
     questions=[]
@@ -1001,7 +1006,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith('/pronunciation/'):
             return self.send_pronunciation(path[len('/pronunciation/'):],head=True)
         files = {"/":"index.html","/index.html":"index.html",
-                 "/app.js":"app.js","/vocab.js":"vocab.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+                 "/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
         filename = files.get(path)
         if filename:
             file = ROOT / filename
@@ -1183,7 +1188,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200,dict(registered=bool(account),
                  nickname=account["nickname"] if account else None,
                  avatar=pseudonym(uid)["avatar"] if account else None),new,token)
-        if path in ("/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session") and not account:
+        if path in ("/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero") and not account:
             return self.send_json(401,{"error":"login_required"},new,token)
         if path=="/api/session":
             with conn() as db:result=_lesson_sync.read(db,uid)
@@ -1194,6 +1199,16 @@ class Handler(BaseHTTPRequestHandler):
         if path=="/api/personalized/status":
             with conn() as db:summary=personalized.progress_summary(db,uid)
             return self.send_json(200,summary,new,token)
+        if path in ("/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
+            language=parse_qs(urlparse(self.path).query).get("lang",["ru"])[0]
+            if language not in _tracks.LANGUAGES:
+                return self.send_json(400,{"error":"invalid_language"},new,token)
+            with conn() as db:
+                if path.endswith("/anki"):result=_tracks.anki_get(db,uid,language)
+                elif path.endswith("/route"):result=_tracks.route_get(db,uid,language)
+                elif path.endswith("/likes"):result=_games.likes_get(db,uid,language)
+                else:result=_games.store_get(db,uid,language)
+            return self.send_json(200,result,new,uid)
         if path=="/api/vocab/meta":
             groups=[dict(**t, count=sum(t["id"] in w["topics"] for w in vocab.VOCAB),
                   a1=sum(t["id"] in w["topics"] and w["level"]=="A1" for w in vocab.VOCAB),
@@ -1266,7 +1281,7 @@ class Handler(BaseHTTPRequestHandler):
                  listeningByChapter={str(n):sum(x["chapter"]==n for x in LISTEN_CARDS) for n in range(1,21)},
                  printedUnits=20,reviewUnits=[5,10,15,20],pdfOffset=2,
                  pagePrecision="approximate",source="Verified printed unit start/end and pedagogy from uploaded Patakis PDF; independently authored practice questions, approximate within-unit page anchors"),new,uid)
-        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
         file=files.get(path)
         if file:
             b=(ROOT/file).read_bytes()
@@ -1278,7 +1293,7 @@ class Handler(BaseHTTPRequestHandler):
         path=request_path(self.path)
         if path not in ("/api/answer","/api/leaderboard/join","/api/leaderboard/leave",
                          "/api/auth/register","/api/auth/login","/api/auth/logout",
-                         "/api/vocab/answer","/api/session"):
+                         "/api/vocab/answer","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
             self.close_connection=True  # Avoid leaving unread POST bodies on reused HTTP/1.1 connections.
             return self.send_json(404,{"error":"not found"})
         if self.headers.get("Origin") != ORIGIN:
@@ -1315,6 +1330,14 @@ class Handler(BaseHTTPRequestHandler):
             if path=="/api/session":
                 with conn() as db:result=_lesson_sync.action(db,uid,body)
                 return self.send_json(200,result,new,uid)
+            if path in ("/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
+                language=body.get("lang","ru")
+                with conn() as db:
+                    if path.endswith("/anki"):response=_tracks.anki_action(db,uid,language,body)
+                    elif path.endswith("/route"):response=_tracks.route_action(db,uid,language,body)
+                    elif path.endswith("/likes"):response=_games.likes_action(db,uid,language,body)
+                    else:response=_games.store_action(db,uid,language,body)
+                return self.send_json(200,response,new,uid)
             if path=="/api/vocab/answer":
                 with conn() as db:return self.send_json(200,vocab.answer(db,uid,body),new,uid)
             if path in ("/api/leaderboard/join","/api/leaderboard/leave"):
@@ -1329,8 +1352,8 @@ class Handler(BaseHTTPRequestHandler):
         except (ValueError,json.JSONDecodeError) as error:
             self.close_connection=True
             reason=str(error)
-            status=429 if reason=="rate_limited" else 409 if reason in ("nickname_taken","already_registered","session_conflict") else 401 if reason=="invalid_credentials" else 400
-            return self.send_json(status,{"error":reason if reason in ("nickname_invalid","nickname_taken","already_registered","invalid_credentials","rate_limited","session_conflict") else "invalid request"})
+            status=429 if reason=="rate_limited" else 409 if reason in ("nickname_taken","already_registered","session_conflict","stale_track") else 401 if reason=="invalid_credentials" else 400
+            return self.send_json(status,{"error":reason if reason in ("nickname_invalid","nickname_taken","already_registered","invalid_credentials","rate_limited","session_conflict","stale_track") else "invalid request"})
         except Exception:
             self.close_connection=True
             return self.send_json(500,{"error":"write failed"})

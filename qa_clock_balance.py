@@ -53,7 +53,7 @@ with tempfile.TemporaryDirectory() as td:
         assert cards and all(c["kind"]!="clock" for c in cards)
         random.seed(seed)
         pages=server.make_quiz("new",{"scope":["pages"],"from":["1"],"to":["79"],
-            "types":[ALL_KIN],"lang":["ru"],"count":["60"]})["questions"]
+            "types":[ALL_KINDS],"lang":["ru"],"count":["60"]})["questions"]
         assert len(pages)==60 and sum(c["kind"]=="clock" for c in pages)<=6
 
     # If a small selected range cannot supply enough non-clock questions,

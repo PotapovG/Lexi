@@ -403,3 +403,45 @@ button,select,input{touch-action:manipulation}
 .feedback .clock-result{margin:14px 0 0;padding:10px 14px;background:#132d3c;
  border:1px solid #42556b;border-radius:10px;color:#e8eef6;font-size:14px;line-height:1.6}
 @media(max-width:760px){.clock-face{max-width:235px;margin:-8px auto 18px}}
+
+/* Independent route / 30-word mastery tracks: no timed quiz CSS reused. */
+.tracks-panel{max-width:1040px;margin:0 auto}
+.track-mode-row{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 25px}
+.track-button{font-weight:650;max-width:100%;white-space:normal}
+.track-mode-row .active{border-color:var(--accent);background:#263b4b;color:#f3d89d}
+.track-content{min-height:220px}
+.track-eyebrow{color:var(--accent);letter-spacing:.08em;font-size:12px;font-weight:700;margin:12px 0}
+.track-meta,.track-small{color:#acbed1;font-size:13px;line-height:1.65}
+.track-word-card{background:linear-gradient(145deg,#172b40,#0b192b);
+ border:1px solid #40526b;border-radius:18px;min-height:250px;
+ display:flex;align-items:center;flex-direction:column;justify-content:center;
+ gap:12px;text-align:center;padding:29px 19px;margin:16px 0}
+.track-greek{font:clamp(33px,4.5vw,49px)/1.24 Georgia,serif;color:#f2f1e9;margin:9px 0}
+.track-meaning{font-size:20px;color:#e6cb8b;margin:4px 0}
+.track-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;margin:14px 0}
+.track-choices .track-button{width:100%;min-height:70px;text-align:start;font-size:15px}
+.track-success{color:#8de0b7!important;font-weight:700}
+.track-error{color:#f1a7a7!important;font-weight:650}
+.track-message{padding:12px 16px;border:1px solid #536378;border-radius:9px;background:#11273b}
+.track-message.bad{color:#f2b0b0}
+.track-subtitle{font:28px Georgia,serif;margin:8px 0 10px}
+.route-bus-wrap{display:flex;align-items:center;gap:15px;font-size:28px;margin:20px 0}
+.route-bus{background:#e9bd67;color:#17243c;padding:4px 17px;border-radius:10px;font-size:29px}
+.route-map{overflow-x:auto;border:1px solid #40576e;padding:10px;background:#102239;border-radius:16px;margin:12px 0 21px}
+.route-map svg{width:610px;max-width:none;height:auto;display:block}
+.route-answer-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.route-field{display:flex;flex-direction:column;gap:7px;padding:11px 13px;border:1px solid #3b516a;border-radius:12px;min-width:0}
+.route-prefix{font-size:17px;color:#edcf8c;direction:ltr}
+.route-field input{color:#f0f5f8;border:1px solid #576b80;background:#0e2032;outline-offset:3px;
+ border-radius:8px;font-size:17px;padding:10px 12px;min-height:48px;max-width:100%;font-family:inherit}
+.route-field input:focus{outline:2px solid #deb96e}
+.route-field input.track-invalid{border-color:#e88484}
+.route-answer-form>button,.track-route-feedback{grid-column:1/-1}
+.track-route-feedback{line-height:1.7;overflow-wrap:anywhere}
+.track-greek-summary{color:#e7d292;line-height:1.7}
+@media(max-width:750px){
+ .tracks-panel{padding:21px 15px}
+ .route-answer-form,.track-choices{grid-template-columns:1fr}
+ .track-word-card{min-height:230px;padding:20px 12px}
+ .route-map svg{width:550px}
+}
