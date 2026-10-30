@@ -1,22 +1,24 @@
-# Lexi UI policy — board launch 2026-10-30
+# Lexi UI policy — eight-lesson course (2026-10-30)
 
-## Primary: game board
-- Game board is the default home for new and returning students.
-- One primary move, plus a single chapter limit (1–20). Eight quest families per chapter: textbook, A1 lexicon, verbs, grammar, listening, dialogues, clocks, real-life scenarios.
-- Server enforces syllabus stage gates, scores with reviewed existing logic, and saves per-account board progress in SQLite independently of legacy quiz sessions.
-- Incorrect answers never advance a move. An unverified free-text answer may be skipped without an invented grammar penalty.
-- The optional start-at-selected-chapter route skips prior nodes without granting false mastery.
+## Default experience: guided lessons
 
-## Classic interface: DEPRECATED but functional
-- The original practice-view, page/chapter selections, task filters, session duration, adaptive mode, SRS, timer and answer history remain working.
-- Classic is always reachable through the visible navigation toggle and clearly labelled Deprecated, with an easy return to board.
-- Do not introduce board-only quest types, story mechanics, new game modes, or XP controls into Classic. Label such capabilities unavailable in Classic and link to the board rather than adding inert controls.
-- Shared security changes, data protection, grading correctness and bug fixes must still be applied in both clients.
-- Do not change original card IDs or delete user accounts, progress, weak/SRS history, or ongoing legacy sessions.
-- Maintain independent automated integration tests for both interfaces.
+- The default home is an eight-lesson list for each studied textbook chapter.
+- Each lesson consists of a persistent sequence of 10–14 tasks (normally ~5–10 minutes), not a single quiz question. The next lesson remains server-locked and its title/content is not disclosed until the previous lesson completes.
+- Eight completed lessons close a chapter round; the student sees answers, errors, accuracy, active minutes and wall-clock elapsed time, plus their learning backlog. A completed-round acknowledgment unlocks the next round.
+- Weaknesses from incorrect answers are recorded in account-owned storage and up to two are recalled in future lessons. A correct answer within the original failed lesson does not immediately clear scheduled review.
+- Server verifies answers and account ownership, protects revisions against replay and preserves lesson checkpoints across devices and sessions.
+- Optional start-at-selected-chapter skips earlier lessons without falsely granting mastery.
+- V1 single-question board progress is archived verbatim on migration; it does not become credit for multi-question lessons. Legacy answer history stays intact.
 
-## Learning content and audio
-- The textbook contains 20 chapters. Do not advertise nonexistent chapters.
-- A1 supplementary vocabulary is editorial enrichment, not a claim about publisher pages.
-- Pre-generated validated Pocket TTS WAV only. No browser speech synthesis, runtime TTS, or unsupported audio.
-- Anki, Greek Life, themed vocabulary, review and stats remain accessible as specialist study areas while the game board provides the default guided sequence.
+## Classic interface: deprecated but fully functional
+
+- The prior Classic interface, including filters, duration, timer, weak mode and SRS, remains available with a visible Deprecated label and an easy return to the new course.
+- Existing Classic quiz endpoints, session state, user progress, card IDs and scoring remain functional. Shared security or correctness fixes still apply.
+- New course-specific features, future lesson types, stats and game mechanics are not backported into Classic. Explain their unavailability there instead of adding inert controls.
+- Keep independent API, regression, mobile and classic timed quiz tests in the release gate.
+
+## Other modes / data
+
+- Anki, Greek Life, topical vocabulary and leaderboard remain accessible under More without affecting the main lesson flow.
+- Audio is verified pre-generated Pocket Greek WAV only; no browser TTS.
+- Chapters are 1–20 per the printed textbook; A1 supplemental vocabulary is editorial enrichment, not a precise publisher quotation.

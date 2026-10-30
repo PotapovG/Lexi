@@ -1359,7 +1359,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(200,{"loggedOut":True},True,secrets.token_hex(16))
             if path=="/api/board":
                 with conn() as db:
-                    result=_board.board_action(db,uid,body.get("lang","ru"),body,mark)
+                    result=_board.board_action(db,uid,body.get("lang","ru"),body,mark,
+                        (PRACTICE_ALL+LISTEN_CARDS,vocab.VOCAB,format_question,
+                         _grammar_guard.milestone,LISTENING_ENABLED,
+                         lambda gr:_word_audio.lookup(gr,listening)))
                 return self.send_json(200,result,new,uid)
             if path=="/api/session":
                 with conn() as db:result=_lesson_sync.action(db,uid,body)
