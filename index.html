@@ -4,9 +4,10 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1220">
 <title>Λέξη — Greek practice</title>
-<link rel="stylesheet" href="/greek/styles.css?v=39">
+<link rel="stylesheet" href="/greek/styles.css?v=40">
 <script src="/greek/greek_word_audio.js?v=4" defer></script>
-<script src="/greek/app.js?v=45" defer></script>
+<script src="/greek/app.js?v=46" defer></script>
+<script src="/greek/board.js?v=1" defer></script>
 <script src="/greek/tracks.js?v=4" defer></script>
 <script src="/greek/life_art.js?v=1" defer></script>
 <script src="/greek/life.js?v=3" defer></script>
@@ -68,14 +69,20 @@
    </div>
   </section>
   <nav class="tabs" aria-label="Sections">
-   <button class="tab active" data-page="practice" aria-current="page" data-i18n="practice">Занятие</button>
-   <button class="tab" data-page="vocab" data-i18n="vocabTab">Словарь A1/A2</button>
-   <button class="tab" data-page="tracks" data-i18n="tracksTab">Карточки · 30</button>
-   <button class="tab" data-page="life" data-i18n="lifeTab">Ελληνική Ζωή</button>
-   <button class="tab" data-page="weak"><span data-i18n="myMistakes">Мои ошибки</span> <span class="bubble" id="weak-bubble">0</span></button>
-   <button class="tab" data-page="stats" data-i18n="statistics">Статистика</button>
-   <button class="tab" data-page="leaderboard" data-i18n="leaders">Рейтинг</button>
-  </nav>
+   <button class="tab active" data-page="board" aria-current="page">🎲 Путь обучения</button>
+   <button class="tab" data-page="practice" id="legacy-practice-tab">Классика · Deprecated</button>
+   <details class="tab-more" id="additional-modes">
+    <summary id="additional-modes-label">Другие режимы <span aria-hidden="true">⌄</span></summary>
+    <div class="tab-more-menu">
+     <button class="tab" data-page="vocab" data-i18n="vocabTab">Словарь A1/A2</button>
+     <button class="tab" data-page="tracks" data-i18n="tracksTab">Карточки · 30</button>
+     <button class="tab" data-page="life" data-i18n="lifeTab">Ελληνική Ζωή</button>
+     <button class="tab" data-page="weak"><span data-i18n="myMistakes">Мои ошибки</span> <span class="bubble" id="weak-bubble">0</span></button>
+     <button class="tab" data-page="stats" data-i18n="statistics">Статистика</button>
+     <button class="tab" data-page="leaderboard" data-i18n="leaders">Рейтинг</button>
+    </div>
+   </details>
+  </nav>v>
   <div class="student-identity" id="student-identity">
     <span id="student-avatar" class="identity-avatar">🎓</span>
     <div class="identity-name"><span class="eyebrow" data-i18n="studentName">Твой учебный псевдоним</span><strong id="student-nickname">...</strong></div>
@@ -84,8 +91,15 @@
       <button type="button" class="text-button" id="account-logout" data-i18n="authExit">Выйти</button>
     </div>
   </div>
+  <section id="board-view">
+    <div id="board-map" role="region" aria-label="Игровое поле"></div>
+    <div id="board-play" hidden role="region" aria-label="Задание на игровом поле"></div>
+    <p class="board-status" id="board-message" role="status" aria-live="polite" hidden></p>
+  </section>
   <section id="practice-view">
    <div id="setup" class="panel">
+    <div class="legacy-notice" role="note"><strong>Классический интерфейс · Deprecated</strong>
+    <p>Этот режим сохранён со всеми прежними настройками и остаётся рабочим. Новые игровые механики доступны только на <button type="button" id="legacy-switch-board" class="text-button">игровом поле ↗</button>. В классике они недоступны.</p></div>
     <div class="panel-heading"><span class="eyebrow" data-i18n="settings">НАСТРОЙКА ЗАНЯТИЯ</span><h2 data-i18n="whatPractice">Что учим сегодня?</h2>
       <p data-i18n="chooseInfo">Можно выбрать страницы или конкретные главы. В каждом вопросе — восемь вариантов, перевод всегда в обе стороны.</p>
     </div>

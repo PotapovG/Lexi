@@ -868,7 +868,8 @@
       localStorage.setItem(ACCESS_CODE_KEY,savedCode);showAccountCode(savedCode);
       state.loggedIn=true;state.profile={registered:true,nickname:result.nickname,avatar:"🎓"};
       txt("student-nickname",result.nickname);await refreshStats();
-      if(login){show("auth-gate",false);setAuthMode("register");await restoreActiveSession();}
+      if(login){show("auth-gate",false);setAuthMode("register");await restoreActiveSession();
+        if(!state.deadline)setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");}
       else{
         txt("auth-created-code",savedCode);
         show("auth-modes",false);show("auth-form",false);show("auth-success",true);
@@ -1021,7 +1022,19 @@
     finally{button.disabled=false;}
   }
   function setPage(page){
-    for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life"])show(id+"-view",id===page);
+    for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life","board"])show(id+"-view",id===page);
+    const extra=$("additional-modes");
+    if(extra){
+      extra.open=false;
+      const more=$("additional-modes-label");
+      if(more){
+        const section=["board","practice"].includes(page)?"":
+          (document.querySelector('.tab[data-page="'+page+'"]')?.innerText||"");
+        const locale=$("lang").value;
+        more.textContent=(locale==="ru"?"Другие режимы":"More")+
+          (section?" · "+section:"")+" ⌄";
+      }
+    }
     document.querySelectorAll(".tab").forEach(button=>{
       const active=button.dataset.page===page;
       button.classList.toggle("active",active);
@@ -1030,6 +1043,7 @@
     if(page==="leaderboard")refreshLeaderboard();
     else if(page==="vocab")window.lexiVocab?.onOpen();
     else if(page==="life")window.lexiLife?.onOpen();
+    else if(page==="board")window.lexiBoard?.onOpen();
     else if(page==="tracks")window.lexiTracks?.onOpen();
     else if(page!=="practice")refreshStats();
   }
@@ -1815,7 +1829,10 @@
     $("mode-register").addEventListener("click",()=>setAuthMode("register"));
     $("mode-login").addEventListener("click",()=>setAuthMode("login"));
     $("auth-form").addEventListener("submit",submitAuth);
-    $("auth-enter").addEventListener("click",()=>show("auth-gate",false));
+    $("auth-enter").addEventListener("click",()=>{
+      show("auth-gate",false);
+      setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");
+    });
     $("auth-copy").addEventListener("click",copyAccessCode);
     $("account-copy").addEventListener("click",copyAccessCode);
     $("account-logout").addEventListener("click",signOut);
@@ -1828,7 +1845,8 @@
     $("verb-max-unit").addEventListener("change",()=>{renderVerbReference();renderVerbStageSummary();saveSettings();});
     $("verb-group-options").addEventListener("change",()=>{renderVerbStageSummary();saveSettings();});
     $("level-options").addEventListener("change",()=>{renderVerbReference();renderVerbStageSummary();saveSettings();});
-    $("lang").addEventListener("change",()=>{updateLanguage();saveSettings();});
+    $("lang").addEventListener("change",()=>{updateLanguage();saveSettings();
+      if(!$("board-view").hidden)window.lexiBoard?.onOpen();});
     $("auth-lang").addEventListener("change",()=>{
       $("lang").value=$("auth-lang").value;updateLanguage();saveSettings();
     });
@@ -1840,7 +1858,14 @@
     };
     $("all-chapters").addEventListener("click",()=>{$("chapter-grid").querySelectorAll('input').forEach(x=>x.checked=true);persistChapterChecks();});
     $("clear-chapters").addEventListener("click",()=>{$("chapter-grid").querySelectorAll('input').forEach(x=>x.checked=false);persistChapterChecks();});
-    document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setPage(b.dataset.page)));
+    document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+      if(b.dataset.page==="practice"||b.dataset.page==="board")
+        localStorage.setItem("lexi-home-interface",b.dataset.page);
+      setPage(b.dataset.page);
+    }));
+    $("legacy-switch-board").addEventListener("click",()=>{
+      localStorage.setItem("lexi-home-interface","board");setPage("board");
+    });
     $("leader-toggle").addEventListener("click",toggleLeaderboard);
     $("start").addEventListener("click",()=>startQuiz(false));
     $("weak-start").addEventListener("click",()=>startQuiz(true));
@@ -1877,6 +1902,8 @@
     updateLanguage();
     await loadProfile();
     await restoreActiveSession();
+    if(!state.deadline)
+      setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");
   }
   init();
 })();

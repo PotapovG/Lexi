@@ -20,6 +20,7 @@ import vocab_lessons as vocab
 import study_tracks as _tracks
 import practice_games as _games
 import greek_life as _life
+import board_course as _board
 import verb_phrase
 import personalized
 import accepted_glosses
@@ -1007,7 +1008,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith('/pronunciation/'):
             return self.send_pronunciation(path[len('/pronunciation/'):],head=True)
         files = {"/":"index.html","/index.html":"index.html",
-                 "/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+                 "/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
         filename = files.get(path)
         if filename:
             file = ROOT / filename
@@ -1189,8 +1190,17 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200,dict(registered=bool(account),
                  nickname=account["nickname"] if account else None,
                  avatar=pseudonym(uid)["avatar"] if account else None),new,token)
-        if path in ("/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene") and not account:
+        if path in ("/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene","/api/board") and not account:
             return self.send_json(401,{"error":"login_required"},new,token)
+        if path=="/api/board":
+            qp=parse_qs(urlparse(self.path).query)
+            language=qp.get("lang",["ru"])[0]
+            with conn() as db:
+                result=_board.board_get(db,uid,language,
+                    PRACTICE_ALL+LISTEN_CARDS,vocab.VOCAB,format_question,
+                    _grammar_guard.milestone,LISTENING_ENABLED,
+                    lambda gr:_word_audio.lookup(gr,listening))
+            return self.send_json(200,result,new,uid)
         if path=="/api/session":
             with conn() as db:result=_lesson_sync.read(db,uid)
             return self.send_json(200,result,new,uid)
@@ -1301,7 +1311,7 @@ class Handler(BaseHTTPRequestHandler):
                  listeningByChapter={str(n):sum(x["chapter"]==n for x in LISTEN_CARDS) for n in range(1,21)},
                  printedUnits=20,reviewUnits=[5,10,15,20],pdfOffset=2,
                  pagePrecision="approximate",source="Verified printed unit start/end and pedagogy from uploaded Patakis PDF; independently authored practice questions, approximate within-unit page anchors"),new,uid)
-        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
         file=files.get(path)
         if file:
             b=(ROOT/file).read_bytes()
@@ -1313,7 +1323,7 @@ class Handler(BaseHTTPRequestHandler):
         path=request_path(self.path)
         if path not in ("/api/answer","/api/leaderboard/join","/api/leaderboard/leave",
                          "/api/auth/register","/api/auth/login","/api/auth/logout",
-                         "/api/vocab/answer","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene"):
+                         "/api/vocab/answer","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene","/api/board"):
             self.close_connection=True  # Avoid leaving unread POST bodies on reused HTTP/1.1 connections.
             return self.send_json(404,{"error":"not found"})
         if self.headers.get("Origin") != ORIGIN:
@@ -1347,6 +1357,10 @@ class Handler(BaseHTTPRequestHandler):
             if path=="/api/auth/logout":
                 with conn() as db:auth.logout(db,token)
                 return self.send_json(200,{"loggedOut":True},True,secrets.token_hex(16))
+            if path=="/api/board":
+                with conn() as db:
+                    result=_board.board_action(db,uid,body.get("lang","ru"),body,mark)
+                return self.send_json(200,result,new,uid)
             if path=="/api/session":
                 with conn() as db:result=_lesson_sync.action(db,uid,body)
                 return self.send_json(200,result,new,uid)
