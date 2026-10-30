@@ -7,7 +7,7 @@
     ru:{title:"Твой путь в греческом",sub:"Восемь уроков на круг. Следующий откроется после предыдущего.",
       chapter:"Изучено до главы",round:"Круг",lesson:"Урок",locked:"Неизвестный урок",
       complete:"Пройден",now:"Текущий урок",start:"Начать урок",resume:"Продолжить урок",
-      next:"Следующее задание",toLessons:"К списку уроков",done:"Урок завершён!",
+      next:"Дальше",finishLesson:"Завершить урок",yourAnswer:"Твой ответ",toLessons:"К списку уроков",done:"Урок завершён!",
       summary:"Итоги круга",continueRound:"Начать следующий круг",allDone:"Доступные главы пройдены",
       question:"Задание",listen:"▶ Слушать",slow:"0,8× Медленнее",check:"Ответить",
       correct:"Верно!",wrong:"Есть ошибка. Попробуй исправить.",uncertain:"Вариант не подтверждён — без штрафа.",
@@ -25,7 +25,7 @@
     en:{title:"Your Greek lessons",sub:"Eight lessons in each round. The next stays hidden until you finish the current one.",
       chapter:"Studied through chapter",round:"Round",lesson:"Lesson",locked:"Unknown lesson",
       complete:"Complete",now:"Current lesson",start:"Start lesson",resume:"Continue lesson",
-      next:"Next question",toLessons:"Back to lessons",done:"Lesson completed!",
+      next:"Next",finishLesson:"Finish lesson",yourAnswer:"Your answer",toLessons:"Back to lessons",done:"Lesson completed!",
       summary:"Round results",continueRound:"Start next round",allDone:"All available chapters complete",
       question:"Question",listen:"▶ Listen",slow:"0.8× Slower",check:"Submit",
       correct:"Correct!",wrong:"Not quite. Try again.",uncertain:"Unverified alternative — no penalty.",
@@ -272,12 +272,19 @@
     }
     holder.append(wrap);
   }
-  function finishFeedback(parent,result,choices){
-    // Wrong answers must remain retryable. Only a correct, completed
-    // question is locked while its feedback is visible.
-    feedbackVisible=Boolean(result.correct);parent.replaceChildren();
+  function finishFeedback(parent,result,choices,selected){
+    // A submitted response is final regardless of correctness. Remove every
+    // option / text input immediately; only Next or Finish lesson remains.
+    feedbackVisible=true;choices.replaceChildren();parent.replaceChildren();
+    // Once the answer is revealed, the learner cannot change it or use
+    // another control to resubmit. The only action is Next / Finish lesson.
+    const play=$("board-play");
+    for(const element of play.querySelectorAll(".lesson-play-top button, .lesson-audio-row"))
+      element.hidden=true;
     parent.append(node("strong",result.correct?t("correct"):result.unverified?t("uncertain"):t("wrong"),
       result.correct?"lesson-correct":result.unverified?"lesson-uncertain":"lesson-incorrect"));
+    if(!result.correct&&selected)
+      parent.append(node("p",t("yourAnswer")+": "+selected,"lesson-muted"));
     if(result.explanation)parent.append(node("p",t("explanation")+": "+result.explanation,"lesson-explanation"));
     if(result.answer)parent.append(node("p",t("correction")+": "+result.answer,"lesson-correct-answer"));
     if(result.translation||result.clozeTranslation)
@@ -287,14 +294,9 @@
       parent.append(node("h3",t("done"),"lesson-card-title"));
       parent.append(node("p",t("time")+": "+fmt(l.activeSeconds)+" · "+t("attempts")+": "+l.attempts+
         " · "+t("errors")+": "+l.errors,"lesson-lesson-total"));
-      choices.replaceChildren();
-      parent.append(button(t("toLessons"),renderList,"primary lesson-primary"));
-    }else if(result.correct){
-      choices.replaceChildren();
+      parent.append(button(t("finishLesson"),renderList,"primary lesson-primary"));
+    }else{
       parent.append(button(t("next"),renderLesson,"primary lesson-primary"));
-    }else if(result.unverified){
-      parent.append(button(t("skip"),()=>sendAction({action:"skip",revision:data.revision,
-        lessonIndex:data.lesson.index,questionId:data.lesson.question.id},true),"secondary lesson-secondary"));
     }
   }
   async function submitAnswer(selected,choices,feedback){
@@ -306,7 +308,7 @@
       const response=await request({action:"answer",revision:data.revision,
         lessonIndex:lesson.index,questionId:q.id,selected});
       data=response;
-      finishFeedback(feedback,response.feedback,choices);
+      finishFeedback(feedback,response.feedback,choices,selected);
     }catch(e){
       status(t("fail")+e.message,true);
     }finally{working=false;}

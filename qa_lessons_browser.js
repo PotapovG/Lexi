@@ -30,10 +30,16 @@ const {chromium}=require("/app/qa_deps/node_modules/playwright");
   const wrong=labels.findIndex((x,i)=>i!==correct);
   await choices.nth(wrong).click();
   await page.getByText("Есть ошибка. Попробуй исправить.",{exact:false}).waitFor();
-  if(!(await page.locator(".lesson-progress-label").innerText()).includes("Задание 1"))
-    throw Error("Wrong answer advanced lesson");
-  await choices.nth(correct).click();
-  await page.getByText("Верно!",{exact:true}).waitFor();
+  if(await page.locator(".lesson-option").count()!==0)
+    throw Error("Incorrect answer options remained available after revealing solution");
+  if(await page.locator(".lesson-feedback button").count()!==1)
+    throw Error("Answer not finalized to a single navigation button");
+  if((await page.locator(".lesson-feedback button").innerText())!=="Дальше")
+    throw Error("Expected only Next after wrong answer");
+  if(await page.locator(".lesson-play-top button").isVisible())
+    throw Error("Back button still available while answer correction visible");
+  if(!await page.locator(".lesson-correct-answer").isVisible())
+    throw Error("Missing solution after wrong response");
   await page.locator(".lesson-feedback .lesson-primary").click();
   await page.locator(".lesson-progress-label").getByText("Задание 2",{exact:false}).waitFor();
   await page.locator(".lesson-play-top button").click();
@@ -64,7 +70,37 @@ const {chromium}=require("/app/qa_deps/node_modules/playwright");
     if(overflow>3)throw Error("Horizontal overflow "+width+" "+overflow);
   }
   if(errors.length)throw Error("Browser JavaScript errors "+JSON.stringify(errors));
-  console.log("PASS eight locked lessons, 14-question progress, mistake backlog, resume, Classic intact, mobile 320–1200px");
   await context.close();
+
+  // Last question failed: one Finish lesson control, not a leaked retry
+  // despite the server having finalized the lesson on that response.
+  const lastContext=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  await lastContext.addCookies([{name:"greek_session",value:process.env.QA_LAST_TOKEN,
+    url:"http://127.0.0.1:18632/greek/",httpOnly:true,secure:false,sameSite:"Lax"}]);
+  const lastPage=await lastContext.newPage();
+  await lastPage.goto("http://127.0.0.1:18632/greek/",{waitUntil:"networkidle"});
+  await lastPage.locator("#auth-gate").waitFor({state:"hidden",timeout:12000});
+  await lastPage.locator(".lesson-list-item.current .lesson-inline-start").click();
+  await lastPage.locator(".lesson-progress-label").getByText("Задание 14",{exact:false}).waitFor();
+  const lastOptions=lastPage.locator(".lesson-option");
+  const finalLabels=await lastOptions.allInnerTexts();
+  const lastWrongIndex=finalLabels.findIndex(x=>!x.endsWith(process.env.QA_LAST_CORRECT));
+  if(lastWrongIndex<0)throw Error("No wrong last answer offered");
+  await lastOptions.nth(lastWrongIndex).click();
+  await lastPage.getByText("Есть ошибка. Попробуй исправить.",{exact:false}).waitFor();
+  if(await lastPage.locator(".lesson-option").count())
+    throw Error("Last question remained answerable after wrong response");
+  if(await lastPage.locator(".lesson-feedback button").count()!==1)
+    throw Error("Expected exactly one lesson completion button");
+  if((await lastPage.locator(".lesson-feedback button").innerText())!=="Завершить урок")
+    throw Error("Expected Finish lesson after wrong FINAL answer");
+  if(!await lastPage.getByText("Ошибки: 1",{exact:false}).isVisible())
+    throw Error("Final wrong answer not counted");
+  await lastPage.locator(".lesson-feedback button").click();
+  await lastPage.locator(".lesson-list-item.completed").first().waitFor();
+  if(await lastPage.locator(".lesson-review-count").innerText()!=="1")
+    throw Error("Final wrong question not in later-review backlog");
+  await lastContext.close();
+  console.log("PASS wrong first/final answers immediately finalized with single Next/Finish, backlog, Classic intact, mobile 320–1200px");
  }finally{await browser.close();}
 })().catch(e=>{console.error("FAIL "+e.stack);process.exitCode=1});

@@ -53,40 +53,51 @@ with tempfile.TemporaryDirectory() as td:
                for x in started["nodes"][1:])
     assert get()["lesson"]["question"]==started["lesson"]["question"]
 
-    # A wrong option creates one durable weakness, without advancing the
-    # lesson. Correcting the same question does not suppress future review.
+    # The FIRST submitted answer is final. A wrong answer advances
+    # immediately, remains wrong in stats and enters the long-term backlog.
     q=started["lesson"]["question"]
     wrong=next(o for o in q["choices"] if o!=correct(q))
     failed=action(dict(action="answer",revision=started["revision"],
                        lessonIndex=0,questionId=q["id"],selected=wrong))
-    assert failed["lesson"]["at"]==0 and failed["lesson"]["errors"]==1
+    assert failed["feedback"]["correct"] is False
+    assert failed["lesson"]["at"]==1 and failed["lesson"]["errors"]==1
+    assert failed["lesson"]["attempts"]==1
     assert failed["backlog"]["due"]==1 and failed["backlog"]["items"][0]["errors"]==1
     assert failed["roundStats"]["lessonsCompleted"]==0
+    assert get()["lesson"]["question"]["id"]!=q["id"]
+    # Revealed correct answer cannot be resubmitted for free credit,
+    # even with the new revision: the current question id changed.
+    try:
+        action(dict(action="answer",revision=failed["revision"],
+                    lessonIndex=0,questionId=q["id"],selected=correct(q)))
+        raise AssertionError("revealed correct option accepted")
+    except ValueError as ex:assert str(ex)=="stale_track"
+    try:
+        action(dict(action="answer",revision=started["revision"],
+                    lessonIndex=0,questionId=q["id"],selected=correct(q)))
+        raise AssertionError("replayed answer accepted")
+    except ValueError as ex:assert str(ex)=="stale_track"
     with server.conn() as db:
         saved,_,_=board._load(db,"player")
         saved["active"]["lastAt"]=(dt.datetime.now(dt.timezone.utc)-dt.timedelta(seconds=50)).isoformat(timespec="seconds")
         tracks._save(db,"player","board","shared",saved,failed["revision"])
     failed=get()
+    next_q=failed["lesson"]["question"]
     passed=action(dict(action="answer",revision=failed["revision"],
-                       lessonIndex=0,questionId=q["id"],selected=correct(q)))
-    assert passed["lesson"]["at"]==1 and passed["lesson"]["activeSeconds"]>=45
-    assert passed["backlog"]["due"]==1 # review is genuinely scheduled
-    try:
-        action(dict(action="answer",revision=failed["revision"],
-                    lessonIndex=0,questionId=q["id"],selected=correct(q)))
-        raise AssertionError("replayed answer accepted")
-    except ValueError as ex:assert str(ex)=="stale_track"
+                       lessonIndex=0,questionId=next_q["id"],selected=correct(next_q)))
+    assert passed["lesson"]["at"]==2 and passed["lesson"]["activeSeconds"]>=45
+    assert passed["backlog"]["due"]==1 # review scheduled in later lesson
 
     # Pause, resume and complete all eight full lessons in the first round.
     paused=action(dict(action="pause",revision=passed["revision"]))
     assert paused["lesson"]["paused"] is True
     saved=get()
     assert saved["lesson"]["paused"]
-    assert saved["lesson"]["at"]==1
+    assert saved["lesson"]["at"]==2
     resumed=action(dict(action="lesson_start",revision=saved["revision"]))
     assert not resumed["lesson"]["paused"]
 
-    attempts=1
+    attempts=2
     completed_lengths=[]
     while True:
         state=get()
@@ -96,11 +107,18 @@ with tempfile.TemporaryDirectory() as td:
         lesson=state["lesson"];q=lesson["question"]
         assert lesson["count"]>=10
         assert lesson["index"]==state["position"]
+        # The final question of lesson 1 is intentionally wrong: it must
+        # *still* finalize that lesson and expose Finish lesson in the UI.
+        fail_final=(lesson["index"]==0 and lesson["at"]==lesson["count"]-1)
+        selected=(next(x for x in q["choices"] if x!=correct(q))
+                  if fail_final else correct(q))
         result=action(dict(action="answer",revision=state["revision"],
-                  lessonIndex=lesson["index"],questionId=q["id"],selected=correct(q)))
-        assert result["feedback"]["correct"],(lesson["index"],q["id"],result["feedback"])
+                  lessonIndex=lesson["index"],questionId=q["id"],selected=selected))
+        assert result["feedback"]["correct"] is (not fail_final),(lesson["index"],q["id"],result["feedback"])
         if result["feedback"].get("lessonComplete"):
             completed_lengths.append(result["feedback"]["lessonComplete"]["total"])
+            if fail_final:
+                assert result["lesson"] is None and result["position"]==1
         attempts+=1
         assert attempts<160
     assert len(completed_lengths)==8,completed_lengths
@@ -109,8 +127,8 @@ with tempfile.TemporaryDirectory() as td:
     assert state["roundStats"]["chapter"]==1
     assert state["roundStats"]["finished"]
     assert state["roundStats"]["lessonsCompleted"]==8
-    assert state["roundStats"]["errors"]==1
-    assert state["roundStats"]["attempts"]==sum(completed_lengths)+1
+    assert state["roundStats"]["errors"]==2
+    assert state["roundStats"]["attempts"]==sum(completed_lengths)
     assert state["roundStats"]["activeSeconds"]>=45
     assert len(state["roundStats"]["lessons"])==8
     assert state["nodes"][-1]["state"]=="completed"
@@ -124,7 +142,7 @@ with tempfile.TemporaryDirectory() as td:
     assert next_round["nodes"][0]["state"]=="current"
     assert all(x["state"]=="locked" and "name" not in x for x in next_round["nodes"][1:])
     assert next_round["totals"]["lessons"]==8
-    assert next_round["totals"]["errors"]==1
+    assert next_round["totals"]["errors"]==2
 
     # V1 1-question cell progress is archived, not magically converted into
     # lessons. Old account and legacy scorer records remain unchanged.
@@ -141,5 +159,5 @@ with tempfile.TemporaryDirectory() as td:
         assert db.execute("PRAGMA quick_check").fetchone()[0]=="ok"
 
 print("PASS eight 10–14-question lessons per round, locked titles, server-timed statistics")
-print("PASS durable misses/backlog, scheduled review, pause/resume, 8-lesson round report")
+print("PASS final wrong answer advances once; delayed review backlog, pause/resume, round report")
 print("PASS progression gates, replay resistance, optional honest jump, v1 archive migration")

@@ -5,7 +5,8 @@
 - The default home is an eight-lesson list for each studied textbook chapter.
 - Each lesson consists of a persistent sequence of 10–14 tasks (normally ~5–10 minutes), not a single quiz question. The next lesson remains server-locked and its title/content is not disclosed until the previous lesson completes.
 - Eight completed lessons close a chapter round; the student sees answers, errors, accuracy, active minutes and wall-clock elapsed time, plus their learning backlog. A completed-round acknowledgment unlocks the next round.
-- Weaknesses from incorrect answers are recorded in account-owned storage and up to two are recalled in future lessons. A correct answer within the original failed lesson does not immediately clear scheduled review.
+- **First submitted answer is final** for each lesson question, correct or incorrect. The UI immediately shows explanation and correct form, disables all answer inputs, and permits only Next (or Finish lesson on the last question). Retyping/choosing the revealed answer must never upgrade the grade.
+- Weaknesses from incorrect answers are recorded in account-owned storage and up to two are recalled in future lessons. A wrong answer still advances the lesson but never counts as correct; mastery is demonstrated only at a future scheduled review. Unverified free-text wording moves ahead without a false error penalty.
 - Server verifies answers and account ownership, protects revisions against replay and preserves lesson checkpoints across devices and sessions.
 - Optional start-at-selected-chapter skips earlier lessons without falsely granting mastery.
 - V1 single-question board progress is archived verbatim on migration; it does not become credit for multi-question lessons. Legacy answer history stays intact.

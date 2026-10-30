@@ -420,14 +420,24 @@ def board_action(db,uid,lang,body,scorer,materials=None):
                 feedback=scorer(uid,{"id":q["id"],"direction":q["direction"],"lang":q["lang"],
                               "selected":selected},injected_db=db)
                 s["canSkip"]=False
-            if not feedback.get("unverified"):
-                active["attempts"]+=1
+            # One submission = one finalized question. The learner sees the
+            # correction, then moves on with Next; repeating the just-shown
+            # correct option is not evidence of learning. Incorrect items
+            # enter the durable review backlog for a *later* lesson.
             if feedback["correct"]:
-                active["at"]+=1;active["correct"]+=1
+                active["attempts"]+=1
+                active["correct"]+=1
                 _review_success(s,q)
-            elif not feedback.get("unverified"):
+            elif feedback.get("unverified"):
+                # A creative phrasing may be valid Greek; neither score nor
+                # mistake debt is assigned to a verdict we cannot justify.
+                active["skips"]+=1
+            else:
+                active["attempts"]+=1
                 active["errors"]+=1
                 _record_error(s,q,active["chapter"])
+            active["at"]+=1
+            s["canSkip"]=False
         if active["at"]>=len(active["items"]):
             complete=dict(index=active["index"],chapter=active["chapter"],family=active["family"],
                           name=active["name"],attempts=active["attempts"],errors=active["errors"],
