@@ -1007,7 +1007,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith('/pronunciation/'):
             return self.send_pronunciation(path[len('/pronunciation/'):],head=True)
         files = {"/":"index.html","/index.html":"index.html",
-                 "/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/life.js":"life.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+                 "/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
         filename = files.get(path)
         if filename:
             file = ROOT / filename
@@ -1301,7 +1301,7 @@ class Handler(BaseHTTPRequestHandler):
                  listeningByChapter={str(n):sum(x["chapter"]==n for x in LISTEN_CARDS) for n in range(1,21)},
                  printedUnits=20,reviewUnits=[5,10,15,20],pdfOffset=2,
                  pagePrecision="approximate",source="Verified printed unit start/end and pedagogy from uploaded Patakis PDF; independently authored practice questions, approximate within-unit page anchors"),new,uid)
-        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/life.js":"life.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
         file=files.get(path)
         if file:
             b=(ROOT/file).read_bytes()
@@ -1353,7 +1353,13 @@ class Handler(BaseHTTPRequestHandler):
             if path in ("/api/life","/api/life/scene"):
                 language=body.get("lang","ru")
                 with conn() as db:
-                    response=(_life.update_settings(db,uid,language,body) if path=="/api/life" else _life.scene_answer(db,uid,language,body))
+                    response=(
+                        _life.skip_scene(db,uid,language,body)
+                        if path=="/api/life" and body.get("action")=="skip" else
+                        _life.update_settings(db,uid,language,body)
+                        if path=="/api/life" else
+                        _life.scene_answer(db,uid,language,body)
+                    )
                 return self.send_json(200,response,new,uid)
             if path in ("/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
                 language=body.get("lang","ru")

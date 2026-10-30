@@ -1,184 +1,250 @@
 "use strict";
 (() => {
+  // Greek Life is a guided adventure. Only one learner-facing preference:
+  // the last studied textbook chapter. Scenario order is account-adaptive.
   const $=id=>document.getElementById(id);
-  const messages={
+  const COPY={
     ru:{
-      scope:"Изучено до главы включительно",desc:"Применяй знакомые слова в реальных ситуациях. Доступные задания зависят от глав и твоего прогресса.",
-      recommended:"Подойдёт сейчас",guided:"С подсказкой",independent:"Самостоятельно",
-      start:"Попробовать ситуацию",answer:"Напиши ответ по-гречески",check:"Проверить",
-      right:"Верно! Фраза засчитана.",wrong:"Нужно исправить ответ.",
-      unverified:"Не уверен, что этот вариант неверен. Ошибка не засчитана.",
-      retry:"Попробуй ещё раз",back:"Выбрать другую ситуацию",correct:"Пример правильного ответа",
-      why:"Почему ответ не подошёл",meaning:"Перевод",progress:"Практика по аккаунту",
-      errors:"ошибок",completed:"правильных",need:"Доступно после главы",
-      all:"Сценарии по пройденным главам",later:"Необязательная подсказка",
-      unsupported:"Для этого варианта ответ не подтверждён. Сравни с проверенными фразами.",
-      noActivity:"Это задание откроется на более позднем этапе."
+      chapter:"Я дошёл до главы",intro:"Тренируй греческий так, как будто уже живёшь на Кипре.",
+      eyebrow:"ТВОЁ СЛЕДУЮЩЕЕ ПРИКЛЮЧЕНИЕ",play:"Продолжить приключение",resume:"Продолжить",
+      scene:"Ситуация",mission:"ТВОЯ ЗАДАЧА",guide:"Небольшая подсказка",type:"Напиши по-гречески",
+      check:"Ответить",good:"Отлично! Тебя поняли.",bad:"Почти! Попробуй исправить фразу.",
+      unsure:"Фраза может быть допустимой. Ошибку не засчитываем.",
+      explain:"Почему не подошло?",right:"Так можно сказать",mean:"Что это значит",
+      next:"Следующая ситуация",back:"На главную",progress:"Ситуаций освоено",
+      fresh:"Новая ситуация",returning:"Повторение знакомого",guided:"С подсказкой",
+      independent:"Без подсказок",loading:"Подбираем ситуацию…",
+      error:"Не удалось загрузить приключение",round:"Твой путь",
+      needsLanguage:"(перевод на английском)",notScored:"Неуверенный вариант не штрафуем — можно продолжить."
     },
     en:{
-      scope:"Studied up to chapter",desc:"Apply familiar words in everyday situations. Scenes are bounded by your chosen chapters and learning history.",
-      recommended:"Recommended for you",guided:"With a hint",independent:"Independent",
-      start:"Try this situation",answer:"Write the Greek answer",check:"Check",
-      right:"Correct! Your answer is accepted.",wrong:"Correct the answer to continue.",
-      unverified:"This alternative is not verified; no mistake is recorded.",
-      retry:"Try again",back:"Choose another scene",correct:"Reviewed correct answer",
-      why:"Why this answer did not fit",meaning:"Meaning",progress:"Your progress",
-      errors:"mistakes",completed:"correct",need:"Available after chapter",
-      all:"Situations from studied chapters",later:"Optional hint",
-      unsupported:"This alternative is not verified. Compare with the reviewed answers.",
-      noActivity:"This situation unlocks at a later learning stage."
+      chapter:"I've studied through chapter",intro:"Put your Greek to work in everyday situations.",
+      eyebrow:"YOUR NEXT ADVENTURE",play:"Continue the adventure",resume:"Continue",
+      scene:"Scene",mission:"YOUR MISSION",guide:"A helpful hint",type:"Write in Greek",
+      check:"Send reply",good:"Great! They understood you.",bad:"Almost! Try adjusting your phrase.",
+      unsure:"That may be valid Greek. No mistake is recorded.",
+      explain:"What needs adjusting?",right:"A natural way to say it",mean:"Meaning",
+      next:"Next scene",back:"Home",progress:"Scenes mastered",
+      fresh:"New scene",returning:"Practice again",guided:"With hints",
+      independent:"Without hints",loading:"Finding your next moment…",
+      error:"Couldn't open the adventure",round:"Your journey",
+      needsLanguage:"(English translation)",notScored:"This unverified answer won't count as a mistake."
     }
   };
+  const t=key=>(COPY[$("lang").value]||COPY.en)[key]||COPY.en[key]||key;
   const lang=()=>$("lang").value;
   const text=(tag,value,css)=>{
-    const el=document.createElement(tag);el.textContent=String(value||"");
-    if(css)el.className=css;return el;
+    const n=document.createElement(tag);n.textContent=String(value??"");
+    if(css)n.className=css;
+    return n;
   };
-  const button=(caption,action,css="secondary")=>{
-    const el=document.createElement("button");el.type="button";
-    el.className=css+" track-button";el.textContent=caption;
-    el.addEventListener("click",action);return el;
+  const button=(title,click,css)=>{
+    const n=document.createElement("button");n.type="button";
+    n.className=css||"primary life-button";n.textContent=title;
+    n.addEventListener("click",click);return n;
   };
-  const t=key=>(messages[lang()]||messages.en)[key]||messages.en[key]||key;
-  let overview=null,current=null,shownLang=null,busy=false;
   const root=()=>$("life-roleplay-content");
-  function notice(message,bad=false){
-    const node=$("life-message");node.hidden=!message;node.textContent=message||"";
-    node.className="track-message"+(bad?" bad":"");
+  const art=id=>{
+    const wrapper=document.createElement("div");wrapper.className="life-illustration";
+    if(window.LexiScenes)wrapper.append(window.LexiScenes.illustration(id));
+    return wrapper;
+  };
+  let overview=null,current=null,busy=false,activeMode="hub";
+  function notice(value,bad=false){
+    const n=$("life-message");n.hidden=!value;n.textContent=value||"";
+    n.className="track-message"+(bad?" bad":"");
   }
-  async function api(name,payload=null){
-    const query=payload?"":"?lang="+encodeURIComponent(lang())+(name.startsWith("scene:")?"&id="+encodeURIComponent(name.slice(6)):"");
-    const route=name.startsWith("scene:")?"scene":name;
-    const path=name==="life"?"/greek/api/life":"/greek/api/life/"+route;
-    const res=await fetch(path+query,{credentials:"same-origin",cache:"no-store",
-      ...(payload?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,lang:lang()})}:{})});
-    const body=await res.json().catch(()=>({}));
-    if(!res.ok)throw Error(body.error||"HTTP "+res.status);
+  async function api(kind,data){
+    const url=kind.startsWith("scene:")?"/greek/api/life/scene?id="+encodeURIComponent(kind.slice(6)):
+      kind==="life"?"/greek/api/life":"/greek/api/life/scene";
+    const params=data?"":"&lang="+encodeURIComponent(lang());
+    const final=url+(url.includes("?")?params:"?lang="+encodeURIComponent(lang()));
+    const response=await fetch(final,{credentials:"same-origin",cache:"no-store",
+      ...(data?{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({...data,lang:lang()})}:{})});
+    const body=await response.json().catch(()=>({}));
+    if(!response.ok)throw Error(body.error||"HTTP "+response.status);
     return body;
   }
-  function status(){
-    $("life-description").textContent=t("desc");
-    $("life-scope-label").textContent=t("scope");
-    $("life-max-chapter").value=String(overview.maxChapter);
-    $("life-progress-note").textContent=t("progress")+": "+overview.observations+
-      " · "+overview.masteredWords+" mastered words";
-    for(const [id,chapter] of [["route",6],["periptero",8],["likes",16]]){
-      const node=$("track-"+id+"-mode");node.hidden=overview.maxChapter<chapter;
-    }
-  }
-  function showRoleplay(){
+  function onlyHub(){
+    activeMode="hub";
     $("life-content").hidden=true;
     root().hidden=false;
-    $("life-roleplay-mode").classList.add("active");
-    ["route","periptero","likes"].forEach(x=>$("track-"+x+"-mode").classList.remove("active"));
-  }
-  function showSimulation(){
-    $("life-content").hidden=false;
-    root().hidden=true;
-    $("life-roleplay-mode").classList.remove("active");
     current=null;
-    notice("");
   }
-  function renderMenu(){
-    showRoleplay();
+  function backgroundScene(){
+    const scene=overview.nextAdventure;
+    if(!scene)return null;
+    return scene;
+  }
+  function heroHeader(scene){
+    const heading=document.createElement("div");heading.className="life-scene-head";
+    const label=text("span",t("eyebrow"),"life-quest-eyebrow");
+    heading.append(label);
+    heading.append(text("span",t(scene.difficulty==="independent"?"independent":"guided"),
+      "life-quest-difficulty"));
+    return heading;
+  }
+  function progress(row){
+    const box=document.createElement("div");box.className="life-progress";
+    const line=document.createElement("div");line.className="life-progress-line";
+    line.append(text("span",t("progress"),"life-progress-title"));
+    line.append(text("strong",overview.completedExperiences+" / "+overview.totalExperiences,
+      "life-progress-count"));
+    box.append(line);
+    const track=document.createElement("div");track.className="life-progress-track";
+    const fill=document.createElement("div");fill.className="life-progress-fill";
+    fill.style.width=(overview.totalExperiences?
+      Math.round(100*overview.completedExperiences/overview.totalExperiences):0)+"%";
+    track.append(fill);box.append(track);
+    return box;
+  }
+  function renderHub(){
+    onlyHub();
     const el=root();el.replaceChildren();
-    const available=overview.available.filter(x=>x.type==="roleplay");
-    el.append(text("h3",t("all"),"track-subtitle"));
-    const recommended=available.find(x=>x.id===overview.recommended);
-    if(recommended)el.append(text("p",t("recommended")+": "+recommended.name,"track-meta"));
-    const grid=document.createElement("div");grid.className="life-scenes";
-    available.forEach(scene=>{
-      const card=document.createElement("div");card.className="life-scene";
-      const title=text("strong",scene.name);card.append(title);
-      card.append(text("p",(lang()==="ru"?"Глава ":"Chapter ")+scene.chapter+
-         " · "+t(scene.difficulty)+" · "+scene.attempts+" "+t("progress"),"track-small"));
-      card.append(text("p",scene.errors+" "+t("errors")+" · "+scene.attempts+" attempts","track-small"));
-      card.append(button(t("start"),()=>loadScene(scene.id),"secondary"));
-      grid.append(card);
-    });
-    el.append(grid);
+    const scene=backgroundScene();
+    if(!scene)return;
+    const shell=document.createElement("div");shell.className="life-adventure-card";
+    shell.append(art(scene.id));
+    const bottom=document.createElement("div");bottom.className="life-adventure-info";
+    bottom.append(heroHeader(scene));
+    bottom.append(text("h3",scene.name,"life-adventure-title"));
+    bottom.append(text("p",t(scene.correct?"returning":"fresh")+" · "+
+      (lang()==="ru"?"Глава ":"Chapter ")+scene.chapter,"life-adventure-subtitle"));
+    bottom.append(button(t("play"),startRecommended,"primary life-continue"));
+    shell.append(bottom);el.append(shell);
+    el.append(progress(scene));
   }
-  async function loadScene(id){
-    if(busy)return;busy=true;notice("");
-    try{current=await api("scene:"+id);renderScene();}
-    catch(e){notice(e.message,true);}
-    finally{busy=false;}
-  }
-  function renderScene(){
-    showRoleplay();
-    const host=root();host.replaceChildren();
-    host.append(button(t("back"),renderMenu));
-    host.append(text("div",current.title+" · "+current.chapter,"track-eyebrow"));
-    host.append(text("h3",current.prompt,"life-prompt"));
-    if(current.promptLang!==lang())host.append(text("p","(EN)","track-small"));
-    if(current.hint)host.append(text("p",t("later")+": "+current.hint,"life-hint"));
-    const form=document.createElement("form");form.className="life-form";host.append(form);
+  function showTask(){
+    $("life-content").hidden=true;
+    root().hidden=false;
+    activeMode="scene";
+    const el=root();el.replaceChildren();
+    const wrapper=document.createElement("div");wrapper.className="life-task-card";
+    wrapper.append(art(current.id));
+    const task=document.createElement("div");task.className="life-task-body";
+    task.append(text("span",t("scene")+" "+current.chapter,"life-quest-eyebrow"));
+    task.append(text("div",t("mission"),"life-mission-label"));
+    task.append(text("h3",current.prompt,"life-task-prompt"));
+    if(current.promptLang!==lang())task.append(text("p",t("needsLanguage"),"life-muted"));
+    if(current.hint)task.append(text("div",t("guide")+": "+current.hint,"life-hint-strip"));
+    const form=document.createElement("form");form.className="life-answer-form";
     const input=document.createElement("textarea");input.rows=2;input.maxLength=320;
-    input.dir="ltr";input.lang="el";input.autocomplete="off";
-    input.placeholder="Γράψε στα ελληνικά…";
-    input.setAttribute("aria-label",t("answer"));form.append(input);
+    input.lang="el";input.dir="ltr";input.autocomplete="off";
+    input.placeholder="Γράψε στα ελληνικά…";input.setAttribute("aria-label",t("type"));
+    form.append(input);
+    const actions=document.createElement("div");actions.className="life-task-actions";
     const submit=document.createElement("button");submit.type="submit";
-    submit.className="primary track-button";submit.textContent=t("check");
-    form.append(submit);
-    const feedback=document.createElement("div");feedback.className="life-feedback";form.append(feedback);
-    form.addEventListener("submit",async event=>{
-      event.preventDefault();if(busy||!input.value.trim())return;
+    submit.className="primary life-continue";submit.textContent=t("check");
+    actions.append(submit);
+    actions.append(button(t("back"),renderHub,"secondary life-secondary"));
+    form.append(actions);
+    const feedback=document.createElement("div");feedback.className="life-answer-feedback";
+    form.append(feedback);task.append(form);
+    wrapper.append(task);el.append(wrapper);
+    form.addEventListener("submit",async e=>{
+      e.preventDefault();if(busy||!input.value.trim())return;
       busy=true;submit.disabled=true;notice("");
       try{
         const result=await api("scene",{revision:current.revision,id:current.id,answer:input.value});
-        current.revision=result.revision;
-        feedback.replaceChildren();
-        feedback.append(text("p",t(result.correct?"right":result.unverified?"unverified":"wrong"),
-          result.correct?"track-success":result.unverified?"track-meta":"track-error"));
+        current.revision=result.revision;feedback.replaceChildren();
+        const success=result.correct;
+        const header=text("div",t(success?"good":result.unverified?"unsure":"bad"),
+          success?"life-feedback-good":result.unverified?"life-feedback-caution":"life-feedback-bad");
+        feedback.append(header);
         if(result.explanation){
-          feedback.append(text("strong",t("why"),"life-feedback-heading"));
-          feedback.append(text("p",result.explanation,"track-error"));
+          feedback.append(text("strong",t("explain"),"life-feedback-label"));
+          feedback.append(text("p",result.explanation,"life-feedback-explanation"));
         }
-        feedback.append(text("strong",t("correct"),"life-feedback-heading"));
-        feedback.append(text("p",result.answer,"track-greek-summary"));
+        feedback.append(text("strong",t("right"),"life-feedback-label"));
+        feedback.append(text("p",result.answer,"life-feedback-greek"));
         if(result.alternatives?.length)
-          feedback.append(text("p",result.alternatives.join(" / "),"track-small"));
-        feedback.append(text("p",t("meaning")+": "+result.translation+
-          (result.translationLang!==lang()?" (EN)":""),"track-meta"));
-        if(result.correct){
-          input.disabled=true;submit.hidden=true;
-          feedback.append(button(t("back"),renderMenu,"primary"));
+          feedback.append(text("p",result.alternatives.join(" / "),"life-muted"));
+        feedback.append(text("p",t("mean")+": "+result.translation+
+          (result.translationLang!==lang()?" (EN)":""),"life-feedback-meaning"));
+        if(success){
+          submit.hidden=true;input.disabled=true;
+          actions.replaceChildren(button(t("next"),nextAdventure,"primary life-continue"));
         }else{
-          feedback.append(text("p",t("retry"),"track-small"));
+          input.focus();input.select();
           submit.disabled=false;
+          if(result.unverified){
+            feedback.append(text("p",t("notScored"),"life-muted"));
+            feedback.append(button(t("next"),skipUnverified,"secondary life-secondary"));
+          }
         }
-      }catch(e){
-        notice(e.message,true);
-        if(e.message==="stale_track"){await loadScene(current.id);}
+      }catch(error){
+        if(error.message==="stale_track")return await loadScene(current.id);
+        notice(t("error")+": "+error.message,true);
       }finally{busy=false;if(!input.disabled)submit.disabled=false;}
     });
     input.focus();
   }
-  async function open(){
-    if($("life-view").hidden||busy)return;
-    shownLang=lang();busy=true;notice("");
-    try{
-      overview=await api("life");
-      const select=$("life-max-chapter");select.replaceChildren();
-      for(let n=1;n<=overview.printedChapterCount;n++){
-        const option=document.createElement("option");option.value=String(n);
-        option.textContent=(lang()==="ru"?"Главы 1–":"Chapters 1–")+n;
-        select.append(option);
-      }
-      status();renderMenu();
-    }catch(e){notice(e.message,true);}
+  async function loadScene(id){
+    if(busy)return;busy=true;notice("");
+    try{current=await api("scene:"+id);showTask();}
+    catch(error){notice(t("error")+": "+error.message,true);}
     finally{busy=false;}
   }
-  async function changeScope(value){
-    if(busy||!overview)return;
+  function startRecommended(){
+    if(!overview?.nextAdventure||busy)return;
+    const scene=overview.nextAdventure;
+    if(scene.type==="roleplay")return loadScene(scene.id);
+    activeMode="activity";
+    root().hidden=true;
+    $("life-content").hidden=false;
+    window.lexiTracks?.openLife?.(scene.id);
+  }
+  async function refresh(){
+    overview=await api("life");
+    const select=$("life-max-chapter");
+    select.replaceChildren();
+    for(let i=1;i<=overview.printedChapterCount;i++){
+      const option=document.createElement("option");option.value=String(i);
+      option.textContent=(lang()==="ru"?"Глава ":"Chapter ")+i;
+      select.append(option);
+    }
+    select.value=String(overview.maxChapter);
+    $("life-scope-label").textContent=t("chapter");
+    $("life-description").textContent=t("intro");
+    renderHub();
+  }
+  async function skipUnverified(){
+    if(busy||!current)return;
+    busy=true;
+    try{
+      overview=await api("life",{action:"skip",revision:current.revision,id:current.id});
+      renderHub();
+    }catch(error){notice(t("error")+": "+error.message,true);}
+    finally{busy=false;}
+    if(!busy)startRecommended();
+  }
+  async function nextAdventure(){
+    if(busy)return;busy=true;
+    try{await refresh();}
+    catch(error){notice(t("error")+": "+error.message,true);}
+    finally{busy=false;}
+    if(!busy)startRecommended();
+  }
+  async function open(){
+    if($("life-view").hidden||busy)return;
+    busy=true;notice("");
+    try{await refresh();}
+    catch(error){notice(t("error")+": "+error.message,true);}
+    finally{busy=false;}
+  }
+  async function changeChapter(value){
+    if(!overview||busy)return;
     busy=true;notice("");
     try{
       overview=await api("life",{revision:overview.revision,maxChapter:Number(value)});
-      status();renderMenu();
-    }catch(e){notice(e.message,true);if(e.message==="stale_track"){busy=false;await open();}}
-    finally{busy=false;}
+      await refresh();
+    }catch(error){
+      notice(t("error")+": "+error.message,true);
+      if(error.message==="stale_track")await refresh();
+    }finally{busy=false;}
   }
-  $("life-max-chapter").addEventListener("change",e=>changeScope(e.target.value));
-  $("life-roleplay-mode").addEventListener("click",()=>{if(overview)renderMenu();});
-  window.lexiLife={onOpen:open,showSimulation};
+  $("life-max-chapter").addEventListener("change",e=>changeChapter(e.target.value));
+  window.lexiLife={onOpen:open,advanceFromActivity:nextAdventure,
+    showSimulation:()=>{activeMode="activity";root().hidden=true;$("life-content").hidden=false;}};
 })();

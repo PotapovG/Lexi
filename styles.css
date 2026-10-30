@@ -470,3 +470,104 @@ button,select,input{touch-action:manipulation}
 .life-feedback-heading{display:block;color:#e5c985;margin:13px 0 4px}
 @media(max-width:700px){.life-scenes{grid-template-columns:1fr}
  .life-form textarea{min-height:90px}.life-scene{padding:14px}}
+
+/* Lexi 2026 visual system — warm Mediterranean accents, confident hierarchy. */
+:root{--bg:#091522;--panel:#102337;--line:#28425a;--muted:#a2b8c8;--accent:#f0c87b;--accent-text:#182534}
+body{background:radial-gradient(circle at 95% 0%,#1b3447 0,#0b1a29 45%,#091522 80%) fixed;color:#f2f4f1}
+.site-header{border-bottom-color:#2a4358}
+.brand-mark{box-shadow:0 5px 0 #b8894f,0 12px 27px #0005;border-radius:13px;transform:translateY(-2px)}
+.tabs{gap:7px;border:0;margin-bottom:26px;scrollbar-width:none;padding:5px 3px 12px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid #29435a;border-radius:13px;background:#14293a;color:#a9bcc9;
+  font-weight:700;padding:12px 18px;min-height:47px;transition:background .15s,border-color .15s}
+.tab:hover{background:#1a3648;color:#f5f2e6}
+.tab.active{background:#e9c583;color:#1d3040;border-color:#e9c583;box-shadow:0 4px 0 #b98f51}
+.panel{border-color:#314c61;background:linear-gradient(145deg,#162c40,#0e2031)}
+.student-identity{background:linear-gradient(90deg,#173344,#112737);border-color:#325366}
+
+/* The immersive story mode deliberately has no visible task/category selector. */
+.life-shell{max-width:960px;margin:auto;overflow:hidden}
+.life-head{display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap;
+  background:linear-gradient(112deg,#12384c,#164154 56%,#1a3749);border:1px solid #355c70;
+  padding:25px 30px;margin-bottom:19px;border-radius:23px;box-shadow:0 16px 45px #07111e66}
+.life-overline{color:#f1ca84;letter-spacing:.21em;font-size:11px;font-weight:850}
+.life-head h2{font:clamp(34px,4vw,50px)/1.1 Georgia,serif;letter-spacing:-.04em;margin:9px 0 6px}
+.life-head-spark{color:#f0cc86;font-size:25px;vertical-align:top}
+.life-head p{margin:0;color:#bed3db;font-size:14px;max-width:500px}
+.life-chapter-control{display:flex;flex-direction:column;gap:7px;min-width:200px}
+.life-chapter-control label{font-size:12px;color:#dae4e5;font-weight:750}
+.life-chapter-control select{width:100%;min-height:48px;background:#0e2d40;border:1px solid #70919c;
+  border-radius:11px;padding:10px 13px;color:#fff;font-size:16px;font-weight:750}
+.life-chapter-control select:focus-visible{outline:2px solid #f0ca7e;outline-offset:2px}
+.life-illustration,.life-activity-art{position:relative;overflow:hidden;
+  background:linear-gradient(145deg,#9bccd4,#f2ddb0)}
+.life-illustration svg,.life-activity-art svg{display:block;width:100%;height:auto;aspect-ratio:800/320}
+.life-adventure-card,.life-task-card{background:#152b40;border:1px solid #35566c;border-radius:24px;
+  overflow:hidden;box-shadow:0 22px 48px #030d1861}
+.life-adventure-info{padding:28px 32px 34px}
+.life-scene-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.life-quest-eyebrow{font-size:11px;letter-spacing:.13em;color:#eacb91;font-weight:850}
+.life-quest-difficulty{font-size:12px;background:#244a58;color:#b6e0d6;
+  border-radius:30px;padding:6px 11px;font-weight:700}
+.life-adventure-title{font:clamp(30px,4.6vw,49px)/1.13 Georgia,serif;
+  margin:14px 0 6px;color:#fbf7ee;letter-spacing:-.025em}
+.life-adventure-subtitle{font-size:14px;color:#c7d5de;margin:6px 0 22px}
+.life-continue{background:#efca83;color:#203044;border:0;border-radius:13px;
+  min-height:54px;padding:13px 22px;font-size:16px;font-weight:800;
+  box-shadow:0 5px 0 #ad8750;transition:transform .15s,box-shadow .15s}
+.life-continue:hover{background:#f9d99a;transform:translateY(-1px)}
+.life-continue:active{transform:translateY(3px);box-shadow:0 2px 0 #ad8750}
+.life-progress{margin:18px 0 9px;border:1px solid #28485b;background:#102639;border-radius:16px;padding:16px 20px}
+.life-progress-line{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.life-progress-title{font-size:13px;color:#c2d3dd}.life-progress-count{color:#f6d08b;font-size:17px}
+.life-progress-track{height:9px;border-radius:10px;overflow:hidden;background:#294858;margin-top:12px}
+.life-progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#5cbda5,#f0cd87);transition:width .3s}
+.life-task-body{padding:27px 32px 32px}
+.life-mission-label{color:#a2becb;font-size:12px;letter-spacing:.13em;font-weight:750;margin:14px 0 5px}
+.life-task-prompt{font:clamp(23px,3.6vw,37px)/1.24 Georgia,serif;color:#f4f5ee;margin:8px 0 18px}
+.life-hint-strip{background:#1b3b45;color:#f0d597;border-left:3px solid #e3be7c;
+  padding:11px 14px;border-radius:9px;font-size:14px;margin-bottom:18px}
+.life-answer-form{display:flex;flex-direction:column;align-items:stretch;gap:15px}
+.life-answer-form textarea{width:100%;min-height:110px;max-width:100%;resize:vertical;background:#0e2236;
+  border:1px solid #668195;color:#f6f6ef;border-radius:13px;padding:16px 18px;
+  font:19px/1.5 system-ui,sans-serif}
+.life-answer-form textarea:focus{outline:2px solid #f0cb86;outline-offset:1px}
+.life-task-actions{display:flex;gap:13px;align-items:center;flex-wrap:wrap}
+.life-task-actions .life-continue{min-width:180px}
+.life-secondary{border:1px solid #5a7286;border-radius:13px;background:#182f43;
+  color:#d3e2e9;min-height:52px;padding:12px 20px;font-weight:720}
+.life-answer-feedback{margin-top:6px;line-height:1.6}
+.life-feedback-good,.life-feedback-bad,.life-feedback-caution{border-radius:11px;padding:13px 16px;font-weight:750}
+.life-feedback-good{background:#1d5148;color:#b5f4d4;border:1px solid #3c977d}
+.life-feedback-bad{background:#533537;color:#f9c8bf;border:1px solid #9b6461}
+.life-feedback-caution{background:#3f4050;color:#e2d8ba;border:1px solid #736b7d}
+.life-feedback-label{display:block;color:#f4d18e;font-size:13px;margin-top:15px}
+.life-feedback-greek{font-size:21px;color:#f5f5ee;margin:4px 0}
+.life-feedback-explanation{color:#d5e2e8;margin:5px 0}
+.life-feedback-meaning{color:#aec9d2;font-size:14px}
+.life-muted{color:#a7bac8;font-size:13px}
+#life-content{border:1px solid #35566c;background:#152b40;border-radius:22px;
+  overflow:hidden;padding:0 24px 28px;box-shadow:0 20px 44px #04111d55}
+.life-activity-art{margin:0 -24px 24px}
+#life-content .track-word-card{background:#102639}
+#life-content .route-answer-form{margin:14px 0}
+#life-content .track-choices .track-button{min-height:56px}
+#life-message{margin-top:15px}
+@media(max-width:760px){
+  .tab{flex:0 0 auto;font-size:12px;padding:12px 14px}
+  .life-head{padding:20px 18px;border-radius:19px;gap:19px}
+  .life-head h2{font-size:36px}
+  .life-chapter-control{width:100%}
+  .life-adventure-card,.life-task-card{border-radius:19px}
+  .life-adventure-info{padding:20px 19px 24px}
+  .life-task-body{padding:19px 18px 25px}
+  .life-adventure-title{font-size:32px}
+  .life-continue{width:100%;min-height:56px}
+  .life-task-actions{flex-direction:column}
+  .life-task-actions>*{width:100%}
+  #life-content{padding:0 15px 23px;border-radius:19px}
+  .life-activity-art{margin:0 -15px 22px}
+}
+@media(prefers-reduced-motion:reduce){
+  .life-continue,.life-progress-fill,.tab{transition:none}
+}

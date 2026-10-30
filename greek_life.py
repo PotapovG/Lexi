@@ -108,7 +108,7 @@ def current_settings(db,uid,lang):
         result=s["results"].get(scene["id"],{})
         tries=result.get("attempts",0);errors=result.get("errors",0)
         demonstrated=next((r["good"] for r in relevant if r["unit"]==scene["chapter"]),0)
-        ready=demonstrated>=6 or mastered_words>=30 or tries>=2
+        ready=demonstrated>=6 or mastered_words>=30 or result.get("correct",0)>=1
         difficulty="independent" if ready else "guided"
         priority=(errors*4)+(weak_by_unit.get(scene["chapter"],0)//4)-tries
         scenarios.append({"id":scene["id"],"name":scene["name"] if lang=="ru" else scene["en"],
@@ -124,9 +124,41 @@ def current_settings(db,uid,lang):
             scenarios.append({"id":id,"name":ru if lang=="ru" else en,
                 "chapter":gate,"type":"activity","difficulty":"guided",
                 "priority":0,"attempts":0,"errors":0})
-    preferred=sorted(scenarios,key=lambda x:(-x["priority"],x["chapter"],x["id"]))
+    # Build one guided "next adventure" from all unlocked experiences. The
+    # learner never has to choose a category or scroll through eleven scenes.
+    # Reuse existing account-owned activity progress rather than resetting it.
+    activity_data={
+        "route":tracks._load(db,uid,"route",lang,tracks._route_initial)[0],
+        "periptero":tracks._load(db,uid,"periptero",lang,lambda:{"round":0,"bought":[]})[0],
+        "likes":tracks._load(db,uid,"likes",lang,lambda:{"index":0})[0],
+    }
+    for item in scenarios:
+        if item["type"]=="activity":
+            data=activity_data[item["id"]]
+            item["correct"]=(int(data.get("index",0)) if item["id"] in ("route","likes")
+                else int(data.get("round",0)))
+            item["inProgress"]=(item["id"]=="periptero" and bool(data.get("bought")))
+            item["attempts"]=item["correct"]
+        else:
+            item["correct"]=s["results"].get(item["id"],{}).get("correct",0)
+            item["inProgress"]=False
+    # Skipped unknown alternatives are deferred, never counted as mastery.
+    for item in scenarios:
+        if item["type"]=="roleplay":
+            item["skipped"]=s["results"].get(item["id"],{}).get("skipped",0)
+        else:item["skipped"]=0
+    # Finish an already-started shopping basket before switching situations.
+    pending=next((x for x in scenarios if x.get("inProgress")),None)
+    # A failed scene is revisited, but only its demonstrated, curated errors
+    # affect the queue; unverified alternative wordings were never penalized.
+    preferred=sorted(scenarios,key=lambda x:(
+        x["correct"]+x.get("skipped",0), -int(x.get("errors",0)>0), x["chapter"], x["id"]))
+    recommended=pending or (preferred[0] if preferred else None)
+    distinct_done=sum(x["correct"]>0 for x in scenarios)
     return {"revision":rev,"maxChapter":max_chapter,
-            "available":scenarios,"recommended":preferred[0]["id"] if preferred else None,
+            "available":scenarios,"recommended":recommended["id"] if recommended else None,
+            "nextAdventure":recommended,
+            "completedExperiences":distinct_done,"totalExperiences":len(scenarios),
             "masteredWords":mastered_words,"observations":sum(r["total"] for r in relevant),
             "printedChapterCount":MAX_CHAPTER}
 
@@ -140,6 +172,19 @@ def update_settings(db,uid,lang,body):
     if body.get("revision")!=rev:raise ValueError("stale_track")
     s["maxChapter"]=chapter
     tracks._save(db,uid,"life",lang,s,rev)
+    return current_settings(db,uid,lang)
+
+def skip_scene(db,uid,lang,body):
+    """Skip an ambiguous response without marking any answer as correct/wrong."""
+    sid=body.get("id")
+    if lang not in LANGS or sid not in BY_ID:raise ValueError("invalid_scene")
+    db.execute("BEGIN IMMEDIATE")
+    state,rev=tracks._load(db,uid,"life",lang,_initial)
+    if body.get("revision")!=rev:raise ValueError("stale_track")
+    if BY_ID[sid]["chapter"]>_max(state):raise ValueError("chapter_not_unlocked")
+    item=state["results"].setdefault(sid,{"attempts":0,"correct":0,"errors":0})
+    item["skipped"]=item.get("skipped",0)+1
+    tracks._save(db,uid,"life",lang,state,rev)
     return current_settings(db,uid,lang)
 
 def ensure(db,uid,lang,activity):
@@ -190,7 +235,7 @@ def scene_get(db,uid,lang,scene_id):
     progress=state["results"].get(scene_id,{})
     demonstrated=db.execute("SELECT COUNT(*) FROM attempts WHERE user_id=? AND correct=1 AND unit<=?",
                             (uid,scene["chapter"])).fetchone()[0]
-    experienced=demonstrated>=12 or progress.get("attempts",0)>=2
+    experienced=demonstrated>=12 or progress.get("correct",0)>=1
     return {"id":scene_id,"revision":revision,
             "chapter":scene["chapter"],"title":scene["name"] if lang=="ru" else scene["en"],
             "prompt":scene["prompt"] if lang=="ru" else scene["promptEN"],
@@ -217,8 +262,15 @@ def scene_answer(db,uid,lang,body):
     explanation=None if correct else explain(answer,scene["accepted"][0],lang)
     # A response outside our reviewed grammar patterns may be valid Greek.
     # Do not count it as a learner error until it can be verified.
-    unverified=bool(explanation and explanation.startswith((
-        "Фраза не совпала с проверенными вариантами", "The response does not match reviewed alternatives")))
+    # Only confidently detectable particles/articles can count as a
+    # grammatical mistake. A different synonym, word order or verb choice
+    # may be perfectly idiomatic and must not be penalized by string diff.
+    confidently_known=bool(explanation and (
+        explanation.startswith(("Пропущена частица", "The particle",
+            "Пропущено отрицание", "The negative particle",
+            "Лишнее отрицание", "Extra δεν",
+            "Не хватает формы", "Missing «"))))
+    unverified=bool(not correct and not confidently_known)
     history["errors"]+=int(not correct and not unverified)
     tracks._save(db,uid,"life",lang,state,rev)
     return {"revision":rev+1,"correct":correct,"unverified":unverified,
@@ -227,7 +279,7 @@ def scene_answer(db,uid,lang,body):
             "explanation":explanation,
             "translation":scene["translation"] if lang=="ru" else scene["translationEN"],
             "translationLang":"ru" if lang=="ru" else "en",
-            "difficulty":"independent" if history["attempts"]>=2 else "guided",
+            "difficulty":"independent" if history["correct"]>=1 else "guided",
             "attempts":history["attempts"]}
 
 def validate():

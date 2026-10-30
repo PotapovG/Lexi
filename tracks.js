@@ -182,6 +182,8 @@
   }
   function renderRoute(){
     const root=$("life-content");root.replaceChildren();
+    if(window.LexiScenes){const scene=document.createElement("div");scene.className="life-activity-art";
+      scene.append(window.LexiScenes.illustration("route"));root.append(scene);}
     root.append(text("div",t("routeLesson"),"track-eyebrow"));
     root.append(text("h3",t("routeTitle"),"track-subtitle"));
     if(!["ru","en"].includes(lang()))root.append(text("p","Stops: EN translation","track-small"));
@@ -224,7 +226,7 @@
         feedback.append(text("p",result.translation,"track-small"));
         if(result.correct){
           submit.hidden=true;
-          feedback.append(control(t("nextRoute"),()=>renderRoute(),"primary"));
+          feedback.append(control(t("continue"),()=>window.lexiLife?.advanceFromActivity?.(),"primary"));
         }else{
           submit.disabled=false;
         }
@@ -235,6 +237,8 @@
 
   function renderLikes(){
     const root=$("life-content");root.replaceChildren();
+    if(window.LexiScenes){const scene=document.createElement("div");scene.className="life-activity-art";
+      scene.append(window.LexiScenes.illustration("likes"));root.append(scene);}
     root.append(text("div","Γραμματική · A1/A2","track-eyebrow"));
     root.append(text("h3",t("likeTitle"),"track-subtitle"));
     root.append(text("p",t("likeHelp"),"track-small"));
@@ -271,16 +275,21 @@
         result.append(text("p",data.feedback.expected,"track-greek-summary"));
         if(data.feedback.correct){
           input.disabled=true;submit.hidden=true;
-          result.append(control(t("continue"),()=>renderLikes(),"primary"));
+          result.append(control(t("continue"),()=>window.lexiLife?.advanceFromActivity?.(),"primary"));
         }else submit.disabled=false;
       }).finally(()=>{if(!busy)submit.disabled=false;});
     });
   }
   function renderShop(){
     const root=$("life-content");root.replaceChildren();
+    if(window.LexiScenes){const scene=document.createElement("div");scene.className="life-activity-art";
+      scene.append(window.LexiScenes.illustration("periptero"));root.append(scene);}
     root.append(text("div","Περίπτερο · Μίνι μάρκετ","track-eyebrow"));
     root.append(text("h3",t("shopTitle")+" · "+shop.round,"track-subtitle"));
-    root.append(text("p",t("shopHelp"),"track-small"));
+    const help=(shop.requestPrefix==="θέλω"
+      ?(lang()==="ru"?"В этом этапе используй знакомую форму «Θέλω…», указывая количество и товар.":"At this level, request each item with the studied form «Θέλω…».")
+      :t("shopHelp"));
+    root.append(text("p",help,"track-small"));
     if(!["ru","en"].includes(lang()))root.append(text("p","Shopping list: EN translation","track-small"));
     const summary=text("p",t("basket")+": "+shop.bought.length+"/4","track-meta");
     root.append(summary);
@@ -317,9 +326,9 @@
     }
     if(shop.stage==="complete"){
       root.append(text("p",t("shopComplete"),"track-success"));
-      root.append(control(t("nextBasket"),()=>action("periptero",{
+      root.append(control(t("continue"),()=>action("periptero",{
         action:"next",revision:shop.revision
-      },data=>{shop=data;renderShop();}),"primary"));
+      },data=>{shop=data;window.lexiLife?.advanceFromActivity?.();}),"primary"));
     }
   }
 
