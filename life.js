@@ -156,10 +156,21 @@
           feedback.append(text("strong",t("explain"),"life-feedback-label"));
           feedback.append(text("p",result.explanation,"life-feedback-explanation"));
         }
+        if(result.orthographyNote)
+          feedback.append(text("p",result.orthographyNote,"life-orthography-note"));
         feedback.append(text("strong",t("right"),"life-feedback-label"));
-        feedback.append(text("p",result.answer,"life-feedback-greek"));
-        if(result.alternatives?.length)
-          feedback.append(text("p",result.alternatives.join(" / "),"life-muted"));
+        const shown=result.closestAnswer||result.answer;
+        feedback.append(text("p",shown,"life-feedback-greek"));
+        const otherOptions=[result.answer,...(result.alternatives||[])]
+          .filter((value,i,all)=>value!==shown&&all.indexOf(value)===i);
+        if(otherOptions.length){
+          const more=document.createElement("details");
+          more.className="life-more-answers";
+          const summary=document.createElement("summary");
+          summary.textContent=lang()==="ru"?"Другие допустимые формулировки":"Other accepted wordings";
+          more.append(summary,text("p",otherOptions.join(" / "),"life-muted"));
+          feedback.append(more);
+        }
         feedback.append(text("p",t("mean")+": "+result.translation+
           (result.translationLang!==lang()?" (EN)":""),"life-feedback-meaning"));
         if(success){

@@ -9,6 +9,7 @@ import json
 import re
 import difflib
 import study_tracks as tracks
+import life_answer_check as _checker
 
 LANGS=tracks.LANGUAGES
 MAX_CHAPTER=20
@@ -199,32 +200,9 @@ def _norm(s):
     return tracks._normalized(s)
 
 def explain(selected,accepted,lang):
-    """Trust only diagnostic patterns that a fixed script can know."""
-    t=_norm(selected).split()
-    expected=_norm(accepted).split()
-    tr=(lang=="ru")
-    if "να" in expected and "να" not in t:
-        return "Пропущена частица να перед глаголом." if tr else "The particle να is missing before the verb."
-    if "δεν" in expected and "δεν" not in t:
-        return "Пропущено отрицание δεν." if tr else "The negative particle δεν is missing."
-    if "δεν" in t and "δεν" not in expected:
-        return "Лишнее отрицание δεν меняет смысл фразы." if tr else "Extra δεν changes the meaning."
-    # Compare well-known functional words only, not free creative synonyms.
-    articles=("ο","η","το","οι","τα","τον","τη","την","του","της","στο","στη","στην","στον","εναν","ένα","εναν")
-    for x in expected:
-        if x in articles and x not in t:
-            return (f"Не хватает формы «{x}»: проверь артикль, род, падеж или предлог." if tr
-                    else f"Missing «{x}»: check article, case, or preposition.")
-    operations=difflib.SequenceMatcher(None,expected,t).get_opcodes()
-    for operation,i,j,k,l in operations:
-        if operation=="replace" and i<j and k<l:
-            return (f"Здесь ожидается «{' '.join(expected[i:j])}», а написано «{' '.join(t[k:l])}». Проверь форму слова и смысл." if tr else
-                    f"Expected «{' '.join(expected[i:j])}» rather than «{' '.join(t[k:l])}». Check the form and meaning.")
-        if operation=="delete" and i<j:
-            return (f"Пропущено «{' '.join(expected[i:j])}»." if tr else
-                    f"Missing «{' '.join(expected[i:j])}».")
-    return ("Фраза не совпала с проверенными вариантами. Проверь контекст и форму слов; допустимые варианты показаны ниже." if tr else
-            "The response does not match reviewed alternatives. Check meaning and forms; accepted examples are below.")
+    """Compatibility helper: never diagnose by raw token membership."""
+    return _checker.evaluate(selected,(accepted,),lang)["explanation"]
+
 
 def scene_get(db,uid,lang,scene_id):
     if lang not in LANGS:raise ValueError("invalid_language")
@@ -255,25 +233,18 @@ def scene_answer(db,uid,lang,body):
     scene=BY_ID[sid]
     if body.get("revision")!=rev:raise ValueError("stale_track")
     if scene["chapter"]>_max(state):raise ValueError("chapter_not_unlocked")
-    correct=any(_norm(answer)==_norm(x) for x in scene["accepted"])
+    assessment=_checker.evaluate(answer,scene["accepted"],lang)
+    correct=assessment["correct"]
     history=state["results"].setdefault(sid,{"attempts":0,"correct":0,"errors":0})
     history["attempts"]+=1
     history["correct"]+=int(correct)
-    explanation=None if correct else explain(answer,scene["accepted"][0],lang)
-    # A response outside our reviewed grammar patterns may be valid Greek.
-    # Do not count it as a learner error until it can be verified.
-    # Only confidently detectable particles/articles can count as a
-    # grammatical mistake. A different synonym, word order or verb choice
-    # may be perfectly idiomatic and must not be penalized by string diff.
-    confidently_known=bool(explanation and (
-        explanation.startswith(("Пропущена частица", "The particle",
-            "Пропущено отрицание", "The negative particle",
-            "Лишнее отрицание", "Extra δεν",
-            "Не хватает формы", "Missing «"))))
-    unverified=bool(not correct and not confidently_known)
+    explanation=assessment["explanation"]
+    unverified=assessment["unverified"]
     history["errors"]+=int(not correct and not unverified)
     tracks._save(db,uid,"life",lang,state,rev)
     return {"revision":rev+1,"correct":correct,"unverified":unverified,
+            "orthographyNote":assessment["orthographyNote"],
+            "closestAnswer":assessment["closest"],
             "answer":scene["accepted"][0],
             "alternatives":list(scene["accepted"][1:]),
             "explanation":explanation,

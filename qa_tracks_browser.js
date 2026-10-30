@@ -23,12 +23,23 @@ const {chromium}=require("/app/qa_deps/node_modules/playwright");
    await page.getByText("Отлично! Тебя поняли.",{exact:false}).waitFor();
    await page.locator(".life-task-actions .life-continue").click();
    await page.locator(".life-task-prompt").getByText("Я живу в Никосии",{exact:false}).waitFor();
+   await page.locator(".life-answer-form textarea").fill("Μένω στην Λεθκώσια");
+   await page.locator(".life-answer-form button[type=submit]").click();
+   await page.getByText("опечатка",{exact:false}).first().waitFor();
+   const panel=await page.locator(".life-answer-feedback").innerText();
+   if(panel.includes("Не хватает формы"))throw Error("False missing-article diagnosis");
+   if(!panel.includes("Λεθκώσια")||!panel.includes("Λευκωσία"))
+     throw Error("No precise correction of the city name");
+   if(await page.locator(".life-feedback-greek").textContent()!=="Μένω στην Λευκωσία.")
+     throw Error("Did not show nearest accepted form");
+   if(!panel.includes("Я живу в Никосии"))throw Error("Missing Russian translation");
    await page.locator(".life-answer-form textarea").fill("Μένω Λευκωσία");
    await page.locator(".life-answer-form button[type=submit]").click();
    await page.getByText("артикль",{exact:false}).first().waitFor();
-   await page.locator(".life-answer-form textarea").fill("Μένω στη Λευκωσία");
+   await page.locator(".life-answer-form textarea").fill("Μένω στην Λευκωσία");
    await page.locator(".life-answer-form button[type=submit]").click();
    await page.getByText("Отлично! Тебя поняли.",{exact:false}).waitFor();
+   await page.getByText("Другие допустимые формулировки",{exact:true}).waitFor();
    await page.locator(".life-task-actions .life-continue").click();
    await page.locator(".life-task-prompt").getByText("У меня есть",{exact:false}).waitFor();
    const finishTask=async(phrase)=>{

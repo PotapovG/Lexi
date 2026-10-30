@@ -571,3 +571,11 @@ body{background:radial-gradient(circle at 95% 0%,#1b3447 0,#0b1a29 45%,#091522 8
 @media(prefers-reduced-motion:reduce){
   .life-continue,.life-progress-fill,.tab{transition:none}
 }
+
+/* Answer explanations: concise orthography help, optional reviewed variants. */
+.life-orthography-note{margin:12px 0;padding:11px 14px;border:1px solid #4d8774;
+  background:#1b443d;border-radius:10px;color:#b6eed6;font-size:14px}
+.life-more-answers{margin:8px 0 0;color:#b5c8d3;font-size:13px}
+.life-more-answers summary{cursor:pointer;padding:9px 0;min-height:42px;
+  display:list-item;list-style:revert;outline-offset:3px}
+.life-more-answers p{margin:6px 0 0;padding:7px 0;color:#c7d4da}
