@@ -5,7 +5,7 @@ import server, catalog_v2, dialogue_quality
 from catalog_v2 import ALL
 current={x['id']:x for x in ALL if x['kind']=='dialogue'}
 original=catalog_v2.ORIGINAL_DIALOGUE_SNAPSHOT
-assert len(current)==len(original)==100
+assert len(current)==len(original)==112
 assert len(catalog_v2.CURATED_DIALOGUE_BANKS)==35
 assert len([x for x in current.values() if x.get('bank_source')=='curated-stage-safe-20261020'])==35
 assert current['dlg024_v2']['replaces']=='dlg024' and current['dlg024_v2']['gaps']==['Χαίρω πολύ','Πού μένεις']

@@ -25,11 +25,23 @@ def load(lang):
 TABLES={lang:load(lang) for lang in ('ru','en')}
 
 def validate(cards):
+    from dialogues_a1_expansion import SOURCE, LANGUAGES
     dialogues={c['id']:c for c in cards if c['kind']=='dialogue'}
+    legacy={cid:c for cid,c in dialogues.items() if c.get('source') != SOURCE}
+    added={cid:c for cid,c in dialogues.items() if c.get('source') == SOURCE}
+    assert len(added)==12
+    for card in added.values():
+        assert set(card['locales'])==set(LANGUAGES)
+        for lang in LANGUAGES:
+            template=card['locales'][lang]['lines']
+            assert len(template)==len(card['lines'])
+            assert len(card['locales'][lang]['glosses'])==len(card['gaps'])
+            for greek, translated in zip(card['lines'],template):
+                assert MARK.findall(greek)==MARK.findall(translated), (card['id'],lang)
     for lang,table in TABLES.items():
-        if table.keys()!=dialogues.keys():
+        if table.keys()!=legacy.keys():
             raise ValueError(f'full-dialogue coverage mismatch for {lang}')
-        for cid,card in dialogues.items():
+        for cid,card in legacy.items():
             lines=table[cid]
             if len(lines)!=len(card['lines']):
                 raise ValueError(f'line count mismatch {lang}/{cid}')
@@ -43,6 +55,16 @@ def validate(cards):
     return len(dialogues)
 
 def after_score(card,lang):
+    from dialogues_a1_expansion import SOURCE
+    if card.get("source")==SOURCE:
+        loc=card["locales"][lang]
+        return {
+            "dialogueFullTemplate": loc["lines"],
+            "dialogueFullGlosses": {
+                answer: loc["glosses"][i] for i,answer in enumerate(card["gaps"])
+            },
+            "dialogueFullLang": lang,
+        }
     # The other four UI locales currently receive fully English dialogue text
     # visibly marked "EN". Do not blend English static lines with translations
     # of only the gaps in an unrelated UI language.

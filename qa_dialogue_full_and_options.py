@@ -9,13 +9,13 @@ import dialogue_full
 import distractor_quality
 
 cards=[c for c in server.ALL if c['kind']=='dialogue']
-assert dialogue_full.validate(server.ALL)==100
+assert dialogue_full.validate(server.ALL)==112
 norm=distractor_quality.norm
 for lang in ('ru','en','zh','ar','es','pt'):
     for card in cards:
         info=dialogue_full.after_score(card,lang)
         assert len(info['dialogueFullTemplate'])==len(card['lines'])
-        expected_language=lang if lang in ('ru','en') else 'en'
+        expected_language=(lang if card.get('source')=='independent_a1_dialogue_20261110' or lang in ('ru','en') else 'en')
         assert info['dialogueFullLang']==expected_language
         result=[re.sub(r'\[\[(\d+)\]\]',lambda m:info['dialogueFullGlosses'][card['gaps'][int(m[1])]],line)
                 for line in info['dialogueFullTemplate']]
@@ -37,6 +37,7 @@ for cid in case_duplicates:
 
 with tempfile.TemporaryDirectory() as folder:
     server.DB=str(Path(folder)/'test.sqlite3')
+    server.auth.SECRET_FILE=Path(folder)/'login-pepper'
     server.init_db()
     for lang in ('ru','en','zh','ar','es','pt'):
         for card in cards:

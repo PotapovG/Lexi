@@ -205,6 +205,11 @@ import patakis_context_cards as _patk
 ALL.extend(_patk.CARDS)
 import form_exercises as _form
 ALL.extend(_form.CARDS)
+# Extra original A1 dialogues reuse the existing dialogue kind, gap UI and
+# learner SRS. They are authored for printed chapters and MUST NOT undergo
+# legacy 16-to-20 chapter remapping.
+import dialogues_a1_expansion as _a1_conversations
+ALL.extend(_a1_conversations.CARDS)
 # Independent contributor content. Only new, validated stable IDs are admitted.
 import community_content as _community
 COMMUNITY_CARDS = _community.load(ALL)
