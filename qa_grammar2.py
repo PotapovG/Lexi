@@ -35,7 +35,10 @@ with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
     body={'id':c['id'],'direction':'grammar_fill','lang':lang,'selected':c['correct']}
     right=server.mark('learner',body)
     assert right['correct'] and right['answer']==c['correct']
-    assert right['grammarTip']==c[lang]
+    from cloze_meanings import explanation
+    assert right['grammarTip']==explanation(c,lang)
+    if c['group']=='gender':
+     assert c['correct'] in right['grammarTip'],(c['id'],lang)
     body['selected']=c['options'][1]
     wrong=server.mark('learner',body)
     assert not wrong['correct'] and wrong['answer']==c['correct'] and wrong['explanation']
