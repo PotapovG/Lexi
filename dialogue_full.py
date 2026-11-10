@@ -27,7 +27,7 @@ TABLES={lang:load(lang) for lang in ('ru','en')}
 def validate(cards):
     from dialogues_a1_expansion import SOURCE, LANGUAGES
     dialogues={c['id']:c for c in cards if c['kind']=='dialogue'}
-    original={cid:c for cid,c in dialogues.items() if c.get('source') != SOURCE}
+    legacy={cid:c for cid,c in dialogues.items() if c.get('source') != SOURCE}
     added={cid:c for cid,c in dialogues.items() if c.get('source') == SOURCE}
     assert len(added)==12
     for card in added.values():
@@ -39,9 +39,9 @@ def validate(cards):
             for greek, translated in zip(card['lines'],template):
                 assert MARK.findall(greek)==MARK.findall(translated), (card['id'],lang)
     for lang,table in TABLES.items():
-        if table.keys()!=original.keys():
+        if table.keys()!=legacy.keys():
             raise ValueError(f'full-dialogue coverage mismatch for {lang}')
-        for cid,card in original.items():
+        for cid,card in legacy.items():
             lines=table[cid]
             if len(lines)!=len(card['lines']):
                 raise ValueError(f'line count mismatch {lang}/{cid}')
