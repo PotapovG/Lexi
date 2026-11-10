@@ -41,7 +41,7 @@ def validate(cards):
     for lang,table in TABLES.items():
         if table.keys()!=original.keys():
             raise ValueError(f'full-dialogue coverage mismatch for {lang}')
-        for cid,card in dialogues.items():
+        for cid,card in original.items():
             lines=table[cid]
             if len(lines)!=len(card['lines']):
                 raise ValueError(f'line count mismatch {lang}/{cid}')
