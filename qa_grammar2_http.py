@@ -6,7 +6,8 @@ import server
 with tempfile.TemporaryDirectory(prefix='lexi-grammar2-http-') as tmp:
  s=socket.socket();s.bind(('127.0.0.1',0));port=s.getsockname()[1];s.close()
  proc=subprocess.Popen([sys.executable,'server.py'],cwd=str(Path(__file__).parent),
-  env=dict(os.environ,GREEK_PORT=str(port),GREEK_DB=str(Path(tmp)/'account.sqlite3')),
+  env=dict(os.environ,GREEK_PORT=str(port),GREEK_DB=str(Path(tmp)/'account.sqlite3'),
+           GREEK_PEPPER=str(Path(tmp)/'login-pepper')),
   stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
  origin='http://127.0.0.1:'+str(port)
  def req(route,body=None,cookie=''):
