@@ -29,7 +29,7 @@ with tempfile.TemporaryDirectory(prefix='lexi-grammar2-http-') as tmp:
   else:raise AssertionError('local server unavailable')
   status,cat,_=req('/api/catalog')
   assert status==200 and cat['practiceCardCount']==len(server.PRACTICE_ALL) and cat['supplementalGrammar']==76
-  assert cat['cardCount']==len(server.ALL) and cat['listeningCount']==717
+  assert cat['cardCount']==len(server.ALL) and cat['listeningCount']==len(server.LISTEN_CARDS)
   assert 'grammar' in cat['types']
   status,acc,header=req('/api/auth/register',{'nickname':'GrammarQ'+uuid.uuid4().hex[:6]})
   assert status==200,acc
