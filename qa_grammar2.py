@@ -48,7 +48,7 @@ with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
   params={'scope':['chapters'],'chapters':['1,2,3,4,8,9,11,12,14,16'],
           'types':['grammar'],'count':['60'],'lang':['en']}
   quiz=server.make_quiz('new',params)
-  assert quiz['count']==76 and quiz['available']==76
+  assert quiz['count']==60 and quiz['available']==76  # server caps a single session at 60
   # Weak practice and SRS retain permanent keys across six locales.
   with server.conn() as db:
    saved=db.execute("SELECT SUM(attempts),COUNT(*) FROM progress WHERE user_id=?",
