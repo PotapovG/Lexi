@@ -177,6 +177,10 @@ Can you read the book?
 Do you want to watch a film?
 """
 
+# Independent issue #7 gender-cloze meanings are shown only after grading.
+GRAMMAR_RU = GRAMMAR_RU.rstrip() + "\n" + "Дом находится в городе.\nДруг живёт в деревне.\nПодруга живёт в городе.\nМобильный телефон находится дома.\nМама — учительница.\nПапа — водитель.\nРебёнок живёт в Афинах.\nДвоюродный брат — инженер.\nДвоюродная сестра — студентка.\nМальчик родом с Кипра.\nВрач — моя сестра.\nДочь — студентка.\nГречанка говорит по-гречески.\nГрек знает английский.\nУченица говорит по-немецки.\nУченик говорит по-русски.\nМаркер находится на столе.\nСтраница находится в книге.\nВаза находится дома.\nЗажигалка находится в сумке."
+GRAMMAR_EN = GRAMMAR_EN.rstrip() + "\n" + "The house is in the city.\nThe male friend lives in the village.\nThe female friend lives in the city.\nThe mobile phone is at home.\nThe mother is a teacher.\nThe father is a driver.\nThe child lives in Athens.\nThe male cousin is an engineer.\nThe female cousin is a university student.\nThe boy is from Cyprus.\nThe female doctor is my sister.\nThe daughter is a university student.\nThe Greek woman speaks Greek.\nThe Greek man knows English.\nThe schoolgirl speaks German.\nThe schoolboy speaks Russian.\nThe marker pen is on the table.\nThe page is in the book.\nThe vase is at home.\nThe lighter is in the bag."
+
 # The first 10 grammar exercises contrast case and article forms, not merely
 # vocabulary. Give a real grammatical reason instead of repeating the prompt.
 CASE_RU = (
@@ -219,7 +223,7 @@ def validate():
             lines=TABLES[kind][lang]
             assert len(lines)==len(cards),(kind,lang,len(lines),len(cards))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==56
+    assert len(ARTICLES)==24 and len(GRAMMAR)==76
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
@@ -231,7 +235,28 @@ def translation(card,lang):
     assert KINDS[kind][number]["id"]==card["id"]
     return TABLES[kind][used][number],used
 
+GENDER_EXPLANATIONS={
+ "ru":{"Ο":"Ο — мужской род, именительный падеж, единственное число.",
+       "Η":"Η — женский род, именительный падеж, единственное число.",
+       "Το":"Το — средний род, именительный падеж, единственное число."},
+ "en":{"Ο":"Ο — masculine singular nominative article.",
+       "Η":"Η — feminine singular nominative article.",
+       "Το":"Το — neuter singular nominative article."},
+ "zh":{"Ο":"Ο — 阳性单数主格冠词。","Η":"Η — 阴性单数主格冠词。","Το":"Το — 中性单数主格冠词。"},
+ "ar":{"Ο":"Ο — أداة التعريف للمفرد المذكر في حالة الرفع.",
+       "Η":"Η — أداة التعريف للمفرد المؤنث في حالة الرفع.",
+       "Το":"Το — أداة التعريف للمفرد المحايد في حالة الرفع."},
+ "es":{"Ο":"Ο — artículo nominativo masculino singular.",
+       "Η":"Η — artículo nominativo femenino singular.",
+       "Το":"Το — artículo nominativo neutro singular."},
+ "pt":{"Ο":"Ο — artigo nominativo masculino singular.",
+       "Η":"Η — artigo nominativo feminino singular.",
+       "Το":"Το — artigo nominativo neutro singular."}
+}
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="gender":
+        return GENDER_EXPLANATIONS.get(lang,GENDER_EXPLANATIONS["en"])[card["correct"]]
     if card["kind"]!="grammar" or card.get("group")!="case":
         return None
     index=int(card["id"].split("_")[-1])-1

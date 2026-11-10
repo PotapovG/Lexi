@@ -6,7 +6,8 @@ import server
 with tempfile.TemporaryDirectory(prefix='lexi-grammar2-http-') as tmp:
  s=socket.socket();s.bind(('127.0.0.1',0));port=s.getsockname()[1];s.close()
  proc=subprocess.Popen([sys.executable,'server.py'],cwd=str(Path(__file__).parent),
-  env=dict(os.environ,GREEK_PORT=str(port),GREEK_DB=str(Path(tmp)/'account.sqlite3')),
+  env=dict(os.environ,GREEK_PORT=str(port),GREEK_DB=str(Path(tmp)/'account.sqlite3'),
+           GREEK_PEPPER=str(Path(tmp)/'login-pepper')),
   stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
  origin='http://127.0.0.1:'+str(port)
  def req(route,body=None,cookie=''):
@@ -27,14 +28,14 @@ with tempfile.TemporaryDirectory(prefix='lexi-grammar2-http-') as tmp:
    except OSError:time.sleep(.15)
   else:raise AssertionError('local server unavailable')
   status,cat,_=req('/api/catalog')
-  assert status==200 and cat['practiceCardCount']==1978 and cat['supplementalGrammar']==56
-  assert cat['cardCount']==1795 and cat['listeningCount']==717
+  assert status==200 and cat['practiceCardCount']==len(server.PRACTICE_ALL) and cat['supplementalGrammar']==76
+  assert cat['cardCount']==len(server.ALL) and cat['listeningCount']==len(server.LISTEN_CARDS)
   assert 'grammar' in cat['types']
   status,acc,header=req('/api/auth/register',{'nickname':'GrammarQ'+uuid.uuid4().hex[:6]})
   assert status==200,acc
   cookie=header['Set-Cookie'].split(';',1)[0]
   status,quiz,_=req('/api/quiz?scope=chapters&chapters=4&types=grammar&count=60&lang=ru',cookie=cookie)
-  assert status==200 and quiz['count']==10,quiz
+  assert status==200 and quiz['count']==sum(c['chapter']==4 for c in server.GRAMMAR2_ALL),quiz
   assert all(q['kind']=='grammar' and q['direction']=='grammar_fill' for q in quiz['questions'])
   first=quiz['questions'][0];card=server.GRAMMAR2_BY_ID[first['id']]
   body={'id':card['id'],'direction':'grammar_fill','lang':'ru','selected':card['correct'],
@@ -48,7 +49,7 @@ with tempfile.TemporaryDirectory(prefix='lexi-grammar2-http-') as tmp:
   status,late,_=req('/api/quiz?scope=chapters&chapters=16&types=grammar&count=60&lang=en',cookie=cookie)
   assert status==200 and late['count']==8
   assert all(q['chapter']==16 for q in late['questions'])
-  print('PASS GRAMMAR2 HTTP: catalog 1978/56, registration, stage4/16, 4-choice variants, answer idempotency, stats/SRS')
+  print('PASS GRAMMAR2 HTTP: catalog new gender clozes, registration, stage4/16, 4-choice variants, answer idempotency, stats/SRS')
  finally:
   proc.terminate()
   try:proc.communicate(timeout=4)
