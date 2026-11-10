@@ -41,6 +41,7 @@ for chapter in range(1,17):
 
 with tempfile.TemporaryDirectory() as td:
     server.DB=str(Path(td)/'test.sqlite3')
+    server.auth.SECRET_FILE=Path(td)/'login-pepper'
     server.init_db()
     # Every dialogue's own gap is scored, logged and tracked independently,
     # including new gap2 and 1-gap-only cards.
