@@ -235,19 +235,29 @@ OVERRIDES = {
 }
 
 def validate(cards):
+    from dialogues_a1_expansion import SOURCE, LANGUAGES as NEW_LANGS
     actual={card['id']:card for card in cards if card['kind']=='dialogue'}
+    existing={cid:c for cid,c in actual.items() if c.get('source')!=SOURCE}
+    additional={cid:c for cid,c in actual.items() if c.get('source')==SOURCE}
     for lang, entries in LANGUAGES.items():
-        assert set(entries)==set(actual),(lang,sorted(set(entries)^set(actual)))
+        assert set(entries)==set(existing),(lang,sorted(set(entries)^set(existing)))
         for cid,values in entries.items():
-            assert len(values)==len(actual[cid]['gaps']),(lang,cid,len(values))
+            assert len(values)==len(existing[cid]['gaps']),(lang,cid,len(values))
     for cid,langs in OVERRIDES.items():
         for lang,values in langs.items():
-            assert len(values)==len(actual[cid]['gaps']),(cid,lang)
+            assert len(values)==len(existing[cid]['gaps']),(cid,lang)
+    assert len(additional)==12
+    for card in additional.values():
+        assert set(card['locales'])==set(NEW_LANGS)
+        assert all(len(card['locales'][lang]['glosses'])==len(card['gaps']) for lang in NEW_LANGS)
     return len(actual)
 
 def lookup(card, direction, language, selected=None):
     assert card['kind']=='dialogue'
+    from dialogues_a1_expansion import SOURCE
     gap=int(direction[3:])
+    if card.get('source')==SOURCE:
+        return card['locales'][language]['glosses'][gap],language
     target=gap
     if selected in card.get('acceptedByGap',{}).get(direction,()) and selected in card['gaps']:
         target=card['gaps'].index(selected)
