@@ -3,8 +3,10 @@
 These are **instructions to AI coding assistants and human contributors**, not an invitation to deploy autonomously.
 
 ## Work boundaries
-- One branch/PR per coherent batch. Never push directly to `main`, rewrite history, merge your own PR or access production.
+- One branch/PR per coherent batch. Never push directly to `main`, rewrite history or access production. A coding assistant may merge only when the repository owner explicitly delegates that authority; the owner delegated merging of passing Lexi PRs on 2026-11-10. Respect required checks and branch protection.
+- **Owner's permanent rule (2026-11-10): NO NEW LEARNER MODES.** Expand only existing exercise kinds, vocabulary, grammatical explanations, dialogue cards and exercises inside current UI modes. Never create an extra mode/tab/course/parallel trainer; reuse existing SRS, weak review, lesson filtering and progress.
 - For course expansion, edit **only** `content/community/*.json` unless the maintainer specifically requests backend changes.
+- Existing dialogue exercises may be extended with independently authored material in `content/conversations/*.json` through the current dialogue-kind loader. That does NOT authorize adding a new learner mode or changing historic IDs.
 - Read `CONTRIBUTING.md`, `docs/CONTENT_AUTHORING.md` and `CONTENT_RIGHTS.md` first.
 - Never read, upload or reproduce a purchased Patakis PDF or its exercises, dialogues, translated passages, images, answer keys or screenshots. Follow only the independently described chapter learning goals.
 - Do not include student records, names, access codes, database/pepper, secrets, model weights or generated WAVs.
