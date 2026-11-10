@@ -20,6 +20,13 @@ def main():
         assert card["curriculum_ready_unit"] <= card["chapter"], card["id"]
         assert card["semanticId"].startswith("lex_"), card["id"]
         assert card["page_anchor_approximate"] is True
+    # Community-added words must be eligible for chapter practice but must
+    # NEVER change the independent A1/A2 atlas IDs or six-locale glossary.
+    import vocab_lessons
+    assert len(vocab_lessons.VOCAB) == 1700
+    community_words = {c["gr"] for c in additions if c["kind"] == "word"}
+    assert not community_words.intersection(w["gr"] for w in vocab_lessons.VOCAB)
+    assert len(community_words) >= 5  # issue #7 adds an initial noun batch
     print("PASS: community cards, immutable IDs, complete locales, grammar levels")
     print("NEW COMMUNITY CARDS BY CHAPTER", dict(sorted(Counter(c["chapter"] for c in additions).items())))
 
