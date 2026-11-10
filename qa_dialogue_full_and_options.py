@@ -37,6 +37,7 @@ for cid in case_duplicates:
 
 with tempfile.TemporaryDirectory() as folder:
     server.DB=str(Path(folder)/'test.sqlite3')
+    server.auth.SECRET_FILE=Path(folder)/'login-pepper'
     server.init_db()
     for lang in ('ru','en','zh','ar','es','pt'):
         for card in cards:
