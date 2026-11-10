@@ -20,6 +20,8 @@ for c in gc.CARDS:
  assert all(c[l] for l in ('ru','en','zh','ar','es','pt'))
 with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
  original=server.DB;server.DB=str(Path(d)/'student.sqlite3')
+ original_secret=server.auth.SECRET_FILE
+ server.auth.SECRET_FILE=Path(d)/'login-pepper'
  try:
   server.init_db()
   for c in gc.CARDS:
@@ -58,6 +60,8 @@ with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
   assert server.GRAMMAR2_BY_ID[gc.CARDS[0]['id']]['id']==gc.CARDS[0]['id']
   # Original textbook ID and audio unaffected.
   assert 'g2261021_001' not in server.BY_ID
- finally:server.DB=original
+ finally:
+  server.DB=original
+  server.auth.SECRET_FILE=original_secret
 print('PASS GRAMMAR2: 76 morphology cards x 6 locales x correct/wrong (912 scores), '
       '4 credible choices, chapter gates and original 1795/717/1700 unchanged')
