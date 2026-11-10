@@ -235,7 +235,28 @@ def translation(card,lang):
     assert KINDS[kind][number]["id"]==card["id"]
     return TABLES[kind][used][number],used
 
+GENDER_EXPLANATIONS={
+ "ru":{"Ο":"Ο — мужской род, именительный падеж, единственное число.",
+       "Η":"Η — женский род, именительный падеж, единственное число.",
+       "Το":"Το — средний род, именительный падеж, единственное число."},
+ "en":{"Ο":"Ο — masculine singular nominative article.",
+       "Η":"Η — feminine singular nominative article.",
+       "Το":"Το — neuter singular nominative article."},
+ "zh":{"Ο":"Ο — 阳性单数主格冠词。","Η":"Η — 阴性单数主格冠词。","Το":"Το — 中性单数主格冠词。"},
+ "ar":{"Ο":"Ο — أداة التعريف للمفرد المذكر في حالة الرفع.",
+       "Η":"Η — أداة التعريف للمفرد المؤنث في حالة الرفع.",
+       "Το":"Το — أداة التعريف للمفرد المحايد في حالة الرفع."},
+ "es":{"Ο":"Ο — artículo nominativo masculino singular.",
+       "Η":"Η — artículo nominativo femenino singular.",
+       "Το":"Το — artículo nominativo neutro singular."},
+ "pt":{"Ο":"Ο — artigo nominativo masculino singular.",
+       "Η":"Η — artigo nominativo feminino singular.",
+       "Το":"Το — artigo nominativo neutro singular."}
+}
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="gender":
+        return GENDER_EXPLANATIONS.get(lang,GENDER_EXPLANATIONS["en"])[card["correct"]]
     if card["kind"]!="grammar" or card.get("group")!="case":
         return None
     index=int(card["id"].split("_")[-1])-1
