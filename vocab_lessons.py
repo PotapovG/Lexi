@@ -273,7 +273,7 @@ def build_vocabulary():
     for c in ALL:
         # Supplementary textbook cards must not expand the independent
         # 1,700-word A1/A2 course or change saved vocabulary IDs.
-        if c["kind"]!="word" or c.get("source")=="original-from-book-syllabus":continue
+        # Community course headwords belong to chapter lessons, not the frozen\n        # 1,700-ID independent A1/A2 vocabulary atlas with reviewed glosses.\n        if c["kind"]!="word" or c.get("source") in ("original-from-book-syllabus", "original-community"):continue
         gr=c["gr"].strip()
         if not gr or gr in by_word:continue
         # Stable word IDs must not change when a pedagogical Greek typo is
