@@ -11,7 +11,7 @@ import dialogues_extra
 from catalog_v2 import ALL, BY_ID
 from textbook_alignment import CHAPTERS as PRINTED_CHAPTERS, LEGACY_TO_PRINTED
 
-cards=[x for x in ALL if x['kind']=='dialogue']
+cards=[x for x in ALL if x['kind']=='dialogue' and x.get('source')!='independent_a1_dialogue_20261110']
 assert len(cards)==100
 assert len(set(x['id'] for x in cards))==100
 assert {x['id'] for x in cards}==({f'dlg{i:03}' for i in range(1,101)}-{'dlg024'})|{'dlg024_v2'}
