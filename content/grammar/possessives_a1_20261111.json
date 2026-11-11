@@ -15,10 +15,10 @@
     "fullTranslations": {
       "ru": "У меня есть книга. Это моя книга.",
       "en": "I have a book. This is my book.",
-      "zh": "我有一本书。 这是我的书。",
+      "zh": "我有一本书。这是我的书。",
       "ar": "لدي كتاب. هذا كتابي.",
       "es": "Tengo un libro. Este es mi libro.",
-      "pt": "Tenho um livro. Este é ο meu livro."
+      "pt": "Tenho um livro. Este é o meu livro."
     }
   },
   {
@@ -37,10 +37,10 @@
     "fullTranslations": {
       "ru": "У меня есть телефон. Мой телефон здесь.",
       "en": "I have a telephone. My telephone is here.",
-      "zh": "我有一部电话。 我的电话在这里。",
+      "zh": "我有一部电话。我的电话在这里。",
       "ar": "لدي هاتف. هاتفي هنا.",
       "es": "Tengo un teléfono. Mi teléfono está aquí.",
-      "pt": "Tenho um telefone. Ο meu telefone está aqui."
+      "pt": "Tenho um telefone. O meu telefone está aqui."
     },
     "stressNoun": {
       "article": "το",
@@ -64,10 +64,10 @@
     "fullTranslations": {
       "ru": "У меня есть друг. Мой друг с Кипра.",
       "en": "I have a friend. My friend is from Cyprus.",
-      "zh": "我有一个朋友。 我的朋友来自塞浦路斯。",
+      "zh": "我有一个朋友。我的朋友来自塞浦路斯。",
       "ar": "لدي صديق. صديقي من قبرص.",
       "es": "Tengo un amigo. Mi amigo es de Chipre.",
-      "pt": "Tenho um amigo. Ο meu amigo é de Chipre."
+      "pt": "Tenho um amigo. O meu amigo é de Chipre."
     }
   },
   {
@@ -86,7 +86,7 @@
     "fullTranslations": {
       "ru": "У меня есть сумка. Моя сумка дома?",
       "en": "I have a bag. Is my bag at home?",
-      "zh": "我有一个包。 我的包在家吗？",
+      "zh": "我有一个包。我的包在家吗？",
       "ar": "لدي حقيبة. هل حقيبتي في البيت؟",
       "es": "Tengo una bolsa. ¿Está mi bolsa en casa?",
       "pt": "Tenho uma mala. A minha mala está em casa?"
@@ -108,7 +108,7 @@
     "fullTranslations": {
       "ru": "У меня есть дом. Мой дом не в Афинах.",
       "en": "I have a house. My house is not in Athens.",
-      "zh": "我有一所房子。 我的房子不在雅典。",
+      "zh": "我有一所房子。我的房子不在雅典。",
       "ar": "لدي بيت. بيتي ليس في أثينا.",
       "es": "Tengo una casa. Mi casa no está en Atenas.",
       "pt": "Tenho uma casa. A minha casa não fica em Atenas."
@@ -130,10 +130,10 @@
     "fullTranslations": {
       "ru": "У тебя есть книга. Это твоя книга.",
       "en": "You have a book. This is your book.",
-      "zh": "你有一本书。 这是你的书。",
+      "zh": "你有一本书。这是你的书。",
       "ar": "لديك كتاب. هذا كتابك.",
       "es": "Tienes un libro. Este es tu libro.",
-      "pt": "Tu tens um livro. Este é ο teu livro."
+      "pt": "Tu tens um livro. Este é o teu livro."
     }
   },
   {
@@ -152,10 +152,10 @@
     "fullTranslations": {
       "ru": "У тебя есть телефон. Твой телефон здесь.",
       "en": "You have a telephone. Your telephone is here.",
-      "zh": "你有一部电话。 你的电话在这里。",
+      "zh": "你有一部电话。你的电话在这里。",
       "ar": "لديك هاتف. هاتفك هنا.",
       "es": "Tienes un teléfono. Tu teléfono está aquí.",
-      "pt": "Tu tens um telefone. Ο teu telefone está aqui."
+      "pt": "Tu tens um telefone. O teu telefone está aqui."
     },
     "stressNoun": {
       "article": "το",
@@ -179,10 +179,10 @@
     "fullTranslations": {
       "ru": "У тебя есть друг. Твой друг с Кипра.",
       "en": "You have a friend. Your friend is from Cyprus.",
-      "zh": "你有一个朋友。 你的朋友来自塞浦路斯。",
+      "zh": "你有一个朋友。你的朋友来自塞浦路斯。",
       "ar": "لديك صديق. صديقك من قبرص.",
       "es": "Tienes un amigo. Tu amigo es de Chipre.",
-      "pt": "Tu tens um amigo. Ο teu amigo é de Chipre."
+      "pt": "Tu tens um amigo. O teu amigo é de Chipre."
     }
   },
   {
@@ -201,7 +201,7 @@
     "fullTranslations": {
       "ru": "У тебя есть сумка. Твоя сумка дома?",
       "en": "You have a bag. Is your bag at home?",
-      "zh": "你有一个包。 你的包在家吗？",
+      "zh": "你有一个包。你的包在家吗？",
       "ar": "لديك حقيبة. هل حقيبتك في البيت؟",
       "es": "Tienes una bolsa. ¿Está tu bolsa en casa?",
       "pt": "Tu tens uma mala. A tua mala está em casa?"
@@ -223,7 +223,7 @@
     "fullTranslations": {
       "ru": "У тебя есть дом. Твой дом не в Афинах.",
       "en": "You have a house. Your house is not in Athens.",
-      "zh": "你有一所房子。 你的房子不在雅典。",
+      "zh": "你有一所房子。你的房子不在雅典。",
       "ar": "لديك بيت. بيتك ليس في أثينا.",
       "es": "Tienes una casa. Tu casa no está en Atenas.",
       "pt": "Tu tens uma casa. A tua casa não fica em Atenas."
@@ -245,7 +245,7 @@
     "fullTranslations": {
       "ru": "У Никоса есть книга. Это его книга.",
       "en": "Nikos has a book. This is his book.",
-      "zh": "尼科斯有一本书。 这是他的书。",
+      "zh": "尼科斯有一本书。这是他的书。",
       "ar": "لدى نيكوس كتاب. هذا كتابه.",
       "es": "Nikos tiene un libro. Este es su libro.",
       "pt": "O Nikos tem um livro. Este é o livro dele."
@@ -267,7 +267,7 @@
     "fullTranslations": {
       "ru": "У Никоса есть телефон. Его телефон здесь.",
       "en": "Nikos has a telephone. His telephone is here.",
-      "zh": "尼科斯有一部电话。 他的电话在这里。",
+      "zh": "尼科斯有一部电话。他的电话在这里。",
       "ar": "لدى نيكوس هاتف. هاتفه هنا.",
       "es": "Nikos tiene un teléfono. Su teléfono está aquí.",
       "pt": "O Nikos tem um telefone. O telefone dele está aqui."
@@ -294,7 +294,7 @@
     "fullTranslations": {
       "ru": "У Никоса есть друг. Его друг с Кипра.",
       "en": "Nikos has a friend. His friend is from Cyprus.",
-      "zh": "尼科斯有一个朋友。 他的朋友来自塞浦路斯。",
+      "zh": "尼科斯有一个朋友。他的朋友来自塞浦路斯。",
       "ar": "لدى نيكوس صديق. صديقه من قبرص.",
       "es": "Nikos tiene un amigo. Su amigo es de Chipre.",
       "pt": "O Nikos tem um amigo. O amigo dele é de Chipre."
@@ -316,7 +316,7 @@
     "fullTranslations": {
       "ru": "У Никоса есть сумка. Его сумка дома?",
       "en": "Nikos has a bag. Is his bag at home?",
-      "zh": "尼科斯有一个包。 他的包在家吗？",
+      "zh": "尼科斯有一个包。他的包在家吗？",
       "ar": "لدى نيكوس حقيبة. هل حقيبته في البيت؟",
       "es": "Nikos tiene una bolsa. ¿Está su bolsa en casa?",
       "pt": "O Nikos tem uma mala. A mala dele está em casa?"
@@ -338,7 +338,7 @@
     "fullTranslations": {
       "ru": "У Никоса есть дом. Его дом не в Афинах.",
       "en": "Nikos has a house. His house is not in Athens.",
-      "zh": "尼科斯有一所房子。 他的房子不在雅典。",
+      "zh": "尼科斯有一所房子。他的房子不在雅典。",
       "ar": "لدى نيكوس بيت. بيته ليس في أثينا.",
       "es": "Nikos tiene una casa. Su casa no está en Atenas.",
       "pt": "O Nikos tem uma casa. A casa dele não fica em Atenas."
@@ -360,7 +360,7 @@
     "fullTranslations": {
       "ru": "У Марии есть книга. Это её книга.",
       "en": "Maria has a book. This is her book.",
-      "zh": "玛丽亚有一本书。 这是她的书。",
+      "zh": "玛丽亚有一本书。这是她的书。",
       "ar": "لدى ماريا كتاب. هذا كتابها.",
       "es": "María tiene un libro. Este es su libro.",
       "pt": "A Maria tem um livro. Este é o livro dela."
@@ -382,7 +382,7 @@
     "fullTranslations": {
       "ru": "У Марии есть телефон. Её телефон здесь.",
       "en": "Maria has a telephone. Her telephone is here.",
-      "zh": "玛丽亚有一部电话。 她的电话在这里。",
+      "zh": "玛丽亚有一部电话。她的电话在这里。",
       "ar": "لدى ماريا هاتف. هاتفها هنا.",
       "es": "María tiene un teléfono. Su teléfono está aquí.",
       "pt": "A Maria tem um telefone. O telefone dela está aqui."
@@ -409,7 +409,7 @@
     "fullTranslations": {
       "ru": "У Марии есть друг. Её друг с Кипра.",
       "en": "Maria has a friend. Her friend is from Cyprus.",
-      "zh": "玛丽亚有一个朋友。 她的朋友来自塞浦路斯。",
+      "zh": "玛丽亚有一个朋友。她的朋友来自塞浦路斯。",
       "ar": "لدى ماريا صديق. صديقها من قبرص.",
       "es": "María tiene un amigo. Su amigo es de Chipre.",
       "pt": "A Maria tem um amigo. O amigo dela é de Chipre."
@@ -431,7 +431,7 @@
     "fullTranslations": {
       "ru": "У Марии есть сумка. Её сумка дома?",
       "en": "Maria has a bag. Is her bag at home?",
-      "zh": "玛丽亚有一个包。 她的包在家吗？",
+      "zh": "玛丽亚有一个包。她的包在家吗？",
       "ar": "لدى ماريا حقيبة. هل حقيبتها في البيت؟",
       "es": "María tiene una bolsa. ¿Está su bolsa en casa?",
       "pt": "A Maria tem uma mala. A mala dela está em casa?"
@@ -453,7 +453,7 @@
     "fullTranslations": {
       "ru": "У Марии есть дом. Её дом не в Афинах.",
       "en": "Maria has a house. Her house is not in Athens.",
-      "zh": "玛丽亚有一所房子。 她的房子不在雅典。",
+      "zh": "玛丽亚有一所房子。她的房子不在雅典。",
       "ar": "لدى ماريا بيت. بيتها ليس في أثينا.",
       "es": "María tiene una casa. Su casa no está en Atenas.",
       "pt": "A Maria tem uma casa. A casa dela não fica em Atenas."
@@ -475,10 +475,10 @@
     "fullTranslations": {
       "ru": "У нас есть книга. Это наша книга.",
       "en": "We have a book. This is our book.",
-      "zh": "我们有一本书。 这是我们的书。",
+      "zh": "我们有一本书。这是我们的书。",
       "ar": "لدينا كتاب. هذا كتابنا.",
       "es": "Tenemos un libro. Este es nuestro libro.",
-      "pt": "Nós temos um livro. Este é ο nosso livro."
+      "pt": "Nós temos um livro. Este é o nosso livro."
     }
   },
   {
@@ -497,10 +497,10 @@
     "fullTranslations": {
       "ru": "У нас есть телефон. Наш телефон здесь.",
       "en": "We have a telephone. Our telephone is here.",
-      "zh": "我们有一部电话。 我们的电话在这里。",
+      "zh": "我们有一部电话。我们的电话在这里。",
       "ar": "لدينا هاتف. هاتفنا هنا.",
       "es": "Tenemos un teléfono. Nuestro teléfono está aquí.",
-      "pt": "Nós temos um telefone. Ο nosso telefone está aqui."
+      "pt": "Nós temos um telefone. O nosso telefone está aqui."
     },
     "stressNoun": {
       "article": "το",
@@ -524,10 +524,10 @@
     "fullTranslations": {
       "ru": "У нас есть друг. Наш друг с Кипра.",
       "en": "We have a friend. Our friend is from Cyprus.",
-      "zh": "我们有一个朋友。 我们的朋友来自塞浦路斯。",
+      "zh": "我们有一个朋友。我们的朋友来自塞浦路斯。",
       "ar": "لدينا صديق. صديقنا من قبرص.",
       "es": "Tenemos un amigo. Nuestro amigo es de Chipre.",
-      "pt": "Nós temos um amigo. Ο nosso amigo é de Chipre."
+      "pt": "Nós temos um amigo. O nosso amigo é de Chipre."
     }
   },
   {
@@ -546,7 +546,7 @@
     "fullTranslations": {
       "ru": "У нас есть сумка. Наша сумка дома?",
       "en": "We have a bag. Is our bag at home?",
-      "zh": "我们有一个包。 我们的包在家吗？",
+      "zh": "我们有一个包。我们的包在家吗？",
       "ar": "لدينا حقيبة. هل حقيبتنا في البيت؟",
       "es": "Tenemos una bolsa. ¿Está nuestra bolsa en casa?",
       "pt": "Nós temos uma mala. A nossa mala está em casa?"
@@ -568,7 +568,7 @@
     "fullTranslations": {
       "ru": "У нас есть дом. Наш дом не в Афинах.",
       "en": "We have a house. Our house is not in Athens.",
-      "zh": "我们有一所房子。 我们的房子不在雅典。",
+      "zh": "我们有一所房子。我们的房子不在雅典。",
       "ar": "لدينا بيت. بيتنا ليس في أثينا.",
       "es": "Tenemos una casa. Nuestra casa no está en Atenas.",
       "pt": "Nós temos uma casa. A nossa casa não fica em Atenas."
@@ -590,10 +590,10 @@
     "fullTranslations": {
       "ru": "У вас есть книга. Это ваша книга.",
       "en": "You have a book. This is your book.",
-      "zh": "您有一本书。 这是您的书。",
+      "zh": "您有一本书。这是您的书。",
       "ar": "لديكم كتاب. هذا كتابكم.",
       "es": "Usted tiene un libro. Este es su libro.",
-      "pt": "O senhor tem um livro. Este é ο seu livro."
+      "pt": "O senhor tem um livro. Este é o seu livro."
     }
   },
   {
@@ -612,10 +612,10 @@
     "fullTranslations": {
       "ru": "У вас есть телефон. Ваш телефон здесь.",
       "en": "You have a telephone. Your telephone is here.",
-      "zh": "您有一部电话。 您的电话在这里。",
+      "zh": "您有一部电话。您的电话在这里。",
       "ar": "لديكم هاتف. هاتفكم هنا.",
       "es": "Usted tiene un teléfono. Su teléfono está aquí.",
-      "pt": "O senhor tem um telefone. Ο seu telefone está aqui."
+      "pt": "O senhor tem um telefone. O seu telefone está aqui."
     },
     "stressNoun": {
       "article": "το",
@@ -639,10 +639,10 @@
     "fullTranslations": {
       "ru": "У вас есть друг. Ваш друг с Кипра.",
       "en": "You have a friend. Your friend is from Cyprus.",
-      "zh": "您有一个朋友。 您的朋友来自塞浦路斯。",
+      "zh": "您有一个朋友。您的朋友来自塞浦路斯。",
       "ar": "لديكم صديق. صديقكم من قبرص.",
       "es": "Usted tiene un amigo. Su amigo es de Chipre.",
-      "pt": "O senhor tem um amigo. Ο seu amigo é de Chipre."
+      "pt": "O senhor tem um amigo. O seu amigo é de Chipre."
     }
   },
   {
@@ -661,7 +661,7 @@
     "fullTranslations": {
       "ru": "У вас есть сумка. Ваша сумка дома?",
       "en": "You have a bag. Is your bag at home?",
-      "zh": "您有一个包。 您的包在家吗？",
+      "zh": "您有一个包。您的包在家吗？",
       "ar": "لديكم حقيبة. هل حقيبتكم في البيت؟",
       "es": "Usted tiene una bolsa. ¿Está su bolsa en casa?",
       "pt": "O senhor tem uma mala. A sua mala está em casa?"
@@ -683,7 +683,7 @@
     "fullTranslations": {
       "ru": "У вас есть дом. Ваш дом не в Афинах.",
       "en": "You have a house. Your house is not in Athens.",
-      "zh": "您有一所房子。 您的房子不在雅典。",
+      "zh": "您有一所房子。您的房子不在雅典。",
       "ar": "لديكم بيت. بيتكم ليس في أثينا.",
       "es": "Usted tiene una casa. Su casa no está en Atenas.",
       "pt": "O senhor tem uma casa. A sua casa não fica em Atenas."
@@ -705,7 +705,7 @@
     "fullTranslations": {
       "ru": "У Никоса и Марии есть книга. Это их книга.",
       "en": "Nikos and Maria have a book. This is their book.",
-      "zh": "尼科斯和玛丽亚有一本书。 这是他们的书。",
+      "zh": "尼科斯和玛丽亚有一本书。这是他们的书。",
       "ar": "لدى نيكوس وماريا كتاب. هذا كتابهم.",
       "es": "Nikos y María tienen un libro. Este es su libro.",
       "pt": "O Nikos e a Maria têm um livro. Este é o livro deles."
@@ -727,7 +727,7 @@
     "fullTranslations": {
       "ru": "У Никоса и Марии есть телефон. Их телефон здесь.",
       "en": "Nikos and Maria have a telephone. Their telephone is here.",
-      "zh": "尼科斯和玛丽亚有一部电话。 他们的电话在这里。",
+      "zh": "尼科斯和玛丽亚有一部电话。他们的电话在这里。",
       "ar": "لدى نيكوس وماريا هاتف. هاتفهم هنا.",
       "es": "Nikos y María tienen un teléfono. Su teléfono está aquí.",
       "pt": "O Nikos e a Maria têm um telefone. O telefone deles está aqui."
@@ -754,7 +754,7 @@
     "fullTranslations": {
       "ru": "У Никоса и Марии есть друг. Их друг с Кипра.",
       "en": "Nikos and Maria have a friend. Their friend is from Cyprus.",
-      "zh": "尼科斯和玛丽亚有一个朋友。 他们的朋友来自塞浦路斯。",
+      "zh": "尼科斯和玛丽亚有一个朋友。他们的朋友来自塞浦路斯。",
       "ar": "لدى نيكوس وماريا صديق. صديقهم من قبرص.",
       "es": "Nikos y María tienen un amigo. Su amigo es de Chipre.",
       "pt": "O Nikos e a Maria têm um amigo. O amigo deles é de Chipre."
@@ -776,7 +776,7 @@
     "fullTranslations": {
       "ru": "У Никоса и Марии есть сумка. Их сумка дома?",
       "en": "Nikos and Maria have a bag. Is their bag at home?",
-      "zh": "尼科斯和玛丽亚有一个包。 他们的包在家吗？",
+      "zh": "尼科斯和玛丽亚有一个包。他们的包在家吗？",
       "ar": "لدى نيكوس وماريا حقيبة. هل حقيبتهم في البيت؟",
       "es": "Nikos y María tienen una bolsa. ¿Está su bolsa en casa?",
       "pt": "O Nikos e a Maria têm uma mala. A mala deles está em casa?"
@@ -798,7 +798,7 @@
     "fullTranslations": {
       "ru": "У Никоса и Марии есть дом. Их дом не в Афинах.",
       "en": "Nikos and Maria have a house. Their house is not in Athens.",
-      "zh": "尼科斯和玛丽亚有一所房子。 他们的房子不在雅典。",
+      "zh": "尼科斯和玛丽亚有一所房子。他们的房子不在雅典。",
       "ar": "لدى نيكوس وماريا بيت. بيتهم ليس في أثينا.",
       "es": "Nikos y María tienen una casa. Su casa no está en Atenas.",
       "pt": "O Nikos e a Maria têm uma casa. A casa deles não fica em Atenas."
