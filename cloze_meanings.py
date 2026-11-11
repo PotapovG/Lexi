@@ -221,13 +221,18 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            assert len(lines)==len(cards),(kind,lang,len(lines),len(cards))
+            legacy=[c for c in cards if c.get("group")!="possessive"] if kind=="grammar" else cards
+            assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==76
+    assert len(ARTICLES)==24 and len(GRAMMAR)==111
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="possessive":
+        # Newly authored complete sentence glosses for all six locales.
+        # Do not show any English fallback for this new content.
+        return card["fullTranslations"][lang],lang
     kind=card["kind"]
     assert kind in TABLES
     number=(int(card["id"].split("_")[-1])-1)
@@ -254,7 +259,91 @@ GENDER_EXPLANATIONS={
        "Το":"Το — artigo nominativo neutro singular."}
 }
 
+
+POSSESSIVE_GUIDANCE={
+ "ru":"«{form}» обозначает владельца: {owner}. Притяжательная форма зависит от владельца, а не от рода предмета. Это принадлежность, не конструкция «μου αρέσει».",
+ "en":"“{form}” identifies the owner: {owner}. The owner, not the noun’s gender, determines the possessive. This is ownership, not the “μου αρέσει” construction.",
+ "zh":"“{form}”表示拥有者：{owner}。物主形式取决于拥有者，而不是物品名词的性；这里不是“μου αρέσει”结构。",
+ "ar":"«{form}» يدل على صاحب الشيء: {owner}. صيغة الملكية تتبع المالك لا جنس الاسم؛ وليست هنا صيغة «μου αρέσει».",
+ "es":"«{form}» indica quién es el propietario: {owner}. La forma posesiva depende del propietario, no del género del objeto; aquí no es «μου αρέσει».",
+ "pt":"«{form}» identifica o dono: {owner}. A forma possessiva depende de quem possui o objeto, não do género do nome; aqui não é «μου αρέσει»."
+}
+POSSESSIVE_OWNER={
+ "mine":{
+ "ru":"говорящий (я)",
+ "en":"the speaker (I)",
+ "zh":"说话者（我）",
+ "ar":"المتكلم (أنا)",
+ "es":"quien habla (yo)",
+ "pt":"quem fala (eu)"
+},
+ "yours":{
+ "ru":"собеседник на «ты»",
+ "en":"the person addressed informally (you)",
+ "zh":"被非正式称呼的人（你）",
+ "ar":"المخاطب بصيغة المفرد غير الرسمية",
+ "es":"la persona a la que se habla de tú",
+ "pt":"a pessoa tratada por tu"
+},
+ "his":{
+ "ru":"Никос (мужчина)",
+ "en":"Nikos (he)",
+ "zh":"尼科斯（他）",
+ "ar":"نيكوس (هو)",
+ "es":"Nikos (él)",
+ "pt":"o Nikos (ele)"
+},
+ "hers":{
+ "ru":"Мария (женщина)",
+ "en":"Maria (she)",
+ "zh":"玛丽亚（她）",
+ "ar":"ماريا (هي)",
+ "es":"María (ella)",
+ "pt":"a Maria (ela)"
+},
+ "ours":{
+ "ru":"говорящий и его группа (мы)",
+ "en":"the speaker and their group (we)",
+ "zh":"说话者与其同伴（我们）",
+ "ar":"المتكلم ومجموعته (نحن)",
+ "es":"quien habla y su grupo (nosotros)",
+ "pt":"quem fala e o seu grupo (nós)"
+},
+ "yours_formal":{
+ "ru":"собеседник на вежливое «вы»",
+ "en":"the person addressed politely (you)",
+ "zh":"被礼貌称呼的人（您）",
+ "ar":"المخاطب بصيغة الاحترام (أنتم)",
+ "es":"la persona tratada de usted",
+ "pt":"a pessoa tratada com formalidade"
+},
+ "theirs":{
+ "ru":"Никос и Мария вместе (они)",
+ "en":"Nikos and Maria together (they)",
+ "zh":"尼科斯和玛丽亚（他们）",
+ "ar":"نيكوس وماريا معًا (هم)",
+ "es":"Nikos y María juntos (ellos)",
+ "pt":"o Nikos e a Maria juntos (eles)"
+}
+}
+
+def _possessive_explanation(card,lang):
+    from enclitic_stress import EXPLANATIONS as STRESS_GUIDANCE
+    message=POSSESSIVE_GUIDANCE[lang].format(
+        form=card["correct"],owner=POSSESSIVE_OWNER[card["owner"]][lang]
+    )
+    if card.get("stressNoun"):
+        info=card["stressNoun"]
+        stress=STRESS_GUIDANCE[lang][0].format(
+            noun=info["noun"],pronoun=card["correct"],
+            correct=f'{info["article"]} {info["rendered"]} {card["correct"]}'
+        )
+        message += " " + stress
+    return message
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="possessive":
+        return _possessive_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="gender":
         return GENDER_EXPLANATIONS.get(lang,GENDER_EXPLANATIONS["en"])[card["correct"]]
     if card["kind"]!="grammar" or card.get("group")!="case":
