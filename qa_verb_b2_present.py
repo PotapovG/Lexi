@@ -17,7 +17,7 @@ import verb_b2_cards
 CARDS=verb_b2_cards.CARDS
 LANGS=verb_b2_cards.LANGS
 assert len(verb_b2_cards.PARADIGMS)==10 and len(CARDS)==40
-assert len(grammar2_cards.CARDS)==223
+assert len(grammar2_cards.CARDS)>=223  # issue #13 appends likes without altering old IDs
 assert [c["id"] for c in grammar2_cards.CARDS[:183]]==[
     f"g2261021_{i:03d}" for i in range(1,184)
 ]

@@ -75,5 +75,10 @@ assert len(CARDS)==183,len(CARDS)
 from verb_b2_cards import CARDS as VERB_B2_CARDS
 CARDS.extend(VERB_B2_CARDS)
 assert len(CARDS)==223,len(CARDS)
+# Issue #13 extends existing grammar_fill questions (choice + typed);
+# immutable previous 223 IDs and learner progress are never renumbered.
+from likes_dislikes_cards import CARDS as LIKES_CARDS
+CARDS.extend(LIKES_CARDS)
+assert len(CARDS)==259,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}

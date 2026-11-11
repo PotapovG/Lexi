@@ -1,0 +1,637 @@
+{
+  "version": 1,
+  "cards": [
+    {
+      "id": "g2261021_224",
+      "chapter": 7,
+      "skill": "agreement",
+      "prompt": "Μου ___ ο καφές.",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "μου",
+      "translations": {
+        "ru": "Мне нравится кофе.",
+        "en": "I like coffee.",
+        "zh": "我喜欢咖啡。",
+        "ar": "أحب القهوة.",
+        "es": "Me gusta el café.",
+        "pt": "Gosto de café."
+      }
+    },
+    {
+      "id": "g2261021_225",
+      "chapter": 7,
+      "skill": "agreement",
+      "prompt": "Σου ___ η μουσική;",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "σου",
+      "translations": {
+        "ru": "Тебе нравится музыка?",
+        "en": "Do you like music?",
+        "zh": "你喜欢音乐吗？",
+        "ar": "هل تحب الموسيقى؟",
+        "es": "¿Te gusta la música?",
+        "pt": "Gostas de música?"
+      }
+    },
+    {
+      "id": "g2261021_226",
+      "chapter": 7,
+      "skill": "agreement",
+      "prompt": "Του ___ το βιβλίο.",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "του",
+      "translations": {
+        "ru": "Ему нравится книга.",
+        "en": "He likes the book.",
+        "zh": "他喜欢这本书。",
+        "ar": "يعجبه الكتاب.",
+        "es": "Le gusta el libro.",
+        "pt": "Ele gosta do livro."
+      }
+    },
+    {
+      "id": "g2261021_227",
+      "chapter": 7,
+      "skill": "agreement",
+      "prompt": "Δεν της ___ ο χορός.",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "της",
+      "translations": {
+        "ru": "Ей не нравятся танцы.",
+        "en": "She does not like dancing.",
+        "zh": "她不喜欢跳舞。",
+        "ar": "هي لا تحب الرقص.",
+        "es": "No le gusta bailar.",
+        "pt": "Ela não gosta de dançar."
+      }
+    },
+    {
+      "id": "g2261021_228",
+      "chapter": 7,
+      "skill": "agreement",
+      "prompt": "Μας ___ το ποδόσφαιρο.",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "μας",
+      "translations": {
+        "ru": "Нам нравится футбол.",
+        "en": "We like football.",
+        "zh": "我们喜欢足球。",
+        "ar": "نحن نحب كرة القدم.",
+        "es": "Nos gusta el fútbol.",
+        "pt": "Gostamos de futebol."
+      }
+    },
+    {
+      "id": "g2261021_229",
+      "chapter": 7,
+      "skill": "agreement",
+      "prompt": "Σας ___ η φωτογραφία;",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "σας",
+      "translations": {
+        "ru": "Вам нравится фотография?",
+        "en": "Do you like the photograph?",
+        "zh": "您喜欢这张照片吗？",
+        "ar": "هل تعجبكم الصورة؟",
+        "es": "¿Les gusta la fotografía?",
+        "pt": "Gostam da fotografia?"
+      }
+    },
+    {
+      "id": "g2261021_230",
+      "chapter": 7,
+      "skill": "agreement",
+      "prompt": "Τους ___ το σκάκι.",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "τους",
+      "translations": {
+        "ru": "Им нравятся шахматы.",
+        "en": "They like chess.",
+        "zh": "他们喜欢国际象棋。",
+        "ar": "هم يحبون الشطرنج.",
+        "es": "Les gusta el ajedrez.",
+        "pt": "Eles gostam de xadrez."
+      }
+    },
+    {
+      "id": "g2261021_231",
+      "chapter": 16,
+      "skill": "agreement",
+      "prompt": "Δεν μου ___ το θέατρο.",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "μου",
+      "translations": {
+        "ru": "Мне не нравится театр.",
+        "en": "I do not like theatre.",
+        "zh": "我不喜欢戏剧。",
+        "ar": "أنا لا أحب المسرح.",
+        "es": "No me gusta el teatro.",
+        "pt": "Não gosto de teatro."
+      }
+    },
+    {
+      "id": "g2261021_232",
+      "chapter": 16,
+      "skill": "agreement",
+      "prompt": "Της ___ ο κινηματογράφος;",
+      "correct": "αρέσει",
+      "number": "sg",
+      "experiencer": "της",
+      "translations": {
+        "ru": "Ей нравится кино?",
+        "en": "Does she like cinema?",
+        "zh": "她喜欢电影吗？",
+        "ar": "هل تحب السينما؟",
+        "es": "¿Le gusta el cine?",
+        "pt": "Ela gosta de cinema?"
+      }
+    },
+    {
+      "id": "g2261021_233",
+      "chapter": 8,
+      "skill": "agreement",
+      "prompt": "Μου ___ τα βιβλία.",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "μου",
+      "translations": {
+        "ru": "Мне нравятся книги.",
+        "en": "I like books.",
+        "zh": "我喜欢书。",
+        "ar": "أحب الكتب.",
+        "es": "Me gustan los libros.",
+        "pt": "Gosto de livros."
+      }
+    },
+    {
+      "id": "g2261021_234",
+      "chapter": 8,
+      "skill": "agreement",
+      "prompt": "Σου ___ οι φίλοι του Νίκου;",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "σου",
+      "translations": {
+        "ru": "Тебе нравятся друзья Никоса?",
+        "en": "Do you like Nikos's friends?",
+        "zh": "你喜欢尼科斯的朋友们吗？",
+        "ar": "هل تحب أصدقاء نيكوس؟",
+        "es": "¿Te gustan los amigos de Nikos?",
+        "pt": "Gostas dos amigos do Nikos?"
+      }
+    },
+    {
+      "id": "g2261021_235",
+      "chapter": 8,
+      "skill": "agreement",
+      "prompt": "Δεν του ___ τα παιχνίδια.",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "του",
+      "translations": {
+        "ru": "Ему не нравятся игры.",
+        "en": "He does not like games.",
+        "zh": "他不喜欢游戏。",
+        "ar": "هو لا يحب الألعاب.",
+        "es": "No le gustan los juegos.",
+        "pt": "Ele não gosta de jogos."
+      }
+    },
+    {
+      "id": "g2261021_236",
+      "chapter": 8,
+      "skill": "agreement",
+      "prompt": "Της ___ οι ταινίες.",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "της",
+      "translations": {
+        "ru": "Ей нравятся фильмы.",
+        "en": "She likes films.",
+        "zh": "她喜欢电影。",
+        "ar": "هي تحب الأفلام.",
+        "es": "Le gustan las películas.",
+        "pt": "Ela gosta de filmes."
+      }
+    },
+    {
+      "id": "g2261021_237",
+      "chapter": 8,
+      "skill": "agreement",
+      "prompt": "Μας ___ τα λουλούδια.",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "μας",
+      "translations": {
+        "ru": "Нам нравятся цветы.",
+        "en": "We like flowers.",
+        "zh": "我们喜欢花。",
+        "ar": "نحن نحب الزهور.",
+        "es": "Nos gustan las flores.",
+        "pt": "Gostamos de flores."
+      }
+    },
+    {
+      "id": "g2261021_238",
+      "chapter": 8,
+      "skill": "agreement",
+      "prompt": "Σας ___ τα μήλα;",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "σας",
+      "translations": {
+        "ru": "Вам нравятся яблоки?",
+        "en": "Do you like apples?",
+        "zh": "您喜欢苹果吗？",
+        "ar": "هل تحبون التفاح؟",
+        "es": "¿Les gustan las manzanas?",
+        "pt": "Gostam de maçãs?"
+      }
+    },
+    {
+      "id": "g2261021_239",
+      "chapter": 16,
+      "skill": "agreement",
+      "prompt": "Τους ___ τα μουσεία.",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "τους",
+      "translations": {
+        "ru": "Им нравятся музеи.",
+        "en": "They like museums.",
+        "zh": "他们喜欢博物馆。",
+        "ar": "هم يحبون المتاحف.",
+        "es": "Les gustan los museos.",
+        "pt": "Eles gostam de museus."
+      }
+    },
+    {
+      "id": "g2261021_240",
+      "chapter": 16,
+      "skill": "agreement",
+      "prompt": "Δεν μου ___ οι συναυλίες.",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "μου",
+      "translations": {
+        "ru": "Мне не нравятся концерты.",
+        "en": "I do not like concerts.",
+        "zh": "我不喜欢音乐会。",
+        "ar": "أنا لا أحب الحفلات الموسيقية.",
+        "es": "No me gustan los conciertos.",
+        "pt": "Não gosto de concertos."
+      }
+    },
+    {
+      "id": "g2261021_241",
+      "chapter": 16,
+      "skill": "agreement",
+      "prompt": "Του ___ οι εκδρομές;",
+      "correct": "αρέσουν",
+      "number": "pl",
+      "experiencer": "του",
+      "translations": {
+        "ru": "Ему нравятся экскурсии?",
+        "en": "Does he like excursions?",
+        "zh": "他喜欢短途旅行吗？",
+        "ar": "هل يحب الرحلات؟",
+        "es": "¿Le gustan las excursiones?",
+        "pt": "Ele gosta de excursões?"
+      }
+    },
+    {
+      "id": "g2261021_242",
+      "chapter": 7,
+      "skill": "experiencer",
+      "prompt": "Εμένα ___ αρέσει ο καφές.",
+      "correct": "μου",
+      "number": "sg",
+      "experiencer": "μου",
+      "translations": {
+        "ru": "Мне нравится кофе.",
+        "en": "I like coffee.",
+        "zh": "我喜欢咖啡。",
+        "ar": "أنا أحب القهوة.",
+        "es": "A mí me gusta el café.",
+        "pt": "Eu gosto de café."
+      }
+    },
+    {
+      "id": "g2261021_243",
+      "chapter": 7,
+      "skill": "experiencer",
+      "prompt": "Εσένα ___ αρέσει η μουσική;",
+      "correct": "σου",
+      "number": "sg",
+      "experiencer": "σου",
+      "translations": {
+        "ru": "Тебе нравится музыка?",
+        "en": "Do you like music?",
+        "zh": "你喜欢音乐吗？",
+        "ar": "هل تحب الموسيقى؟",
+        "es": "¿A ti te gusta la música?",
+        "pt": "Tu gostas de música?"
+      }
+    },
+    {
+      "id": "g2261021_244",
+      "chapter": 7,
+      "skill": "experiencer",
+      "prompt": "Στον Νίκο ___ αρέσει το βιβλίο.",
+      "correct": "του",
+      "number": "sg",
+      "experiencer": "του",
+      "translations": {
+        "ru": "Никосу нравится книга.",
+        "en": "Nikos likes the book.",
+        "zh": "尼科斯喜欢这本书。",
+        "ar": "نيكوس يحب الكتاب.",
+        "es": "A Nikos le gusta el libro.",
+        "pt": "O Nikos gosta do livro."
+      }
+    },
+    {
+      "id": "g2261021_245",
+      "chapter": 7,
+      "skill": "experiencer",
+      "prompt": "Στη Μαρία ___ αρέσει η φωτογραφία.",
+      "correct": "της",
+      "number": "sg",
+      "experiencer": "της",
+      "translations": {
+        "ru": "Марии нравится фотография.",
+        "en": "Maria likes the photograph.",
+        "zh": "玛丽亚喜欢这张照片。",
+        "ar": "ماريا تعجبها الصورة.",
+        "es": "A María le gusta la fotografía.",
+        "pt": "A Maria gosta da fotografia."
+      }
+    },
+    {
+      "id": "g2261021_246",
+      "chapter": 7,
+      "skill": "experiencer",
+      "prompt": "Σε εμάς ___ αρέσει το ποδόσφαιρο.",
+      "correct": "μας",
+      "number": "sg",
+      "experiencer": "μας",
+      "translations": {
+        "ru": "Нам нравится футбол.",
+        "en": "We like football.",
+        "zh": "我们喜欢足球。",
+        "ar": "نحن نحب كرة القدم.",
+        "es": "A nosotros nos gusta el fútbol.",
+        "pt": "Nós gostamos de futebol."
+      }
+    },
+    {
+      "id": "g2261021_247",
+      "chapter": 7,
+      "skill": "experiencer",
+      "prompt": "Σε εσάς ___ αρέσει ο χορός;",
+      "correct": "σας",
+      "number": "sg",
+      "experiencer": "σας",
+      "translations": {
+        "ru": "Вам нравятся танцы?",
+        "en": "Do you like dancing?",
+        "zh": "您喜欢跳舞吗？",
+        "ar": "هل تحبون الرقص؟",
+        "es": "¿A ustedes les gusta bailar?",
+        "pt": "Vocês gostam de dançar?"
+      }
+    },
+    {
+      "id": "g2261021_248",
+      "chapter": 8,
+      "skill": "experiencer",
+      "prompt": "Στον Πέτρο και τη Μαρία ___ αρέσουν τα παιχνίδια.",
+      "correct": "τους",
+      "number": "pl",
+      "experiencer": "τους",
+      "translations": {
+        "ru": "Петросу и Марии нравятся игры.",
+        "en": "Petros and Maria like games.",
+        "zh": "彼得罗斯和玛丽亚喜欢游戏。",
+        "ar": "بيتروس وماريا يحبان الألعاب.",
+        "es": "A Petros y María les gustan los juegos.",
+        "pt": "O Petros e a Maria gostam de jogos."
+      }
+    },
+    {
+      "id": "g2261021_249",
+      "chapter": 8,
+      "skill": "experiencer",
+      "prompt": "Στον Νίκο ___ αρέσουν οι ταινίες;",
+      "correct": "του",
+      "number": "pl",
+      "experiencer": "του",
+      "translations": {
+        "ru": "Никосу нравятся фильмы?",
+        "en": "Does Nikos like films?",
+        "zh": "尼科斯喜欢电影吗？",
+        "ar": "هل يحب نيكوس الأفلام؟",
+        "es": "¿A Nikos le gustan las películas?",
+        "pt": "O Nikos gosta de filmes?"
+      }
+    },
+    {
+      "id": "g2261021_250",
+      "chapter": 8,
+      "skill": "experiencer",
+      "prompt": "Στη Μαρία ___ αρέσουν τα βιβλία.",
+      "correct": "της",
+      "number": "pl",
+      "experiencer": "της",
+      "translations": {
+        "ru": "Марии нравятся книги.",
+        "en": "Maria likes books.",
+        "zh": "玛丽亚喜欢书。",
+        "ar": "ماريا تحب الكتب.",
+        "es": "A María le gustan los libros.",
+        "pt": "A Maria gosta de livros."
+      }
+    },
+    {
+      "id": "g2261021_251",
+      "chapter": 16,
+      "skill": "experiencer",
+      "prompt": "Σε εμάς ___ αρέσουν τα μουσεία.",
+      "correct": "μας",
+      "number": "pl",
+      "experiencer": "μας",
+      "translations": {
+        "ru": "Нам нравятся музеи.",
+        "en": "We like museums.",
+        "zh": "我们喜欢博物馆。",
+        "ar": "نحن نحب المتاحف.",
+        "es": "A nosotros nos gustan los museos.",
+        "pt": "Nós gostamos de museus."
+      }
+    },
+    {
+      "id": "g2261021_252",
+      "chapter": 16,
+      "skill": "experiencer",
+      "prompt": "Σε εσάς ___ αρέσουν οι συναυλίες;",
+      "correct": "σας",
+      "number": "pl",
+      "experiencer": "σας",
+      "translations": {
+        "ru": "Вам нравятся концерты?",
+        "en": "Do you like concerts?",
+        "zh": "您喜欢音乐会吗？",
+        "ar": "هل تحبون الحفلات الموسيقية؟",
+        "es": "¿A ustedes les gustan los conciertos?",
+        "pt": "Vocês gostam de concertos?"
+      }
+    },
+    {
+      "id": "g2261021_253",
+      "chapter": 16,
+      "skill": "experiencer",
+      "prompt": "Σε εκείνους ___ αρέσει το θέατρο.",
+      "correct": "τους",
+      "number": "sg",
+      "experiencer": "τους",
+      "translations": {
+        "ru": "Им нравится театр.",
+        "en": "They like theatre.",
+        "zh": "他们喜欢戏剧。",
+        "ar": "هم يحبون المسرح.",
+        "es": "A ellos les gusta el teatro.",
+        "pt": "Eles gostam de teatro."
+      }
+    },
+    {
+      "id": "g2261021_254",
+      "chapter": 16,
+      "skill": "typed",
+      "prompt": "Η Άννα: «Το σκάκι είναι το αγαπημένο μου παιχνίδι». ___ το σκάκι.",
+      "correct": "Της αρέσει",
+      "number": "sg",
+      "experiencer": "της",
+      "translations": {
+        "ru": "Анне нравятся шахматы.",
+        "en": "Anna likes chess.",
+        "zh": "安娜喜欢国际象棋。",
+        "ar": "آنا تحب الشطرنج.",
+        "es": "A Ana le gusta el ajedrez.",
+        "pt": "A Ana gosta de xadrez."
+      },
+      "accepted": [
+        "Της αρέσει"
+      ]
+    },
+    {
+      "id": "g2261021_255",
+      "chapter": 16,
+      "skill": "typed",
+      "prompt": "Ο Νίκος: «Οι συναυλίες είναι βαρετές». ___ οι συναυλίες.",
+      "correct": "Δεν του αρέσουν",
+      "number": "pl",
+      "experiencer": "του",
+      "translations": {
+        "ru": "Никосу не нравятся концерты.",
+        "en": "Nikos does not like concerts.",
+        "zh": "尼科斯不喜欢音乐会。",
+        "ar": "نيكوس لا يحب الحفلات الموسيقية.",
+        "es": "A Nikos no le gustan los conciertos.",
+        "pt": "O Nikos não gosta de concertos."
+      },
+      "accepted": [
+        "Δεν του αρέσουν"
+      ]
+    },
+    {
+      "id": "g2261021_256",
+      "chapter": 16,
+      "skill": "typed",
+      "prompt": "Εμείς: «Τα μουσεία είναι υπέροχα». ___ τα μουσεία.",
+      "correct": "Μας αρέσουν",
+      "number": "pl",
+      "experiencer": "μας",
+      "translations": {
+        "ru": "Нам нравятся музеи.",
+        "en": "We like museums.",
+        "zh": "我们喜欢博物馆。",
+        "ar": "نحن نحب المتاحف.",
+        "es": "Nos gustan los museos.",
+        "pt": "Gostamos de museus."
+      },
+      "accepted": [
+        "Μας αρέσουν"
+      ]
+    },
+    {
+      "id": "g2261021_257",
+      "chapter": 16,
+      "skill": "typed",
+      "prompt": "Εσείς: «Το θέατρο είναι βαρετό». ___ το θέατρο.",
+      "correct": "Δεν σας αρέσει",
+      "number": "sg",
+      "experiencer": "σας",
+      "translations": {
+        "ru": "Вам не нравится театр.",
+        "en": "You do not like theatre.",
+        "zh": "您不喜欢戏剧。",
+        "ar": "أنتم لا تحبون المسرح.",
+        "es": "No les gusta el teatro.",
+        "pt": "Vocês não gostam de teatro."
+      },
+      "accepted": [
+        "Δεν σας αρέσει"
+      ]
+    },
+    {
+      "id": "g2261021_258",
+      "chapter": 16,
+      "skill": "typed",
+      "prompt": "Εγώ: «Το σκάκι είναι υπέροχο». ___ το σκάκι.",
+      "correct": "Μου αρέσει",
+      "number": "sg",
+      "experiencer": "μου",
+      "translations": {
+        "ru": "Мне нравятся шахматы.",
+        "en": "I like chess.",
+        "zh": "我喜欢国际象棋。",
+        "ar": "أنا أحب الشطرنج.",
+        "es": "Me gusta el ajedrez.",
+        "pt": "Gosto de xadrez."
+      },
+      "accepted": [
+        "Μου αρέσει",
+        "Μ' αρέσει",
+        "Μ’ αρέσει"
+      ]
+    },
+    {
+      "id": "g2261021_259",
+      "chapter": 16,
+      "skill": "typed",
+      "prompt": "Εσύ: «Τα παιχνίδια είναι υπέροχα». ___ τα παιχνίδια.",
+      "correct": "Σου αρέσουν",
+      "number": "pl",
+      "experiencer": "σου",
+      "translations": {
+        "ru": "Тебе нравятся игры.",
+        "en": "You like games.",
+        "zh": "你喜欢游戏。",
+        "ar": "أنت تحب الألعاب.",
+        "es": "Te gustan los juegos.",
+        "pt": "Gostas de jogos."
+      },
+      "accepted": [
+        "Σου αρέσουν"
+      ]
+    }
+  ]
+}
