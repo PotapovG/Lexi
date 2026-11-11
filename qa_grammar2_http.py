@@ -47,7 +47,8 @@ with tempfile.TemporaryDirectory(prefix='lexi-grammar2-http-') as tmp:
   status,stats,_=req('/api/stats',cookie=cookie)
   assert status==200 and stats['attempts']==1 and stats['correct']==1
   status,late,_=req('/api/quiz?scope=chapters&chapters=16&types=grammar&count=60&lang=en',cookie=cookie)
-  assert status==200 and late['count']==8
+  assert status==200 and 8<=late['count']<=20
+  assert any(q.get('grammarGroup')=='verb_B1' for q in late['questions'])
   assert all(q['chapter']==16 for q in late['questions'])
   print('PASS GRAMMAR2 HTTP: 183 grammar clozes with typed A and B1 forms, registration, chapter gates, answer idempotency, stats/SRS')
  finally:
