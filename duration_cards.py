@@ -44,6 +44,14 @@ LABEL={
   "es":"Lee el inicio y la duración; elige la hora de fin, no confundas duración con hora.",
   "pt":"Lê o início e a duração; escolhe a hora de fim, sem confundir duração com hora."
  },
+ "preposition":{
+  "ru":"Выбери «από» для начальной точки («с какого времени?») или «για» для длительности («на какой срок?»).",
+  "en":"Choose από for a starting point (“since/from when”) or για for a time span (“for how long”).",
+  "zh":"时间起点（“从何时开始”）用 από，持续时长（“持续多久”）用 για。",
+  "ar":"اختر από للدلالة على بداية الفترة الزمنية، و για للدلالة على مدة زمنية محددة.",
+  "es":"Elige από para el punto de inicio («desde cuándo») o για para una duración («durante cuánto»).",
+  "pt":"Escolhe από para o ponto de partida («desde quando») ou για para a duração («durante quanto tempo»)."
+ },
  "typed":{
   "ru":"Введи по-гречески естественный ответ о длительности, учитывая числительное и форму существительного.",
   "en":"Type a natural Greek answer about duration, matching numeral and noun form.",
@@ -55,7 +63,7 @@ LABEL={
 }
 QUESTION_CHOICE=("Πόση ώρα","Πόσο καιρό","Τι ώρα","Πότε")
 CARDS=[]
-assert DATA["version"]==1 and len(DATA["questions"])==34
+assert DATA["version"]==1 and len(DATA["questions"])==38
 for n,row in enumerate(DATA["questions"],302):
     cid=f"g2261021_{n:03d}"
     assert row["id"]==cid
@@ -92,6 +100,11 @@ for n,row in enumerate(DATA["questions"],302):
         choices=[correct,*row["wrong"]]
         typed=False
         assert len(set(choices))==4,cid
+    elif skill=="preposition":
+        assert row["context"] in ("starting","duration"),cid
+        assert correct==("από" if row["context"]=="starting" else "για"),cid
+        choices=[correct,*row["wrong"]]
+        typed=False
     else:
         assert skill=="typed" and chapter in (7,11,13)
         assert row["accepted"][0]==correct
@@ -111,7 +124,7 @@ for n,row in enumerate(DATA["questions"],302):
         grammar_tags=[],
         **{l:LABEL[skill][l] for l in LANGS}
     )
-    if skill=="contrast":
+    if skill in ("contrast","preposition"):
         card["contextType"]=row["context"]
     elif skill=="timeline":
         card.update(startTime=row["start"],minutes=row["minutes"],endTime=row["end"])
@@ -123,9 +136,9 @@ for n,row in enumerate(DATA["questions"],302):
     assert card["curriculum_ready_unit"]<=chapter,(cid,card["curriculum_ready_unit"])
     CARDS.append(card)
 
-assert len(CARDS)==len({c["id"] for c in CARDS})==34
-assert len({c["prompt"] for c in CARDS})==34
+assert len(CARDS)==len({c["id"] for c in CARDS})==38
+assert len({c["prompt"] for c in CARDS})==38
 assert Counter(c["skill"] for c in CARDS)=={
-    "contrast":8,"unit":10,"timeline":8,"typed":8
+    "contrast":8,"unit":10,"timeline":8,"typed":8,"preposition":4
 }
 BY_ID={c["id"]:c for c in CARDS}
