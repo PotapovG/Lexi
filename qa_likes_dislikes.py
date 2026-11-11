@@ -24,17 +24,17 @@ assert {c["id"] for c in cards}=={
 assert Counter(c["skill"] for c in cards)=={
     "agreement":18,"experiencer":12,"typed":6
 }
-assert Counter(c["chapter"] for c in cards)=={7:13,8:9,13:14}
-assert Counter(c["number"] for c in cards)=={"sg":21,"pl":15}
+assert Counter(c["chapter"] for c in cards)=={7:13,8:9,16:14}
+assert Counter(c["number"] for c in cards)=={"sg":19,"pl":17}
 assert len({c["prompt"] for c in cards})==36
 assert all(c["kind"]=="grammar" and c["group"]=="likes"
            and c["curriculum_ready_unit"]<=c["chapter"] for c in cards)
 assert all(c["number"]!="pl" or c["chapter"]>=8 for c in cards)
-assert all(c["skill"]!="typed" or c["chapter"]>=13 for c in cards)
+assert all(c["skill"]!="typed" or c["chapter"]>=16 for c in cards)
 assert all(c["source"].startswith("independent_") and not c["book_page_verified"] for c in cards)
 assert len(server.vocab.VOCAB)==1700
 assert len([c for c in server.ALL if c.get("source")=="original-community" and
-            c["id"].startswith("cm13_08")])==10
+            c["id"].startswith("cm16_08")])==10
 
 for c in cards:
     if c["skill"]=="agreement":
@@ -102,7 +102,7 @@ with tempfile.TemporaryDirectory(prefix="lexi-likes-") as td:
                         assert variant in v["clozeGreek"]
                         assert v["clozeTranslationLang"]==lang
                         scored+=1
-        for chapter in (7,8,13):
+        for chapter in (7,8,16):
             quiz=server.make_quiz("fresh",{
                 "scope":["chapters"],"chapters":[str(chapter)],
                 "types":["grammar"],"count":["60"],"lang":["ru"]
