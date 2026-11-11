@@ -15,21 +15,22 @@ import grammar2_cards
 import server
 
 cards=duration_cards.CARDS
-assert len(cards)==34 and len(grammar2_cards.CARDS)==335
+assert len(cards)==38 and len(grammar2_cards.CARDS)==339
 assert [c["id"] for c in grammar2_cards.CARDS[:301]]==[
     f"g2261021_{i:03d}" for i in range(1,302)
 ]
 assert {c["id"] for c in cards}=={
-    f"g2261021_{i:03d}" for i in range(302,336)
+    f"g2261021_{i:03d}" for i in range(302,340)
 }
 assert Counter(c["skill"] for c in cards)=={
-    "contrast":8,"unit":10,"timeline":8,"typed":8
+    "contrast":8,"unit":10,"timeline":8,"typed":8,"preposition":4
 }
-assert Counter(c["chapter"] for c in cards)=={7:22,11:6,13:6}
+assert Counter(c["chapter"] for c in cards)=={7:25,11:7,13:6}
 assert Counter(c["contextType"] for c in cards if c["skill"]=="contrast")=={
     "event":4,"ongoing":4
 }
 assert len({c["prompt"] for c in cards})==len(cards)
+assert Counter(c["correct"] for c in cards if c["skill"]=="preposition")=={"από":2,"για":2}
 assert all(c["kind"]=="grammar" and c["group"]=="duration" for c in cards)
 assert all(c["curriculum_ready_unit"]<=c["chapter"] for c in cards)
 assert all(c["id"] in server.GRAMMAR2_BY_ID for c in cards)
@@ -165,6 +166,6 @@ with tempfile.TemporaryDirectory(prefix="lexi-duration-") as temp:
         server.DB=old_db
         server.auth.SECRET_FILE=old_secret
 
-print(f"PASS 34 authored duration cards x six locales, {approved} explicitly approved typed variants")
-print("PASS 8 contrast scenes, 10 morphology units, 8 arithmetic timelines, 8 typed answers")
+print(f"PASS 38 authored duration cards x six locales, {approved} explicitly approved typed variants")
+print("PASS 8 contrast scenes, 10 morphology units, 8 timelines, 8 typed answers, 4 από/για distinctions")
 print("PASS existing grammar/SRS, 301 old grammar IDs, 144 clock cards and 1700 vocab immutable")
