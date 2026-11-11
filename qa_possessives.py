@@ -80,7 +80,7 @@ with tempfile.TemporaryDirectory(prefix="lexi-possessive-") as folder:
             })
             assert len([q for q in quiz["questions"]
                         if q["id"].startswith("g2261021_")
-                        and int(q["id"].split("_")[-1])>=77])==sum(
+                        and 77<=int(q["id"].split("_")[-1])<=111])==sum(
                 c["chapter"]==chapter for c in cards
             )
         with server.conn() as db:
