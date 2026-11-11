@@ -62,5 +62,10 @@ assert len(CARDS)==76,len(CARDS)
 from possessive_cards import CARDS as POSSESSIVE_CARDS
 CARDS.extend(POSSESSIVE_CARDS)
 assert len(CARDS)==111,len(CARDS)
+# Issue #9 extends the EXISTING grammar-fill practice with typed examples.
+# The original 111 immutable IDs and all answers stay unchanged.
+from verb_a_cards import CARDS as VERB_A_CARDS
+CARDS.extend(VERB_A_CARDS)
+assert len(CARDS)==147,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}
