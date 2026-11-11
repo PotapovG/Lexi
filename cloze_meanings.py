@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group")!="possessive"] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==111
+    assert len(ARTICLES)==24 and len(GRAMMAR)==147
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="verb_A":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="possessive":
         # Newly authored complete sentence glosses for all six locales.
         # Do not show any English fallback for this new content.
@@ -341,7 +343,35 @@ def _possessive_explanation(card,lang):
         message += " " + stress
     return message
 
+
+VERB_A_ENDINGS=("ω","εις","ει","ουμε","ετε","ουν")
+VERB_A_TIPS={
+ "ru":"Лицо: {person}; глагол «{lemma}», основа «{root}» + окончание «-{ending}» → «{correct}». Ударение сохраняется; «δεν» не меняет спряжение.",
+ "en":"Person: {person}; verb “{lemma}”, stem “{root}” + ending “-{ending}” → “{correct}”. Keep the Greek accent; δεν does not change conjugation.",
+ "zh":"人称：{person}；动词“{lemma}”，词干“{root}”加词尾“-{ending}”→“{correct}”。注意重音；δεν 不改变变位。",
+ "ar":"الشخص: {person}؛ الفعل «{lemma}»، الجذر «{root}» + النهاية «-{ending}» ← «{correct}». حافظ على النبر؛ «δεν» لا يغيّر التصريف.",
+ "es":"Persona: {person}; verbo «{lemma}», raíz «{root}» + terminación «-{ending}» → «{correct}». Conserva la tilde griega; «δεν» no cambia la conjugación.",
+ "pt":"Pessoa: {person}; verbo «{lemma}», radical «{root}» + terminação «-{ending}» → «{correct}». Mantém o acento grego; «δεν» não altera a conjugação."
+}
+VERB_A_PERSONS={
+ "ru":["я, 1-е ед.ч.","ты, 2-е ед.ч.","Мария, 3-е ед.ч.","мы, 1-е мн.ч.","вы, 2-е мн.ч.","они, 3-е мн.ч."],
+ "en":["I, 1st singular","you, 2nd singular","Maria, 3rd singular","we, 1st plural","you, 2nd plural","they, 3rd plural"],
+ "zh":["我，第一人称单数","你，第二人称单数","玛丽亚，第三人称单数","我们，第一人称复数","你们，第二人称复数","他们，第三人称复数"],
+ "ar":["أنا، المفرد الأول","أنت، المفرد الثاني","ماريا، المفرد الثالث","نحن، الجمع الأول","أنتم، الجمع الثاني","هم، الجمع الثالث"],
+ "es":["yo, 1.ª singular","tú, 2.ª singular","María, 3.ª singular","nosotros, 1.ª plural","ustedes, 2.ª plural","ellos, 3.ª plural"],
+ "pt":["eu, 1.ª singular","tu, 2.ª singular","Maria, 3.ª singular","nós, 1.ª plural","vocês, 2.ª plural","eles, 3.ª plural"]
+}
+
+def _verb_a_explanation(card,lang):
+    lemma=card["lemma"]
+    return VERB_A_TIPS[lang].format(
+        lemma=lemma,root=lemma[:-1],person=VERB_A_PERSONS[lang][card["person"]],
+        ending=VERB_A_ENDINGS[card["person"]],correct=card["correct"]
+    )
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="verb_A":
+        return _verb_a_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="possessive":
         return _possessive_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="gender":
