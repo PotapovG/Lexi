@@ -17,7 +17,7 @@ import verb_b1_cards
 CARDS=verb_b1_cards.CARDS
 LANGS=verb_b1_cards.LANGS
 assert len(verb_b1_cards.PARADIGMS)==9 and len(CARDS)==36
-assert len(grammar2_cards.CARDS)==183
+assert len(grammar2_cards.CARDS)>=183  # later B2 cards append; old IDs stable
 assert [c["id"] for c in grammar2_cards.CARDS[:147]]==[
     f"g2261021_{i:03d}" for i in range(1,148)
 ]

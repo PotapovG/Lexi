@@ -28,7 +28,7 @@ with tempfile.TemporaryDirectory(prefix='lexi-grammar2-http-') as tmp:
    except OSError:time.sleep(.15)
   else:raise AssertionError('local server unavailable')
   status,cat,_=req('/api/catalog')
-  assert status==200 and cat['practiceCardCount']==len(server.PRACTICE_ALL) and cat['supplementalGrammar']==183
+  assert status==200 and cat['practiceCardCount']==len(server.PRACTICE_ALL) and cat['supplementalGrammar']==223
   assert cat['cardCount']==len(server.ALL) and cat['listeningCount']==len(server.LISTEN_CARDS)
   assert 'grammar' in cat['types']
   status,acc,header=req('/api/auth/register',{'nickname':'GrammarQ'+uuid.uuid4().hex[:6]})
@@ -47,10 +47,11 @@ with tempfile.TemporaryDirectory(prefix='lexi-grammar2-http-') as tmp:
   status,stats,_=req('/api/stats',cookie=cookie)
   assert status==200 and stats['attempts']==1 and stats['correct']==1
   status,late,_=req('/api/quiz?scope=chapters&chapters=16&types=grammar&count=60&lang=en',cookie=cookie)
-  assert status==200 and 8<=late['count']<=20
+  assert status==200 and 20<=late['count']<=60
   assert any(q.get('grammarGroup')=='verb_B1' for q in late['questions'])
+  assert any(q.get('grammarGroup')=='verb_B2' for q in late['questions'])
   assert all(q['chapter']==16 for q in late['questions'])
-  print('PASS GRAMMAR2 HTTP: 183 grammar clozes with typed A and B1 forms, registration, chapter gates, answer idempotency, stats/SRS')
+  print('PASS GRAMMAR2 HTTP: 223 grammar clozes with typed A, B1 and B2 forms, registration, chapter gates, answer idempotency, stats/SRS')
  finally:
   proc.terminate()
   try:proc.communicate(timeout=4)

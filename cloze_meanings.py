@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1")] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==183
+    assert len(ARTICLES)==24 and len(GRAMMAR)==223
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="verb_B2":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="verb_B1":
         return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="verb_A":
@@ -392,7 +394,40 @@ def _verb_b1_explanation(card,lang):
         alternatives=" / ".join(variants) if variants else "—"
     )
 
+
+VERB_B2_ENDINGS=("ώ","είς","εί","ούμε","είτε","ούν")
+VERB_B2_TIPS={
+ "ru":"B2, {person}: основа «{root}» + окончание «-{ending}» → «{correct}». {variant} Не путай с B1 (-άς/-άει/-άτε); ударение обязательно.",
+ "en":"B2, {person}: stem “{root}” + ending “-{ending}” → “{correct}”. {variant} Do not confuse it with B1 (-άς/-άει/-άτε); keep the stress mark.",
+ "zh":"B2，{person}：词干“{root}”加词尾“-{ending}”得到“{correct}”。{variant} 不要与 B1 的 -άς/-άει/-άτε 混淆；注意重音。",
+ "ar":"B2، {person}: الجذر «{root}» + النهاية «-{ending}» ← «{correct}». {variant} لا تخلطها مع B1 (-άς/-άει/-άτε)، وحافظ على علامة النبر.",
+ "es":"B2, {person}: raíz «{root}» + terminación «-{ending}» → «{correct}». {variant} No lo confundas con B1 (-άς/-άει/-άτε); conserva el acento.",
+ "pt":"B2, {person}: radical «{root}» + terminação «-{ending}» → «{correct}». {variant} Não confundas com B1 (-άς/-άει/-άτε); mantém o acento."
+}
+VERB_B2_VARIANTS={
+ "ru":["Допустим также разговорный вариант: {forms}.","Других вариантов для этой формы не указано."],
+ "en":["Also accepted in conversation: {forms}.","No alternative is listed for this person."],
+ "zh":["也接受口语变体：{forms}。","此人称未列出其他变体。"],
+ "ar":["تُقبل أيضاً الصيغة المحكية: {forms}.","لا توجد صيغة بديلة محددة لهذا الشخص."],
+ "es":["También se acepta la variante coloquial: {forms}.","No se admite otra variante para esta persona."],
+ "pt":["Também se aceita a variante coloquial: {forms}.","Não há outra variante admitida para esta pessoa."]
+}
+
+def _verb_b2_explanation(card,lang):
+    alternatives=card.get("acceptedForms",[card["correct"]])[1:]
+    variant=(VERB_B2_VARIANTS[lang][0].format(forms=" / ".join(alternatives))
+             if alternatives else VERB_B2_VARIANTS[lang][1])
+    return VERB_B2_TIPS[lang].format(
+        person=VERB_A_PERSONS[lang][card["person"]],
+        root=card["lemma"][:-1],
+        ending=VERB_B2_ENDINGS[card["person"]],
+        correct=card["correct"],
+        variant=variant
+    )
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="verb_B2":
+        return _verb_b2_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="verb_B1":
         return _verb_b1_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="verb_A":
