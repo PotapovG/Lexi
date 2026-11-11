@@ -56,6 +56,11 @@ for n,line in enumerate(RAW.splitlines(),1):
     pedagogy_rules.tag(card)
     assert card['curriculum_ready_unit']<=ch,(n,card['curriculum_ready_unit'])
     CARDS.append(card)
+# Preserve original 76 stable answer IDs; issue #8 adds only new cards in
+# the already shipped grammar-fill mode, with no separate mode or navigation.
 assert len(CARDS)==76,len(CARDS)
+from possessive_cards import CARDS as POSSESSIVE_CARDS
+CARDS.extend(POSSESSIVE_CARDS)
+assert len(CARDS)==111,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}

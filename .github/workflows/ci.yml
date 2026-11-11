@@ -20,6 +20,7 @@ jobs:
         run: |
           python3 qa_grammar2.py
           python3 qa_grammar2_http.py
+          python3 qa_possessives.py
       - name: A1 dialogue expansion and legacy dialogue integrity
         run: |
           python3 qa_a1_dialogue_expansion.py

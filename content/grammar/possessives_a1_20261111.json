@@ -1,0 +1,807 @@
+[
+  {
+    "id": "g2261021_077",
+    "chapter": 2,
+    "page": 28,
+    "owner": "mine",
+    "noun": "book",
+    "prompt": "Εγώ έχω ένα βιβλίο. Αυτό είναι το βιβλίο ___.",
+    "correct": "μου",
+    "wrong": [
+      "σου",
+      "του",
+      "της"
+    ],
+    "fullTranslations": {
+      "ru": "У меня есть книга. Это моя книга.",
+      "en": "I have a book. This is my book.",
+      "zh": "我有一本书。这是我的书。",
+      "ar": "لدي كتاب. هذا كتابي.",
+      "es": "Tengo un libro. Este es mi libro.",
+      "pt": "Tenho um livro. Este é o meu livro."
+    }
+  },
+  {
+    "id": "g2261021_078",
+    "chapter": 2,
+    "page": 29,
+    "owner": "mine",
+    "noun": "phone",
+    "prompt": "Εγώ έχω ένα τηλέφωνο. Το τηλέφωνό ___ είναι εδώ.",
+    "correct": "μου",
+    "wrong": [
+      "σου",
+      "του",
+      "της"
+    ],
+    "fullTranslations": {
+      "ru": "У меня есть телефон. Мой телефон здесь.",
+      "en": "I have a telephone. My telephone is here.",
+      "zh": "我有一部电话。我的电话在这里。",
+      "ar": "لدي هاتف. هاتفي هنا.",
+      "es": "Tengo un teléfono. Mi teléfono está aquí.",
+      "pt": "Tenho um telefone. O meu telefone está aqui."
+    },
+    "stressNoun": {
+      "article": "το",
+      "noun": "τηλέφωνο",
+      "rendered": "τηλέφωνό"
+    }
+  },
+  {
+    "id": "g2261021_079",
+    "chapter": 2,
+    "page": 30,
+    "owner": "mine",
+    "noun": "friend",
+    "prompt": "Εγώ έχω έναν φίλο. Ο φίλος ___ είναι από την Κύπρο.",
+    "correct": "μου",
+    "wrong": [
+      "σου",
+      "του",
+      "της"
+    ],
+    "fullTranslations": {
+      "ru": "У меня есть друг. Мой друг с Кипра.",
+      "en": "I have a friend. My friend is from Cyprus.",
+      "zh": "我有一个朋友。我的朋友来自塞浦路斯。",
+      "ar": "لدي صديق. صديقي من قبرص.",
+      "es": "Tengo un amigo. Mi amigo es de Chipre.",
+      "pt": "Tenho um amigo. O meu amigo é de Chipre."
+    }
+  },
+  {
+    "id": "g2261021_080",
+    "chapter": 2,
+    "page": 31,
+    "owner": "mine",
+    "noun": "bag",
+    "prompt": "Εγώ έχω μία τσάντα. Είναι η τσάντα ___ στο σπίτι;",
+    "correct": "μου",
+    "wrong": [
+      "σου",
+      "του",
+      "της"
+    ],
+    "fullTranslations": {
+      "ru": "У меня есть сумка. Моя сумка дома?",
+      "en": "I have a bag. Is my bag at home?",
+      "zh": "我有一个包。我的包在家吗？",
+      "ar": "لدي حقيبة. هل حقيبتي في البيت؟",
+      "es": "Tengo una bolsa. ¿Está mi bolsa en casa?",
+      "pt": "Tenho uma mala. A minha mala está em casa?"
+    }
+  },
+  {
+    "id": "g2261021_081",
+    "chapter": 2,
+    "page": 32,
+    "owner": "mine",
+    "noun": "house",
+    "prompt": "Εγώ έχω ένα σπίτι. Το σπίτι ___ δεν είναι στην Αθήνα.",
+    "correct": "μου",
+    "wrong": [
+      "σου",
+      "του",
+      "της"
+    ],
+    "fullTranslations": {
+      "ru": "У меня есть дом. Мой дом не в Афинах.",
+      "en": "I have a house. My house is not in Athens.",
+      "zh": "我有一所房子。我的房子不在雅典。",
+      "ar": "لدي بيت. بيتي ليس في أثينا.",
+      "es": "Tengo una casa. Mi casa no está en Atenas.",
+      "pt": "Tenho uma casa. A minha casa não fica em Atenas."
+    }
+  },
+  {
+    "id": "g2261021_082",
+    "chapter": 2,
+    "page": 28,
+    "owner": "yours",
+    "noun": "book",
+    "prompt": "Εσύ έχεις ένα βιβλίο. Αυτό είναι το βιβλίο ___.",
+    "correct": "σου",
+    "wrong": [
+      "μου",
+      "σας",
+      "του"
+    ],
+    "fullTranslations": {
+      "ru": "У тебя есть книга. Это твоя книга.",
+      "en": "You have a book. This is your book.",
+      "zh": "你有一本书。这是你的书。",
+      "ar": "لديك كتاب. هذا كتابك.",
+      "es": "Tienes un libro. Este es tu libro.",
+      "pt": "Tu tens um livro. Este é o teu livro."
+    }
+  },
+  {
+    "id": "g2261021_083",
+    "chapter": 2,
+    "page": 29,
+    "owner": "yours",
+    "noun": "phone",
+    "prompt": "Εσύ έχεις ένα τηλέφωνο. Το τηλέφωνό ___ είναι εδώ.",
+    "correct": "σου",
+    "wrong": [
+      "μου",
+      "σας",
+      "του"
+    ],
+    "fullTranslations": {
+      "ru": "У тебя есть телефон. Твой телефон здесь.",
+      "en": "You have a telephone. Your telephone is here.",
+      "zh": "你有一部电话。你的电话在这里。",
+      "ar": "لديك هاتف. هاتفك هنا.",
+      "es": "Tienes un teléfono. Tu teléfono está aquí.",
+      "pt": "Tu tens um telefone. O teu telefone está aqui."
+    },
+    "stressNoun": {
+      "article": "το",
+      "noun": "τηλέφωνο",
+      "rendered": "τηλέφωνό"
+    }
+  },
+  {
+    "id": "g2261021_084",
+    "chapter": 2,
+    "page": 30,
+    "owner": "yours",
+    "noun": "friend",
+    "prompt": "Εσύ έχεις έναν φίλο. Ο φίλος ___ είναι από την Κύπρο.",
+    "correct": "σου",
+    "wrong": [
+      "μου",
+      "σας",
+      "του"
+    ],
+    "fullTranslations": {
+      "ru": "У тебя есть друг. Твой друг с Кипра.",
+      "en": "You have a friend. Your friend is from Cyprus.",
+      "zh": "你有一个朋友。你的朋友来自塞浦路斯。",
+      "ar": "لديك صديق. صديقك من قبرص.",
+      "es": "Tienes un amigo. Tu amigo es de Chipre.",
+      "pt": "Tu tens um amigo. O teu amigo é de Chipre."
+    }
+  },
+  {
+    "id": "g2261021_085",
+    "chapter": 2,
+    "page": 31,
+    "owner": "yours",
+    "noun": "bag",
+    "prompt": "Εσύ έχεις μία τσάντα. Είναι η τσάντα ___ στο σπίτι;",
+    "correct": "σου",
+    "wrong": [
+      "μου",
+      "σας",
+      "του"
+    ],
+    "fullTranslations": {
+      "ru": "У тебя есть сумка. Твоя сумка дома?",
+      "en": "You have a bag. Is your bag at home?",
+      "zh": "你有一个包。你的包在家吗？",
+      "ar": "لديك حقيبة. هل حقيبتك في البيت؟",
+      "es": "Tienes una bolsa. ¿Está tu bolsa en casa?",
+      "pt": "Tu tens uma mala. A tua mala está em casa?"
+    }
+  },
+  {
+    "id": "g2261021_086",
+    "chapter": 2,
+    "page": 32,
+    "owner": "yours",
+    "noun": "house",
+    "prompt": "Εσύ έχεις ένα σπίτι. Το σπίτι ___ δεν είναι στην Αθήνα.",
+    "correct": "σου",
+    "wrong": [
+      "μου",
+      "σας",
+      "του"
+    ],
+    "fullTranslations": {
+      "ru": "У тебя есть дом. Твой дом не в Афинах.",
+      "en": "You have a house. Your house is not in Athens.",
+      "zh": "你有一所房子。你的房子不在雅典。",
+      "ar": "لديك بيت. بيتك ليس في أثينا.",
+      "es": "Tienes una casa. Tu casa no está en Atenas.",
+      "pt": "Tu tens uma casa. A tua casa não fica em Atenas."
+    }
+  },
+  {
+    "id": "g2261021_087",
+    "chapter": 3,
+    "page": 39,
+    "owner": "his",
+    "noun": "book",
+    "prompt": "Ο Νίκος έχει ένα βιβλίο. Αυτό είναι το βιβλίο ___.",
+    "correct": "του",
+    "wrong": [
+      "της",
+      "τους",
+      "μου"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса есть книга. Это его книга.",
+      "en": "Nikos has a book. This is his book.",
+      "zh": "尼科斯有一本书。这是他的书。",
+      "ar": "لدى نيكوس كتاب. هذا كتابه.",
+      "es": "Nikos tiene un libro. Este es su libro.",
+      "pt": "O Nikos tem um livro. Este é o livro dele."
+    }
+  },
+  {
+    "id": "g2261021_088",
+    "chapter": 3,
+    "page": 40,
+    "owner": "his",
+    "noun": "phone",
+    "prompt": "Ο Νίκος έχει ένα τηλέφωνο. Το τηλέφωνό ___ είναι εδώ.",
+    "correct": "του",
+    "wrong": [
+      "της",
+      "τους",
+      "μου"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса есть телефон. Его телефон здесь.",
+      "en": "Nikos has a telephone. His telephone is here.",
+      "zh": "尼科斯有一部电话。他的电话在这里。",
+      "ar": "لدى نيكوس هاتف. هاتفه هنا.",
+      "es": "Nikos tiene un teléfono. Su teléfono está aquí.",
+      "pt": "O Nikos tem um telefone. O telefone dele está aqui."
+    },
+    "stressNoun": {
+      "article": "το",
+      "noun": "τηλέφωνο",
+      "rendered": "τηλέφωνό"
+    }
+  },
+  {
+    "id": "g2261021_089",
+    "chapter": 3,
+    "page": 41,
+    "owner": "his",
+    "noun": "friend",
+    "prompt": "Ο Νίκος έχει έναν φίλο. Ο φίλος ___ είναι από την Κύπρο.",
+    "correct": "του",
+    "wrong": [
+      "της",
+      "τους",
+      "μου"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса есть друг. Его друг с Кипра.",
+      "en": "Nikos has a friend. His friend is from Cyprus.",
+      "zh": "尼科斯有一个朋友。他的朋友来自塞浦路斯。",
+      "ar": "لدى نيكوس صديق. صديقه من قبرص.",
+      "es": "Nikos tiene un amigo. Su amigo es de Chipre.",
+      "pt": "O Nikos tem um amigo. O amigo dele é de Chipre."
+    }
+  },
+  {
+    "id": "g2261021_090",
+    "chapter": 3,
+    "page": 42,
+    "owner": "his",
+    "noun": "bag",
+    "prompt": "Ο Νίκος έχει μία τσάντα. Είναι η τσάντα ___ στο σπίτι;",
+    "correct": "του",
+    "wrong": [
+      "της",
+      "τους",
+      "μου"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса есть сумка. Его сумка дома?",
+      "en": "Nikos has a bag. Is his bag at home?",
+      "zh": "尼科斯有一个包。他的包在家吗？",
+      "ar": "لدى نيكوس حقيبة. هل حقيبته في البيت؟",
+      "es": "Nikos tiene una bolsa. ¿Está su bolsa en casa?",
+      "pt": "O Nikos tem uma mala. A mala dele está em casa?"
+    }
+  },
+  {
+    "id": "g2261021_091",
+    "chapter": 3,
+    "page": 43,
+    "owner": "his",
+    "noun": "house",
+    "prompt": "Ο Νίκος έχει ένα σπίτι. Το σπίτι ___ δεν είναι στην Αθήνα.",
+    "correct": "του",
+    "wrong": [
+      "της",
+      "τους",
+      "μου"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса есть дом. Его дом не в Афинах.",
+      "en": "Nikos has a house. His house is not in Athens.",
+      "zh": "尼科斯有一所房子。他的房子不在雅典。",
+      "ar": "لدى نيكوس بيت. بيته ليس في أثينا.",
+      "es": "Nikos tiene una casa. Su casa no está en Atenas.",
+      "pt": "O Nikos tem uma casa. A casa dele não fica em Atenas."
+    }
+  },
+  {
+    "id": "g2261021_092",
+    "chapter": 3,
+    "page": 39,
+    "owner": "hers",
+    "noun": "book",
+    "prompt": "Η Μαρία έχει ένα βιβλίο. Αυτό είναι το βιβλίο ___.",
+    "correct": "της",
+    "wrong": [
+      "του",
+      "τους",
+      "σου"
+    ],
+    "fullTranslations": {
+      "ru": "У Марии есть книга. Это её книга.",
+      "en": "Maria has a book. This is her book.",
+      "zh": "玛丽亚有一本书。这是她的书。",
+      "ar": "لدى ماريا كتاب. هذا كتابها.",
+      "es": "María tiene un libro. Este es su libro.",
+      "pt": "A Maria tem um livro. Este é o livro dela."
+    }
+  },
+  {
+    "id": "g2261021_093",
+    "chapter": 3,
+    "page": 40,
+    "owner": "hers",
+    "noun": "phone",
+    "prompt": "Η Μαρία έχει ένα τηλέφωνο. Το τηλέφωνό ___ είναι εδώ.",
+    "correct": "της",
+    "wrong": [
+      "του",
+      "τους",
+      "σου"
+    ],
+    "fullTranslations": {
+      "ru": "У Марии есть телефон. Её телефон здесь.",
+      "en": "Maria has a telephone. Her telephone is here.",
+      "zh": "玛丽亚有一部电话。她的电话在这里。",
+      "ar": "لدى ماريا هاتف. هاتفها هنا.",
+      "es": "María tiene un teléfono. Su teléfono está aquí.",
+      "pt": "A Maria tem um telefone. O telefone dela está aqui."
+    },
+    "stressNoun": {
+      "article": "το",
+      "noun": "τηλέφωνο",
+      "rendered": "τηλέφωνό"
+    }
+  },
+  {
+    "id": "g2261021_094",
+    "chapter": 3,
+    "page": 41,
+    "owner": "hers",
+    "noun": "friend",
+    "prompt": "Η Μαρία έχει έναν φίλο. Ο φίλος ___ είναι από την Κύπρο.",
+    "correct": "της",
+    "wrong": [
+      "του",
+      "τους",
+      "σου"
+    ],
+    "fullTranslations": {
+      "ru": "У Марии есть друг. Её друг с Кипра.",
+      "en": "Maria has a friend. Her friend is from Cyprus.",
+      "zh": "玛丽亚有一个朋友。她的朋友来自塞浦路斯。",
+      "ar": "لدى ماريا صديق. صديقها من قبرص.",
+      "es": "María tiene un amigo. Su amigo es de Chipre.",
+      "pt": "A Maria tem um amigo. O amigo dela é de Chipre."
+    }
+  },
+  {
+    "id": "g2261021_095",
+    "chapter": 3,
+    "page": 42,
+    "owner": "hers",
+    "noun": "bag",
+    "prompt": "Η Μαρία έχει μία τσάντα. Είναι η τσάντα ___ στο σπίτι;",
+    "correct": "της",
+    "wrong": [
+      "του",
+      "τους",
+      "σου"
+    ],
+    "fullTranslations": {
+      "ru": "У Марии есть сумка. Её сумка дома?",
+      "en": "Maria has a bag. Is her bag at home?",
+      "zh": "玛丽亚有一个包。她的包在家吗？",
+      "ar": "لدى ماريا حقيبة. هل حقيبتها في البيت؟",
+      "es": "María tiene una bolsa. ¿Está su bolsa en casa?",
+      "pt": "A Maria tem uma mala. A mala dela está em casa?"
+    }
+  },
+  {
+    "id": "g2261021_096",
+    "chapter": 3,
+    "page": 43,
+    "owner": "hers",
+    "noun": "house",
+    "prompt": "Η Μαρία έχει ένα σπίτι. Το σπίτι ___ δεν είναι στην Αθήνα.",
+    "correct": "της",
+    "wrong": [
+      "του",
+      "τους",
+      "σου"
+    ],
+    "fullTranslations": {
+      "ru": "У Марии есть дом. Её дом не в Афинах.",
+      "en": "Maria has a house. Her house is not in Athens.",
+      "zh": "玛丽亚有一所房子。她的房子不在雅典。",
+      "ar": "لدى ماريا بيت. بيتها ليس في أثينا.",
+      "es": "María tiene una casa. Su casa no está en Atenas.",
+      "pt": "A Maria tem uma casa. A casa dela não fica em Atenas."
+    }
+  },
+  {
+    "id": "g2261021_097",
+    "chapter": 2,
+    "page": 28,
+    "owner": "ours",
+    "noun": "book",
+    "prompt": "Εμείς έχουμε ένα βιβλίο. Αυτό είναι το βιβλίο ___.",
+    "correct": "μας",
+    "wrong": [
+      "μου",
+      "σας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У нас есть книга. Это наша книга.",
+      "en": "We have a book. This is our book.",
+      "zh": "我们有一本书。这是我们的书。",
+      "ar": "لدينا كتاب. هذا كتابنا.",
+      "es": "Tenemos un libro. Este es nuestro libro.",
+      "pt": "Nós temos um livro. Este é o nosso livro."
+    }
+  },
+  {
+    "id": "g2261021_098",
+    "chapter": 2,
+    "page": 29,
+    "owner": "ours",
+    "noun": "phone",
+    "prompt": "Εμείς έχουμε ένα τηλέφωνο. Το τηλέφωνό ___ είναι εδώ.",
+    "correct": "μας",
+    "wrong": [
+      "μου",
+      "σας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У нас есть телефон. Наш телефон здесь.",
+      "en": "We have a telephone. Our telephone is here.",
+      "zh": "我们有一部电话。我们的电话在这里。",
+      "ar": "لدينا هاتف. هاتفنا هنا.",
+      "es": "Tenemos un teléfono. Nuestro teléfono está aquí.",
+      "pt": "Nós temos um telefone. O nosso telefone está aqui."
+    },
+    "stressNoun": {
+      "article": "το",
+      "noun": "τηλέφωνο",
+      "rendered": "τηλέφωνό"
+    }
+  },
+  {
+    "id": "g2261021_099",
+    "chapter": 2,
+    "page": 30,
+    "owner": "ours",
+    "noun": "friend",
+    "prompt": "Εμείς έχουμε έναν φίλο. Ο φίλος ___ είναι από την Κύπρο.",
+    "correct": "μας",
+    "wrong": [
+      "μου",
+      "σας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У нас есть друг. Наш друг с Кипра.",
+      "en": "We have a friend. Our friend is from Cyprus.",
+      "zh": "我们有一个朋友。我们的朋友来自塞浦路斯。",
+      "ar": "لدينا صديق. صديقنا من قبرص.",
+      "es": "Tenemos un amigo. Nuestro amigo es de Chipre.",
+      "pt": "Nós temos um amigo. O nosso amigo é de Chipre."
+    }
+  },
+  {
+    "id": "g2261021_100",
+    "chapter": 2,
+    "page": 31,
+    "owner": "ours",
+    "noun": "bag",
+    "prompt": "Εμείς έχουμε μία τσάντα. Είναι η τσάντα ___ στο σπίτι;",
+    "correct": "μας",
+    "wrong": [
+      "μου",
+      "σας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У нас есть сумка. Наша сумка дома?",
+      "en": "We have a bag. Is our bag at home?",
+      "zh": "我们有一个包。我们的包在家吗？",
+      "ar": "لدينا حقيبة. هل حقيبتنا في البيت؟",
+      "es": "Tenemos una bolsa. ¿Está nuestra bolsa en casa?",
+      "pt": "Nós temos uma mala. A nossa mala está em casa?"
+    }
+  },
+  {
+    "id": "g2261021_101",
+    "chapter": 2,
+    "page": 32,
+    "owner": "ours",
+    "noun": "house",
+    "prompt": "Εμείς έχουμε ένα σπίτι. Το σπίτι ___ δεν είναι στην Αθήνα.",
+    "correct": "μας",
+    "wrong": [
+      "μου",
+      "σας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У нас есть дом. Наш дом не в Афинах.",
+      "en": "We have a house. Our house is not in Athens.",
+      "zh": "我们有一所房子。我们的房子不在雅典。",
+      "ar": "لدينا بيت. بيتنا ليس في أثينا.",
+      "es": "Tenemos una casa. Nuestra casa no está en Atenas.",
+      "pt": "Nós temos uma casa. A nossa casa não fica em Atenas."
+    }
+  },
+  {
+    "id": "g2261021_102",
+    "chapter": 2,
+    "page": 28,
+    "owner": "yours_formal",
+    "noun": "book",
+    "prompt": "Εσείς έχετε ένα βιβλίο. Αυτό είναι το βιβλίο ___.",
+    "correct": "σας",
+    "wrong": [
+      "σου",
+      "μας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У вас есть книга. Это ваша книга.",
+      "en": "You have a book. This is your book.",
+      "zh": "您有一本书。这是您的书。",
+      "ar": "لديكم كتاب. هذا كتابكم.",
+      "es": "Usted tiene un libro. Este es su libro.",
+      "pt": "O senhor tem um livro. Este é o seu livro."
+    }
+  },
+  {
+    "id": "g2261021_103",
+    "chapter": 2,
+    "page": 29,
+    "owner": "yours_formal",
+    "noun": "phone",
+    "prompt": "Εσείς έχετε ένα τηλέφωνο. Το τηλέφωνό ___ είναι εδώ.",
+    "correct": "σας",
+    "wrong": [
+      "σου",
+      "μας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У вас есть телефон. Ваш телефон здесь.",
+      "en": "You have a telephone. Your telephone is here.",
+      "zh": "您有一部电话。您的电话在这里。",
+      "ar": "لديكم هاتف. هاتفكم هنا.",
+      "es": "Usted tiene un teléfono. Su teléfono está aquí.",
+      "pt": "O senhor tem um telefone. O seu telefone está aqui."
+    },
+    "stressNoun": {
+      "article": "το",
+      "noun": "τηλέφωνο",
+      "rendered": "τηλέφωνό"
+    }
+  },
+  {
+    "id": "g2261021_104",
+    "chapter": 2,
+    "page": 30,
+    "owner": "yours_formal",
+    "noun": "friend",
+    "prompt": "Εσείς έχετε έναν φίλο. Ο φίλος ___ είναι από την Κύπρο.",
+    "correct": "σας",
+    "wrong": [
+      "σου",
+      "μας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У вас есть друг. Ваш друг с Кипра.",
+      "en": "You have a friend. Your friend is from Cyprus.",
+      "zh": "您有一个朋友。您的朋友来自塞浦路斯。",
+      "ar": "لديكم صديق. صديقكم من قبرص.",
+      "es": "Usted tiene un amigo. Su amigo es de Chipre.",
+      "pt": "O senhor tem um amigo. O seu amigo é de Chipre."
+    }
+  },
+  {
+    "id": "g2261021_105",
+    "chapter": 2,
+    "page": 31,
+    "owner": "yours_formal",
+    "noun": "bag",
+    "prompt": "Εσείς έχετε μία τσάντα. Είναι η τσάντα ___ στο σπίτι;",
+    "correct": "σας",
+    "wrong": [
+      "σου",
+      "μας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У вас есть сумка. Ваша сумка дома?",
+      "en": "You have a bag. Is your bag at home?",
+      "zh": "您有一个包。您的包在家吗？",
+      "ar": "لديكم حقيبة. هل حقيبتكم في البيت؟",
+      "es": "Usted tiene una bolsa. ¿Está su bolsa en casa?",
+      "pt": "O senhor tem uma mala. A sua mala está em casa?"
+    }
+  },
+  {
+    "id": "g2261021_106",
+    "chapter": 2,
+    "page": 32,
+    "owner": "yours_formal",
+    "noun": "house",
+    "prompt": "Εσείς έχετε ένα σπίτι. Το σπίτι ___ δεν είναι στην Αθήνα.",
+    "correct": "σας",
+    "wrong": [
+      "σου",
+      "μας",
+      "τους"
+    ],
+    "fullTranslations": {
+      "ru": "У вас есть дом. Ваш дом не в Афинах.",
+      "en": "You have a house. Your house is not in Athens.",
+      "zh": "您有一所房子。您的房子不在雅典。",
+      "ar": "لديكم بيت. بيتكم ليس في أثينا.",
+      "es": "Usted tiene una casa. Su casa no está en Atenas.",
+      "pt": "O senhor tem uma casa. A sua casa não fica em Atenas."
+    }
+  },
+  {
+    "id": "g2261021_107",
+    "chapter": 3,
+    "page": 39,
+    "owner": "theirs",
+    "noun": "book",
+    "prompt": "Ο Νίκος και η Μαρία έχουν ένα βιβλίο. Αυτό είναι το βιβλίο ___.",
+    "correct": "τους",
+    "wrong": [
+      "του",
+      "της",
+      "μας"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса и Марии есть книга. Это их книга.",
+      "en": "Nikos and Maria have a book. This is their book.",
+      "zh": "尼科斯和玛丽亚有一本书。这是他们的书。",
+      "ar": "لدى نيكوس وماريا كتاب. هذا كتابهم.",
+      "es": "Nikos y María tienen un libro. Este es su libro.",
+      "pt": "O Nikos e a Maria têm um livro. Este é o livro deles."
+    }
+  },
+  {
+    "id": "g2261021_108",
+    "chapter": 3,
+    "page": 40,
+    "owner": "theirs",
+    "noun": "phone",
+    "prompt": "Ο Νίκος και η Μαρία έχουν ένα τηλέφωνο. Το τηλέφωνό ___ είναι εδώ.",
+    "correct": "τους",
+    "wrong": [
+      "του",
+      "της",
+      "μας"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса и Марии есть телефон. Их телефон здесь.",
+      "en": "Nikos and Maria have a telephone. Their telephone is here.",
+      "zh": "尼科斯和玛丽亚有一部电话。他们的电话在这里。",
+      "ar": "لدى نيكوس وماريا هاتف. هاتفهم هنا.",
+      "es": "Nikos y María tienen un teléfono. Su teléfono está aquí.",
+      "pt": "O Nikos e a Maria têm um telefone. O telefone deles está aqui."
+    },
+    "stressNoun": {
+      "article": "το",
+      "noun": "τηλέφωνο",
+      "rendered": "τηλέφωνό"
+    }
+  },
+  {
+    "id": "g2261021_109",
+    "chapter": 3,
+    "page": 41,
+    "owner": "theirs",
+    "noun": "friend",
+    "prompt": "Ο Νίκος και η Μαρία έχουν έναν φίλο. Ο φίλος ___ είναι από την Κύπρο.",
+    "correct": "τους",
+    "wrong": [
+      "του",
+      "της",
+      "μας"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса и Марии есть друг. Их друг с Кипра.",
+      "en": "Nikos and Maria have a friend. Their friend is from Cyprus.",
+      "zh": "尼科斯和玛丽亚有一个朋友。他们的朋友来自塞浦路斯。",
+      "ar": "لدى نيكوس وماريا صديق. صديقهم من قبرص.",
+      "es": "Nikos y María tienen un amigo. Su amigo es de Chipre.",
+      "pt": "O Nikos e a Maria têm um amigo. O amigo deles é de Chipre."
+    }
+  },
+  {
+    "id": "g2261021_110",
+    "chapter": 3,
+    "page": 42,
+    "owner": "theirs",
+    "noun": "bag",
+    "prompt": "Ο Νίκος και η Μαρία έχουν μία τσάντα. Είναι η τσάντα ___ στο σπίτι;",
+    "correct": "τους",
+    "wrong": [
+      "του",
+      "της",
+      "μας"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса и Марии есть сумка. Их сумка дома?",
+      "en": "Nikos and Maria have a bag. Is their bag at home?",
+      "zh": "尼科斯和玛丽亚有一个包。他们的包在家吗？",
+      "ar": "لدى نيكوس وماريا حقيبة. هل حقيبتهم في البيت؟",
+      "es": "Nikos y María tienen una bolsa. ¿Está su bolsa en casa?",
+      "pt": "O Nikos e a Maria têm uma mala. A mala deles está em casa?"
+    }
+  },
+  {
+    "id": "g2261021_111",
+    "chapter": 3,
+    "page": 43,
+    "owner": "theirs",
+    "noun": "house",
+    "prompt": "Ο Νίκος και η Μαρία έχουν ένα σπίτι. Το σπίτι ___ δεν είναι στην Αθήνα.",
+    "correct": "τους",
+    "wrong": [
+      "του",
+      "της",
+      "μας"
+    ],
+    "fullTranslations": {
+      "ru": "У Никоса и Марии есть дом. Их дом не в Афинах.",
+      "en": "Nikos and Maria have a house. Their house is not in Athens.",
+      "zh": "尼科斯和玛丽亚有一所房子。他们的房子不在雅典。",
+      "ar": "لدى نيكوس وماريا بيت. بيتهم ليس في أثينا.",
+      "es": "Nikos y María tienen una casa. Su casa no está en Atenas.",
+      "pt": "O Nikos e a Maria têm uma casa. A casa deles não fica em Atenas."
+    }
+  }
+]
