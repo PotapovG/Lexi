@@ -604,18 +604,18 @@
       "skill": "form",
       "lemma": "κλαίω",
       "person": 0,
-      "prompt": "Εγώ ___ όταν είμαι λυπημένος.",
+      "prompt": "Εγώ ___ στο τέλος της ταινίας.",
       "correct": "κλαίω",
       "accepted": [
         "κλαίω"
       ],
       "translations": {
-        "ru": "Я плачу, когда мне грустно.",
-        "en": "I cry when I am sad.",
-        "zh": "我难过时会哭。",
-        "ar": "أبكي عندما أكون حزيناً.",
-        "es": "Lloro cuando estoy triste.",
-        "pt": "Choro quando estou triste."
+        "ru": "Я плачу в конце фильма.",
+        "en": "I cry at the end of the film.",
+        "zh": "我在电影结尾哭了。",
+        "ar": "أبكي في نهاية الفيلم.",
+        "es": "Lloro al final de la película.",
+        "pt": "Choro no fim do filme."
       }
     },
     {
@@ -1020,7 +1020,7 @@
       "skill": "semantic",
       "lemma": "κλαίω",
       "person": 0,
-      "prompt": "Α: Γιατί έχεις δάκρυα;\nΒ: Εγώ ___ γιατί είμαι λυπημένος.",
+      "prompt": "Α: Γιατί έχεις δάκρυα;\nΒ: Εγώ ___ όταν βλέπω την ταινία.",
       "correct": "κλαίω",
       "wrong": [
         "πάω",
@@ -1028,12 +1028,12 @@
         "ακούω"
       ],
       "translations": {
-        "ru": "А: Почему у тебя слёзы? Б: Я плачу, потому что мне грустно.",
-        "en": "A: Why do you have tears? B: I cry because I am sad.",
-        "zh": "甲：你为什么有眼泪？乙：我哭，因为我很伤心。",
-        "ar": "أ: لماذا لديك دموع؟ ب: أبكي لأنني حزين.",
-        "es": "A: ¿Por qué tienes lágrimas? B: Lloro porque estoy triste.",
-        "pt": "A: Porque tens lágrimas? B: Choro porque estou triste."
+        "ru": "А: Почему у тебя слёзы? Б: Я плачу, когда смотрю фильм.",
+        "en": "A: Why do you have tears? B: I cry when I watch the film.",
+        "zh": "甲：你为什么流泪？乙：我看电影时会哭。",
+        "ar": "أ: لماذا لديك دموع؟ ب: أبكي عندما أشاهد الفيلم.",
+        "es": "A: ¿Por qué tienes lágrimas? B: Lloro cuando veo la película.",
+        "pt": "A: Porque tens lágrimas? B: Choro quando vejo o filme."
       }
     },
     {
