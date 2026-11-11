@@ -771,3 +771,27 @@ body{background:radial-gradient(circle at 95% 0%,#1b3447 0,#0b1a29 45%,#091522 8
   flex: 1 1 8rem;
   min-height: 2.9rem;
 }
+
+
+/* Week agenda is a vertically stacked source inside the existing grammar
+   question. 320px phones never need a seven-column horizontal table. */
+#question-prompt.schedule-agenda {
+  display: block;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-align: left;
+  font-family: inherit;
+  font-size: clamp(.91rem, 2.5vw, 1.13rem);
+  line-height: 1.65;
+}
+@media (max-width: 360px) {
+  #question-prompt.schedule-agenda {
+    font-size: .91rem;
+    line-height: 1.6;
+  }
+}
