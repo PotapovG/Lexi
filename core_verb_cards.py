@@ -13,6 +13,16 @@ from pathlib import Path
 
 import pedagogy_rules
 from textbook_alignment import INDEX
+from topics_verbs import VERBS as EXISTING_VERB_GROUPS
+from verb_curriculum import first_unit as existing_verb_intro
+
+# All distractors come from already shipped A/B1/B2 conjugations.
+# Prevent a high-level lemma (e.g. μπορώ at unit 16) appearing in a
+# chapter-six/seven semantic choice despite being a *wrong* answer.
+EXISTING_CONTRASTS={}
+for family,_level,lemma,_ru,_en,forms in EXISTING_VERB_GROUPS:
+    for form in forms:
+        EXISTING_CONTRASTS[form]=(family,existing_verb_intro(lemma))
 
 ROOT=Path(__file__).resolve().parent
 DATA=json.loads((ROOT/"content/grammar/core_verbs_present_20261111.json").read_text("utf-8"))
@@ -98,9 +108,12 @@ for pos,raw in enumerate(DATA["cards"],370):
         assert "\nΒ: " in prompt,cid
         assert raw["wrong"] and len(raw["wrong"])==3
         options=[raw["correct"],*raw["wrong"]]
-        assert all(other in [
-            x for spec2 in EXPECTED.values() for x in spec2
-        ] for other in options),cid
+        assert all(other in EXISTING_CONTRASTS for other in raw["wrong"]),cid
+        assert {EXISTING_CONTRASTS[other][0] for other in raw["wrong"]}=={
+            "A","B1","B2"
+        },cid
+        assert all(EXISTING_CONTRASTS[other][1]<=chapter
+                   for other in raw["wrong"]),(cid,raw["wrong"])
         accepted=None
         typed=False
     assert len(options)==len(set(options))==4 and options[0]==raw["correct"],cid
