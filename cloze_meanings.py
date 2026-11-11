@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes")] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==259
+    assert len(ARTICLES)==24 and len(GRAMMAR)==301
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="schedule":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="likes":
         return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="verb_B2":
@@ -452,7 +454,25 @@ def _likes_explanation(card,lang):
         )
     return message
 
+
+SCHEDULE_GUIDANCE={
+ "time":{"ru":"Смотри на день и название события в расписании. Ответ «{correct}». Для 12-часовой разговорной записи уточни утро/день/вечер: «{spoken}».","en":"Match the day and activity in the agenda. Answer: “{correct}”. In 12-hour speech, disambiguate morning/afternoon/evening: “{spoken}”.","zh":"根据日程中的星期和活动确定时间。答案：“{correct}”。12小时口语必须标明早上、下午或晚上：“{spoken}”。","ar":"اقرأ اليوم والنشاط في الجدول. الإجابة «{correct}». في النطق بصيغة 12 ساعة حدّد الصباح/الظهر/المساء: «{spoken}».","es":"Localiza el día y la actividad en la agenda. Respuesta: «{correct}». Al hablar en formato de 12 horas, aclara mañana/tarde/noche: «{spoken}».","pt":"Encontra o dia e a atividade na agenda. Resposta: «{correct}». Em formato falado de 12 horas, distingue manhã/tarde/noite: «{spoken}»."},
+ "day":{"ru":"Сопоставь единственное событие с нужной строкой недели. Правильный ответ: «{correct}». Перед днём недели используется τη/την/το.","en":"Match the unique event to its weekday row. Correct: “{correct}”. Greek weekday expressions use τη/την/το before the day.","zh":"将唯一的活动与日程中的星期匹配。正确答案：“{correct}”。希腊语星期前使用 τη/την/το。","ar":"طابق الحدث مع يومه في الجدول. الإجابة «{correct}». تُستخدم τη/την/το قبل اسم اليوم.","es":"Relaciona la actividad con su día. Respuesta: «{correct}». Antes del día griego se usa τη/την/το.","pt":"Relaciona a atividade com o dia certo. Resposta: «{correct}». Antes do dia em grego usa-se τη/την/το."},
+ "date":{"ru":"В расписании указана неделя 2–8 ноября 2026 года. Ответ «{correct}» — день месяца и название месяца в родительном падеже.","en":"The schedule is for 2–8 November 2026. “{correct}” uses the day number and the genitive month name.","zh":"日程日期为2026年11月2日至8日。“{correct}”由日期数字和月份的属格形式组成。","ar":"الجدول للأسبوع 2–8 نوفمبر 2026. «{correct}» هو رقم اليوم مع اسم الشهر في حالة الإضافة.","es":"La agenda abarca del 2 al 8 de noviembre de 2026. «{correct}» combina día y nombre del mes en genitivo.","pt":"A agenda cobre 2–8 de novembro de 2026. «{correct}» combina o dia e o nome do mês no genitivo."},
+ "spoken":{"ru":"24-часовое время «{clock}» в разговорной форме: «{correct}». Часть суток обязательна. «Μία» требует «στη», остальные часы — «στις».","en":"The 24-hour time “{clock}” spoken naturally is “{correct}”. Keep the part of day explicit. Use στη with μία and στις for other hours.","zh":"24小时制“{clock}”对应的希腊语口语为“{correct}”。必须说明时段。μία 前用 στη，其他钟点用 στις。","ar":"الوقت «{clock}» بصيغة 24 ساعة يُقال «{correct}». حدّد فترة اليوم. نستخدم στη مع μία و στις مع بقية الساعات.","es":"La hora de 24 horas «{clock}» se dice «{correct}». Mantén explícita la parte del día. Se usa στη con μία y στις con las demás horas.","pt":"A hora de 24h «{clock}» diz-se «{correct}». Indica a parte do dia. Usa στη com μία e στις nas restantes horas."}
+}
+
+def _schedule_explanation(card,lang):
+    from agenda_cards import DAYS
+    day=next(d for d in DAYS if d["id"]==card["dayID"])
+    event=next(e for e in day["events"] if e["id"]==card["eventID"])
+    return SCHEDULE_GUIDANCE[card["skill"]][lang].format(
+        correct=card["correct"],clock=card["eventTime"],spoken=event["spoken"]
+    )
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="schedule":
+        return _schedule_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="likes":
         return _likes_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="verb_B2":

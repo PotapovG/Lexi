@@ -80,5 +80,10 @@ assert len(CARDS)==223,len(CARDS)
 from likes_dislikes_cards import CARDS as LIKES_CARDS
 CARDS.extend(LIKES_CARDS)
 assert len(CARDS)==259,len(CARDS)
+# Issue #15 adds 42 schedule-reading questions only to the existing grammar_fill
+# kind; no modes, routes, SRS resets or modifications to original 259 IDs.
+from agenda_cards import CARDS as AGENDA_CARDS
+CARDS.extend(AGENDA_CARDS)
+assert len(CARDS)==301,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}

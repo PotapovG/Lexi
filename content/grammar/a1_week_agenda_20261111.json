@@ -1,0 +1,429 @@
+{
+  "version": 1,
+  "weekStart": "2026-11-02",
+  "weekEnd": "2026-11-08",
+  "monthGreek": "Νοεμβρίου",
+  "monthLocales": {
+    "ru": "ноября",
+    "en": "November",
+    "zh": "11月",
+    "ar": "نوفمبر",
+    "es": "noviembre",
+    "pt": "novembro"
+  },
+  "days": [
+    {
+      "id": "mon",
+      "day": "Δευτέρα",
+      "dayAcc": "τη Δευτέρα",
+      "dateISO": "2026-11-02",
+      "dateDisplay": "2/11",
+      "dayLocales": {
+        "ru": "понедельник",
+        "en": "Monday",
+        "zh": "星期一",
+        "ar": "الاثنين",
+        "es": "lunes",
+        "pt": "segunda-feira"
+      },
+      "events": [
+        {
+          "id": "mon_1",
+          "gr": "το πρωινό",
+          "time": "07:30",
+          "spoken": "στις επτά και μισή το πρωί",
+          "locales": {
+            "ru": "завтрак",
+            "en": "breakfast",
+            "zh": "早餐",
+            "ar": "الفطور",
+            "es": "el desayuno",
+            "pt": "o pequeno-almoço"
+          }
+        },
+        {
+          "id": "mon_2",
+          "gr": "το μάθημα ελληνικών",
+          "time": "09:00",
+          "spoken": "στις εννέα το πρωί",
+          "locales": {
+            "ru": "урок греческого",
+            "en": "Greek class",
+            "zh": "希腊语课",
+            "ar": "درس اليونانية",
+            "es": "la clase de griego",
+            "pt": "a aula de grego"
+          }
+        },
+        {
+          "id": "mon_3",
+          "gr": "ο καφές με φίλους",
+          "time": "18:00",
+          "spoken": "στις έξι το απόγευμα",
+          "locales": {
+            "ru": "кофе с друзьями",
+            "en": "coffee with friends",
+            "zh": "和朋友喝咖啡",
+            "ar": "القهوة مع الأصدقاء",
+            "es": "el café con amigos",
+            "pt": "o café com amigos"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tue",
+      "day": "Τρίτη",
+      "dayAcc": "την Τρίτη",
+      "dateISO": "2026-11-03",
+      "dateDisplay": "3/11",
+      "dayLocales": {
+        "ru": "вторник",
+        "en": "Tuesday",
+        "zh": "星期二",
+        "ar": "الثلاثاء",
+        "es": "martes",
+        "pt": "terça-feira"
+      },
+      "events": [
+        {
+          "id": "tue_1",
+          "gr": "το λεωφορείο",
+          "time": "08:15",
+          "spoken": "στις οκτώ και τέταρτο το πρωί",
+          "locales": {
+            "ru": "автобус",
+            "en": "the bus",
+            "zh": "公交车",
+            "ar": "الحافلة",
+            "es": "el autobús",
+            "pt": "o autocarro"
+          }
+        },
+        {
+          "id": "tue_2",
+          "gr": "η δουλειά στο γραφείο",
+          "time": "10:30",
+          "spoken": "στις δέκα και μισή το πρωί",
+          "locales": {
+            "ru": "работа в офисе",
+            "en": "office work",
+            "zh": "办公室工作",
+            "ar": "العمل في المكتب",
+            "es": "el trabajo en la oficina",
+            "pt": "o trabalho no escritório"
+          }
+        },
+        {
+          "id": "tue_3",
+          "gr": "η συνάντηση με τον Νίκο",
+          "time": "19:00",
+          "spoken": "στις επτά το βράδυ",
+          "locales": {
+            "ru": "встреча с Никосом",
+            "en": "the meeting with Nikos",
+            "zh": "和尼科斯见面",
+            "ar": "اللقاء مع نيكوس",
+            "es": "la reunión con Nikos",
+            "pt": "o encontro com o Nikos"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wed",
+      "day": "Τετάρτη",
+      "dayAcc": "την Τετάρτη",
+      "dateISO": "2026-11-04",
+      "dateDisplay": "4/11",
+      "dayLocales": {
+        "ru": "среда",
+        "en": "Wednesday",
+        "zh": "星期三",
+        "ar": "الأربعاء",
+        "es": "miércoles",
+        "pt": "quarta-feira"
+      },
+      "events": [
+        {
+          "id": "wed_1",
+          "gr": "το πρωινό στο σπίτι",
+          "time": "07:45",
+          "spoken": "στις οκτώ παρά τέταρτο το πρωί",
+          "locales": {
+            "ru": "завтрак дома",
+            "en": "breakfast at home",
+            "zh": "在家吃早餐",
+            "ar": "الفطور في البيت",
+            "es": "el desayuno en casa",
+            "pt": "o pequeno-almoço em casa"
+          }
+        },
+        {
+          "id": "wed_2",
+          "gr": "το μάθημα",
+          "time": "14:00",
+          "spoken": "στις δύο το μεσημέρι",
+          "locales": {
+            "ru": "урок",
+            "en": "the lesson",
+            "zh": "课程",
+            "ar": "الدرس",
+            "es": "la clase",
+            "pt": "a aula"
+          }
+        },
+        {
+          "id": "wed_3",
+          "gr": "η μουσική στο σπίτι",
+          "time": "20:30",
+          "spoken": "στις οκτώ και μισή το βράδυ",
+          "locales": {
+            "ru": "музыка дома",
+            "en": "music at home",
+            "zh": "在家听音乐",
+            "ar": "الموسيقى في البيت",
+            "es": "la música en casa",
+            "pt": "a música em casa"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thu",
+      "day": "Πέμπτη",
+      "dayAcc": "την Πέμπτη",
+      "dateISO": "2026-11-05",
+      "dateDisplay": "5/11",
+      "dayLocales": {
+        "ru": "четверг",
+        "en": "Thursday",
+        "zh": "星期四",
+        "ar": "الخميس",
+        "es": "jueves",
+        "pt": "quinta-feira"
+      },
+      "events": [
+        {
+          "id": "thu_1",
+          "gr": "το λεωφορείο για το κέντρο",
+          "time": "08:00",
+          "spoken": "στις οκτώ το πρωί",
+          "locales": {
+            "ru": "автобус в центр",
+            "en": "the bus to the centre",
+            "zh": "去市中心的公交车",
+            "ar": "الحافلة إلى المركز",
+            "es": "el autobús al centro",
+            "pt": "o autocarro para o centro"
+          }
+        },
+        {
+          "id": "thu_2",
+          "gr": "το μεσημεριανό φαγητό",
+          "time": "13:15",
+          "spoken": "στη μία και τέταρτο το μεσημέρι",
+          "locales": {
+            "ru": "обед",
+            "en": "lunch",
+            "zh": "午餐",
+            "ar": "الغداء",
+            "es": "el almuerzo",
+            "pt": "o almoço"
+          }
+        },
+        {
+          "id": "thu_3",
+          "gr": "ο καφές με τη Μαρία",
+          "time": "18:30",
+          "spoken": "στις έξι και μισή το απόγευμα",
+          "locales": {
+            "ru": "кофе с Марией",
+            "en": "coffee with Maria",
+            "zh": "和玛丽亚喝咖啡",
+            "ar": "القهوة مع ماريا",
+            "es": "el café con María",
+            "pt": "o café com a Maria"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fri",
+      "day": "Παρασκευή",
+      "dayAcc": "την Παρασκευή",
+      "dateISO": "2026-11-06",
+      "dateDisplay": "6/11",
+      "dayLocales": {
+        "ru": "пятница",
+        "en": "Friday",
+        "zh": "星期五",
+        "ar": "الجمعة",
+        "es": "viernes",
+        "pt": "sexta-feira"
+      },
+      "events": [
+        {
+          "id": "fri_1",
+          "gr": "η δουλειά",
+          "time": "09:15",
+          "spoken": "στις εννέα και τέταρτο το πρωί",
+          "locales": {
+            "ru": "работа",
+            "en": "work",
+            "zh": "工作",
+            "ar": "العمل",
+            "es": "el trabajo",
+            "pt": "o trabalho"
+          }
+        },
+        {
+          "id": "fri_2",
+          "gr": "το μάθημα στο σχολείο",
+          "time": "16:00",
+          "spoken": "στις τέσσερις το απόγευμα",
+          "locales": {
+            "ru": "урок в школе",
+            "en": "class at school",
+            "zh": "学校的课",
+            "ar": "الدرس في المدرسة",
+            "es": "la clase en la escuela",
+            "pt": "a aula na escola"
+          }
+        },
+        {
+          "id": "fri_3",
+          "gr": "η συνάντηση με φίλους",
+          "time": "21:00",
+          "spoken": "στις εννέα το βράδυ",
+          "locales": {
+            "ru": "встреча с друзьями",
+            "en": "the meeting with friends",
+            "zh": "和朋友见面",
+            "ar": "اللقاء مع الأصدقاء",
+            "es": "la reunión con amigos",
+            "pt": "o encontro com amigos"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sat",
+      "day": "Σάββατο",
+      "dayAcc": "το Σάββατο",
+      "dateISO": "2026-11-07",
+      "dateDisplay": "7/11",
+      "dayLocales": {
+        "ru": "суббота",
+        "en": "Saturday",
+        "zh": "星期六",
+        "ar": "السبت",
+        "es": "sábado",
+        "pt": "sábado"
+      },
+      "events": [
+        {
+          "id": "sat_1",
+          "gr": "ο καφές το πρωί",
+          "time": "10:00",
+          "spoken": "στις δέκα το πρωί",
+          "locales": {
+            "ru": "утренний кофе",
+            "en": "morning coffee",
+            "zh": "早上的咖啡",
+            "ar": "قهوة الصباح",
+            "es": "el café de la mañana",
+            "pt": "o café da manhã"
+          }
+        },
+        {
+          "id": "sat_2",
+          "gr": "το φαγητό με την οικογένεια",
+          "time": "12:30",
+          "spoken": "στις δώδεκα και μισή το μεσημέρι",
+          "locales": {
+            "ru": "еда с семьёй",
+            "en": "meal with family",
+            "zh": "和家人吃饭",
+            "ar": "الطعام مع العائلة",
+            "es": "la comida con la familia",
+            "pt": "a refeição com a família"
+          }
+        },
+        {
+          "id": "sat_3",
+          "gr": "η βόλτα στο πάρκο",
+          "time": "17:45",
+          "spoken": "στις έξι παρά τέταρτο το απόγευμα",
+          "locales": {
+            "ru": "прогулка в парке",
+            "en": "walk in the park",
+            "zh": "公园散步",
+            "ar": "النزهة في الحديقة",
+            "es": "el paseo por el parque",
+            "pt": "o passeio no parque"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sun",
+      "day": "Κυριακή",
+      "dayAcc": "την Κυριακή",
+      "dateISO": "2026-11-08",
+      "dateDisplay": "8/11",
+      "dayLocales": {
+        "ru": "воскресенье",
+        "en": "Sunday",
+        "zh": "星期日",
+        "ar": "الأحد",
+        "es": "domingo",
+        "pt": "domingo"
+      },
+      "events": [
+        {
+          "id": "sun_1",
+          "gr": "το πρωινό με την οικογένεια",
+          "time": "09:30",
+          "spoken": "στις εννέα και μισή το πρωί",
+          "locales": {
+            "ru": "завтрак с семьёй",
+            "en": "breakfast with family",
+            "zh": "和家人吃早餐",
+            "ar": "الفطور مع العائلة",
+            "es": "el desayuno con la familia",
+            "pt": "o pequeno-almoço com a família"
+          }
+        },
+        {
+          "id": "sun_2",
+          "gr": "το φαγητό με τους γονείς",
+          "time": "13:00",
+          "spoken": "στη μία το μεσημέρι",
+          "locales": {
+            "ru": "обед с родителями",
+            "en": "meal with parents",
+            "zh": "和父母吃饭",
+            "ar": "الطعام مع الوالدين",
+            "es": "la comida con los padres",
+            "pt": "a refeição com os pais"
+          }
+        },
+        {
+          "id": "sun_3",
+          "gr": "η μουσική το απόγευμα",
+          "time": "18:15",
+          "spoken": "στις έξι και τέταρτο το απόγευμα",
+          "locales": {
+            "ru": "музыка вечером",
+            "en": "music in the late afternoon",
+            "zh": "傍晚听音乐",
+            "ar": "الموسيقى بعد الظهر",
+            "es": "la música por la tarde",
+            "pt": "a música ao fim da tarde"
+          }
+        }
+      ]
+    }
+  ]
+}

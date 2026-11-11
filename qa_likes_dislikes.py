@@ -14,7 +14,7 @@ import server
 
 cards=likes_dislikes_cards.CARDS
 langs=likes_dislikes_cards.LANGS
-assert len(cards)==36 and len(grammar2_cards.CARDS)==259
+assert len(cards)==36 and len(grammar2_cards.CARDS)>=259  # new schedule cards append, old IDs stable
 assert [c["id"] for c in grammar2_cards.CARDS[:223]]==[
     f"g2261021_{i:03d}" for i in range(1,224)
 ]
@@ -103,11 +103,14 @@ with tempfile.TemporaryDirectory(prefix="lexi-likes-") as td:
                         assert v["clozeTranslationLang"]==lang
                         scored+=1
         for chapter in (7,8,16):
+            expected={c["id"] for c in cards if c["chapter"]==chapter}
+            excluded=",".join(c["id"] for c in server.GRAMMAR2_ALL
+                              if c["chapter"]==chapter and c["id"] not in expected)
             quiz=server.make_quiz("fresh",{
                 "scope":["chapters"],"chapters":[str(chapter)],
-                "types":["grammar"],"count":["60"],"lang":["ru"]
+                "types":["grammar"],"count":["60"],"lang":["ru"],
+                "exclude":[excluded]
             })
-            expected={c["id"] for c in cards if c["chapter"]==chapter}
             got={c["id"] for c in quiz["questions"]}
             assert expected.issubset(got),(chapter,expected-got)
         # Existing mistakes remain gradeable in their own separate scope:
