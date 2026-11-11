@@ -1,0 +1,1106 @@
+{
+  "version": 1,
+  "verbs": [
+    {
+      "lemma": "λέω",
+      "chapter": 7,
+      "forms": [
+        "λέω",
+        "λες",
+        "λέει",
+        "λέμε",
+        "λέτε",
+        "λένε"
+      ],
+      "acceptedAlternatives": {
+        "5": [
+          "λεν"
+        ]
+      }
+    },
+    {
+      "lemma": "πάω",
+      "chapter": 6,
+      "forms": [
+        "πάω",
+        "πας",
+        "πάει",
+        "πάμε",
+        "πάτε",
+        "πάνε"
+      ],
+      "acceptedAlternatives": {
+        "0": [
+          "πηγαίνω"
+        ],
+        "1": [
+          "πηγαίνεις"
+        ],
+        "2": [
+          "πηγαίνει"
+        ],
+        "3": [
+          "πηγαίνουμε"
+        ],
+        "4": [
+          "πηγαίνετε"
+        ],
+        "5": [
+          "πηγαίνουν",
+          "παν"
+        ]
+      }
+    },
+    {
+      "lemma": "τρώω",
+      "chapter": 7,
+      "forms": [
+        "τρώω",
+        "τρως",
+        "τρώει",
+        "τρώμε",
+        "τρώτε",
+        "τρώνε"
+      ],
+      "acceptedAlternatives": {}
+    },
+    {
+      "lemma": "ακούω",
+      "chapter": 7,
+      "forms": [
+        "ακούω",
+        "ακούς",
+        "ακούει",
+        "ακούμε",
+        "ακούτε",
+        "ακούνε"
+      ],
+      "acceptedAlternatives": {
+        "5": [
+          "ακούν"
+        ]
+      }
+    },
+    {
+      "lemma": "κλαίω",
+      "chapter": 7,
+      "forms": [
+        "κλαίω",
+        "κλαις",
+        "κλαίει",
+        "κλαίμε",
+        "κλαίτε",
+        "κλαίνε"
+      ],
+      "acceptedAlternatives": {}
+    },
+    {
+      "lemma": "φταίω",
+      "chapter": 7,
+      "forms": [
+        "φταίω",
+        "φταις",
+        "φταίει",
+        "φταίμε",
+        "φταίτε",
+        "φταίνε"
+      ],
+      "acceptedAlternatives": {}
+    }
+  ],
+  "cards": [
+    {
+      "id": "g2261021_370",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "λέω",
+      "person": 0,
+      "prompt": "Εγώ ___ «καλημέρα» στον γείτονα.",
+      "correct": "λέω",
+      "accepted": [
+        "λέω"
+      ],
+      "translations": {
+        "ru": "Я говорю соседу «доброе утро».",
+        "en": "I say good morning to the neighbour.",
+        "zh": "我向邻居说早上好。",
+        "ar": "أقول صباح الخير للجار.",
+        "es": "Le digo buenos días al vecino.",
+        "pt": "Digo bom dia ao vizinho."
+      }
+    },
+    {
+      "id": "g2261021_371",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "λέω",
+      "person": 1,
+      "prompt": "Εσύ δεν ___ το όνομά σου.",
+      "correct": "λες",
+      "accepted": [
+        "λες"
+      ],
+      "translations": {
+        "ru": "Ты не называешь своё имя.",
+        "en": "You do not say your name.",
+        "zh": "你不说你的名字。",
+        "ar": "أنت لا تقول اسمك.",
+        "es": "No dices tu nombre.",
+        "pt": "Tu não dizes o teu nome."
+      }
+    },
+    {
+      "id": "g2261021_372",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "λέω",
+      "person": 2,
+      "prompt": "Η Μαρία ___ την αλήθεια;",
+      "correct": "λέει",
+      "accepted": [
+        "λέει"
+      ],
+      "translations": {
+        "ru": "Мария говорит правду?",
+        "en": "Does Maria tell the truth?",
+        "zh": "玛丽亚说实话吗？",
+        "ar": "هل تقول ماريا الحقيقة؟",
+        "es": "¿María dice la verdad?",
+        "pt": "A Maria diz a verdade?"
+      }
+    },
+    {
+      "id": "g2261021_373",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "λέω",
+      "person": 3,
+      "prompt": "Εμείς ___ μια λέξη στα ελληνικά.",
+      "correct": "λέμε",
+      "accepted": [
+        "λέμε"
+      ],
+      "translations": {
+        "ru": "Мы произносим слово по-гречески.",
+        "en": "We say a word in Greek.",
+        "zh": "我们用希腊语说一个词。",
+        "ar": "نقول كلمة باليونانية.",
+        "es": "Decimos una palabra en griego.",
+        "pt": "Dizemos uma palavra em grego."
+      }
+    },
+    {
+      "id": "g2261021_374",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "λέω",
+      "person": 4,
+      "prompt": "Εσείς ___ «ευχαριστώ» στον δάσκαλο;",
+      "correct": "λέτε",
+      "accepted": [
+        "λέτε"
+      ],
+      "translations": {
+        "ru": "Вы говорите учителю «спасибо»?",
+        "en": "Do you say thank you to the teacher?",
+        "zh": "你们向老师说谢谢吗？",
+        "ar": "هل تقولون شكراً للمعلم؟",
+        "es": "¿Le dicen gracias al profesor?",
+        "pt": "Dizem obrigado ao professor?"
+      }
+    },
+    {
+      "id": "g2261021_375",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "λέω",
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ τίποτα στο τηλέφωνο.",
+      "correct": "λένε",
+      "accepted": [
+        "λένε",
+        "λεν"
+      ],
+      "translations": {
+        "ru": "Они ничего не говорят по телефону.",
+        "en": "They do not say anything on the phone.",
+        "zh": "他们在电话里什么都不说。",
+        "ar": "هم لا يقولون شيئاً في الهاتف.",
+        "es": "No dicen nada por teléfono.",
+        "pt": "Eles não dizem nada ao telefone."
+      }
+    },
+    {
+      "id": "g2261021_376",
+      "chapter": 6,
+      "skill": "form",
+      "lemma": "πάω",
+      "person": 0,
+      "prompt": "Εγώ ___ στο σχολείο με το λεωφορείο.",
+      "correct": "πάω",
+      "accepted": [
+        "πάω",
+        "πηγαίνω"
+      ],
+      "translations": {
+        "ru": "Я езжу в школу на автобусе.",
+        "en": "I go to school by bus.",
+        "zh": "我乘公交车去学校。",
+        "ar": "أذهب إلى المدرسة بالحافلة.",
+        "es": "Voy a la escuela en autobús.",
+        "pt": "Vou à escola de autocarro."
+      }
+    },
+    {
+      "id": "g2261021_377",
+      "chapter": 6,
+      "skill": "form",
+      "lemma": "πάω",
+      "person": 1,
+      "prompt": "Εσύ δεν ___ στο κέντρο το πρωί.",
+      "correct": "πας",
+      "accepted": [
+        "πας",
+        "πηγαίνεις"
+      ],
+      "translations": {
+        "ru": "Утром ты не едешь в центр.",
+        "en": "You do not go to the centre in the morning.",
+        "zh": "你早上不去市中心。",
+        "ar": "أنت لا تذهب إلى المركز صباحاً.",
+        "es": "No vas al centro por la mañana.",
+        "pt": "Tu não vais ao centro de manhã."
+      }
+    },
+    {
+      "id": "g2261021_378",
+      "chapter": 6,
+      "skill": "form",
+      "lemma": "πάω",
+      "person": 2,
+      "prompt": "Η Μαρία ___ στο γραφείο με τα πόδια;",
+      "correct": "πάει",
+      "accepted": [
+        "πάει",
+        "πηγαίνει"
+      ],
+      "translations": {
+        "ru": "Мария ходит в офис пешком?",
+        "en": "Does Maria go to the office on foot?",
+        "zh": "玛丽亚步行去办公室吗？",
+        "ar": "هل تذهب ماريا إلى المكتب مشياً؟",
+        "es": "¿María va a la oficina a pie?",
+        "pt": "A Maria vai ao escritório a pé?"
+      }
+    },
+    {
+      "id": "g2261021_379",
+      "chapter": 6,
+      "skill": "form",
+      "lemma": "πάω",
+      "person": 3,
+      "prompt": "Εμείς ___ στην πόλη το Σάββατο.",
+      "correct": "πάμε",
+      "accepted": [
+        "πάμε",
+        "πηγαίνουμε"
+      ],
+      "translations": {
+        "ru": "В субботу мы едем в город.",
+        "en": "We go into the city on Saturday.",
+        "zh": "我们星期六去城里。",
+        "ar": "نذهب إلى المدينة يوم السبت.",
+        "es": "Vamos a la ciudad el sábado.",
+        "pt": "Vamos à cidade no sábado."
+      }
+    },
+    {
+      "id": "g2261021_380",
+      "chapter": 6,
+      "skill": "form",
+      "lemma": "πάω",
+      "person": 4,
+      "prompt": "Εσείς ___ στο σπίτι τώρα;",
+      "correct": "πάτε",
+      "accepted": [
+        "πάτε",
+        "πηγαίνετε"
+      ],
+      "translations": {
+        "ru": "Вы сейчас идёте домой?",
+        "en": "Are you going home now?",
+        "zh": "你们现在回家吗？",
+        "ar": "هل تذهبون إلى البيت الآن؟",
+        "es": "¿Van ustedes a casa ahora?",
+        "pt": "Vocês vão para casa agora?"
+      }
+    },
+    {
+      "id": "g2261021_381",
+      "chapter": 6,
+      "skill": "form",
+      "lemma": "πάω",
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ στο μουσείο σήμερα.",
+      "correct": "πάνε",
+      "accepted": [
+        "πάνε",
+        "πηγαίνουν",
+        "παν"
+      ],
+      "translations": {
+        "ru": "Они сегодня не идут в музей.",
+        "en": "They do not go to the museum today.",
+        "zh": "他们今天不去博物馆。",
+        "ar": "هم لا يذهبون إلى المتحف اليوم.",
+        "es": "Hoy no van al museo.",
+        "pt": "Eles não vão ao museu hoje."
+      }
+    },
+    {
+      "id": "g2261021_382",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "τρώω",
+      "person": 0,
+      "prompt": "Εγώ ___ ψωμί με τυρί το πρωί.",
+      "correct": "τρώω",
+      "accepted": [
+        "τρώω"
+      ],
+      "translations": {
+        "ru": "Утром я ем хлеб с сыром.",
+        "en": "I eat bread with cheese in the morning.",
+        "zh": "我早上吃面包和奶酪。",
+        "ar": "آكل الخبز مع الجبن صباحاً.",
+        "es": "Como pan con queso por la mañana.",
+        "pt": "Como pão com queijo de manhã."
+      }
+    },
+    {
+      "id": "g2261021_383",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "τρώω",
+      "person": 1,
+      "prompt": "Εσύ δεν ___ κρέας.",
+      "correct": "τρως",
+      "accepted": [
+        "τρως"
+      ],
+      "translations": {
+        "ru": "Ты не ешь мясо.",
+        "en": "You do not eat meat.",
+        "zh": "你不吃肉。",
+        "ar": "أنت لا تأكل اللحم.",
+        "es": "No comes carne.",
+        "pt": "Tu não comes carne."
+      }
+    },
+    {
+      "id": "g2261021_384",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "τρώω",
+      "person": 2,
+      "prompt": "Η Μαρία ___ μια σαλάτα στο γραφείο;",
+      "correct": "τρώει",
+      "accepted": [
+        "τρώει"
+      ],
+      "translations": {
+        "ru": "Мария ест салат в офисе?",
+        "en": "Does Maria eat a salad at the office?",
+        "zh": "玛丽亚在办公室吃沙拉吗？",
+        "ar": "هل تأكل ماريا السلطة في المكتب؟",
+        "es": "¿María come una ensalada en la oficina?",
+        "pt": "A Maria come uma salada no escritório?"
+      }
+    },
+    {
+      "id": "g2261021_385",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "τρώω",
+      "person": 3,
+      "prompt": "Εμείς ___ μαζί στην κουζίνα.",
+      "correct": "τρώμε",
+      "accepted": [
+        "τρώμε"
+      ],
+      "translations": {
+        "ru": "Мы едим вместе на кухне.",
+        "en": "We eat together in the kitchen.",
+        "zh": "我们一起在厨房吃饭。",
+        "ar": "نأكل معاً في المطبخ.",
+        "es": "Comemos juntos en la cocina.",
+        "pt": "Comemos juntos na cozinha."
+      }
+    },
+    {
+      "id": "g2261021_386",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "τρώω",
+      "person": 4,
+      "prompt": "Εσείς ___ πρωινό στις οκτώ;",
+      "correct": "τρώτε",
+      "accepted": [
+        "τρώτε"
+      ],
+      "translations": {
+        "ru": "Вы завтракаете в восемь?",
+        "en": "Do you have breakfast at eight?",
+        "zh": "你们八点吃早餐吗？",
+        "ar": "هل تتناولون الفطور في الثامنة؟",
+        "es": "¿Desayunan a las ocho?",
+        "pt": "Vocês tomam o pequeno-almoço às oito?"
+      }
+    },
+    {
+      "id": "g2261021_387",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "τρώω",
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ πριν από το μάθημα.",
+      "correct": "τρώνε",
+      "accepted": [
+        "τρώνε"
+      ],
+      "translations": {
+        "ru": "Они не едят перед уроком.",
+        "en": "They do not eat before class.",
+        "zh": "他们上课前不吃东西。",
+        "ar": "هم لا يأكلون قبل الدرس.",
+        "es": "No comen antes de clase.",
+        "pt": "Eles não comem antes da aula."
+      }
+    },
+    {
+      "id": "g2261021_388",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "ακούω",
+      "person": 0,
+      "prompt": "Εγώ ___ μουσική όταν δουλεύω.",
+      "correct": "ακούω",
+      "accepted": [
+        "ακούω"
+      ],
+      "translations": {
+        "ru": "Я слушаю музыку, когда работаю.",
+        "en": "I listen to music while I work.",
+        "zh": "我工作时听音乐。",
+        "ar": "أستمع إلى الموسيقى أثناء العمل.",
+        "es": "Escucho música mientras trabajo.",
+        "pt": "Ouço música enquanto trabalho."
+      }
+    },
+    {
+      "id": "g2261021_389",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "ακούω",
+      "person": 1,
+      "prompt": "Εσύ δεν ___ τον δάσκαλο στην τάξη.",
+      "correct": "ακούς",
+      "accepted": [
+        "ακούς"
+      ],
+      "translations": {
+        "ru": "Ты не слушаешь учителя в классе.",
+        "en": "You do not listen to the teacher in class.",
+        "zh": "你在课堂上不听老师讲课。",
+        "ar": "أنت لا تستمع إلى المعلم في الصف.",
+        "es": "No escuchas al profesor en clase.",
+        "pt": "Tu não ouves o professor na aula."
+      }
+    },
+    {
+      "id": "g2261021_390",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "ακούω",
+      "person": 2,
+      "prompt": "Η Μαρία ___ το ραδιόφωνο το πρωί;",
+      "correct": "ακούει",
+      "accepted": [
+        "ακούει"
+      ],
+      "translations": {
+        "ru": "Мария слушает радио утром?",
+        "en": "Does Maria listen to the radio in the morning?",
+        "zh": "玛丽亚早上听收音机吗？",
+        "ar": "هل تستمع ماريا إلى الراديو صباحاً؟",
+        "es": "¿María escucha la radio por la mañana?",
+        "pt": "A Maria ouve rádio de manhã?"
+      }
+    },
+    {
+      "id": "g2261021_391",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "ακούω",
+      "person": 3,
+      "prompt": "Εμείς ___ την ερώτηση στην τάξη.",
+      "correct": "ακούμε",
+      "accepted": [
+        "ακούμε"
+      ],
+      "translations": {
+        "ru": "Мы слушаем вопрос в классе.",
+        "en": "We listen to the question in class.",
+        "zh": "我们在课堂上听问题。",
+        "ar": "نستمع إلى السؤال في الصف.",
+        "es": "Escuchamos la pregunta en clase.",
+        "pt": "Ouvimos a pergunta na aula."
+      }
+    },
+    {
+      "id": "g2261021_392",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "ακούω",
+      "person": 4,
+      "prompt": "Εσείς ___ τη μουσική από το δωμάτιο;",
+      "correct": "ακούτε",
+      "accepted": [
+        "ακούτε"
+      ],
+      "translations": {
+        "ru": "Вы слышите музыку из комнаты?",
+        "en": "Can you hear the music coming from the room?",
+        "zh": "你们听到房间里传来的音乐吗？",
+        "ar": "هل تسمعون الموسيقى من الغرفة؟",
+        "es": "¿Oyen la música que viene de la habitación?",
+        "pt": "Ouvem a música que vem do quarto?"
+      }
+    },
+    {
+      "id": "g2261021_393",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "ακούω",
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ το τηλέφωνο.",
+      "correct": "ακούνε",
+      "accepted": [
+        "ακούνε",
+        "ακούν"
+      ],
+      "translations": {
+        "ru": "Они не слышат телефон.",
+        "en": "They do not hear the phone.",
+        "zh": "他们没有听见电话。",
+        "ar": "هم لا يسمعون الهاتف.",
+        "es": "No oyen el teléfono.",
+        "pt": "Eles não ouvem o telefone."
+      }
+    },
+    {
+      "id": "g2261021_394",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "κλαίω",
+      "person": 0,
+      "prompt": "Εγώ ___ όταν είμαι λυπημένος.",
+      "correct": "κλαίω",
+      "accepted": [
+        "κλαίω"
+      ],
+      "translations": {
+        "ru": "Я плачу, когда мне грустно.",
+        "en": "I cry when I am sad.",
+        "zh": "我难过时会哭。",
+        "ar": "أبكي عندما أكون حزيناً.",
+        "es": "Lloro cuando estoy triste.",
+        "pt": "Choro quando estou triste."
+      }
+    },
+    {
+      "id": "g2261021_395",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "κλαίω",
+      "person": 1,
+      "prompt": "Εσύ δεν ___ όταν βλέπεις την ταινία.",
+      "correct": "κλαις",
+      "accepted": [
+        "κλαις"
+      ],
+      "translations": {
+        "ru": "Ты не плачешь, когда смотришь фильм.",
+        "en": "You do not cry while watching the film.",
+        "zh": "你看电影时不哭。",
+        "ar": "أنت لا تبكي عندما تشاهد الفيلم.",
+        "es": "No lloras mientras ves la película.",
+        "pt": "Tu não choras quando vês o filme."
+      }
+    },
+    {
+      "id": "g2261021_396",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "κλαίω",
+      "person": 2,
+      "prompt": "Η Μαρία ___ στην ταινία;",
+      "correct": "κλαίει",
+      "accepted": [
+        "κλαίει"
+      ],
+      "translations": {
+        "ru": "Мария плачет во время фильма?",
+        "en": "Does Maria cry during the film?",
+        "zh": "玛丽亚看电影时哭吗？",
+        "ar": "هل تبكي ماريا أثناء الفيلم؟",
+        "es": "¿María llora durante la película?",
+        "pt": "A Maria chora durante o filme?"
+      }
+    },
+    {
+      "id": "g2261021_397",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "κλαίω",
+      "person": 3,
+      "prompt": "Εμείς ___ όταν τελειώνει η ιστορία.",
+      "correct": "κλαίμε",
+      "accepted": [
+        "κλαίμε"
+      ],
+      "translations": {
+        "ru": "Мы плачем, когда история заканчивается.",
+        "en": "We cry when the story ends.",
+        "zh": "故事结束时我们会哭。",
+        "ar": "نبكي عندما تنتهي القصة.",
+        "es": "Lloramos cuando termina la historia.",
+        "pt": "Choramos quando a história termina."
+      }
+    },
+    {
+      "id": "g2261021_398",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "κλαίω",
+      "person": 4,
+      "prompt": "Εσείς ___ εύκολα;",
+      "correct": "κλαίτε",
+      "accepted": [
+        "κλαίτε"
+      ],
+      "translations": {
+        "ru": "Вы легко плачете?",
+        "en": "Do you cry easily?",
+        "zh": "你们容易哭吗？",
+        "ar": "هل تبكون بسهولة؟",
+        "es": "¿Lloran con facilidad?",
+        "pt": "Vocês choram facilmente?"
+      }
+    },
+    {
+      "id": "g2261021_399",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "κλαίω",
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ στο τέλος της ταινίας.",
+      "correct": "κλαίνε",
+      "accepted": [
+        "κλαίνε"
+      ],
+      "translations": {
+        "ru": "Они не плачут в конце фильма.",
+        "en": "They do not cry at the end of the film.",
+        "zh": "他们在电影结尾没有哭。",
+        "ar": "هم لا يبكون في نهاية الفيلم.",
+        "es": "No lloran al final de la película.",
+        "pt": "Eles não choram no fim do filme."
+      }
+    },
+    {
+      "id": "g2261021_400",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "φταίω",
+      "person": 0,
+      "prompt": "Εγώ ___ για το λάθος.",
+      "correct": "φταίω",
+      "accepted": [
+        "φταίω"
+      ],
+      "translations": {
+        "ru": "Я виноват в ошибке.",
+        "en": "I am to blame for the mistake.",
+        "zh": "这个错误是我的责任。",
+        "ar": "أنا المسؤول عن الخطأ.",
+        "es": "Yo tengo la culpa del error.",
+        "pt": "Eu tenho culpa pelo erro."
+      }
+    },
+    {
+      "id": "g2261021_401",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "φταίω",
+      "person": 1,
+      "prompt": "Εσύ δεν ___ για την καθυστέρηση.",
+      "correct": "φταις",
+      "accepted": [
+        "φταις"
+      ],
+      "translations": {
+        "ru": "Ты не виноват в задержке.",
+        "en": "You are not to blame for the delay.",
+        "zh": "延误不是你的责任。",
+        "ar": "أنت لست مسؤولاً عن التأخير.",
+        "es": "No tienes la culpa del retraso.",
+        "pt": "Tu não tens culpa pelo atraso."
+      }
+    },
+    {
+      "id": "g2261021_402",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "φταίω",
+      "person": 2,
+      "prompt": "Η Μαρία ___ για το πρόβλημα;",
+      "correct": "φταίει",
+      "accepted": [
+        "φταίει"
+      ],
+      "translations": {
+        "ru": "Мария виновата в проблеме?",
+        "en": "Is Maria to blame for the problem?",
+        "zh": "玛丽亚对这个问题负有责任吗？",
+        "ar": "هل ماريا مسؤولة عن المشكلة؟",
+        "es": "¿María tiene la culpa del problema?",
+        "pt": "A Maria tem culpa pelo problema?"
+      }
+    },
+    {
+      "id": "g2261021_403",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "φταίω",
+      "person": 3,
+      "prompt": "Εμείς ___ για το λάθος στο μήνυμα.",
+      "correct": "φταίμε",
+      "accepted": [
+        "φταίμε"
+      ],
+      "translations": {
+        "ru": "Мы виноваты в ошибке в сообщении.",
+        "en": "We are to blame for the mistake in the message.",
+        "zh": "我们要为消息中的错误负责。",
+        "ar": "نحن المسؤولون عن الخطأ في الرسالة.",
+        "es": "Tenemos la culpa del error en el mensaje.",
+        "pt": "Temos culpa pelo erro na mensagem."
+      }
+    },
+    {
+      "id": "g2261021_404",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "φταίω",
+      "person": 4,
+      "prompt": "Εσείς δεν ___ για το πρόβλημα.",
+      "correct": "φταίτε",
+      "accepted": [
+        "φταίτε"
+      ],
+      "translations": {
+        "ru": "Вы не виноваты в этой проблеме.",
+        "en": "You are not to blame for the problem.",
+        "zh": "你们不需要为这个问题负责。",
+        "ar": "أنتم لستم مسؤولين عن المشكلة.",
+        "es": "No tienen la culpa del problema.",
+        "pt": "Vocês não têm culpa pelo problema."
+      }
+    },
+    {
+      "id": "g2261021_405",
+      "chapter": 7,
+      "skill": "form",
+      "lemma": "φταίω",
+      "person": 5,
+      "prompt": "Αυτοί ___ για την καθυστέρηση;",
+      "correct": "φταίνε",
+      "accepted": [
+        "φταίνε"
+      ],
+      "translations": {
+        "ru": "Они виноваты в задержке?",
+        "en": "Are they to blame for the delay?",
+        "zh": "延误是他们的责任吗？",
+        "ar": "هل هم مسؤولون عن التأخير؟",
+        "es": "¿Tienen ellos la culpa del retraso?",
+        "pt": "Eles têm culpa pelo atraso?"
+      }
+    },
+    {
+      "id": "g2261021_406",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "λέω",
+      "person": 0,
+      "prompt": "Α: Πώς χαιρετάς τη Μαρία;\nΒ: Εγώ ___ «γεια σου».",
+      "correct": "λέω",
+      "wrong": [
+        "πάω",
+        "τρώω",
+        "ακούω"
+      ],
+      "translations": {
+        "ru": "А: Как ты приветствуешь Марию? Б: Я говорю «привет».",
+        "en": "A: How do you greet Maria? B: I say hello.",
+        "zh": "甲：你怎样向玛丽亚打招呼？乙：我说“你好”。",
+        "ar": "أ: كيف تحيي ماريا؟ ب: أقول مرحباً.",
+        "es": "A: ¿Cómo saludas a María? B: Yo digo hola.",
+        "pt": "A: Como cumprimentas a Maria? B: Eu digo olá."
+      }
+    },
+    {
+      "id": "g2261021_407",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "λέω",
+      "person": 2,
+      "prompt": "Α: Τι κάνει η δασκάλα πριν από το μάθημα;\nΒ: Η δασκάλα ___ «καλημέρα».",
+      "correct": "λέει",
+      "wrong": [
+        "τρώει",
+        "κλαίει",
+        "φταίει"
+      ],
+      "translations": {
+        "ru": "А: Что делает учительница перед уроком? Б: Она говорит «доброе утро».",
+        "en": "A: What does the teacher do before class? B: She says good morning.",
+        "zh": "甲：老师上课前做什么？乙：她说“早上好”。",
+        "ar": "أ: ماذا تفعل المعلمة قبل الدرس؟ ب: تقول صباح الخير.",
+        "es": "A: ¿Qué hace la profesora antes de clase? B: Dice buenos días.",
+        "pt": "A: O que faz a professora antes da aula? B: Diz bom dia."
+      }
+    },
+    {
+      "id": "g2261021_408",
+      "chapter": 6,
+      "skill": "semantic",
+      "lemma": "πάω",
+      "person": 0,
+      "prompt": "Α: Τι κάνεις κάθε πρωί με το λεωφορείο;\nΒ: Εγώ ___ στο σχολείο.",
+      "correct": "πάω",
+      "wrong": [
+        "τρώω",
+        "λέω",
+        "κλαίω"
+      ],
+      "translations": {
+        "ru": "А: Что ты делаешь каждое утро на автобусе? Б: Я езжу в школу.",
+        "en": "A: What do you do by bus each morning? B: I go to school.",
+        "zh": "甲：你每天早上坐公交车做什么？乙：我去学校。",
+        "ar": "أ: ماذا تفعل بالحافلة كل صباح؟ ب: أذهب إلى المدرسة.",
+        "es": "A: ¿Qué haces en autobús cada mañana? B: Voy a la escuela.",
+        "pt": "A: O que fazes de autocarro todas as manhãs? B: Vou à escola."
+      }
+    },
+    {
+      "id": "g2261021_409",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "πάω",
+      "person": 5,
+      "prompt": "Α: Τι κάνουν οι φίλοι το Σάββατο;\nΒ: Αυτοί ___ στο πάρκο με τα πόδια.",
+      "correct": "πάνε",
+      "wrong": [
+        "τρώνε",
+        "λένε",
+        "φταίνε"
+      ],
+      "translations": {
+        "ru": "А: Что делают друзья в субботу? Б: Они идут пешком в парк.",
+        "en": "A: What do the friends do on Saturday? B: They walk to the park.",
+        "zh": "甲：朋友们星期六做什么？乙：他们步行去公园。",
+        "ar": "أ: ماذا يفعل الأصدقاء يوم السبت؟ ب: يذهبون إلى الحديقة مشياً.",
+        "es": "A: ¿Qué hacen los amigos el sábado? B: Van al parque a pie.",
+        "pt": "A: O que fazem os amigos no sábado? B: Vão ao parque a pé."
+      }
+    },
+    {
+      "id": "g2261021_410",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "τρώω",
+      "person": 0,
+      "prompt": "Α: Έχεις ψωμί και τυρί;\nΒ: Ναι, εγώ ___ ψωμί με τυρί.",
+      "correct": "τρώω",
+      "wrong": [
+        "πάω",
+        "λέω",
+        "ακούω"
+      ],
+      "translations": {
+        "ru": "А: У тебя есть хлеб и сыр? Б: Да, я ем хлеб с сыром.",
+        "en": "A: Do you have bread and cheese? B: Yes, I eat bread with cheese.",
+        "zh": "甲：你有面包和奶酪吗？乙：有，我吃面包配奶酪。",
+        "ar": "أ: هل لديك خبز وجبن؟ ب: نعم، آكل خبزاً مع جبن.",
+        "es": "A: ¿Tienes pan y queso? B: Sí, como pan con queso.",
+        "pt": "A: Tens pão e queijo? B: Sim, como pão com queijo."
+      }
+    },
+    {
+      "id": "g2261021_411",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "τρώω",
+      "person": 5,
+      "prompt": "Α: Τι κάνουν οι φίλοι στην ταβέρνα;\nΒ: Αυτοί ___ φαγητό.",
+      "correct": "τρώνε",
+      "wrong": [
+        "λένε",
+        "πάνε",
+        "φταίνε"
+      ],
+      "translations": {
+        "ru": "А: Что делают друзья в таверне? Б: Они едят.",
+        "en": "A: What do the friends do at the tavern? B: They eat.",
+        "zh": "甲：朋友们在小餐馆做什么？乙：他们在吃饭。",
+        "ar": "أ: ماذا يفعل الأصدقاء في الحانة؟ ب: يأكلون الطعام.",
+        "es": "A: ¿Qué hacen los amigos en la taberna? B: Comen.",
+        "pt": "A: O que fazem os amigos na taberna? B: Comem."
+      }
+    },
+    {
+      "id": "g2261021_412",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "ακούω",
+      "person": 0,
+      "prompt": "Α: Υπάρχει μουσική στο δωμάτιο;\nΒ: Ναι, εγώ ___ μουσική.",
+      "correct": "ακούω",
+      "wrong": [
+        "πάω",
+        "τρώω",
+        "φταίω"
+      ],
+      "translations": {
+        "ru": "А: В комнате играет музыка? Б: Да, я слышу музыку.",
+        "en": "A: Is there music in the room? B: Yes, I can hear music.",
+        "zh": "甲：房间里有音乐吗？乙：有，我能听见音乐。",
+        "ar": "أ: هل هناك موسيقى في الغرفة؟ ب: نعم، أسمع الموسيقى.",
+        "es": "A: ¿Hay música en la habitación? B: Sí, escucho música.",
+        "pt": "A: Há música no quarto? B: Sim, ouço música."
+      }
+    },
+    {
+      "id": "g2261021_413",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "ακούω",
+      "person": 2,
+      "prompt": "Α: Τι κάνει η Ελένη με το ραδιόφωνο;\nΒ: Η Ελένη ___ μουσική.",
+      "correct": "ακούει",
+      "wrong": [
+        "τρώει",
+        "κλαίει",
+        "φταίει"
+      ],
+      "translations": {
+        "ru": "А: Что Элени делает с радио? Б: Она слушает музыку.",
+        "en": "A: What does Eleni do with the radio? B: She listens to music.",
+        "zh": "甲：埃莱妮用收音机做什么？乙：她听音乐。",
+        "ar": "أ: ماذا تفعل إليني بالراديو؟ ب: تستمع إلى الموسيقى.",
+        "es": "A: ¿Qué hace Eleni con la radio? B: Escucha música.",
+        "pt": "A: O que faz a Eleni com o rádio? B: Ouve música."
+      }
+    },
+    {
+      "id": "g2261021_414",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "κλαίω",
+      "person": 0,
+      "prompt": "Α: Γιατί έχεις δάκρυα;\nΒ: Εγώ ___ γιατί είμαι λυπημένος.",
+      "correct": "κλαίω",
+      "wrong": [
+        "πάω",
+        "λέω",
+        "ακούω"
+      ],
+      "translations": {
+        "ru": "А: Почему у тебя слёзы? Б: Я плачу, потому что мне грустно.",
+        "en": "A: Why do you have tears? B: I cry because I am sad.",
+        "zh": "甲：你为什么有眼泪？乙：我哭，因为我很伤心。",
+        "ar": "أ: لماذا لديك دموع؟ ب: أبكي لأنني حزين.",
+        "es": "A: ¿Por qué tienes lágrimas? B: Lloro porque estoy triste.",
+        "pt": "A: Porque tens lágrimas? B: Choro porque estou triste."
+      }
+    },
+    {
+      "id": "g2261021_415",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "κλαίω",
+      "person": 2,
+      "prompt": "Α: Γιατί η Μαρία έχει δάκρυα στην ταινία;\nΒ: Η Μαρία ___ στο τέλος.",
+      "correct": "κλαίει",
+      "wrong": [
+        "λέει",
+        "τρώει",
+        "φταίει"
+      ],
+      "translations": {
+        "ru": "А: Почему у Марии слёзы во время фильма? Б: Она плачет в конце.",
+        "en": "A: Why does Maria have tears during the film? B: She cries at the end.",
+        "zh": "甲：玛丽亚看电影时为什么流泪？乙：她在结尾哭了。",
+        "ar": "أ: لماذا تدمع عينا ماريا أثناء الفيلم؟ ب: تبكي في النهاية.",
+        "es": "A: ¿Por qué María tiene lágrimas durante la película? B: Llora al final.",
+        "pt": "A: Porque a Maria tem lágrimas durante o filme? B: Chora no fim."
+      }
+    },
+    {
+      "id": "g2261021_416",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "φταίω",
+      "person": 0,
+      "prompt": "Α: Υπάρχει λάθος στο μήνυμα. Ποιος έχει την ευθύνη;\nΒ: Εγώ ___ για το λάθος.",
+      "correct": "φταίω",
+      "wrong": [
+        "πάω",
+        "τρώω",
+        "ακούω"
+      ],
+      "translations": {
+        "ru": "А: В сообщении ошибка. Кто за неё отвечает? Б: Я виноват в ошибке.",
+        "en": "A: There is a mistake in the message. Who is responsible? B: I am to blame.",
+        "zh": "甲：消息里有错误。谁负责？乙：这是我的责任。",
+        "ar": "أ: يوجد خطأ في الرسالة. من المسؤول؟ ب: أنا المسؤول عن الخطأ.",
+        "es": "A: Hay un error en el mensaje. ¿Quién es responsable? B: Yo tengo la culpa.",
+        "pt": "A: Há um erro na mensagem. Quem é responsável? B: Eu tenho a culpa."
+      }
+    },
+    {
+      "id": "g2261021_417",
+      "chapter": 7,
+      "skill": "semantic",
+      "lemma": "φταίω",
+      "person": 5,
+      "prompt": "Α: Ποιος είναι υπεύθυνος για την καθυστέρηση;\nΒ: Αυτοί ___ για την καθυστέρηση.",
+      "correct": "φταίνε",
+      "wrong": [
+        "λένε",
+        "τρώνε",
+        "πάνε"
+      ],
+      "translations": {
+        "ru": "А: Кто отвечает за задержку? Б: Они виноваты в задержке.",
+        "en": "A: Who is responsible for the delay? B: They are to blame for the delay.",
+        "zh": "甲：谁要为延误负责？乙：他们要负责。",
+        "ar": "أ: من المسؤول عن التأخير؟ ب: هم المسؤولون عن التأخير.",
+        "es": "A: ¿Quién es responsable del retraso? B: Ellos tienen la culpa.",
+        "pt": "A: Quem é responsável pelo atraso? B: Eles têm culpa."
+      }
+    }
+  ]
+}
