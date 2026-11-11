@@ -19,7 +19,7 @@ forms=("μου","σου","του","της","μας","σας","τους")
 assert len(cards)==35
 assert Counter(c["correct"] for c in cards)=={p:5 for p in forms}
 assert {c["id"] for c in cards}=={f"g2261021_{i:03d}" for i in range(77,112)}
-assert len(grammar2_cards.CARDS)==111
+assert len(grammar2_cards.CARDS)>=111  # later grammar batches append, never rewrite these 111 IDs
 assert len([c for c in grammar2_cards.CARDS if c["group"]=="possessive"])==35
 assert [c["id"] for c in grammar2_cards.CARDS[:76]]==[
     f"g2261021_{i:03d}" for i in range(1,77)
