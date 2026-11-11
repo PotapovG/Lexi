@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule")] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule","duration")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==301
+    assert len(ARTICLES)==24 and len(GRAMMAR)==335
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="duration":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="schedule":
         return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="likes":
@@ -470,7 +472,31 @@ def _schedule_explanation(card,lang):
         correct=card["correct"],clock=card["eventTime"],spoken=event["spoken"]
     )
 
+
+DURATION_GUIDANCE={
+ "contrast":{"ru":"Здесь «{correct}» — наиболее естественный вопрос: {reason}. Разница зависит от контекста, а не строго от количества минут или лет; некоторые формулировки пересекаются.","en":"Here “{correct}” is the most natural: {reason}. The distinction is contextual, not a strict minute-versus-year cutoff; usage can overlap.","zh":"本题最自然的问法是“{correct}”：{reason}。区别取决于语境，而不是严格按分钟或年份划分；两者有时可以互用。","ar":"الصيغة الأنسب هنا «{correct}»: {reason}. يعتمد الفرق على السياق، لا على حدّ صارم بين الدقائق والسنوات؛ وقد تتداخل الاستعمالات.","es":"Aquí «{correct}» es lo más natural: {reason}. La distinción depende del contexto, no de un corte rígido entre minutos y años; pueden solaparse.","pt":"Aqui «{correct}» é o mais natural: {reason}. A distinção depende do contexto, não de uma divisão rígida entre minutos e anos; os usos podem sobrepor-se."},
+ "unit":{"ru":"«{correct}» — нужная форма единицы после числительного и предлога в данном предложении. Сравни: ένα λεπτό / δύο λεπτά; μία ώρα / τρεις ώρες; έναν μήνα / τρεις μήνες; έναν χρόνο / τέσσερα χρόνια.","en":"“{correct}” is the appropriate noun form after the numeral/preposition here. Compare ένα λεπτό / δύο λεπτά, μία ώρα / τρεις ώρες, έναν μήνα / τρεις μήνες, έναν χρόνο / τέσσερα χρόνια.","zh":"这里的正确时间单位形式是“{correct}”，由数字和介词决定。比较：ένα λεπτό / δύο λεπτά，μία ώρα / τρεις ώρες，έναν μήνα / τρεις μήνες，έναν χρόνο / τέσσερα χρόνια。","ar":"«{correct}» هي صيغة وحدة الزمن المناسبة بعد العدد وحرف الجر. قارن: ένα λεπτό / δύο λεπτά، μία ώρα / τρεις ώρες، έναν μήνα / τρεις μήνες، έναν χρόνο / τέσσερα χρόνια.","es":"«{correct}» es la forma correcta de la unidad tras el numeral/la preposición. Compara ένα λεπτό / δύο λεπτά, μία ώρα / τρεις ώρες, έναν μήνα / τρεις μήνες, έναν χρόνο / τέσσερα χρόνια.","pt":"«{correct}» é a forma certa da unidade após o numeral/a preposição. Compara ένα λεπτό / δύο λεπτά, μία ώρα / τρεις ώρες, έναν μήνα / τρεις μήνες, έναν χρόνο / τέσσερα χρόνια."},
+ "timeline":{"ru":"Начало {start} + длительность {minutes} мин. = окончание {end}. «Στις» обозначает время на часах, а длительность отвечает на «πόση ώρα».","en":"Start {start} + {minutes} minutes = end {end}. Στις marks a clock-time point; duration answers πόση ώρα.","zh":"开始 {start}，加 {minutes} 分钟，结束于 {end}。“στις”表示钟点，而时长回答“πόση ώρα”。","ar":"البداية {start} + {minutes} دقيقة = النهاية {end}. تشير στις إلى وقت محدد؛ أما المدة فتجيب عن πόση ώρα.","es":"Inicio {start} + {minutes} minutos = fin {end}. Στις marca una hora concreta; la duración responde a πόση ώρα.","pt":"Início {start} + {minutes} minutos = fim {end}. Στις marca uma hora concreta; a duração responde a πόση ώρα."},
+ "typed":{"ru":"Правильный ответ: «{correct}». Важны форма числительного, род и падеж единицы длительности; допустимые цифровые написания перечислены отдельно, а не угадываются.","en":"Correct: “{correct}”. The numeral and the time unit's gender/case matter. Valid digit spellings are curated per question, not guessed.","zh":"正确答案是“{correct}”。注意数词、时间单位的性和格；可接受的数字写法只在本题明确列出。","ar":"الصواب «{correct}». يجب مراعاة العدد وجنس وحدة المدة وحالتها؛ صيغ الأرقام المسموح بها محددة لكل سؤال.","es":"Correcto: «{correct}». Importan el numeral, el género y el caso de la unidad; las variantes con cifras se verifican caso por caso.","pt":"Correto: «{correct}». Importam o numeral, o género e o caso da unidade; as variantes com algarismos são verificadas por pergunta."}
+}
+DURATION_REASONS={
+ "event":{"ru":"указана продолжительность конкретного действия","en":"the duration of a bounded activity is in focus","zh":"重点是一次具体活动的时长","ar":"السؤال عن مدة نشاط محدد","es":"se pregunta por la duración de una actividad concreta","pt":"pergunta-se pela duração de uma atividade concreta"},
+ "ongoing":{"ru":"указан общий период состояния до настоящего времени","en":"the ongoing period up to now is in focus","zh":"重点是一直持续到现在的时期","ar":"السؤال عن فترة مستمرة حتى الآن","es":"se pregunta por un período que continúa hasta hoy","pt":"pergunta-se por um período que continua até hoje"}
+}
+
+def _duration_explanation(card,lang):
+    skill=card["skill"]
+    return DURATION_GUIDANCE[skill][lang].format(
+        correct=card["correct"],
+        reason=DURATION_REASONS[card["contextType"]][lang] if skill=="contrast" else "",
+        start=card.get("startTime",""),
+        minutes=card.get("minutes",""),
+        end=card.get("endTime","")
+    )
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="duration":
+        return _duration_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="schedule":
         return _schedule_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="likes":
