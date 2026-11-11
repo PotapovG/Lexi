@@ -105,7 +105,6 @@ for i,day in enumerate(DAYS):
     assert datetime.date.fromisoformat(day["dateISO"])==WEEK_START+datetime.timedelta(days=i)
     assert day["dateDisplay"]==f"{i+2}/11"
     assert set(day["dayLocales"])==set(LANGS)
-    assert set(e["locales"] for e in [])==set()  # no global translation fallback
     for event in day["events"]:
         assert set(event["locales"])==set(LANGS)
         hour,minute=map(int,event["time"].split(":"))
