@@ -83,11 +83,14 @@ with tempfile.TemporaryDirectory(prefix="lexi-verb-a-") as folder:
         assert accepted["correct"]
         # Existing chapter and SRS filtering can select the new items.
         for stage in (2,7,8):
+            ours={c["id"] for c in CARDS if c["chapter"]==stage}
+            excluded=",".join(c["id"] for c in server.GRAMMAR2_ALL
+                              if c["chapter"]==stage and c["id"] not in ours)
             quiz=server.make_quiz("fresh",{
                 "scope":["chapters"],"chapters":[str(stage)],
-                "types":["grammar"],"count":["60"],"lang":["ru"]
+                "types":["grammar"],"count":["60"],"lang":["ru"],
+                "exclude":[excluded]
             })
-            ours={c["id"] for c in CARDS if c["chapter"]==stage}
             assert ours.issubset({q["id"] for q in quiz["questions"]}),stage
         with server.conn() as db:
             assert db.execute("PRAGMA quick_check").fetchone()[0]=="ok"
