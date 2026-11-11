@@ -118,8 +118,6 @@ for n,row in enumerate(DATA["questions"],302):
     elif skill=="typed":
         card["acceptedForms"]=list(row["accepted"])
     else:
-        card["unit"]=row["unit"]  # overloaded? overwritten below: retain course unit!
-        card["unit"]=chapter
         card["durationUnit"]=row["unit"]
     pedagogy_rules.tag(card)
     assert card["curriculum_ready_unit"]<=chapter,(cid,card["curriculum_ready_unit"])
