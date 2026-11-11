@@ -16,7 +16,7 @@ import cloze_meanings
 CARDS=verb_a_cards.CARDS
 assert len(CARDS)==36
 assert len(verb_a_cards.PARADIGMS)==12
-assert len(grammar2_cards.CARDS)==147
+assert len(grammar2_cards.CARDS)>=147  # appended B1 cards retain old IDs
 assert [c["id"] for c in grammar2_cards.CARDS[:111]]==[
     f"g2261021_{i:03d}" for i in range(1,112)
 ]
