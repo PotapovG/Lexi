@@ -1,0 +1,799 @@
+{
+  "version": 1,
+  "verbs": [
+    {
+      "lemma": "κάνω",
+      "chapter": 7,
+      "forms": [
+        "κάνω",
+        "κάνεις",
+        "κάνει",
+        "κάνουμε",
+        "κάνετε",
+        "κάνουν"
+      ]
+    },
+    {
+      "lemma": "μένω",
+      "chapter": 2,
+      "forms": [
+        "μένω",
+        "μένεις",
+        "μένει",
+        "μένουμε",
+        "μένετε",
+        "μένουν"
+      ]
+    },
+    {
+      "lemma": "θέλω",
+      "chapter": 8,
+      "forms": [
+        "θέλω",
+        "θέλεις",
+        "θέλει",
+        "θέλουμε",
+        "θέλετε",
+        "θέλουν"
+      ]
+    },
+    {
+      "lemma": "έχω",
+      "chapter": 2,
+      "forms": [
+        "έχω",
+        "έχεις",
+        "έχει",
+        "έχουμε",
+        "έχετε",
+        "έχουν"
+      ]
+    },
+    {
+      "lemma": "διαβάζω",
+      "chapter": 7,
+      "forms": [
+        "διαβάζω",
+        "διαβάζεις",
+        "διαβάζει",
+        "διαβάζουμε",
+        "διαβάζετε",
+        "διαβάζουν"
+      ]
+    },
+    {
+      "lemma": "γράφω",
+      "chapter": 7,
+      "forms": [
+        "γράφω",
+        "γράφεις",
+        "γράφει",
+        "γράφουμε",
+        "γράφετε",
+        "γράφουν"
+      ]
+    },
+    {
+      "lemma": "ανοίγω",
+      "chapter": 7,
+      "forms": [
+        "ανοίγω",
+        "ανοίγεις",
+        "ανοίγει",
+        "ανοίγουμε",
+        "ανοίγετε",
+        "ανοίγουν"
+      ]
+    },
+    {
+      "lemma": "κλείνω",
+      "chapter": 7,
+      "forms": [
+        "κλείνω",
+        "κλείνεις",
+        "κλείνει",
+        "κλείνουμε",
+        "κλείνετε",
+        "κλείνουν"
+      ]
+    },
+    {
+      "lemma": "μαθαίνω",
+      "chapter": 7,
+      "forms": [
+        "μαθαίνω",
+        "μαθαίνεις",
+        "μαθαίνει",
+        "μαθαίνουμε",
+        "μαθαίνετε",
+        "μαθαίνουν"
+      ]
+    },
+    {
+      "lemma": "δουλεύω",
+      "chapter": 7,
+      "forms": [
+        "δουλεύω",
+        "δουλεύεις",
+        "δουλεύει",
+        "δουλεύουμε",
+        "δουλεύετε",
+        "δουλεύουν"
+      ]
+    },
+    {
+      "lemma": "αγοράζω",
+      "chapter": 8,
+      "forms": [
+        "αγοράζω",
+        "αγοράζεις",
+        "αγοράζει",
+        "αγοράζουμε",
+        "αγοράζετε",
+        "αγοράζουν"
+      ]
+    },
+    {
+      "lemma": "περιμένω",
+      "chapter": 7,
+      "forms": [
+        "περιμένω",
+        "περιμένεις",
+        "περιμένει",
+        "περιμένουμε",
+        "περιμένετε",
+        "περιμένουν"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "g2261021_112",
+      "lemma": "κάνω",
+      "chapter": 7,
+      "person": 0,
+      "prompt": "Εγώ ___ καφέ.",
+      "correct": "κάνω",
+      "translations": {
+        "ru": "Я готовлю кофе.",
+        "en": "I make coffee.",
+        "zh": "我煮咖啡。",
+        "ar": "أنا أُعِدّ القهوة.",
+        "es": "Preparo café.",
+        "pt": "Eu faço café."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_113",
+      "lemma": "κάνω",
+      "chapter": 7,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ τη δουλειά σου.",
+      "correct": "κάνεις",
+      "translations": {
+        "ru": "Ты не выполняешь свою работу.",
+        "en": "You do not do your work.",
+        "zh": "你没有做你的工作。",
+        "ar": "أنت لا تقوم بعملك.",
+        "es": "No haces tu trabajo.",
+        "pt": "Tu não fazes o teu trabalho."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_114",
+      "lemma": "κάνω",
+      "chapter": 7,
+      "person": 2,
+      "prompt": "Η Μαρία ___ μια ερώτηση;",
+      "correct": "κάνει",
+      "translations": {
+        "ru": "Мария задаёт вопрос?",
+        "en": "Does Maria ask a question?",
+        "zh": "玛丽亚提问吗？",
+        "ar": "هل تطرح ماريا سؤالاً؟",
+        "es": "¿María hace una pregunta?",
+        "pt": "A Maria faz uma pergunta?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_115",
+      "lemma": "μένω",
+      "chapter": 2,
+      "person": 3,
+      "prompt": "Εμείς ___ στην Κύπρο.",
+      "correct": "μένουμε",
+      "translations": {
+        "ru": "Мы живём на Кипре.",
+        "en": "We live in Cyprus.",
+        "zh": "我们住在塞浦路斯。",
+        "ar": "نحن نسكن في قبرص.",
+        "es": "Vivimos en Chipre.",
+        "pt": "Nós moramos em Chipre."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_116",
+      "lemma": "μένω",
+      "chapter": 2,
+      "person": 4,
+      "prompt": "Εσείς δεν ___ στην Ελλάδα.",
+      "correct": "μένετε",
+      "translations": {
+        "ru": "Вы не живёте в Греции.",
+        "en": "You do not live in Greece.",
+        "zh": "您不住在希腊。",
+        "ar": "أنتم لا تسكنون في اليونان.",
+        "es": "Ustedes no viven en Grecia.",
+        "pt": "Vocês não moram na Grécia."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_117",
+      "lemma": "μένω",
+      "chapter": 2,
+      "person": 5,
+      "prompt": "Αυτοί ___ στη Λευκωσία;",
+      "correct": "μένουν",
+      "translations": {
+        "ru": "Они живут в Никосии?",
+        "en": "Do they live in Nicosia?",
+        "zh": "他们住在尼科西亚吗？",
+        "ar": "هل يسكنون في نيقوسيا؟",
+        "es": "¿Viven en Nicosia?",
+        "pt": "Eles moram em Nicósia?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_118",
+      "lemma": "θέλω",
+      "chapter": 8,
+      "person": 0,
+      "prompt": "Εγώ ___ ένα βιβλίο.",
+      "correct": "θέλω",
+      "translations": {
+        "ru": "Я хочу книгу.",
+        "en": "I want a book.",
+        "zh": "我想要一本书。",
+        "ar": "أريد كتاباً.",
+        "es": "Quiero un libro.",
+        "pt": "Quero um livro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_119",
+      "lemma": "θέλω",
+      "chapter": 8,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ νερό.",
+      "correct": "θέλεις",
+      "translations": {
+        "ru": "Ты не хочешь воды.",
+        "en": "You do not want water.",
+        "zh": "你不想喝水。",
+        "ar": "أنت لا تريد الماء.",
+        "es": "No quieres agua.",
+        "pt": "Tu não queres água."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_120",
+      "lemma": "θέλω",
+      "chapter": 8,
+      "person": 2,
+      "prompt": "Η Μαρία ___ καφέ;",
+      "correct": "θέλει",
+      "translations": {
+        "ru": "Мария хочет кофе?",
+        "en": "Does Maria want coffee?",
+        "zh": "玛丽亚想喝咖啡吗？",
+        "ar": "هل تريد ماريا القهوة؟",
+        "es": "¿María quiere café?",
+        "pt": "A Maria quer café?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_121",
+      "lemma": "έχω",
+      "chapter": 2,
+      "person": 3,
+      "prompt": "Εμείς ___ ένα τηλέφωνο.",
+      "correct": "έχουμε",
+      "translations": {
+        "ru": "У нас есть телефон.",
+        "en": "We have a telephone.",
+        "zh": "我们有一部电话。",
+        "ar": "لدينا هاتف.",
+        "es": "Tenemos un teléfono.",
+        "pt": "Nós temos um telefone."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_122",
+      "lemma": "έχω",
+      "chapter": 2,
+      "person": 4,
+      "prompt": "Εσείς δεν ___ κινητό.",
+      "correct": "έχετε",
+      "translations": {
+        "ru": "У вас нет мобильного телефона.",
+        "en": "You do not have a mobile phone.",
+        "zh": "您没有手机。",
+        "ar": "ليس لديكم هاتف محمول.",
+        "es": "Ustedes no tienen móvil.",
+        "pt": "Vocês não têm telemóvel."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_123",
+      "lemma": "έχω",
+      "chapter": 2,
+      "person": 5,
+      "prompt": "Αυτοί ___ ένα σπίτι;",
+      "correct": "έχουν",
+      "translations": {
+        "ru": "У них есть дом?",
+        "en": "Do they have a house?",
+        "zh": "他们有房子吗？",
+        "ar": "هل لديهم بيت؟",
+        "es": "¿Tienen una casa?",
+        "pt": "Eles têm uma casa?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_124",
+      "lemma": "διαβάζω",
+      "chapter": 7,
+      "person": 0,
+      "prompt": "Εγώ ___ το βιβλίο.",
+      "correct": "διαβάζω",
+      "translations": {
+        "ru": "Я читаю книгу.",
+        "en": "I read the book.",
+        "zh": "我读这本书。",
+        "ar": "أنا أقرأ الكتاب.",
+        "es": "Leo el libro.",
+        "pt": "Eu leio o livro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_125",
+      "lemma": "διαβάζω",
+      "chapter": 7,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ την εφημερίδα.",
+      "correct": "διαβάζεις",
+      "translations": {
+        "ru": "Ты не читаешь газету.",
+        "en": "You do not read the newspaper.",
+        "zh": "你不读报纸。",
+        "ar": "أنت لا تقرأ الصحيفة.",
+        "es": "No lees el periódico.",
+        "pt": "Tu não lês o jornal."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_126",
+      "lemma": "διαβάζω",
+      "chapter": 7,
+      "person": 2,
+      "prompt": "Η Μαρία ___ το μήνυμα;",
+      "correct": "διαβάζει",
+      "translations": {
+        "ru": "Мария читает сообщение?",
+        "en": "Does Maria read the message?",
+        "zh": "玛丽亚在读这条消息吗？",
+        "ar": "هل تقرأ ماريا الرسالة؟",
+        "es": "¿María lee el mensaje?",
+        "pt": "A Maria lê a mensagem?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_127",
+      "lemma": "γράφω",
+      "chapter": 7,
+      "person": 3,
+      "prompt": "Εμείς ___ ένα μήνυμα.",
+      "correct": "γράφουμε",
+      "translations": {
+        "ru": "Мы пишем сообщение.",
+        "en": "We write a message.",
+        "zh": "我们写一条消息。",
+        "ar": "نحن نكتب رسالة.",
+        "es": "Escribimos un mensaje.",
+        "pt": "Nós escrevemos uma mensagem."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_128",
+      "lemma": "γράφω",
+      "chapter": 7,
+      "person": 4,
+      "prompt": "Εσείς δεν ___ το όνομα.",
+      "correct": "γράφετε",
+      "translations": {
+        "ru": "Вы не пишете имя.",
+        "en": "You do not write the name.",
+        "zh": "您没有写名字。",
+        "ar": "أنتم لا تكتبون الاسم.",
+        "es": "Ustedes no escriben el nombre.",
+        "pt": "Vocês não escrevem o nome."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_129",
+      "lemma": "γράφω",
+      "chapter": 7,
+      "person": 5,
+      "prompt": "Αυτοί ___ τη διεύθυνση;",
+      "correct": "γράφουν",
+      "translations": {
+        "ru": "Они пишут адрес?",
+        "en": "Do they write the address?",
+        "zh": "他们写地址吗？",
+        "ar": "هل يكتبون العنوان؟",
+        "es": "¿Escriben la dirección?",
+        "pt": "Eles escrevem a morada?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_130",
+      "lemma": "ανοίγω",
+      "chapter": 7,
+      "person": 0,
+      "prompt": "Εγώ ___ την πόρτα.",
+      "correct": "ανοίγω",
+      "translations": {
+        "ru": "Я открываю дверь.",
+        "en": "I open the door.",
+        "zh": "我打开门。",
+        "ar": "أنا أفتح الباب.",
+        "es": "Abro la puerta.",
+        "pt": "Eu abro a porta."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_131",
+      "lemma": "ανοίγω",
+      "chapter": 7,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ το παράθυρο.",
+      "correct": "ανοίγεις",
+      "translations": {
+        "ru": "Ты не открываешь окно.",
+        "en": "You do not open the window.",
+        "zh": "你不开窗户。",
+        "ar": "أنت لا تفتح النافذة.",
+        "es": "No abres la ventana.",
+        "pt": "Tu não abres a janela."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_132",
+      "lemma": "ανοίγω",
+      "chapter": 7,
+      "person": 2,
+      "prompt": "Η Μαρία ___ το βιβλίο;",
+      "correct": "ανοίγει",
+      "translations": {
+        "ru": "Мария открывает книгу?",
+        "en": "Does Maria open the book?",
+        "zh": "玛丽亚打开书吗？",
+        "ar": "هل تفتح ماريا الكتاب؟",
+        "es": "¿María abre el libro?",
+        "pt": "A Maria abre o livro?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_133",
+      "lemma": "κλείνω",
+      "chapter": 7,
+      "person": 3,
+      "prompt": "Εμείς ___ την πόρτα.",
+      "correct": "κλείνουμε",
+      "translations": {
+        "ru": "Мы закрываем дверь.",
+        "en": "We close the door.",
+        "zh": "我们关门。",
+        "ar": "نحن نغلق الباب.",
+        "es": "Cerramos la puerta.",
+        "pt": "Nós fechamos a porta."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_134",
+      "lemma": "κλείνω",
+      "chapter": 7,
+      "person": 4,
+      "prompt": "Εσείς δεν ___ το παράθυρο.",
+      "correct": "κλείνετε",
+      "translations": {
+        "ru": "Вы не закрываете окно.",
+        "en": "You do not close the window.",
+        "zh": "您没有关窗户。",
+        "ar": "أنتم لا تغلقون النافذة.",
+        "es": "Ustedes no cierran la ventana.",
+        "pt": "Vocês não fecham a janela."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_135",
+      "lemma": "κλείνω",
+      "chapter": 7,
+      "person": 5,
+      "prompt": "Αυτοί ___ το βιβλίο;",
+      "correct": "κλείνουν",
+      "translations": {
+        "ru": "Они закрывают книгу?",
+        "en": "Do they close the book?",
+        "zh": "他们合上书吗？",
+        "ar": "هل يغلقون الكتاب؟",
+        "es": "¿Cierran el libro?",
+        "pt": "Eles fecham o livro?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_136",
+      "lemma": "μαθαίνω",
+      "chapter": 7,
+      "person": 0,
+      "prompt": "Εγώ ___ ελληνικά.",
+      "correct": "μαθαίνω",
+      "translations": {
+        "ru": "Я изучаю греческий.",
+        "en": "I learn Greek.",
+        "zh": "我学习希腊语。",
+        "ar": "أنا أتعلم اليونانية.",
+        "es": "Aprendo griego.",
+        "pt": "Eu aprendo grego."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_137",
+      "lemma": "μαθαίνω",
+      "chapter": 7,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ αγγλικά.",
+      "correct": "μαθαίνεις",
+      "translations": {
+        "ru": "Ты не изучаешь английский.",
+        "en": "You do not learn English.",
+        "zh": "你不学英语。",
+        "ar": "أنت لا تتعلم الإنجليزية.",
+        "es": "No aprendes inglés.",
+        "pt": "Tu não aprendes inglês."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_138",
+      "lemma": "μαθαίνω",
+      "chapter": 7,
+      "person": 2,
+      "prompt": "Η Μαρία ___ γερμανικά;",
+      "correct": "μαθαίνει",
+      "translations": {
+        "ru": "Мария изучает немецкий?",
+        "en": "Does Maria learn German?",
+        "zh": "玛丽亚学习德语吗？",
+        "ar": "هل تتعلم ماريا الألمانية؟",
+        "es": "¿María aprende alemán?",
+        "pt": "A Maria aprende alemão?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_139",
+      "lemma": "δουλεύω",
+      "chapter": 7,
+      "person": 3,
+      "prompt": "Εμείς ___ στο γραφείο.",
+      "correct": "δουλεύουμε",
+      "translations": {
+        "ru": "Мы работаем в офисе.",
+        "en": "We work in the office.",
+        "zh": "我们在办公室工作。",
+        "ar": "نحن نعمل في المكتب.",
+        "es": "Trabajamos en la oficina.",
+        "pt": "Nós trabalhamos no escritório."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_140",
+      "lemma": "δουλεύω",
+      "chapter": 7,
+      "person": 4,
+      "prompt": "Εσείς δεν ___ την Κυριακή.",
+      "correct": "δουλεύετε",
+      "translations": {
+        "ru": "Вы не работаете в воскресенье.",
+        "en": "You do not work on Sunday.",
+        "zh": "您星期日不工作。",
+        "ar": "أنتم لا تعملون يوم الأحد.",
+        "es": "Ustedes no trabajan el domingo.",
+        "pt": "Vocês não trabalham ao domingo."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_141",
+      "lemma": "δουλεύω",
+      "chapter": 7,
+      "person": 5,
+      "prompt": "Αυτοί ___ στο σχολείο;",
+      "correct": "δουλεύουν",
+      "translations": {
+        "ru": "Они работают в школе?",
+        "en": "Do they work at school?",
+        "zh": "他们在学校工作吗？",
+        "ar": "هل يعملون في المدرسة؟",
+        "es": "¿Trabajan en la escuela?",
+        "pt": "Eles trabalham na escola?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_142",
+      "lemma": "αγοράζω",
+      "chapter": 8,
+      "person": 0,
+      "prompt": "Εγώ ___ ένα βιβλίο.",
+      "correct": "αγοράζω",
+      "translations": {
+        "ru": "Я покупаю книгу.",
+        "en": "I buy a book.",
+        "zh": "我买一本书。",
+        "ar": "أنا أشتري كتاباً.",
+        "es": "Compro un libro.",
+        "pt": "Eu compro um livro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_143",
+      "lemma": "αγοράζω",
+      "chapter": 8,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ ψωμί.",
+      "correct": "αγοράζεις",
+      "translations": {
+        "ru": "Ты не покупаешь хлеб.",
+        "en": "You do not buy bread.",
+        "zh": "你不买面包。",
+        "ar": "أنت لا تشتري الخبز.",
+        "es": "No compras pan.",
+        "pt": "Tu não compras pão."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_144",
+      "lemma": "αγοράζω",
+      "chapter": 8,
+      "person": 2,
+      "prompt": "Η Μαρία ___ γάλα;",
+      "correct": "αγοράζει",
+      "translations": {
+        "ru": "Мария покупает молоко?",
+        "en": "Does Maria buy milk?",
+        "zh": "玛丽亚买牛奶吗？",
+        "ar": "هل تشتري ماريا الحليب؟",
+        "es": "¿María compra leche?",
+        "pt": "A Maria compra leite?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_145",
+      "lemma": "περιμένω",
+      "chapter": 7,
+      "person": 3,
+      "prompt": "Εμείς ___ το λεωφορείο.",
+      "correct": "περιμένουμε",
+      "translations": {
+        "ru": "Мы ждём автобус.",
+        "en": "We wait for the bus.",
+        "zh": "我们等公交车。",
+        "ar": "نحن ننتظر الحافلة.",
+        "es": "Esperamos el autobús.",
+        "pt": "Nós esperamos pelo autocarro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_146",
+      "lemma": "περιμένω",
+      "chapter": 7,
+      "person": 4,
+      "prompt": "Εσείς δεν ___ τον φίλο σας.",
+      "correct": "περιμένετε",
+      "translations": {
+        "ru": "Вы не ждёте своего друга.",
+        "en": "You do not wait for your friend.",
+        "zh": "您不等您的朋友。",
+        "ar": "أنتم لا تنتظرون صديقكم.",
+        "es": "Ustedes no esperan a su amigo.",
+        "pt": "Vocês não esperam pelo vosso amigo."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_147",
+      "lemma": "περιμένω",
+      "chapter": 7,
+      "person": 5,
+      "prompt": "Αυτοί ___ το ταξί;",
+      "correct": "περιμένουν",
+      "translations": {
+        "ru": "Они ждут такси?",
+        "en": "Do they wait for the taxi?",
+        "zh": "他们等出租车吗？",
+        "ar": "هل ينتظرون سيارة الأجرة؟",
+        "es": "¿Esperan el taxi?",
+        "pt": "Eles esperam pelo táxi?"
+      },
+      "polarity": "positive",
+      "question": true
+    }
+  ]
+}
