@@ -1,0 +1,764 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "g2261021_302",
+      "chapter": 7,
+      "skill": "contrast",
+      "prompt": "Περιμένω στη στάση δεκαπέντε λεπτά.\nΡωτάμε για τη διάρκεια αυτής της αναμονής: ___ περιμένεις στη στάση;",
+      "correct": "Πόση ώρα",
+      "translations": {
+        "ru": "Я жду на остановке пятнадцать минут. Как долго ты ждёшь на остановке?",
+        "en": "I wait at the bus stop for fifteen minutes. How long do you wait there?",
+        "zh": "我在车站等了十五分钟。你在车站等多久？",
+        "ar": "أنتظر عند الموقف خمس عشرة دقيقة. كم من الوقت تنتظر عند الموقف؟",
+        "es": "Espero quince minutos en la parada. ¿Cuánto tiempo esperas allí?",
+        "pt": "Espero quinze minutos na paragem. Quanto tempo esperas lá?"
+      },
+      "context": "event"
+    },
+    {
+      "id": "g2261021_303",
+      "chapter": 7,
+      "skill": "contrast",
+      "prompt": "Η ταινία διαρκεί δύο ώρες.\nΡωτάμε για τη διάρκεια της ταινίας: ___ διαρκεί η ταινία;",
+      "correct": "Πόση ώρα",
+      "translations": {
+        "ru": "Фильм длится два часа. Сколько длится фильм?",
+        "en": "The film lasts two hours. How long does the film last?",
+        "zh": "电影长两小时。这部电影放多久？",
+        "ar": "يستمر الفيلم ساعتين. كم تدوم مدة الفيلم؟",
+        "es": "La película dura dos horas. ¿Cuánto dura la película?",
+        "pt": "O filme dura duas horas. Quanto tempo dura o filme?"
+      },
+      "context": "event"
+    },
+    {
+      "id": "g2261021_304",
+      "chapter": 7,
+      "skill": "contrast",
+      "prompt": "Το φαγητό θέλει τριάντα λεπτά.\nΡωτάμε για τη διάρκεια του μαγειρέματος: ___ θέλει το φαγητό;",
+      "correct": "Πόση ώρα",
+      "translations": {
+        "ru": "На приготовление блюда нужно тридцать минут. Сколько времени нужно для блюда?",
+        "en": "The food needs thirty minutes. How long does it take to prepare?",
+        "zh": "做饭需要三十分钟。做这道菜需要多久？",
+        "ar": "يحتاج الطعام إلى ثلاثين دقيقة. كم يستغرق تحضيره؟",
+        "es": "La comida necesita treinta minutos. ¿Cuánto tarda en prepararse?",
+        "pt": "A comida precisa de trinta minutos. Quanto tempo demora a preparar?"
+      },
+      "context": "event"
+    },
+    {
+      "id": "g2261021_305",
+      "chapter": 7,
+      "skill": "contrast",
+      "prompt": "Το μάθημα διαρκεί σαράντα πέντε λεπτά.\nΡωτάμε για τη διάρκεια του μαθήματος: ___ διαρκεί το μάθημα;",
+      "correct": "Πόση ώρα",
+      "translations": {
+        "ru": "Урок длится сорок пять минут. Сколько длится урок?",
+        "en": "The lesson lasts forty-five minutes. How long does it last?",
+        "zh": "课程长四十五分钟。一节课有多长？",
+        "ar": "يستمر الدرس خمساً وأربعين دقيقة. كم تستغرق الحصة؟",
+        "es": "La clase dura cuarenta y cinco minutos. ¿Cuánto dura?",
+        "pt": "A aula dura quarenta e cinco minutos. Quanto tempo dura?"
+      },
+      "context": "event"
+    },
+    {
+      "id": "g2261021_306",
+      "chapter": 11,
+      "skill": "contrast",
+      "prompt": "Μένω στην Κύπρο εδώ και τρία χρόνια.\nΡωτάμε για τη συνολική περίοδο έως σήμερα: ___ μένεις στην Κύπρο;",
+      "correct": "Πόσο καιρό",
+      "translations": {
+        "ru": "Я живу на Кипре уже три года. Как давно ты живёшь на Кипре?",
+        "en": "I have lived in Cyprus for three years. How long have you lived there?",
+        "zh": "我在塞浦路斯住了三年。你在那里住了多久了？",
+        "ar": "أعيش في قبرص منذ ثلاث سنوات. منذ متى تعيش هناك؟",
+        "es": "Vivo en Chipre desde hace tres años. ¿Cuánto tiempo llevas allí?",
+        "pt": "Vivo em Chipre há três anos. Há quanto tempo vives lá?"
+      },
+      "context": "ongoing"
+    },
+    {
+      "id": "g2261021_307",
+      "chapter": 11,
+      "skill": "contrast",
+      "prompt": "Μαθαίνω ελληνικά εδώ και έξι μήνες.\nΡωτάμε για τη συνολική περίοδο μάθησης: ___ μαθαίνεις ελληνικά;",
+      "correct": "Πόσο καιρό",
+      "translations": {
+        "ru": "Я учу греческий уже шесть месяцев. Как давно ты учишь греческий?",
+        "en": "I have been learning Greek for six months. How long have you been learning it?",
+        "zh": "我学习希腊语已经六个月了。你学了多久？",
+        "ar": "أتعلم اليونانية منذ ستة أشهر. منذ متى تتعلمها؟",
+        "es": "Estudio griego desde hace seis meses. ¿Desde hace cuánto lo estudias?",
+        "pt": "Aprendo grego há seis meses. Há quanto tempo o aprendes?"
+      },
+      "context": "ongoing"
+    },
+    {
+      "id": "g2261021_308",
+      "chapter": 13,
+      "skill": "contrast",
+      "prompt": "Δουλεύω στο γραφείο εδώ και δύο χρόνια.\nΡωτάμε για τη συνολική περίοδο εργασίας: ___ δουλεύεις στο γραφείο;",
+      "correct": "Πόσο καιρό",
+      "translations": {
+        "ru": "Я работаю в офисе уже два года. Как давно ты работаешь там?",
+        "en": "I have worked in the office for two years. How long have you worked there?",
+        "zh": "我在办公室工作了两年。你在那里工作多久了？",
+        "ar": "أعمل في المكتب منذ سنتين. منذ متى تعمل هناك؟",
+        "es": "Trabajo en la oficina desde hace dos años. ¿Cuánto tiempo llevas allí?",
+        "pt": "Trabalho no escritório há dois anos. Há quanto tempo trabalhas lá?"
+      },
+      "context": "ongoing"
+    },
+    {
+      "id": "g2261021_309",
+      "chapter": 13,
+      "skill": "contrast",
+      "prompt": "Γνωρίζω τη Μαρία εδώ και πέντε χρόνια.\nΡωτάμε για τη συνολική περίοδο γνωριμίας: ___ γνωρίζεις τη Μαρία;",
+      "correct": "Πόσο καιρό",
+      "translations": {
+        "ru": "Я знаю Марию уже пять лет. Как давно ты её знаешь?",
+        "en": "I have known Maria for five years. How long have you known her?",
+        "zh": "我认识玛丽亚五年了。你认识她多久了？",
+        "ar": "أعرف ماريا منذ خمس سنوات. منذ متى تعرفها؟",
+        "es": "Conozco a María desde hace cinco años. ¿Cuánto tiempo hace que la conoces?",
+        "pt": "Conheço a Maria há cinco anos. Há quanto tempo a conheces?"
+      },
+      "context": "ongoing"
+    },
+    {
+      "id": "g2261021_310",
+      "chapter": 7,
+      "skill": "unit",
+      "prompt": "Κάρτα: 1 λεπτό.\nΤο διάλειμμα διαρκεί ένα ___.",
+      "correct": "λεπτό",
+      "wrong": [
+        "λεπτά",
+        "ώρα",
+        "ώρες"
+      ],
+      "translations": {
+        "ru": "Перерыв длится одну минуту.",
+        "en": "The break lasts one minute.",
+        "zh": "休息时间为一分钟。",
+        "ar": "تستغرق الاستراحة دقيقة واحدة.",
+        "es": "El descanso dura un minuto.",
+        "pt": "O intervalo dura um minuto."
+      },
+      "unit": "λεπτό"
+    },
+    {
+      "id": "g2261021_311",
+      "chapter": 7,
+      "skill": "unit",
+      "prompt": "Κάρτα: 2 λεπτά.\nΤο λεωφορείο αργεί δύο ___.",
+      "correct": "λεπτά",
+      "wrong": [
+        "λεπτό",
+        "ώρα",
+        "λεπτών"
+      ],
+      "translations": {
+        "ru": "Автобус опаздывает на две минуты.",
+        "en": "The bus is two minutes late.",
+        "zh": "公交车晚点两分钟。",
+        "ar": "الحافلة متأخرة دقيقتين.",
+        "es": "El autobús se retrasa dos minutos.",
+        "pt": "O autocarro está atrasado dois minutos."
+      },
+      "unit": "λεπτά"
+    },
+    {
+      "id": "g2261021_312",
+      "chapter": 7,
+      "skill": "unit",
+      "prompt": "Κάρτα: 1 ώρα.\nΤο μάθημα διαρκεί μία ___.",
+      "correct": "ώρα",
+      "wrong": [
+        "ώρες",
+        "λεπτό",
+        "λεπτά"
+      ],
+      "translations": {
+        "ru": "Урок длится один час.",
+        "en": "The lesson lasts one hour.",
+        "zh": "课程持续一小时。",
+        "ar": "تستمر الحصة ساعة واحدة.",
+        "es": "La clase dura una hora.",
+        "pt": "A aula dura uma hora."
+      },
+      "unit": "ώρα"
+    },
+    {
+      "id": "g2261021_313",
+      "chapter": 7,
+      "skill": "unit",
+      "prompt": "Κάρτα: 3 ώρες.\nΗ διαδρομή διαρκεί τρεις ___.",
+      "correct": "ώρες",
+      "wrong": [
+        "ώρα",
+        "λεπτά",
+        "εβδομάδες"
+      ],
+      "translations": {
+        "ru": "Дорога занимает три часа.",
+        "en": "The journey takes three hours.",
+        "zh": "路程需要三个小时。",
+        "ar": "تستغرق الرحلة ثلاث ساعات.",
+        "es": "El trayecto dura tres horas.",
+        "pt": "A viagem demora três horas."
+      },
+      "unit": "ώρες"
+    },
+    {
+      "id": "g2261021_314",
+      "chapter": 7,
+      "skill": "unit",
+      "prompt": "Κάρτα: 1 εβδομάδα.\nΤο κατάστημα είναι κλειστό για μία ___.",
+      "correct": "εβδομάδα",
+      "wrong": [
+        "εβδομάδες",
+        "ώρα",
+        "μήνα"
+      ],
+      "translations": {
+        "ru": "Магазин закрыт на одну неделю.",
+        "en": "The shop is closed for one week.",
+        "zh": "商店关闭一周。",
+        "ar": "المتجر مغلق لمدة أسبوع واحد.",
+        "es": "La tienda cierra durante una semana.",
+        "pt": "A loja está fechada durante uma semana."
+      },
+      "unit": "εβδομάδα"
+    },
+    {
+      "id": "g2261021_315",
+      "chapter": 7,
+      "skill": "unit",
+      "prompt": "Κάρτα: 2 εβδομάδες.\nΗ έκθεση διαρκεί δύο ___.",
+      "correct": "εβδομάδες",
+      "wrong": [
+        "εβδομάδα",
+        "μήνες",
+        "ώρες"
+      ],
+      "translations": {
+        "ru": "Выставка длится две недели.",
+        "en": "The exhibition lasts two weeks.",
+        "zh": "展览持续两周。",
+        "ar": "يستمر المعرض أسبوعين.",
+        "es": "La exposición dura dos semanas.",
+        "pt": "A exposição dura duas semanas."
+      },
+      "unit": "εβδομάδες"
+    },
+    {
+      "id": "g2261021_316",
+      "chapter": 11,
+      "skill": "unit",
+      "prompt": "Κάρτα: 1 μήνας.\nΜένω στο σπίτι αυτό εδώ και έναν ___.",
+      "correct": "μήνα",
+      "wrong": [
+        "μήνες",
+        "χρόνο",
+        "μήνας"
+      ],
+      "translations": {
+        "ru": "Я живу в этом доме уже месяц.",
+        "en": "I have lived in this house for one month.",
+        "zh": "我在这所房子里住了一个月。",
+        "ar": "أسكن في هذا البيت منذ شهر واحد.",
+        "es": "Llevo un mes viviendo en esta casa.",
+        "pt": "Vivo nesta casa há um mês."
+      },
+      "unit": "μήνα"
+    },
+    {
+      "id": "g2261021_317",
+      "chapter": 11,
+      "skill": "unit",
+      "prompt": "Κάρτα: 3 μήνες.\nΜένω στην πόλη εδώ και τρεις ___.",
+      "correct": "μήνες",
+      "wrong": [
+        "μήνα",
+        "εβδομάδες",
+        "χρόνια"
+      ],
+      "translations": {
+        "ru": "Я живу в городе уже три месяца.",
+        "en": "I have lived in the city for three months.",
+        "zh": "我在这座城市住了三个月。",
+        "ar": "أسكن في المدينة منذ ثلاثة أشهر.",
+        "es": "Llevo tres meses viviendo en la ciudad.",
+        "pt": "Vivo na cidade há três meses."
+      },
+      "unit": "μήνες"
+    },
+    {
+      "id": "g2261021_318",
+      "chapter": 13,
+      "skill": "unit",
+      "prompt": "Κάρτα: 1 χρόνος.\nΔουλεύω εδώ και έναν ___.",
+      "correct": "χρόνο",
+      "wrong": [
+        "χρόνια",
+        "χρόνος",
+        "μήνα"
+      ],
+      "translations": {
+        "ru": "Я работаю здесь уже год.",
+        "en": "I have worked here for one year.",
+        "zh": "我在这里工作一年了。",
+        "ar": "أعمل هنا منذ عام واحد.",
+        "es": "Llevo un año trabajando aquí.",
+        "pt": "Trabalho aqui há um ano."
+      },
+      "unit": "χρόνο"
+    },
+    {
+      "id": "g2261021_319",
+      "chapter": 13,
+      "skill": "unit",
+      "prompt": "Κάρτα: 4 χρόνια.\nΜένω εδώ και τέσσερα ___.",
+      "correct": "χρόνια",
+      "wrong": [
+        "χρόνο",
+        "χρόνος",
+        "μήνες"
+      ],
+      "translations": {
+        "ru": "Я живу здесь уже четыре года.",
+        "en": "I have lived here for four years.",
+        "zh": "我在这里住了四年。",
+        "ar": "أسكن هنا منذ أربع سنوات.",
+        "es": "Llevo cuatro años viviendo aquí.",
+        "pt": "Vivo aqui há quatro anos."
+      },
+      "unit": "χρόνια"
+    },
+    {
+      "id": "g2261021_320",
+      "chapter": 7,
+      "skill": "timeline",
+      "prompt": "Χρονογραμμή · διάλειμμα\nΑρχή: 09:00\nΔιάρκεια: 30 λεπτά\nΤέλος: ___",
+      "correct": "στις 09:30",
+      "wrong": [
+        "στις 09:00",
+        "στις 09:45",
+        "στις 10:00"
+      ],
+      "start": "09:00",
+      "minutes": 30,
+      "end": "09:30",
+      "translations": {
+        "ru": "Перерыв: с 09:00, 30 минут, окончание в 09:30.",
+        "en": "Break starts at 09:00, lasts 30 minutes, ends at 09:30.",
+        "zh": "休息从09:00开始，持续30分钟，09:30结束。",
+        "ar": "تبدأ الاستراحة 09:00 وتستمر 30 دقيقة وتنتهي 09:30.",
+        "es": "El descanso empieza a las 09:00, dura 30 minutos y termina a las 09:30.",
+        "pt": "O intervalo começa às 09:00, dura 30 minutos e termina às 09:30."
+      }
+    },
+    {
+      "id": "g2261021_321",
+      "chapter": 7,
+      "skill": "timeline",
+      "prompt": "Χρονογραμμή · μάθημα\nΑρχή: 09:15\nΔιάρκεια: 45 λεπτά\nΤέλος: ___",
+      "correct": "στις 10:00",
+      "wrong": [
+        "στις 09:15",
+        "στις 10:15",
+        "στις 10:30"
+      ],
+      "start": "09:15",
+      "minutes": 45,
+      "end": "10:00",
+      "translations": {
+        "ru": "Урок: с 09:15, 45 минут, окончание в 10:00.",
+        "en": "Lesson starts at 09:15, lasts 45 minutes, ends at 10:00.",
+        "zh": "课程从09:15开始，45分钟后于10:00结束。",
+        "ar": "يبدأ الدرس 09:15 ويستمر 45 دقيقة وينتهي 10:00.",
+        "es": "La clase empieza a las 09:15, dura 45 minutos y termina a las 10:00.",
+        "pt": "A aula começa às 09:15, dura 45 minutos e termina às 10:00."
+      }
+    },
+    {
+      "id": "g2261021_322",
+      "chapter": 7,
+      "skill": "timeline",
+      "prompt": "Χρονογραμμή · καφές\nΑρχή: 10:30\nΔιάρκεια: 30 λεπτά\nΤέλος: ___",
+      "correct": "στις 11:00",
+      "wrong": [
+        "στις 10:30",
+        "στις 11:15",
+        "στις 11:30"
+      ],
+      "start": "10:30",
+      "minutes": 30,
+      "end": "11:00",
+      "translations": {
+        "ru": "Кофе: с 10:30, 30 минут, окончание в 11:00.",
+        "en": "Coffee starts at 10:30, lasts 30 minutes, ends at 11:00.",
+        "zh": "咖啡时间从10:30开始，11:00结束，共30分钟。",
+        "ar": "تبدأ جلسة القهوة 10:30 وتستمر 30 دقيقة وتنتهي 11:00.",
+        "es": "El café empieza a las 10:30, dura 30 minutos y termina a las 11:00.",
+        "pt": "O café começa às 10:30, dura 30 minutos e termina às 11:00."
+      }
+    },
+    {
+      "id": "g2261021_323",
+      "chapter": 7,
+      "skill": "timeline",
+      "prompt": "Χρονογραμμή · διαδρομή\nΑρχή: 11:20\nΔιάρκεια: 40 λεπτά\nΤέλος: ___",
+      "correct": "στις 12:00",
+      "wrong": [
+        "στις 11:20",
+        "στις 12:15",
+        "στις 12:30"
+      ],
+      "start": "11:20",
+      "minutes": 40,
+      "end": "12:00",
+      "translations": {
+        "ru": "Поездка: с 11:20, 40 минут, прибытие в 12:00.",
+        "en": "The trip starts at 11:20, lasts 40 minutes, ends at 12:00.",
+        "zh": "行程从11:20开始，40分钟后于12:00结束。",
+        "ar": "تبدأ الرحلة 11:20 وتستمر 40 دقيقة وتنتهي 12:00.",
+        "es": "El viaje empieza a las 11:20, dura 40 minutos y termina a las 12:00.",
+        "pt": "A viagem começa às 11:20, dura 40 minutos e termina às 12:00."
+      }
+    },
+    {
+      "id": "g2261021_324",
+      "chapter": 7,
+      "skill": "timeline",
+      "prompt": "Χρονογραμμή · συνάντηση\nΑρχή: 13:00\nΔιάρκεια: 60 λεπτά\nΤέλος: ___",
+      "correct": "στις 14:00",
+      "wrong": [
+        "στις 13:00",
+        "στις 14:15",
+        "στις 14:30"
+      ],
+      "start": "13:00",
+      "minutes": 60,
+      "end": "14:00",
+      "translations": {
+        "ru": "Встреча: с 13:00, один час, окончание в 14:00.",
+        "en": "The meeting starts at 13:00, lasts one hour, ends at 14:00.",
+        "zh": "会议从13:00开始，一小时后于14:00结束。",
+        "ar": "يبدأ اللقاء 13:00 ويستمر ساعة وينتهي 14:00.",
+        "es": "La reunión empieza a las 13:00, dura una hora y termina a las 14:00.",
+        "pt": "O encontro começa às 13:00, dura uma hora e termina às 14:00."
+      }
+    },
+    {
+      "id": "g2261021_325",
+      "chapter": 7,
+      "skill": "timeline",
+      "prompt": "Χρονογραμμή · λεωφορείο\nΑρχή: 17:45\nΔιάρκεια: 15 λεπτά\nΤέλος: ___",
+      "correct": "στις 18:00",
+      "wrong": [
+        "στις 17:45",
+        "στις 18:15",
+        "στις 18:30"
+      ],
+      "start": "17:45",
+      "minutes": 15,
+      "end": "18:00",
+      "translations": {
+        "ru": "Поездка на автобусе: с 17:45, 15 минут, окончание в 18:00.",
+        "en": "The bus trip starts at 17:45, lasts 15 minutes, ends at 18:00.",
+        "zh": "公交行程从17:45开始，15分钟后于18:00结束。",
+        "ar": "تبدأ رحلة الحافلة 17:45 وتستمر 15 دقيقة وتنتهي 18:00.",
+        "es": "El trayecto en autobús empieza a las 17:45, dura 15 minutos y termina a las 18:00.",
+        "pt": "A viagem de autocarro começa às 17:45, dura 15 minutos e termina às 18:00."
+      }
+    },
+    {
+      "id": "g2261021_326",
+      "chapter": 7,
+      "skill": "timeline",
+      "prompt": "Χρονογραμμή · τηλεφώνημα\nΑρχή: 18:20\nΔιάρκεια: 20 λεπτά\nΤέλος: ___",
+      "correct": "στις 18:40",
+      "wrong": [
+        "στις 18:20",
+        "στις 18:55",
+        "στις 19:10"
+      ],
+      "start": "18:20",
+      "minutes": 20,
+      "end": "18:40",
+      "translations": {
+        "ru": "Телефонный разговор: с 18:20, 20 минут, окончание в 18:40.",
+        "en": "The call starts at 18:20, lasts 20 minutes, ends at 18:40.",
+        "zh": "电话从18:20开始，20分钟后于18:40结束。",
+        "ar": "تبدأ المكالمة 18:20 وتستمر 20 دقيقة وتنتهي 18:40.",
+        "es": "La llamada empieza a las 18:20, dura 20 minutos y termina a las 18:40.",
+        "pt": "A chamada começa às 18:20, dura 20 minutos e termina às 18:40."
+      }
+    },
+    {
+      "id": "g2261021_327",
+      "chapter": 7,
+      "skill": "timeline",
+      "prompt": "Χρονογραμμή · ταινία\nΑρχή: 20:30\nΔιάρκεια: 30 λεπτά\nΤέλος: ___",
+      "correct": "στις 21:00",
+      "wrong": [
+        "στις 20:30",
+        "στις 21:15",
+        "στις 21:30"
+      ],
+      "start": "20:30",
+      "minutes": 30,
+      "end": "21:00",
+      "translations": {
+        "ru": "Просмотр фильма: с 20:30, 30 минут, окончание в 21:00.",
+        "en": "The film viewing starts at 20:30, lasts 30 minutes, ends at 21:00.",
+        "zh": "看电影从20:30开始，30分钟后于21:00结束。",
+        "ar": "تبدأ مشاهدة الفيلم 20:30 وتستمر 30 دقيقة وتنتهي 21:00.",
+        "es": "La sesión de película empieza a las 20:30, dura 30 minutos y termina a las 21:00.",
+        "pt": "A sessão de filme começa às 20:30, dura 30 minutos e termina às 21:00."
+      }
+    },
+    {
+      "id": "g2261021_328",
+      "chapter": 7,
+      "skill": "typed",
+      "prompt": "Χρόνος αναμονής: 15 λεπτά.\nΕρώτηση: Πόση ώρα περιμένεις;\nΑπάντηση: ___",
+      "correct": "δεκαπέντε λεπτά",
+      "accepted": [
+        "δεκαπέντε λεπτά",
+        "15 λεπτά"
+      ],
+      "translations": {
+        "ru": "Я жду пятнадцать минут.",
+        "en": "I wait fifteen minutes.",
+        "zh": "我等十五分钟。",
+        "ar": "أنتظر خمس عشرة دقيقة.",
+        "es": "Espero quince minutos.",
+        "pt": "Espero quinze minutos."
+      }
+    },
+    {
+      "id": "g2261021_329",
+      "chapter": 7,
+      "skill": "typed",
+      "prompt": "Διάρκεια διαδρομής: 1 ώρα.\nΕρώτηση: Πόση ώρα διαρκεί η διαδρομή;\nΑπάντηση: ___",
+      "correct": "μία ώρα",
+      "accepted": [
+        "μία ώρα",
+        "μια ώρα",
+        "1 ώρα"
+      ],
+      "translations": {
+        "ru": "Поездка длится один час.",
+        "en": "The journey lasts one hour.",
+        "zh": "路程需要一小时。",
+        "ar": "تستغرق الرحلة ساعة واحدة.",
+        "es": "El viaje dura una hora.",
+        "pt": "A viagem demora uma hora."
+      }
+    },
+    {
+      "id": "g2261021_330",
+      "chapter": 7,
+      "skill": "typed",
+      "prompt": "Διάρκεια μαθήματος: 30 λεπτά.\nΕρώτηση: Πόση ώρα διαρκεί το μάθημα;\nΑπάντηση: ___",
+      "correct": "τριάντα λεπτά",
+      "accepted": [
+        "τριάντα λεπτά",
+        "30 λεπτά"
+      ],
+      "translations": {
+        "ru": "Урок длится тридцать минут.",
+        "en": "The lesson lasts thirty minutes.",
+        "zh": "课程持续三十分钟。",
+        "ar": "تستمر الحصة ثلاثين دقيقة.",
+        "es": "La clase dura treinta minutos.",
+        "pt": "A aula dura trinta minutos."
+      }
+    },
+    {
+      "id": "g2261021_331",
+      "chapter": 7,
+      "skill": "typed",
+      "prompt": "Διάρκεια συνάντησης: 2 ώρες.\nΕρώτηση: Πόση ώρα διαρκεί η συνάντηση;\nΑπάντηση: ___",
+      "correct": "δύο ώρες",
+      "accepted": [
+        "δύο ώρες",
+        "2 ώρες"
+      ],
+      "translations": {
+        "ru": "Встреча длится два часа.",
+        "en": "The meeting lasts two hours.",
+        "zh": "会议持续两小时。",
+        "ar": "يستمر اللقاء ساعتين.",
+        "es": "La reunión dura dos horas.",
+        "pt": "O encontro dura duas horas."
+      }
+    },
+    {
+      "id": "g2261021_332",
+      "chapter": 11,
+      "skill": "typed",
+      "prompt": "Διαμονή: 1 μήνας.\nΕρώτηση: Πόσο καιρό μένεις εδώ;\nΑπάντηση: ___",
+      "correct": "έναν μήνα",
+      "accepted": [
+        "έναν μήνα",
+        "1 μήνα"
+      ],
+      "translations": {
+        "ru": "Я живу здесь один месяц.",
+        "en": "I have lived here for one month.",
+        "zh": "我在这里住了一个月。",
+        "ar": "أسكن هنا منذ شهر.",
+        "es": "Vivo aquí desde hace un mes.",
+        "pt": "Vivo aqui há um mês."
+      }
+    },
+    {
+      "id": "g2261021_333",
+      "chapter": 11,
+      "skill": "typed",
+      "prompt": "Διαμονή: 3 μήνες.\nΕρώτηση: Πόσο καιρό μένεις στην πόλη;\nΑπάντηση: ___",
+      "correct": "τρεις μήνες",
+      "accepted": [
+        "τρεις μήνες",
+        "3 μήνες"
+      ],
+      "translations": {
+        "ru": "Я живу в городе три месяца.",
+        "en": "I have lived in the city for three months.",
+        "zh": "我在这座城市住了三个月。",
+        "ar": "أسكن في المدينة منذ ثلاثة أشهر.",
+        "es": "Vivo en la ciudad desde hace tres meses.",
+        "pt": "Vivo na cidade há três meses."
+      }
+    },
+    {
+      "id": "g2261021_334",
+      "chapter": 13,
+      "skill": "typed",
+      "prompt": "Δουλειά: 1 χρόνος.\nΕρώτηση: Πόσο καιρό δουλεύεις εδώ;\nΑπάντηση: ___",
+      "correct": "έναν χρόνο",
+      "accepted": [
+        "έναν χρόνο",
+        "1 χρόνο"
+      ],
+      "translations": {
+        "ru": "Я работаю здесь уже год.",
+        "en": "I have worked here for one year.",
+        "zh": "我在这里工作一年了。",
+        "ar": "أعمل هنا منذ عام.",
+        "es": "Trabajo aquí desde hace un año.",
+        "pt": "Trabalho aqui há um ano."
+      }
+    },
+    {
+      "id": "g2261021_335",
+      "chapter": 13,
+      "skill": "typed",
+      "prompt": "Μαθήματα: 2 χρόνια.\nΕρώτηση: Πόσο καιρό μαθαίνεις ελληνικά;\nΑπάντηση: ___",
+      "correct": "δύο χρόνια",
+      "accepted": [
+        "δύο χρόνια",
+        "2 χρόνια"
+      ],
+      "translations": {
+        "ru": "Я изучаю греческий уже два года.",
+        "en": "I have been learning Greek for two years.",
+        "zh": "我学习希腊语已有两年。",
+        "ar": "أتعلم اليونانية منذ عامين.",
+        "es": "Estudio griego desde hace dos años.",
+        "pt": "Aprendo grego há dois anos."
+      }
+    },
+    {
+      "id": "g2261021_336",
+      "chapter": 7,
+      "skill": "preposition",
+      "prompt": "Ωράριο βιβλιοθήκης: είναι ανοιχτή ___ τις εννέα μέχρι τις πέντε.",
+      "correct": "από",
+      "wrong": [
+        "για",
+        "στις",
+        "πριν"
+      ],
+      "context": "starting",
+      "translations": {
+        "ru": "Библиотека открыта с девяти до пяти.",
+        "en": "The library is open from nine to five.",
+        "zh": "图书馆从九点开到五点。",
+        "ar": "المكتبة مفتوحة من التاسعة حتى الخامسة.",
+        "es": "La biblioteca abre de nueve a cinco.",
+        "pt": "A biblioteca está aberta das nove às cinco."
+      }
+    },
+    {
+      "id": "g2261021_337",
+      "chapter": 7,
+      "skill": "preposition",
+      "prompt": "Το μαγαζί είναι κλειστό ___ δύο εβδομάδες.",
+      "correct": "για",
+      "wrong": [
+        "από",
+        "στις",
+        "μέχρι"
+      ],
+      "context": "duration",
+      "translations": {
+        "ru": "Магазин закрыт на две недели.",
+        "en": "The shop is closed for two weeks.",
+        "zh": "商店关闭两周。",
+        "ar": "المتجر مغلق لمدة أسبوعين.",
+        "es": "La tienda cierra durante dos semanas.",
+        "pt": "A loja está fechada durante duas semanas."
+      }
+    },
+    {
+      "id": "g2261021_338",
+      "chapter": 7,
+      "skill": "preposition",
+      "prompt": "Τώρα είναι μεσημέρι και είμαι στο γραφείο ___ τις οκτώ το πρωί.",
+      "correct": "από",
+      "wrong": [
+        "για",
+        "στις",
+        "πριν"
+      ],
+      "context": "starting",
+      "translations": {
+        "ru": "Сейчас полдень, я в офисе с восьми утра.",
+        "en": "It is noon now, and I have been at the office since eight in the morning.",
+        "zh": "现在是中午，我从早上八点就在办公室。",
+        "ar": "الآن الظهر وأنا في المكتب منذ الثامنة صباحاً.",
+        "es": "Ahora es mediodía y estoy en la oficina desde las ocho de la mañana.",
+        "pt": "Agora é meio-dia e estou no escritório desde as oito da manhã."
+      }
+    },
+    {
+      "id": "g2261021_339",
+      "chapter": 11,
+      "skill": "preposition",
+      "prompt": "Το εισιτήριο ισχύει ___ τρεις μέρες.",
+      "correct": "για",
+      "wrong": [
+        "από",
+        "στις",
+        "μέχρι"
+      ],
+      "context": "duration",
+      "translations": {
+        "ru": "Билет действителен три дня.",
+        "en": "The ticket is valid for three days.",
+        "zh": "这张票有效期为三天。",
+        "ar": "التذكرة صالحة لمدة ثلاثة أيام.",
+        "es": "El billete es válido durante tres días.",
+        "pt": "O bilhete é válido durante três dias."
+      }
+    }
+  ]
+}

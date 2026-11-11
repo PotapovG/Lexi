@@ -20,7 +20,7 @@ langs=agenda_cards.LANGS
 assert len(days)==7 and all(len(day["events"])==3 for day in days)
 assert len({e["time"] for d in days for e in d["events"]})==21
 assert len(clock_cards.CARDS)==144 and server.CLOCK_COUNT==144
-assert len(cards)==42 and len(grammar2_cards.CARDS)==301
+assert len(cards)==42 and len(grammar2_cards.CARDS)>=301  # added duration cards preserve schedule IDs
 assert [c["id"] for c in grammar2_cards.CARDS[:259]]==[
     f"g2261021_{i:03d}" for i in range(1,260)
 ]

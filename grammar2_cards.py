@@ -85,5 +85,10 @@ assert len(CARDS)==259,len(CARDS)
 from agenda_cards import CARDS as AGENDA_CARDS
 CARDS.extend(AGENDA_CARDS)
 assert len(CARDS)==301,len(CARDS)
+# Issue #14: add original duration exercises in the existing grammar_fill kind.
+# Preserve previous 301 published grammar IDs, scoring and SRS.
+from duration_cards import CARDS as DURATION_CARDS
+CARDS.extend(DURATION_CARDS)
+assert len(CARDS)==339,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}

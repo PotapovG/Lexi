@@ -1134,7 +1134,8 @@
     $("answers").classList.remove("order-tokens");
     $("question-prompt").classList.remove("unaccented-word");
     $("question-prompt").classList.toggle("schedule-agenda",
-      q.kind==="grammar"&&q.grammarGroup==="schedule");
+      q.kind==="grammar"&&q.grammarGroup==="schedule" ||
+      q.kind==="grammar"&&q.grammarGroup==="duration");
     $("question-prompt").lang=["article","syllable","enclitic","grammar"].includes(q.kind)?"el":$("lang").value;
     $("question-prompt").dir=["article","syllable","enclitic","grammar"].includes(q.kind)?"ltr":"auto";
     txt("next",t("next"));
