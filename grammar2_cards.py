@@ -90,5 +90,10 @@ assert len(CARDS)==301,len(CARDS)
 from duration_cards import CARDS as DURATION_CARDS
 CARDS.extend(DURATION_CARDS)
 assert len(CARDS)==339,len(CARDS)
+# Issue #16 expands weather communication INSIDE the shipped grammar_fill kind.
+# All 339 old grammar IDs and user progress remain stable; no new modes.
+from weather_cards import CARDS as WEATHER_CARDS
+CARDS.extend(WEATHER_CARDS)
+assert len(CARDS)==369,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}

@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule","duration")] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule","duration","weather")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==339
+    assert len(ARTICLES)==24 and len(GRAMMAR)==369
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="weather":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="duration":
         return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="schedule":
@@ -500,7 +502,23 @@ def _duration_explanation(card,lang):
         end=card.get("endTime","")
     )
 
+
+WEATHER_GUIDANCE={
+ "sun":{"ru":"«Έχει ήλιο» — безличное описание солнечной погоды: έχει + существительное ήλιο. Отрицание: «δεν έχει ήλιο».","en":"“Έχει ήλιο” is an impersonal weather expression: έχει + the noun ήλιο. Its negative is “δεν έχει ήλιο”.","zh":"“Έχει ήλιο”是非人称天气表达：έχει 加名词 ήλιο。否定形式是“δεν έχει ήλιο”。","ar":"«Έχει ήλιο» تعبير غير شخصي عن الجو المشمس: έχει مع الاسم ήλιο. النفي: «δεν έχει ήλιο».","es":"«Έχει ήλιο» es una expresión impersonal: έχει + el sustantivo ήλιο. Negación: «δεν έχει ήλιο».","pt":"«Έχει ήλιο» é uma expressão impessoal: έχει + o nome ήλιο. Negação: «δεν έχει ήλιο»."},
+ "cloud":{"ru":"«Έχει συννεφιά» — описание облачной погоды с έχει + существительное συννεφιά. Отрицание: «δεν έχει συννεφιά».","en":"“Έχει συννεφιά” describes cloudy weather using έχει + the noun συννεφιά. Negative: “δεν έχει συννεφιά”.","zh":"“Έχει συννεφιά”用 έχει 加名词 συννεφιά 来表示多云。否定是“δεν έχει συννεφιά”。","ar":"«Έχει συννεφιά» يصف الجو الغائم باستخدام έχει مع الاسم συννεφιά. النفي: «δεν έχει συννεφιά».","es":"«Έχει συννεφιά» describe el cielo nublado con έχει + el nombre συννεφιά. Negación: «δεν έχει συννεφιά».","pt":"«Έχει συννεφιά» descreve céu nublado com έχει + o nome συννεφιά. Negação: «δεν έχει συννεφιά»."},
+ "rain":{"ru":"«Βρέχει» — безличный глагол «идёт дождь», без подлежащего «он/она». Отрицание «δεν βρέχει».","en":"“Βρέχει” is the impersonal verb “it is raining”, without a real he/she subject. Negative: “δεν βρέχει”.","zh":"“Βρέχει”是非人称动词“下雨”，不带真正的“他/她”主语。否定：“δεν βρέχει”。","ar":"«Βρέχει» فعل غير شخصي يعني نزول المطر، بلا فاعل بشري. النفي: «δεν βρέχει».","es":"«Βρέχει» es un verbo impersonal: «llueve», sin sujeto él/ella. Negación: «δεν βρέχει».","pt":"«Βρέχει» é um verbo impessoal: «está a chover», sem sujeito ele/ela. Negação: «δεν βρέχει»."},
+ "snow":{"ru":"«Χιονίζει» — безличный глагол «идёт снег». Отрицание: «δεν χιονίζει».","en":"“Χιονίζει” is an impersonal verb for “it is snowing”. Negative: “δεν χιονίζει”.","zh":"“Χιονίζει”是表示“下雪”的非人称动词。否定：“δεν χιονίζει”。","ar":"«Χιονίζει» فعل غير شخصي يعني تساقط الثلج. النفي: «δεν χιονίζει».","es":"«Χιονίζει» es un verbo impersonal: «nieva». Negación: «δεν χιονίζει».","pt":"«Χιονίζει» é um verbo impessoal: «está a nevar». Negação: «δεν χιονίζει»."},
+ "wind":{"ru":"«Φυσάει» — безличное «дует ветер». Знак ≋ обозначает ветер и подписан словом αέρας. Отрицание: «δεν φυσάει».","en":"“Φυσάει” means “it is windy” impersonally. The ≋ symbol is labelled αέρας (wind). Negative: “δεν φυσάει”.","zh":"“Φυσάει”是非人称的“刮风”。符号 ≋ 标为 αέρας（风）。否定：“δεν φυσάει”。","ar":"«Φυσάει» تعني هبوب الرياح بشكل غير شخصي. الرمز ≋ موسوم بكلمة αέρας. النفي: «δεν φυσάει».","es":"«Φυσάει» es impersonal: «hace viento». El símbolo ≋ lleva la etiqueta αέρας (viento). Negación: «δεν φυσάει».","pt":"«Φυσάει» é impessoal: «faz vento». O símbolo ≋ tem a legenda αέρας (vento). Negação: «δεν φυσάει»."}
+}
+
+def _weather_explanation(card,lang):
+    # Negative δεν comes before the complete weather predicate. With ήλιο/
+    # συννεφιά use έχει + noun; βρέχει/χιονίζει/φυσάει are impersonal.
+    return WEATHER_GUIDANCE[card["weatherCode"]][lang]
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="weather":
+        return _weather_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="duration":
         return _duration_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="schedule":

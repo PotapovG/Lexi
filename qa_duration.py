@@ -15,7 +15,7 @@ import grammar2_cards
 import server
 
 cards=duration_cards.CARDS
-assert len(cards)==38 and len(grammar2_cards.CARDS)==339
+assert len(cards)==38 and len(grammar2_cards.CARDS)>=339  # later weather cards append, preserve original IDs
 assert [c["id"] for c in grammar2_cards.CARDS[:301]]==[
     f"g2261021_{i:03d}" for i in range(1,302)
 ]
