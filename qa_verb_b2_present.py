@@ -91,11 +91,14 @@ with tempfile.TemporaryDirectory(prefix="lexi-b2-") as folder:
                 assert not wrong["correct"]
         assert variants>0
         for chapter in (6,7,16,17):
+            expected={c["id"] for c in CARDS if c["chapter"]==chapter}
+            excluded=",".join(c["id"] for c in server.GRAMMAR2_ALL
+                              if c["chapter"]==chapter and c["id"] not in expected)
             quiz=server.make_quiz("fresh",{
                 "scope":["chapters"],"chapters":[str(chapter)],
-                "types":["grammar"],"count":["60"],"lang":["ru"]
+                "types":["grammar"],"count":["60"],"lang":["ru"],
+                "exclude":[excluded]
             })
-            expected={c["id"] for c in CARDS if c["chapter"]==chapter}
             assert expected.issubset({q["id"] for q in quiz["questions"]}),chapter
         with server.conn() as db:
             assert db.execute("PRAGMA quick_check").fetchone()[0]=="ok"
