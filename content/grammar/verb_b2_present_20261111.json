@@ -1,0 +1,1024 @@
+{
+  "version": 1,
+  "verbs": [
+    {
+      "lemma": "μπορώ",
+      "chapter": 16,
+      "stem": "μπορ",
+      "forms": [
+        "μπορώ",
+        "μπορείς",
+        "μπορεί",
+        "μπορούμε",
+        "μπορείτε",
+        "μπορούν"
+      ],
+      "alternatives": {
+        "5": [
+          "μπορούνε"
+        ]
+      }
+    },
+    {
+      "lemma": "οδηγώ",
+      "chapter": 6,
+      "stem": "οδηγ",
+      "forms": [
+        "οδηγώ",
+        "οδηγείς",
+        "οδηγεί",
+        "οδηγούμε",
+        "οδηγείτε",
+        "οδηγούν"
+      ],
+      "alternatives": {
+        "5": [
+          "οδηγούνε"
+        ]
+      }
+    },
+    {
+      "lemma": "τηλεφωνώ",
+      "chapter": 7,
+      "stem": "τηλεφων",
+      "forms": [
+        "τηλεφωνώ",
+        "τηλεφωνείς",
+        "τηλεφωνεί",
+        "τηλεφωνούμε",
+        "τηλεφωνείτε",
+        "τηλεφωνούν"
+      ],
+      "alternatives": {
+        "5": [
+          "τηλεφωνούνε"
+        ]
+      }
+    },
+    {
+      "lemma": "συμφωνώ",
+      "chapter": 16,
+      "stem": "συμφων",
+      "forms": [
+        "συμφωνώ",
+        "συμφωνείς",
+        "συμφωνεί",
+        "συμφωνούμε",
+        "συμφωνείτε",
+        "συμφωνούν"
+      ],
+      "alternatives": {
+        "5": [
+          "συμφωνούνε"
+        ]
+      }
+    },
+    {
+      "lemma": "διαφωνώ",
+      "chapter": 16,
+      "stem": "διαφων",
+      "forms": [
+        "διαφωνώ",
+        "διαφωνείς",
+        "διαφωνεί",
+        "διαφωνούμε",
+        "διαφωνείτε",
+        "διαφωνούν"
+      ],
+      "alternatives": {}
+    },
+    {
+      "lemma": "αργώ",
+      "chapter": 7,
+      "stem": "αργ",
+      "forms": [
+        "αργώ",
+        "αργείς",
+        "αργεί",
+        "αργούμε",
+        "αργείτε",
+        "αργούν"
+      ],
+      "alternatives": {
+        "5": [
+          "αργούνε"
+        ]
+      }
+    },
+    {
+      "lemma": "συγχωρώ",
+      "chapter": 16,
+      "stem": "συγχωρ",
+      "forms": [
+        "συγχωρώ",
+        "συγχωρείς",
+        "συγχωρεί",
+        "συγχωρούμε",
+        "συγχωρείτε",
+        "συγχωρούν"
+      ],
+      "alternatives": {}
+    },
+    {
+      "lemma": "προσπαθώ",
+      "chapter": 16,
+      "stem": "προσπαθ",
+      "forms": [
+        "προσπαθώ",
+        "προσπαθείς",
+        "προσπαθεί",
+        "προσπαθούμε",
+        "προσπαθείτε",
+        "προσπαθούν"
+      ],
+      "alternatives": {
+        "5": [
+          "προσπαθούνε"
+        ]
+      }
+    },
+    {
+      "lemma": "παρακαλώ",
+      "chapter": 16,
+      "stem": "παρακαλ",
+      "forms": [
+        "παρακαλώ",
+        "παρακαλείς",
+        "παρακαλεί",
+        "παρακαλούμε",
+        "παρακαλείτε",
+        "παρακαλούν"
+      ],
+      "alternatives": {
+        "5": [
+          "παρακαλούνε"
+        ]
+      }
+    },
+    {
+      "lemma": "εξηγώ",
+      "chapter": 17,
+      "stem": "εξηγ",
+      "forms": [
+        "εξηγώ",
+        "εξηγείς",
+        "εξηγεί",
+        "εξηγούμε",
+        "εξηγείτε",
+        "εξηγούν"
+      ],
+      "alternatives": {
+        "5": [
+          "εξηγούνε"
+        ]
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": "g2261021_184",
+      "lemma": "μπορώ",
+      "chapter": 16,
+      "person": 0,
+      "prompt": "Εγώ ___ να διαβάσω το μήνυμα τώρα.",
+      "correct": "μπορώ",
+      "accepted": [
+        "μπορώ"
+      ],
+      "translations": {
+        "ru": "Я могу сейчас прочитать сообщение.",
+        "en": "I can read the message now.",
+        "zh": "我现在可以读这条消息。",
+        "ar": "أستطيع قراءة الرسالة الآن.",
+        "es": "Puedo leer el mensaje ahora.",
+        "pt": "Posso ler a mensagem agora."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_185",
+      "lemma": "μπορώ",
+      "chapter": 16,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ να έρθεις σήμερα.",
+      "correct": "μπορείς",
+      "accepted": [
+        "μπορείς"
+      ],
+      "translations": {
+        "ru": "Ты не можешь прийти сегодня.",
+        "en": "You cannot come today.",
+        "zh": "你今天不能来。",
+        "ar": "لا تستطيع أن تأتي اليوم.",
+        "es": "No puedes venir hoy.",
+        "pt": "Não podes vir hoje."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_186",
+      "lemma": "μπορώ",
+      "chapter": 16,
+      "person": 2,
+      "prompt": "Η Μαρία ___ να μιλήσει η Μαρία στο τηλέφωνο;",
+      "correct": "μπορεί",
+      "accepted": [
+        "μπορεί"
+      ],
+      "translations": {
+        "ru": "Мария может поговорить по телефону?",
+        "en": "Can Maria speak on the phone?",
+        "zh": "玛丽亚可以打电话吗？",
+        "ar": "هل تستطيع ماريا التحدث على الهاتف؟",
+        "es": "¿Puede María hablar por teléfono?",
+        "pt": "A Maria pode falar ao telefone?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_187",
+      "lemma": "μπορώ",
+      "chapter": 16,
+      "person": 3,
+      "prompt": "Εμείς ___ να βοηθήσουμε τον φίλο μας.",
+      "correct": "μπορούμε",
+      "accepted": [
+        "μπορούμε"
+      ],
+      "translations": {
+        "ru": "Мы можем помочь нашему другу.",
+        "en": "We can help our friend.",
+        "zh": "我们可以帮助我们的朋友。",
+        "ar": "نستطيع مساعدة صديقنا.",
+        "es": "Podemos ayudar a nuestro amigo.",
+        "pt": "Podemos ajudar o nosso amigo."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_188",
+      "lemma": "οδηγώ",
+      "chapter": 6,
+      "person": 4,
+      "prompt": "Εσείς ___ προσεκτικά στην πόλη.",
+      "correct": "οδηγείτε",
+      "accepted": [
+        "οδηγείτε"
+      ],
+      "translations": {
+        "ru": "Вы осторожно водите в городе.",
+        "en": "You drive carefully in the city.",
+        "zh": "您在城市里小心驾驶。",
+        "ar": "أنتم تقودون بحذر في المدينة.",
+        "es": "Ustedes conducen con cuidado en la ciudad.",
+        "pt": "Vocês conduzem com cuidado na cidade."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_189",
+      "lemma": "οδηγώ",
+      "chapter": 6,
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ το λεωφορείο σήμερα.",
+      "correct": "οδηγούν",
+      "accepted": [
+        "οδηγούν",
+        "οδηγούνε"
+      ],
+      "translations": {
+        "ru": "Они сегодня не водят автобус.",
+        "en": "They do not drive the bus today.",
+        "zh": "他们今天不开公交车。",
+        "ar": "هم لا يقودون الحافلة اليوم.",
+        "es": "Hoy no conducen el autobús.",
+        "pt": "Eles não conduzem o autocarro hoje."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_190",
+      "lemma": "οδηγώ",
+      "chapter": 6,
+      "person": 0,
+      "prompt": "Εγώ ___ το αυτοκίνητο μέχρι το σχολείο.",
+      "correct": "οδηγώ",
+      "accepted": [
+        "οδηγώ"
+      ],
+      "translations": {
+        "ru": "Я еду за рулём до школы.",
+        "en": "I drive the car to the school.",
+        "zh": "我开车去学校。",
+        "ar": "أنا أقود السيارة إلى المدرسة.",
+        "es": "Conduzco el coche hasta la escuela.",
+        "pt": "Conduzo o carro até à escola."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_191",
+      "lemma": "οδηγώ",
+      "chapter": 6,
+      "person": 1,
+      "prompt": "Εσύ ___ εσύ το αυτοκίνητο του πατέρα σου;",
+      "correct": "οδηγείς",
+      "accepted": [
+        "οδηγείς"
+      ],
+      "translations": {
+        "ru": "Ты водишь машину своего отца?",
+        "en": "Do you drive your father's car?",
+        "zh": "你开你父亲的车吗？",
+        "ar": "هل تقود سيارة أبيك؟",
+        "es": "¿Conduces el coche de tu padre?",
+        "pt": "Conduzes o carro do teu pai?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_192",
+      "lemma": "τηλεφωνώ",
+      "chapter": 7,
+      "person": 2,
+      "prompt": "Η Μαρία ___ στη μητέρα της κάθε Κυριακή.",
+      "correct": "τηλεφωνεί",
+      "accepted": [
+        "τηλεφωνεί"
+      ],
+      "translations": {
+        "ru": "Мария звонит своей маме каждое воскресенье.",
+        "en": "Maria calls her mother every Sunday.",
+        "zh": "玛丽亚每个星期日给母亲打电话。",
+        "ar": "تتصل ماريا بأمها كل يوم أحد.",
+        "es": "María llama a su madre todos los domingos.",
+        "pt": "A Maria telefona à mãe todos os domingos."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_193",
+      "lemma": "τηλεφωνώ",
+      "chapter": 7,
+      "person": 3,
+      "prompt": "Εμείς δεν ___ στους φίλους μας το βράδυ.",
+      "correct": "τηλεφωνούμε",
+      "accepted": [
+        "τηλεφωνούμε"
+      ],
+      "translations": {
+        "ru": "Мы не звоним своим друзьям вечером.",
+        "en": "We do not phone our friends in the evening.",
+        "zh": "我们晚上不给朋友打电话。",
+        "ar": "نحن لا نتصل بأصدقائنا مساءً.",
+        "es": "No llamamos a nuestros amigos por la noche.",
+        "pt": "Não telefonamos aos nossos amigos à noite."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_194",
+      "lemma": "τηλεφωνώ",
+      "chapter": 7,
+      "person": 4,
+      "prompt": "Εσείς ___ στον γιατρό το πρωί;",
+      "correct": "τηλεφωνείτε",
+      "accepted": [
+        "τηλεφωνείτε"
+      ],
+      "translations": {
+        "ru": "Вы звоните врачу утром?",
+        "en": "Do you call the doctor in the morning?",
+        "zh": "您早上给医生打电话吗？",
+        "ar": "هل تتصلون بالطبيب صباحاً؟",
+        "es": "¿Llaman al médico por la mañana?",
+        "pt": "Telefonam ao médico de manhã?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_195",
+      "lemma": "τηλεφωνώ",
+      "chapter": 7,
+      "person": 5,
+      "prompt": "Αυτοί ___ στην αδελφή τους από την Κύπρο.",
+      "correct": "τηλεφωνούν",
+      "accepted": [
+        "τηλεφωνούν",
+        "τηλεφωνούνε"
+      ],
+      "translations": {
+        "ru": "Они звонят своей сестре с Кипра.",
+        "en": "They call their sister from Cyprus.",
+        "zh": "他们从塞浦路斯给姐妹打电话。",
+        "ar": "يتصلون بأختهم من قبرص.",
+        "es": "Llaman a su hermana desde Chipre.",
+        "pt": "Telefonam à irmã a partir de Chipre."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_196",
+      "lemma": "συμφωνώ",
+      "chapter": 16,
+      "person": 0,
+      "prompt": "Εγώ ___ με την Άννα για το πρόγραμμα.",
+      "correct": "συμφωνώ",
+      "accepted": [
+        "συμφωνώ"
+      ],
+      "translations": {
+        "ru": "Я согласен с Анной насчёт расписания.",
+        "en": "I agree with Anna about the schedule.",
+        "zh": "我同意安娜关于日程的看法。",
+        "ar": "أنا أتفق مع آنا بشأن البرنامج.",
+        "es": "Estoy de acuerdo con Ana sobre el horario.",
+        "pt": "Concordo com a Ana sobre o horário."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_197",
+      "lemma": "συμφωνώ",
+      "chapter": 16,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ με τον φίλο σου.",
+      "correct": "συμφωνείς",
+      "accepted": [
+        "συμφωνείς"
+      ],
+      "translations": {
+        "ru": "Ты не согласен со своим другом.",
+        "en": "You do not agree with your friend.",
+        "zh": "你不同意你朋友的看法。",
+        "ar": "أنت لا تتفق مع صديقك.",
+        "es": "No estás de acuerdo con tu amigo.",
+        "pt": "Não concordas com o teu amigo."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_198",
+      "lemma": "συμφωνώ",
+      "chapter": 16,
+      "person": 2,
+      "prompt": "Η Μαρία ___ η Μαρία με αυτή την ιδέα;",
+      "correct": "συμφωνεί",
+      "accepted": [
+        "συμφωνεί"
+      ],
+      "translations": {
+        "ru": "Мария согласна с этой идеей?",
+        "en": "Does Maria agree with this idea?",
+        "zh": "玛丽亚同意这个主意吗？",
+        "ar": "هل تتفق ماريا مع هذه الفكرة؟",
+        "es": "¿Está María de acuerdo con esta idea?",
+        "pt": "A Maria concorda com esta ideia?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_199",
+      "lemma": "συμφωνώ",
+      "chapter": 16,
+      "person": 3,
+      "prompt": "Εμείς ___ όλοι για την ώρα της συνάντησης.",
+      "correct": "συμφωνούμε",
+      "accepted": [
+        "συμφωνούμε"
+      ],
+      "translations": {
+        "ru": "Мы все согласны насчёт времени встречи.",
+        "en": "We all agree on the meeting time.",
+        "zh": "我们都同意会议的时间。",
+        "ar": "نحن جميعاً نتفق على وقت اللقاء.",
+        "es": "Todos estamos de acuerdo con la hora de la reunión.",
+        "pt": "Todos concordamos com a hora do encontro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_200",
+      "lemma": "διαφωνώ",
+      "chapter": 16,
+      "person": 4,
+      "prompt": "Εσείς ___ ευγενικά με τον δάσκαλο.",
+      "correct": "διαφωνείτε",
+      "accepted": [
+        "διαφωνείτε"
+      ],
+      "translations": {
+        "ru": "Вы вежливо не соглашаетесь с учителем.",
+        "en": "You politely disagree with the teacher.",
+        "zh": "您礼貌地表示不同意老师的意见。",
+        "ar": "أنتم تختلفون بأدب مع المعلم.",
+        "es": "Ustedes discrepan educadamente del profesor.",
+        "pt": "Vocês discordam educadamente do professor."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_201",
+      "lemma": "διαφωνώ",
+      "chapter": 16,
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ με την απόφαση.",
+      "correct": "διαφωνούν",
+      "accepted": [
+        "διαφωνούν"
+      ],
+      "translations": {
+        "ru": "Они не возражают против решения.",
+        "en": "They do not disagree with the decision.",
+        "zh": "他们对这个决定没有异议。",
+        "ar": "هم لا يختلفون مع القرار.",
+        "es": "No discrepan de la decisión.",
+        "pt": "Eles não discordam da decisão."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_202",
+      "lemma": "διαφωνώ",
+      "chapter": 16,
+      "person": 0,
+      "prompt": "Εγώ ___ με τον Νίκο για το ταξίδι.",
+      "correct": "διαφωνώ",
+      "accepted": [
+        "διαφωνώ"
+      ],
+      "translations": {
+        "ru": "Я не согласен с Никосом насчёт поездки.",
+        "en": "I disagree with Nikos about the trip.",
+        "zh": "我不同意尼科斯关于旅行的看法。",
+        "ar": "أنا أختلف مع نيكوس بشأن الرحلة.",
+        "es": "No estoy de acuerdo con Nikos sobre el viaje.",
+        "pt": "Discordo do Nikos sobre a viagem."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_203",
+      "lemma": "διαφωνώ",
+      "chapter": 16,
+      "person": 1,
+      "prompt": "Εσύ ___ με τη Μαρία ή με τον Πέτρο;",
+      "correct": "διαφωνείς",
+      "accepted": [
+        "διαφωνείς"
+      ],
+      "translations": {
+        "ru": "Ты не согласен с Марией или с Петросом?",
+        "en": "Do you disagree with Maria or with Petros?",
+        "zh": "你不同意玛丽亚还是彼得罗斯？",
+        "ar": "هل تختلف مع ماريا أم مع بيتروس؟",
+        "es": "¿No estás de acuerdo con María o con Petros?",
+        "pt": "Discordas da Maria ou do Petros?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_204",
+      "lemma": "αργώ",
+      "chapter": 7,
+      "person": 2,
+      "prompt": "Η Μαρία ___ για το μάθημα σήμερα.",
+      "correct": "αργεί",
+      "accepted": [
+        "αργεί"
+      ],
+      "translations": {
+        "ru": "Мария сегодня опаздывает на урок.",
+        "en": "Maria is late for class today.",
+        "zh": "玛丽亚今天上课迟到了。",
+        "ar": "تتأخر ماريا عن الدرس اليوم.",
+        "es": "María llega tarde a clase hoy.",
+        "pt": "A Maria atrasa-se para a aula hoje."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_205",
+      "lemma": "αργώ",
+      "chapter": 7,
+      "person": 3,
+      "prompt": "Εμείς δεν ___ για το λεωφορείο.",
+      "correct": "αργούμε",
+      "accepted": [
+        "αργούμε"
+      ],
+      "translations": {
+        "ru": "Мы не опаздываем на автобус.",
+        "en": "We are not late for the bus.",
+        "zh": "我们没有赶不上公交车。",
+        "ar": "نحن لا نتأخر عن الحافلة.",
+        "es": "No llegamos tarde al autobús.",
+        "pt": "Não nos atrasamos para o autocarro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_206",
+      "lemma": "αργώ",
+      "chapter": 7,
+      "person": 4,
+      "prompt": "Εσείς ___ για τη συνάντηση;",
+      "correct": "αργείτε",
+      "accepted": [
+        "αργείτε"
+      ],
+      "translations": {
+        "ru": "Вы опаздываете на встречу?",
+        "en": "Are you late for the meeting?",
+        "zh": "您开会迟到了吗？",
+        "ar": "هل تتأخرون عن اللقاء؟",
+        "es": "¿Llegan tarde a la reunión?",
+        "pt": "Estão atrasados para o encontro?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_207",
+      "lemma": "αργώ",
+      "chapter": 7,
+      "person": 5,
+      "prompt": "Αυτοί ___ κάθε πρωί στη δουλειά.",
+      "correct": "αργούν",
+      "accepted": [
+        "αργούν",
+        "αργούνε"
+      ],
+      "translations": {
+        "ru": "Они каждое утро опаздывают на работу.",
+        "en": "They are late to work every morning.",
+        "zh": "他们每天早上上班迟到。",
+        "ar": "يتأخرون عن العمل كل صباح.",
+        "es": "Llegan tarde al trabajo todas las mañanas.",
+        "pt": "Eles chegam atrasados ao trabalho todas as manhãs."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_208",
+      "lemma": "συγχωρώ",
+      "chapter": 16,
+      "person": 0,
+      "prompt": "Εγώ ___ τον φίλο μου για το λάθος.",
+      "correct": "συγχωρώ",
+      "accepted": [
+        "συγχωρώ"
+      ],
+      "translations": {
+        "ru": "Я прощаю другу ошибку.",
+        "en": "I forgive my friend for the mistake.",
+        "zh": "我原谅朋友的错误。",
+        "ar": "أسامح صديقي على الخطأ.",
+        "es": "Perdono a mi amigo por el error.",
+        "pt": "Perdoo ao meu amigo pelo erro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_209",
+      "lemma": "συγχωρώ",
+      "chapter": 16,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ τον αδελφό σου ακόμα.",
+      "correct": "συγχωρείς",
+      "accepted": [
+        "συγχωρείς"
+      ],
+      "translations": {
+        "ru": "Ты пока не прощаешь своего брата.",
+        "en": "You have not forgiven your brother yet.",
+        "zh": "你还没有原谅你的兄弟。",
+        "ar": "أنت لا تسامح أخاك بعد.",
+        "es": "Todavía no perdonas a tu hermano.",
+        "pt": "Ainda não perdoas ao teu irmão."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_210",
+      "lemma": "συγχωρώ",
+      "chapter": 16,
+      "person": 2,
+      "prompt": "Η Μαρία ___ η Μαρία τη φίλη της;",
+      "correct": "συγχωρεί",
+      "accepted": [
+        "συγχωρεί"
+      ],
+      "translations": {
+        "ru": "Мария прощает свою подругу?",
+        "en": "Does Maria forgive her friend?",
+        "zh": "玛丽亚原谅她的朋友吗？",
+        "ar": "هل تسامح ماريا صديقتها؟",
+        "es": "¿María perdona a su amiga?",
+        "pt": "A Maria perdoa à amiga?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_211",
+      "lemma": "συγχωρώ",
+      "chapter": 16,
+      "person": 3,
+      "prompt": "Εμείς ___ τα μικρά λάθη.",
+      "correct": "συγχωρούμε",
+      "accepted": [
+        "συγχωρούμε"
+      ],
+      "translations": {
+        "ru": "Мы прощаем небольшие ошибки.",
+        "en": "We forgive small mistakes.",
+        "zh": "我们原谅小错误。",
+        "ar": "نحن نسامح على الأخطاء الصغيرة.",
+        "es": "Perdonamos los errores pequeños.",
+        "pt": "Perdoamos os pequenos erros."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_212",
+      "lemma": "προσπαθώ",
+      "chapter": 16,
+      "person": 4,
+      "prompt": "Εσείς ___ να μάθετε ελληνικά κάθε μέρα.",
+      "correct": "προσπαθείτε",
+      "accepted": [
+        "προσπαθείτε"
+      ],
+      "translations": {
+        "ru": "Вы каждый день стараетесь учить греческий.",
+        "en": "You try to learn Greek every day.",
+        "zh": "您每天努力学习希腊语。",
+        "ar": "أنتم تحاولون تعلم اليونانية كل يوم.",
+        "es": "Ustedes intentan aprender griego cada día.",
+        "pt": "Vocês tentam aprender grego todos os dias."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_213",
+      "lemma": "προσπαθώ",
+      "chapter": 16,
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ να τελειώσουν γρήγορα.",
+      "correct": "προσπαθούν",
+      "accepted": [
+        "προσπαθούν",
+        "προσπαθούνε"
+      ],
+      "translations": {
+        "ru": "Они не стараются закончить быстро.",
+        "en": "They do not try to finish quickly.",
+        "zh": "他们不想尽快完成。",
+        "ar": "هم لا يحاولون الانتهاء بسرعة.",
+        "es": "No intentan terminar rápido.",
+        "pt": "Eles não tentam acabar depressa."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_214",
+      "lemma": "προσπαθώ",
+      "chapter": 16,
+      "person": 0,
+      "prompt": "Εγώ ___ να γράψω ένα μήνυμα.",
+      "correct": "προσπαθώ",
+      "accepted": [
+        "προσπαθώ"
+      ],
+      "translations": {
+        "ru": "Я стараюсь написать сообщение.",
+        "en": "I try to write a message.",
+        "zh": "我努力写一条消息。",
+        "ar": "أحاول أن أكتب رسالة.",
+        "es": "Intento escribir un mensaje.",
+        "pt": "Tento escrever uma mensagem."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_215",
+      "lemma": "προσπαθώ",
+      "chapter": 16,
+      "person": 1,
+      "prompt": "Εσύ ___ να διαβάσεις αυτό το βιβλίο;",
+      "correct": "προσπαθείς",
+      "accepted": [
+        "προσπαθείς"
+      ],
+      "translations": {
+        "ru": "Ты пытаешься прочитать эту книгу?",
+        "en": "Are you trying to read this book?",
+        "zh": "你想努力读完这本书吗？",
+        "ar": "هل تحاول قراءة هذا الكتاب؟",
+        "es": "¿Intentas leer este libro?",
+        "pt": "Tentas ler este livro?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_216",
+      "lemma": "παρακαλώ",
+      "chapter": 16,
+      "person": 2,
+      "prompt": "Η Μαρία ___ για βοήθεια στο γραφείο.",
+      "correct": "παρακαλεί",
+      "accepted": [
+        "παρακαλεί"
+      ],
+      "translations": {
+        "ru": "Мария просит помощи в офисе.",
+        "en": "Maria asks for help at the office.",
+        "zh": "玛丽亚在办公室寻求帮助。",
+        "ar": "تطلب ماريا المساعدة في المكتب.",
+        "es": "María pide ayuda en la oficina.",
+        "pt": "A Maria pede ajuda no escritório."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_217",
+      "lemma": "παρακαλώ",
+      "chapter": 16,
+      "person": 3,
+      "prompt": "Εμείς δεν ___ για χρήματα.",
+      "correct": "παρακαλούμε",
+      "accepted": [
+        "παρακαλούμε"
+      ],
+      "translations": {
+        "ru": "Мы не просим денег.",
+        "en": "We do not ask for money.",
+        "zh": "我们不请求金钱援助。",
+        "ar": "نحن لا نطلب المال.",
+        "es": "No pedimos dinero.",
+        "pt": "Não pedimos dinheiro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_218",
+      "lemma": "παρακαλώ",
+      "chapter": 16,
+      "person": 4,
+      "prompt": "Εσείς ___ για λίγη ησυχία;",
+      "correct": "παρακαλείτε",
+      "accepted": [
+        "παρακαλείτε"
+      ],
+      "translations": {
+        "ru": "Вы просите немного тишины?",
+        "en": "Are you asking for a little quiet?",
+        "zh": "您请求保持安静吗？",
+        "ar": "هل تطلبون القليل من الهدوء؟",
+        "es": "¿Piden un poco de silencio?",
+        "pt": "Pedem um pouco de silêncio?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_219",
+      "lemma": "παρακαλώ",
+      "chapter": 16,
+      "person": 5,
+      "prompt": "Αυτοί ___ τον δάσκαλο για άλλη μία εξήγηση.",
+      "correct": "παρακαλούν",
+      "accepted": [
+        "παρακαλούν",
+        "παρακαλούνε"
+      ],
+      "translations": {
+        "ru": "Они просят учителя объяснить ещё раз.",
+        "en": "They ask the teacher for another explanation.",
+        "zh": "他们请老师再解释一次。",
+        "ar": "هم يطلبون من المعلم شرحاً آخر.",
+        "es": "Piden al profesor otra explicación.",
+        "pt": "Pedem ao professor mais uma explicação."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_220",
+      "lemma": "εξηγώ",
+      "chapter": 17,
+      "person": 0,
+      "prompt": "Εγώ ___ το πρόγραμμα στον φίλο μου.",
+      "correct": "εξηγώ",
+      "accepted": [
+        "εξηγώ"
+      ],
+      "translations": {
+        "ru": "Я объясняю расписание своему другу.",
+        "en": "I explain the schedule to my friend.",
+        "zh": "我向朋友解释日程安排。",
+        "ar": "أشرح البرنامج لصديقي.",
+        "es": "Explico el horario a mi amigo.",
+        "pt": "Explico o horário ao meu amigo."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_221",
+      "lemma": "εξηγώ",
+      "chapter": 17,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ την ερώτηση καλά.",
+      "correct": "εξηγείς",
+      "accepted": [
+        "εξηγείς"
+      ],
+      "translations": {
+        "ru": "Ты плохо объясняешь вопрос.",
+        "en": "You do not explain the question well.",
+        "zh": "你没有把问题解释清楚。",
+        "ar": "أنت لا تشرح السؤال جيداً.",
+        "es": "No explicas bien la pregunta.",
+        "pt": "Não explicas bem a pergunta."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_222",
+      "lemma": "εξηγώ",
+      "chapter": 17,
+      "person": 2,
+      "prompt": "Η Μαρία ___ η Μαρία το μάθημα στα παιδιά;",
+      "correct": "εξηγεί",
+      "accepted": [
+        "εξηγεί"
+      ],
+      "translations": {
+        "ru": "Мария объясняет урок детям?",
+        "en": "Does Maria explain the lesson to the children?",
+        "zh": "玛丽亚给孩子们解释课程吗？",
+        "ar": "هل تشرح ماريا الدرس للأطفال؟",
+        "es": "¿María explica la lección a los niños?",
+        "pt": "A Maria explica a lição às crianças?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_223",
+      "lemma": "εξηγώ",
+      "chapter": 17,
+      "person": 3,
+      "prompt": "Εμείς ___ τις οδηγίες πριν από τη δουλειά.",
+      "correct": "εξηγούμε",
+      "accepted": [
+        "εξηγούμε"
+      ],
+      "translations": {
+        "ru": "Мы объясняем инструкции перед работой.",
+        "en": "We explain the instructions before work.",
+        "zh": "我们在工作前解释说明。",
+        "ar": "نشرح التعليمات قبل العمل.",
+        "es": "Explicamos las instrucciones antes del trabajo.",
+        "pt": "Explicamos as instruções antes do trabalho."
+      },
+      "polarity": "positive",
+      "question": false
+    }
+  ]
+}
