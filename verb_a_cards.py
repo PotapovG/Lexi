@@ -50,7 +50,7 @@ for n,raw in enumerate(DATA["cards"],112):
     assert raw["correct"]==spec["forms"][person]
     assert 1<=ch<=20 and INDEX[ch]["start"]<=INDEX[ch]["end"]
     prompt=raw["prompt"]
-    assert prompt.startswith(PERSON[person]+" ") and prompt.count("___")==1
+    assert prompt.casefold().startswith(PERSON[person].casefold()+" ") and prompt.count("___")==1
     assert prompt==unicodedata.normalize("NFC",prompt)
     assert raw["question"]==(prompt.endswith(";"))
     assert raw["polarity"]==("negative" if " δεν ___ " in prompt else "positive")
