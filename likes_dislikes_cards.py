@@ -82,7 +82,7 @@ for idx,raw in enumerate(DATA["cards"],224):
     ),cid
     if skill=="agreement":
         assert answer==("αρέσει" if raw["number"]=="sg" else "αρέσουν"),cid
-        assert raw["experiencer"] in prompt,cid
+        assert raw["experiencer"] in prompt.casefold(),cid
         options=["αρέσει","αρέσουν","αρέσω","αρέσεις"]
         typed=False
     elif skill=="experiencer":
@@ -94,7 +94,7 @@ for idx,raw in enumerate(DATA["cards"],224):
     else:
         assert chapter>=13,cid
         assert raw["number"]=="pl" if "αρέσουν" in answer else raw["number"]=="sg"
-        assert raw["experiencer"] in answer,cid
+        assert raw["experiencer"] in answer.casefold(),cid
         accepted=raw["accepted"]
         assert accepted and accepted[0]==answer and len(accepted)==len(set(accepted)),cid
         assert all(s==unicodedata.normalize("NFC",s) for s in accepted)
