@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2")] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==223
+    assert len(ARTICLES)==24 and len(GRAMMAR)==259
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="likes":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="verb_B2":
         return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="verb_B1":
@@ -425,7 +427,34 @@ def _verb_b2_explanation(card,lang):
         variant=variant
     )
 
+
+LIKES_GUIDANCE={
+ "agreement":{"ru":"Число определяется тем, что нравится: единственное число → «αρέσει», множественное → «αρέσουν». «{person}» указывает, кому нравится, а не кто владеет предметом.","en":"The liked subject controls agreement: singular → “αρέσει”, plural → “αρέσουν”. “{person}” identifies who experiences the preference, not the owner.","zh":"动词与被喜欢的事物一致：单数用“αρέσει”，复数用“αρέσουν”。“{person}”表示喜欢者，不表示物品的拥有者。","ar":"الفعل يتبع الشيء المحبوب: المفرد «αρέσει» والجمع «αρέσουν». الضمير «{person}» يحدد من يعجبه الشيء، لا مالكه.","es":"El número depende de lo que gusta: singular «αρέσει», plural «αρέσουν». «{person}» indica a quién le gusta, no quién lo posee.","pt":"O verbo concorda com aquilo de que se gosta: singular «αρέσει», plural «αρέσουν». «{person}» indica quem gosta, não o dono."},
+ "experiencer":{"ru":"«{person}» означает «кому нравится», а не «чей предмет». Это местоимение стоит перед «αρέσει/αρέσουν»; число глагола задаёт то, что нравится.","en":"“{person}” says who likes it, not whose item it is. This clitic stands before αρέσει/αρέσουν; the liked subject determines singular or plural.","zh":"“{person}”表示谁喜欢，不表示物品归谁所有。它放在 αρέσει/αρέσουν 前；动词单复数由被喜欢的事物决定。","ar":"«{person}» يدل على من يعجبه الشيء، لا على مالكه. يأتي قبل αρέσει/αρέσουν، وعدد الفعل يتبع الشيء المحبوب.","es":"«{person}» indica a quién le gusta, no de quién es. Va antes de αρέσει/αρέσουν; el número depende de lo que gusta.","pt":"«{person}» indica quem gosta, não a quem pertence a coisa. Vem antes de αρέσει/αρέσουν; o número depende daquilo de que se gosta."},
+ "typed":{"ru":"Полная конструкция: «{correct}». Местоимение указывает, кому нравится, а «αρέσει»/«αρέσουν» согласуется с тем, что нравится. Отрицание «δεν» ставится перед местоимением.","en":"Full phrase: “{correct}”. The clitic indicates who likes it, while αρέσει/αρέσουν agrees with the liked item. Negative δεν comes before the clitic.","zh":"完整表达：“{correct}”。代词表示喜欢者，αρέσει/αρέσουν 与被喜欢事物的单复数一致；否定词 δεν 放在代词之前。","ar":"العبارة الصحيحة «{correct}». الضمير يشير إلى من يعجبه الشيء، ويتبع αρέσει/αρέσουν عدد الشيء المحبوب؛ تأتي «δεν» قبل الضمير.","es":"Expresión completa: «{correct}». El clítico indica a quién le gusta; αρέσει/αρέσουν concuerda con lo que gusta. «δεν» va delante del clítico.","pt":"Expressão completa: «{correct}». O clítico indica quem gosta; αρέσει/αρέσουν concorda com o objeto do gosto. «δεν» vem antes do clítico."}
+}
+
+def _likes_explanation(card,lang):
+    message=LIKES_GUIDANCE[card["skill"]][lang].format(
+        person=card["experiencer"], correct=card["correct"]
+    )
+    if card.get("acceptedForms") and len(card["acceptedForms"])>1:
+        messages={
+            "ru":"Допустимое разговорное сокращение: {alternatives}.",
+            "en":"Accepted colloquial contractions: {alternatives}.",
+            "zh":"接受的口语缩略形式：{alternatives}。",
+            "ar":"تُقبل الصيغ المختصرة المحكية: {alternatives}.",
+            "es":"Contracciones coloquiales admitidas: {alternatives}.",
+            "pt":"Contrações coloquiais aceites: {alternatives}."
+        }
+        message += " "+messages[lang].format(
+            alternatives=" / ".join(card["acceptedForms"][1:])
+        )
+    return message
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="likes":
+        return _likes_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="verb_B2":
         return _verb_b2_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="verb_B1":
