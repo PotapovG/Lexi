@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A")] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==147
+    assert len(ARTICLES)==24 and len(GRAMMAR)==183
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="verb_B1":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="verb_A":
         return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="possessive":
@@ -369,7 +371,30 @@ def _verb_a_explanation(card,lang):
         ending=VERB_A_ENDINGS[card["person"]],correct=card["correct"]
     )
 
+
+VERB_B1_ENDINGS=("άω","άς","άει","άμε","άτε","άνε")
+VERB_B1_TIPS={
+ "ru":"B1, лицо: {person}. Основа «{root}» + «-{ending}» = «{correct}». Другие проверенные формы: {alternatives}. Не путай окончания B1 (-άς/-άει/-άτε) с группой A (-εις/-ει/-ετε).",
+ "en":"B1, person: {person}. Stem “{root}” + “-{ending}” = “{correct}”. Other verified forms: {alternatives}. Do not confuse B1 (-άς/-άει/-άτε) with group A (-εις/-ει/-ετε).",
+ "zh":"B1，人称：{person}。词干“{root}”加词尾“-{ending}”得到“{correct}”。已核对的变体：{alternatives}。不要把 B1 (-άς/-άει/-άτε) 与 A 组词尾混淆。",
+ "ar":"المجموعة B1، الشخص: {person}. الجذر «{root}» + النهاية «-{ending}» = «{correct}». الصيغ البديلة المراجَعة: {alternatives}. لا تخلط نهايات B1 بنهايات المجموعة A.",
+ "es":"B1, persona: {person}. Raíz «{root}» + terminación «-{ending}» = «{correct}». Otras formas verificadas: {alternatives}. No confundas B1 (-άς/-άει/-άτε) con el grupo A (-εις/-ει/-ετε).",
+ "pt":"B1, pessoa: {person}. Radical «{root}» + terminação «-{ending}» = «{correct}». Outras formas verificadas: {alternatives}. Não confundas B1 (-άς/-άει/-άτε) com o grupo A (-εις/-ει/-ετε)."
+}
+
+def _verb_b1_explanation(card,lang):
+    variants=card.get("acceptedForms",[card["correct"]])[1:]
+    return VERB_B1_TIPS[lang].format(
+        person=VERB_A_PERSONS[lang][card["person"]],
+        root=card["lemma"][:-2],
+        ending=VERB_B1_ENDINGS[card["person"]],
+        correct=card["correct"],
+        alternatives=" / ".join(variants) if variants else "—"
+    )
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="verb_B1":
+        return _verb_b1_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="verb_A":
         return _verb_a_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="possessive":
