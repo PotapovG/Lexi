@@ -1,0 +1,1030 @@
+{
+  "version": 1,
+  "verbs": [
+    {
+      "lemma": "μιλάω",
+      "chapter": 4,
+      "stem": "μιλ",
+      "forms": [
+        "μιλάω",
+        "μιλάς",
+        "μιλάει",
+        "μιλάμε",
+        "μιλάτε",
+        "μιλάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "μιλώ"
+        ],
+        "2": [
+          "μιλά"
+        ],
+        "3": [
+          "μιλούμε"
+        ],
+        "5": [
+          "μιλούν"
+        ]
+      }
+    },
+    {
+      "lemma": "ρωτάω",
+      "chapter": 4,
+      "stem": "ρωτ",
+      "forms": [
+        "ρωτάω",
+        "ρωτάς",
+        "ρωτάει",
+        "ρωτάμε",
+        "ρωτάτε",
+        "ρωτάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "ρωτώ"
+        ],
+        "2": [
+          "ρωτά"
+        ],
+        "3": [
+          "ρωτούμε"
+        ],
+        "5": [
+          "ρωτούν"
+        ]
+      }
+    },
+    {
+      "lemma": "απαντάω",
+      "chapter": 4,
+      "stem": "απαντ",
+      "forms": [
+        "απαντάω",
+        "απαντάς",
+        "απαντάει",
+        "απαντάμε",
+        "απαντάτε",
+        "απαντάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "απαντώ"
+        ],
+        "2": [
+          "απαντά"
+        ],
+        "3": [
+          "απαντούμε"
+        ],
+        "5": [
+          "απαντούν"
+        ]
+      }
+    },
+    {
+      "lemma": "σταματάω",
+      "chapter": 6,
+      "stem": "σταματ",
+      "forms": [
+        "σταματάω",
+        "σταματάς",
+        "σταματάει",
+        "σταματάμε",
+        "σταματάτε",
+        "σταματάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "σταματώ"
+        ],
+        "2": [
+          "σταματά"
+        ],
+        "3": [
+          "σταματούμε"
+        ],
+        "5": [
+          "σταματούν"
+        ]
+      }
+    },
+    {
+      "lemma": "πεινάω",
+      "chapter": 8,
+      "stem": "πειν",
+      "forms": [
+        "πεινάω",
+        "πεινάς",
+        "πεινάει",
+        "πεινάμε",
+        "πεινάτε",
+        "πεινάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "πεινώ"
+        ],
+        "2": [
+          "πεινά"
+        ],
+        "3": [
+          "πεινούμε"
+        ],
+        "5": [
+          "πεινούν"
+        ]
+      }
+    },
+    {
+      "lemma": "διψάω",
+      "chapter": 8,
+      "stem": "διψ",
+      "forms": [
+        "διψάω",
+        "διψάς",
+        "διψάει",
+        "διψάμε",
+        "διψάτε",
+        "διψάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "διψώ"
+        ],
+        "2": [
+          "διψά"
+        ],
+        "3": [
+          "διψούμε"
+        ],
+        "5": [
+          "διψούν"
+        ]
+      }
+    },
+    {
+      "lemma": "τραγουδάω",
+      "chapter": 16,
+      "stem": "τραγουδ",
+      "forms": [
+        "τραγουδάω",
+        "τραγουδάς",
+        "τραγουδάει",
+        "τραγουδάμε",
+        "τραγουδάτε",
+        "τραγουδάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "τραγουδώ"
+        ],
+        "2": [
+          "τραγουδά"
+        ],
+        "3": [
+          "τραγουδούμε"
+        ],
+        "5": [
+          "τραγουδούν"
+        ]
+      }
+    },
+    {
+      "lemma": "αγαπάω",
+      "chapter": 16,
+      "stem": "αγαπ",
+      "forms": [
+        "αγαπάω",
+        "αγαπάς",
+        "αγαπάει",
+        "αγαπάμε",
+        "αγαπάτε",
+        "αγαπάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "αγαπώ"
+        ],
+        "2": [
+          "αγαπά"
+        ],
+        "3": [
+          "αγαπούμε"
+        ],
+        "5": [
+          "αγαπούν"
+        ]
+      }
+    },
+    {
+      "lemma": "περπατάω",
+      "chapter": 16,
+      "stem": "περπατ",
+      "forms": [
+        "περπατάω",
+        "περπατάς",
+        "περπατάει",
+        "περπατάμε",
+        "περπατάτε",
+        "περπατάνε"
+      ],
+      "alternatives": {
+        "0": [
+          "περπατώ"
+        ],
+        "2": [
+          "περπατά"
+        ],
+        "3": [
+          "περπατούμε"
+        ],
+        "5": [
+          "περπατούν"
+        ]
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": "g2261021_148",
+      "lemma": "μιλάω",
+      "chapter": 4,
+      "person": 0,
+      "prompt": "Εγώ ___ ελληνικά στο μάθημα.",
+      "correct": "μιλάω",
+      "accepted": [
+        "μιλάω",
+        "μιλώ"
+      ],
+      "translations": {
+        "ru": "Я говорю по-гречески на уроке.",
+        "en": "I speak Greek in class.",
+        "zh": "我在课堂上说希腊语。",
+        "ar": "أنا أتحدث اليونانية في الدرس.",
+        "es": "Hablo griego en clase.",
+        "pt": "Falo grego na aula."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_149",
+      "lemma": "μιλάω",
+      "chapter": 4,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ γερμανικά.",
+      "correct": "μιλάς",
+      "accepted": [
+        "μιλάς"
+      ],
+      "translations": {
+        "ru": "Ты не говоришь по-немецки.",
+        "en": "You do not speak German.",
+        "zh": "你不会说德语。",
+        "ar": "أنت لا تتحدث الألمانية.",
+        "es": "No hablas alemán.",
+        "pt": "Tu não falas alemão."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_150",
+      "lemma": "μιλάω",
+      "chapter": 4,
+      "person": 2,
+      "prompt": "Η Μαρία ___ ρωσικά στο τηλέφωνο;",
+      "correct": "μιλάει",
+      "accepted": [
+        "μιλάει",
+        "μιλά"
+      ],
+      "translations": {
+        "ru": "Мария говорит по-русски по телефону?",
+        "en": "Does Maria speak Russian on the phone?",
+        "zh": "玛丽亚在电话里说俄语吗？",
+        "ar": "هل تتحدث ماريا الروسية على الهاتف؟",
+        "es": "¿María habla ruso por teléfono?",
+        "pt": "A Maria fala russo ao telefone?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_151",
+      "lemma": "μιλάω",
+      "chapter": 4,
+      "person": 3,
+      "prompt": "Εμείς ___ λίγο ελληνικά και αγγλικά.",
+      "correct": "μιλάμε",
+      "accepted": [
+        "μιλάμε",
+        "μιλούμε"
+      ],
+      "translations": {
+        "ru": "Мы немного говорим по-гречески и по-английски.",
+        "en": "We speak a little Greek and English.",
+        "zh": "我们会说一点希腊语和英语。",
+        "ar": "نحن نتحدث قليلاً من اليونانية والإنجليزية.",
+        "es": "Hablamos un poco de griego e inglés.",
+        "pt": "Falamos um pouco de grego e inglês."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_152",
+      "lemma": "ρωτάω",
+      "chapter": 4,
+      "person": 4,
+      "prompt": "Εσείς ___ τον δάσκαλο για το μάθημα.",
+      "correct": "ρωτάτε",
+      "accepted": [
+        "ρωτάτε"
+      ],
+      "translations": {
+        "ru": "Вы спрашиваете учителя об уроке.",
+        "en": "You ask the teacher about the lesson.",
+        "zh": "你们向老师询问课程的事。",
+        "ar": "أنتم تسألون المعلم عن الدرس.",
+        "es": "Ustedes preguntan al profesor por la clase.",
+        "pt": "Vocês perguntam ao professor sobre a aula."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_153",
+      "lemma": "ρωτάω",
+      "chapter": 4,
+      "person": 5,
+      "prompt": "Αυτοί δεν ___ τη Μαρία.",
+      "correct": "ρωτάνε",
+      "accepted": [
+        "ρωτάνε",
+        "ρωτούν"
+      ],
+      "translations": {
+        "ru": "Они не спрашивают Марию.",
+        "en": "They do not ask Maria.",
+        "zh": "他们不问玛丽亚。",
+        "ar": "هم لا يسألون ماريا.",
+        "es": "Ellos no preguntan a María.",
+        "pt": "Eles não perguntam à Maria."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_154",
+      "lemma": "ρωτάω",
+      "chapter": 4,
+      "person": 0,
+      "prompt": "Εγώ ___ τον φίλο μου πού μένει.",
+      "correct": "ρωτάω",
+      "accepted": [
+        "ρωτάω",
+        "ρωτώ"
+      ],
+      "translations": {
+        "ru": "Я спрашиваю друга, где он живёт.",
+        "en": "I ask my friend where he lives.",
+        "zh": "我问朋友他住在哪里。",
+        "ar": "أنا أسأل صديقي أين يسكن.",
+        "es": "Le pregunto a mi amigo dónde vive.",
+        "pt": "Pergunto ao meu amigo onde mora."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_155",
+      "lemma": "ρωτάω",
+      "chapter": 4,
+      "person": 1,
+      "prompt": "Εσύ ___ πού είναι η τάξη;",
+      "correct": "ρωτάς",
+      "accepted": [
+        "ρωτάς"
+      ],
+      "translations": {
+        "ru": "Ты спрашиваешь, где находится класс?",
+        "en": "Are you asking where the classroom is?",
+        "zh": "你在问教室在哪里吗？",
+        "ar": "هل تسأل أين قاعة الدرس؟",
+        "es": "¿Preguntas dónde está el aula?",
+        "pt": "Tu perguntas onde fica a sala de aula?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_156",
+      "lemma": "απαντάω",
+      "chapter": 4,
+      "person": 2,
+      "prompt": "Η Μαρία ___ στον δάσκαλο.",
+      "correct": "απαντάει",
+      "accepted": [
+        "απαντάει",
+        "απαντά"
+      ],
+      "translations": {
+        "ru": "Мария отвечает учителю.",
+        "en": "Maria answers the teacher.",
+        "zh": "玛丽亚回答老师。",
+        "ar": "ماريا تجيب المعلم.",
+        "es": "María responde al profesor.",
+        "pt": "A Maria responde ao professor."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_157",
+      "lemma": "απαντάω",
+      "chapter": 4,
+      "person": 3,
+      "prompt": "Εμείς δεν ___ στο τηλέφωνο.",
+      "correct": "απαντάμε",
+      "accepted": [
+        "απαντάμε",
+        "απαντούμε"
+      ],
+      "translations": {
+        "ru": "Мы не отвечаем на телефон.",
+        "en": "We do not answer the phone.",
+        "zh": "我们不接电话。",
+        "ar": "نحن لا نرد على الهاتف.",
+        "es": "No contestamos al teléfono.",
+        "pt": "Não atendemos o telefone."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_158",
+      "lemma": "απαντάω",
+      "chapter": 4,
+      "person": 4,
+      "prompt": "Εσείς ___ στον φίλο σας;",
+      "correct": "απαντάτε",
+      "accepted": [
+        "απαντάτε"
+      ],
+      "translations": {
+        "ru": "Вы отвечаете своему другу?",
+        "en": "Do you answer your friend?",
+        "zh": "您回复您的朋友吗？",
+        "ar": "هل تردون على صديقكم؟",
+        "es": "¿Responden ustedes a su amigo?",
+        "pt": "Vocês respondem ao vosso amigo?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_159",
+      "lemma": "απαντάω",
+      "chapter": 4,
+      "person": 5,
+      "prompt": "Αυτοί ___ στα ελληνικά.",
+      "correct": "απαντάνε",
+      "accepted": [
+        "απαντάνε",
+        "απαντούν"
+      ],
+      "translations": {
+        "ru": "Они отвечают по-гречески.",
+        "en": "They answer in Greek.",
+        "zh": "他们用希腊语回答。",
+        "ar": "هم يجيبون باليونانية.",
+        "es": "Ellos responden en griego.",
+        "pt": "Eles respondem em grego."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_160",
+      "lemma": "σταματάω",
+      "chapter": 6,
+      "person": 0,
+      "prompt": "Εγώ ___ στη στάση του λεωφορείου.",
+      "correct": "σταματάω",
+      "accepted": [
+        "σταματάω",
+        "σταματώ"
+      ],
+      "translations": {
+        "ru": "Я останавливаюсь на автобусной остановке.",
+        "en": "I stop at the bus stop.",
+        "zh": "我在公交车站停下。",
+        "ar": "أنا أتوقف عند موقف الحافلة.",
+        "es": "Paro en la parada del autobús.",
+        "pt": "Eu paro na paragem do autocarro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_161",
+      "lemma": "σταματάω",
+      "chapter": 6,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ στο κέντρο.",
+      "correct": "σταματάς",
+      "accepted": [
+        "σταματάς"
+      ],
+      "translations": {
+        "ru": "Ты не останавливаешься в центре.",
+        "en": "You do not stop in the centre.",
+        "zh": "你不在市中心停下。",
+        "ar": "أنت لا تتوقف في المركز.",
+        "es": "No paras en el centro.",
+        "pt": "Tu não paras no centro."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_162",
+      "lemma": "σταματάω",
+      "chapter": 6,
+      "person": 2,
+      "prompt": "Η Μαρία ___ στο φανάρι;",
+      "correct": "σταματάει",
+      "accepted": [
+        "σταματάει",
+        "σταματά"
+      ],
+      "translations": {
+        "ru": "Мария останавливается на светофоре?",
+        "en": "Does Maria stop at the traffic light?",
+        "zh": "玛丽亚在红绿灯处停下吗？",
+        "ar": "هل تتوقف ماريا عند إشارة المرور؟",
+        "es": "¿María para en el semáforo?",
+        "pt": "A Maria para no semáforo?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_163",
+      "lemma": "σταματάω",
+      "chapter": 6,
+      "person": 3,
+      "prompt": "Εμείς ___ κοντά στο σχολείο.",
+      "correct": "σταματάμε",
+      "accepted": [
+        "σταματάμε",
+        "σταματούμε"
+      ],
+      "translations": {
+        "ru": "Мы останавливаемся рядом со школой.",
+        "en": "We stop near the school.",
+        "zh": "我们在学校附近停下。",
+        "ar": "نحن نتوقف بالقرب من المدرسة.",
+        "es": "Paramos cerca de la escuela.",
+        "pt": "Nós paramos perto da escola."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_164",
+      "lemma": "πεινάω",
+      "chapter": 8,
+      "person": 4,
+      "prompt": "Εσείς ___ μετά το μάθημα;",
+      "correct": "πεινάτε",
+      "accepted": [
+        "πεινάτε"
+      ],
+      "translations": {
+        "ru": "Вы голодны после урока?",
+        "en": "Are you hungry after class?",
+        "zh": "您下课后饿吗？",
+        "ar": "هل تشعرون بالجوع بعد الدرس؟",
+        "es": "¿Tienen hambre después de clase?",
+        "pt": "Têm fome depois da aula?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_165",
+      "lemma": "πεινάω",
+      "chapter": 8,
+      "person": 5,
+      "prompt": "Αυτοί ___ και θέλουν ψωμί.",
+      "correct": "πεινάνε",
+      "accepted": [
+        "πεινάνε",
+        "πεινούν"
+      ],
+      "translations": {
+        "ru": "Они голодны и хотят хлеба.",
+        "en": "They are hungry and want bread.",
+        "zh": "他们饿了，想吃面包。",
+        "ar": "هم جائعون ويريدون خبزاً.",
+        "es": "Tienen hambre y quieren pan.",
+        "pt": "Eles têm fome e querem pão."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_166",
+      "lemma": "πεινάω",
+      "chapter": 8,
+      "person": 0,
+      "prompt": "Εγώ δεν ___ τώρα.",
+      "correct": "πεινάω",
+      "accepted": [
+        "πεινάω",
+        "πεινώ"
+      ],
+      "translations": {
+        "ru": "Сейчас я не голоден.",
+        "en": "I am not hungry now.",
+        "zh": "我现在不饿。",
+        "ar": "أنا لست جائعاً الآن.",
+        "es": "Ahora no tengo hambre.",
+        "pt": "Agora não tenho fome."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_167",
+      "lemma": "πεινάω",
+      "chapter": 8,
+      "person": 1,
+      "prompt": "Εσύ ___ το πρωί;",
+      "correct": "πεινάς",
+      "accepted": [
+        "πεινάς"
+      ],
+      "translations": {
+        "ru": "Ты голоден утром?",
+        "en": "Are you hungry in the morning?",
+        "zh": "你早上饿吗？",
+        "ar": "هل تشعر بالجوع صباحاً؟",
+        "es": "¿Tienes hambre por la mañana?",
+        "pt": "Tens fome de manhã?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_168",
+      "lemma": "διψάω",
+      "chapter": 8,
+      "person": 2,
+      "prompt": "Η Μαρία ___ και πίνει νερό.",
+      "correct": "διψάει",
+      "accepted": [
+        "διψάει",
+        "διψά"
+      ],
+      "translations": {
+        "ru": "Мария хочет пить и пьёт воду.",
+        "en": "Maria is thirsty and drinks water.",
+        "zh": "玛丽亚口渴，正在喝水。",
+        "ar": "ماريا عطشى وتشرب الماء.",
+        "es": "María tiene sed y bebe agua.",
+        "pt": "A Maria tem sede e bebe água."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_169",
+      "lemma": "διψάω",
+      "chapter": 8,
+      "person": 3,
+      "prompt": "Εμείς δεν ___ μετά το φαγητό.",
+      "correct": "διψάμε",
+      "accepted": [
+        "διψάμε",
+        "διψούμε"
+      ],
+      "translations": {
+        "ru": "После еды мы не хотим пить.",
+        "en": "We are not thirsty after the meal.",
+        "zh": "我们吃完饭后不渴。",
+        "ar": "نحن لا نشعر بالعطش بعد الطعام.",
+        "es": "No tenemos sed después de comer.",
+        "pt": "Não temos sede depois da refeição."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_170",
+      "lemma": "διψάω",
+      "chapter": 8,
+      "person": 4,
+      "prompt": "Εσείς ___ ή θέλετε καφέ;",
+      "correct": "διψάτε",
+      "accepted": [
+        "διψάτε"
+      ],
+      "translations": {
+        "ru": "Вы хотите пить или хотите кофе?",
+        "en": "Are you thirsty, or do you want coffee?",
+        "zh": "您口渴了，还是想喝咖啡？",
+        "ar": "هل تشعرون بالعطش أم تريدون القهوة؟",
+        "es": "¿Tienen sed o quieren café?",
+        "pt": "Têm sede ou querem café?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_171",
+      "lemma": "διψάω",
+      "chapter": 8,
+      "person": 5,
+      "prompt": "Αυτοί ___ μετά τη δουλειά.",
+      "correct": "διψάνε",
+      "accepted": [
+        "διψάνε",
+        "διψούν"
+      ],
+      "translations": {
+        "ru": "После работы они хотят пить.",
+        "en": "They are thirsty after work.",
+        "zh": "他们工作后口渴。",
+        "ar": "هم عطشى بعد العمل.",
+        "es": "Tienen sed después del trabajo.",
+        "pt": "Eles têm sede depois do trabalho."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_172",
+      "lemma": "τραγουδάω",
+      "chapter": 16,
+      "person": 0,
+      "prompt": "Εγώ ___ στο σπίτι το βράδυ.",
+      "correct": "τραγουδάω",
+      "accepted": [
+        "τραγουδάω",
+        "τραγουδώ"
+      ],
+      "translations": {
+        "ru": "Я пою дома по вечерам.",
+        "en": "I sing at home in the evening.",
+        "zh": "我晚上在家唱歌。",
+        "ar": "أنا أغني في البيت مساءً.",
+        "es": "Canto en casa por la noche.",
+        "pt": "Eu canto em casa à noite."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_173",
+      "lemma": "τραγουδάω",
+      "chapter": 16,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ σήμερα.",
+      "correct": "τραγουδάς",
+      "accepted": [
+        "τραγουδάς"
+      ],
+      "translations": {
+        "ru": "Ты сегодня не поёшь.",
+        "en": "You are not singing today.",
+        "zh": "你今天不唱歌。",
+        "ar": "أنت لا تغني اليوم.",
+        "es": "Hoy no cantas.",
+        "pt": "Tu não cantas hoje."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_174",
+      "lemma": "τραγουδάω",
+      "chapter": 16,
+      "person": 2,
+      "prompt": "Η Μαρία ___ στο πάρτι;",
+      "correct": "τραγουδάει",
+      "accepted": [
+        "τραγουδάει",
+        "τραγουδά"
+      ],
+      "translations": {
+        "ru": "Мария поёт на вечеринке?",
+        "en": "Does Maria sing at the party?",
+        "zh": "玛丽亚在聚会上唱歌吗？",
+        "ar": "هل تغني ماريا في الحفلة؟",
+        "es": "¿María canta en la fiesta?",
+        "pt": "A Maria canta na festa?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_175",
+      "lemma": "τραγουδάω",
+      "chapter": 16,
+      "person": 3,
+      "prompt": "Εμείς ___ μαζί στο αυτοκίνητο.",
+      "correct": "τραγουδάμε",
+      "accepted": [
+        "τραγουδάμε",
+        "τραγουδούμε"
+      ],
+      "translations": {
+        "ru": "Мы поём вместе в машине.",
+        "en": "We sing together in the car.",
+        "zh": "我们在车里一起唱歌。",
+        "ar": "نحن نغني معاً في السيارة.",
+        "es": "Cantamos juntos en el coche.",
+        "pt": "Nós cantamos juntos no carro."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_176",
+      "lemma": "αγαπάω",
+      "chapter": 16,
+      "person": 4,
+      "prompt": "Εσείς ___ την ελληνική μουσική;",
+      "correct": "αγαπάτε",
+      "accepted": [
+        "αγαπάτε"
+      ],
+      "translations": {
+        "ru": "Вы любите греческую музыку?",
+        "en": "Do you love Greek music?",
+        "zh": "您喜欢希腊音乐吗？",
+        "ar": "هل تحبون الموسيقى اليونانية؟",
+        "es": "¿Les encanta la música griega?",
+        "pt": "Gostam muito de música grega?"
+      },
+      "polarity": "positive",
+      "question": true
+    },
+    {
+      "id": "g2261021_177",
+      "lemma": "αγαπάω",
+      "chapter": 16,
+      "person": 5,
+      "prompt": "Αυτοί ___ τη θάλασσα.",
+      "correct": "αγαπάνε",
+      "accepted": [
+        "αγαπάνε",
+        "αγαπούν"
+      ],
+      "translations": {
+        "ru": "Они любят море.",
+        "en": "They love the sea.",
+        "zh": "他们热爱大海。",
+        "ar": "هم يحبون البحر.",
+        "es": "Les encanta el mar.",
+        "pt": "Eles adoram o mar."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_178",
+      "lemma": "αγαπάω",
+      "chapter": 16,
+      "person": 0,
+      "prompt": "Εγώ ___ την οικογένειά μου.",
+      "correct": "αγαπάω",
+      "accepted": [
+        "αγαπάω",
+        "αγαπώ"
+      ],
+      "translations": {
+        "ru": "Я люблю свою семью.",
+        "en": "I love my family.",
+        "zh": "我爱我的家人。",
+        "ar": "أنا أحب عائلتي.",
+        "es": "Quiero a mi familia.",
+        "pt": "Eu amo a minha família."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_179",
+      "lemma": "αγαπάω",
+      "chapter": 16,
+      "person": 1,
+      "prompt": "Εσύ δεν ___ το τραγούδι.",
+      "correct": "αγαπάς",
+      "accepted": [
+        "αγαπάς"
+      ],
+      "translations": {
+        "ru": "Ты не любишь эту песню.",
+        "en": "You do not love the song.",
+        "zh": "你不喜欢这首歌。",
+        "ar": "أنت لا تحب الأغنية.",
+        "es": "No te gusta esa canción.",
+        "pt": "Tu não gostas da canção."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_180",
+      "lemma": "περπατάω",
+      "chapter": 16,
+      "person": 2,
+      "prompt": "Η Μαρία ___ κάθε μέρα στο πάρκο.",
+      "correct": "περπατάει",
+      "accepted": [
+        "περπατάει",
+        "περπατά"
+      ],
+      "translations": {
+        "ru": "Мария каждый день гуляет в парке.",
+        "en": "Maria walks in the park every day.",
+        "zh": "玛丽亚每天在公园里散步。",
+        "ar": "ماريا تمشي في الحديقة كل يوم.",
+        "es": "María camina por el parque todos los días.",
+        "pt": "A Maria caminha no parque todos os dias."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_181",
+      "lemma": "περπατάω",
+      "chapter": 16,
+      "person": 3,
+      "prompt": "Εμείς ___ μέχρι την πλατεία.",
+      "correct": "περπατάμε",
+      "accepted": [
+        "περπατάμε",
+        "περπατούμε"
+      ],
+      "translations": {
+        "ru": "Мы идём пешком до площади.",
+        "en": "We walk as far as the square.",
+        "zh": "我们步行到广场。",
+        "ar": "نحن نمشي حتى الساحة.",
+        "es": "Caminamos hasta la plaza.",
+        "pt": "Nós caminhamos até à praça."
+      },
+      "polarity": "positive",
+      "question": false
+    },
+    {
+      "id": "g2261021_182",
+      "lemma": "περπατάω",
+      "chapter": 16,
+      "person": 4,
+      "prompt": "Εσείς δεν ___ πολύ το βράδυ.",
+      "correct": "περπατάτε",
+      "accepted": [
+        "περπατάτε"
+      ],
+      "translations": {
+        "ru": "Вы мало гуляете по вечерам.",
+        "en": "You do not walk much in the evening.",
+        "zh": "您晚上走得不多。",
+        "ar": "أنتم لا تمشون كثيراً في المساء.",
+        "es": "No caminan mucho por la noche.",
+        "pt": "Vocês não caminham muito à noite."
+      },
+      "polarity": "negative",
+      "question": false
+    },
+    {
+      "id": "g2261021_183",
+      "lemma": "περπατάω",
+      "chapter": 16,
+      "person": 5,
+      "prompt": "Αυτοί ___ κοντά στη θάλασσα;",
+      "correct": "περπατάνε",
+      "accepted": [
+        "περπατάνε",
+        "περπατούν"
+      ],
+      "translations": {
+        "ru": "Они гуляют у моря?",
+        "en": "Do they walk near the sea?",
+        "zh": "他们在海边散步吗？",
+        "ar": "هل يمشون بالقرب من البحر؟",
+        "es": "¿Caminan cerca del mar?",
+        "pt": "Eles caminham perto do mar?"
+      },
+      "polarity": "positive",
+      "question": true
+    }
+  ]
+}

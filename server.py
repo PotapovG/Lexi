@@ -705,8 +705,12 @@ def mark(user_id,body,injected_db=None):
             # Typed Greek form: preserve stress/orthography, accept case and
             # surrounding whitespace only. Bad forms grade WRONG, not HTTP400,
             # so they can enter the existing weak/SRS remediation queue.
-            correct=(unicodedata.normalize("NFC",selected.strip()).casefold()
-                     ==unicodedata.normalize("NFC",correct_answer).casefold())
+            normalized=unicodedata.normalize("NFC",selected.strip()).casefold()
+            accepted_forms=card.get("acceptedForms",[correct_answer])
+            correct=normalized in {
+                unicodedata.normalize("NFC",form).casefold()
+                for form in accepted_forms
+            }
         else:
             if selected not in card['options']:raise ValueError('invalid grammar form')
             correct=selected==correct_answer
@@ -766,8 +770,14 @@ def mark(user_id,body,injected_db=None):
         sentence_gloss,sentence_lang=_cloze_meanings.translation(card,lang)
         # Never leak translations through format_question; show only after
         # the server has scored the submitted answer.
-        chosen_form=selected if correct else correct_answer
+        chosen_form=(selected.strip() if correct and card.get("typedAnswer")
+                     else selected if correct else correct_answer)
         result['clozeGreek']=card['prompt'].replace('___',chosen_form)
+        if card.get("typedAnswer") and card.get("acceptedForms"):
+            result['acceptedAnswers']=list(card["acceptedForms"])
+            result['acceptedVariant']=bool(correct and
+                unicodedata.normalize("NFC",selected.strip()).casefold()!=
+                unicodedata.normalize("NFC",correct_answer).casefold())
         result['clozeTranslation']=sentence_gloss
         result['clozeTranslationLang']=sentence_lang
         explanation=_cloze_meanings.explanation(card,lang)

@@ -67,5 +67,9 @@ assert len(CARDS)==111,len(CARDS)
 from verb_a_cards import CARDS as VERB_A_CARDS
 CARDS.extend(VERB_A_CARDS)
 assert len(CARDS)==147,len(CARDS)
+# B1 extends the existing typed grammar_fill answers; retain all 147 IDs.
+from verb_b1_cards import CARDS as VERB_B1_CARDS
+CARDS.extend(VERB_B1_CARDS)
+assert len(CARDS)==183,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}
