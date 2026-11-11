@@ -25,6 +25,7 @@ jobs:
           python3 qa_verb_b1_present.py
           python3 qa_verb_b2_present.py
           python3 qa_likes_dislikes.py
+          python3 qa_week_agenda.py
           node --check app.js
       - name: A1 dialogue expansion and legacy dialogue integrity
         run: |
