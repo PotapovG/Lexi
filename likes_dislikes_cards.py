@@ -64,7 +64,7 @@ for idx,raw in enumerate(DATA["cards"],224):
     cid=f"g2261021_{idx:03d}"
     assert raw["id"]==cid
     chapter=raw["chapter"]
-    assert chapter in (7,8,13)
+    assert chapter in (7,8,16)
     assert chapter>=8 if raw["number"]=="pl" else chapter>=7
     assert INDEX[chapter]["start"]<=INDEX[chapter]["end"]
     skill=raw["skill"]
@@ -92,7 +92,7 @@ for idx,raw in enumerate(DATA["cards"],224):
         options=[answer,*CLITIC_DISTRACTORS[answer]]
         typed=False
     else:
-        assert chapter>=13,cid
+        assert chapter>=16,cid
         assert raw["number"]=="pl" if "αρέσουν" in answer else raw["number"]=="sg"
         assert raw["experiencer"] in answer.casefold(),cid
         accepted=raw["accepted"]
@@ -124,5 +124,5 @@ for idx,raw in enumerate(DATA["cards"],224):
 assert len({c["id"] for c in CARDS})==len(CARDS)==36
 assert len({c["prompt"] for c in CARDS})==36
 assert Counter(c["skill"] for c in CARDS)=={"agreement":18,"experiencer":12,"typed":6}
-assert Counter(c["chapter"] for c in CARDS)=={7:13,8:9,13:14}
+assert Counter(c["chapter"] for c in CARDS)=={7:13,8:9,16:14}
 BY_ID={c["id"]:c for c in CARDS}
