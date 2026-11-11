@@ -49,7 +49,7 @@ for pos,raw in enumerate(RAW,77):
     assert len(options)==len(set(options))==4 and set(options)<=set(OWNER_TO_FORM.values()),cid
     prompt=raw["prompt"]
     assert prompt.count("___")==1 and prompt==unicodedata.normalize("NFC",prompt),cid
-    assert "μου αρέσει" not in prompt and "να " not in prompt and "θα " not in prompt,cid
+    assert "μου αρέσει" not in prompt and not re.search(r"\\b(?:να|θα)\\b",prompt),cid
     translations=raw["fullTranslations"]
     assert set(translations)==set(LANGS) and all(
         isinstance(translations[lang],str) and translations[lang].strip()
