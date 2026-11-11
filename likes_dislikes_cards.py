@@ -83,7 +83,7 @@ for idx,raw in enumerate(DATA["cards"],224):
     if skill=="agreement":
         assert answer==("αρέσει" if raw["number"]=="sg" else "αρέσουν"),cid
         assert raw["experiencer"].casefold() in prompt.casefold(),cid
-        options=["αρέσει","αρέσουν","αρέσω","αρέσεις"]
+        options=[answer,*[v for v in ("αρέσει","αρέσουν","αρέσω","αρέσεις") if v!=answer]]
         typed=False
     elif skill=="experiencer":
         assert answer==raw["experiencer"] and answer in EXPERIENCERS,cid
