@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule","duration","weather")] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule","duration","weather","verb_core")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==369
+    assert len(ARTICLES)==24 and len(GRAMMAR)==417
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="verb_core":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="weather":
         return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="duration":
@@ -516,7 +518,49 @@ def _weather_explanation(card,lang):
     # συννεφιά use έχει + noun; βρέχει/χιονίζει/φυσάει are impersonal.
     return WEATHER_GUIDANCE[card["weatherCode"]][lang]
 
+
+CORE_PRESENT_TIPS={
+ "ru":"Настоящее время «{lemma}», лицо {person}: «{correct}». Шесть лиц (я / ты / он или она / мы / вы / они): {forms}. {extra}",
+ "en":"Present tense “{lemma}”, person {person}: “{correct}”. Six persons (I / you / he or she / we / you / they): {forms}. {extra}",
+ "zh":"动词“{lemma}”的现在时，人称{person}：正确形式“{correct}”。六个人称（我／你／他或她／我们／你们／他们）：{forms}。{extra}",
+ "ar":"المضارع للفعل «{lemma}»، الشخص {person}: «{correct}». الأشكال الستة (أنا/أنت/هو أو هي/نحن/أنتم/هم): {forms}. {extra}",
+ "es":"Presente de «{lemma}», persona {person}: «{correct}». Seis personas (yo / tú / él o ella / nosotros / ustedes / ellos): {forms}. {extra}",
+ "pt":"Presente de «{lemma}», pessoa {person}: «{correct}». Seis pessoas (eu / tu / ele ou ela / nós / vocês / eles): {forms}. {extra}"
+}
+CORE_PRESENT_VARIANT_NOTE={
+ "ru":["Для этого лица допускается также: {variants}.","Только указанная форма принимается в этом упражнении."],
+ "en":["Also accepted for this person: {variants}.","Only the listed canonical form is accepted here."],
+ "zh":["此人称也接受：{variants}。","本题只接受列出的标准形式。"],
+ "ar":["تُقبل أيضاً لهذه الصيغة: {variants}.","تُقبل هنا الصيغة الأساسية المدرجة فقط."],
+ "es":["También se acepta para esta persona: {variants}.","Aquí solo se acepta la forma principal indicada."],
+ "pt":["Também se aceita para esta pessoa: {variants}.","Aqui só se aceita a forma principal indicada."]
+}
+CORE_PRESENT_LEGO={
+ "ru":"«Λέγω» — отдельный более книжный вариант; не считаем его автоматической заменой всей таблицы A1.",
+ "en":"“Λέγω” is a distinct, more formal variant; it is not an automatic substitute for every A1 form.",
+ "zh":"“Λέγω”属于较正式的另一组形式，不能自动替换所有 A1 变位。",
+ "ar":"«Λέγω» صيغة أخرى أكثر رسمية، وليست بديلاً آلياً لجميع صيغ A1.",
+ "es":"«Λέγω» es una variante más formal, no un reemplazo automático para todas las personas de A1.",
+ "pt":"«Λέγω» é uma variante mais formal, não uma substituição automática de todas as formas de A1."
+}
+
+def _core_present_explanation(card,lang):
+    from core_verb_cards import EXPECTED, ALLOWED_ALTERNATES
+    forms=" / ".join(EXPECTED[card["lemma"]])
+    variants=ALLOWED_ALTERNATES[card["lemma"]].get(str(card["person"]),[])
+    extra=(CORE_PRESENT_VARIANT_NOTE[lang][0].format(
+        variants=" / ".join(variants)) if variants
+        else CORE_PRESENT_VARIANT_NOTE[lang][1])
+    if card["lemma"]=="λέω":
+        extra += " "+CORE_PRESENT_LEGO[lang]
+    return CORE_PRESENT_TIPS[lang].format(
+        lemma=card["lemma"],person=VERB_A_PERSONS[lang][card["person"]],
+        correct=card["correct"],forms=forms,extra=extra
+    )
+
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="verb_core":
+        return _core_present_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="weather":
         return _weather_explanation(card,lang)
     if card["kind"]=="grammar" and card.get("group")=="duration":
