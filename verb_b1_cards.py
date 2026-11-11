@@ -89,12 +89,9 @@ for pos,raw in enumerate(DATA["cards"],148):
         "acceptedForms":accepted,"options":options,"typedAnswer":True,
         "lemma":lemma,"person":person,"personName":PERSON[person],
         "fullTranslations":meanings,"question":raw["question"],"polarity":raw["polarity"],
-        "grammar_tags":[
-            "languages_b1_and_object_articles" if ch==4 else
-            "transport_and_time" if ch==6 else
-            "plural_nouns" if ch==8 else
-            "subjunctive_na" if ch==16 else "routine_and_days"
-        ],
+        # Printed chapter is the readiness gate; don't mislabel B1
+        # present forms as plural nouns (unit 8) or subjunctive (unit 16).
+        "grammar_tags":[],
         **{lang:LABEL[lang].format(lemma=lemma) for lang in LANGS}
     }
     pedagogy_rules.tag(card)
