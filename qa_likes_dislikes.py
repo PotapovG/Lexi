@@ -14,7 +14,7 @@ import server
 
 cards=likes_dislikes_cards.CARDS
 langs=likes_dislikes_cards.LANGS
-assert len(cards)==36 and len(grammar2_cards.CARDS)==259
+assert len(cards)==36 and len(grammar2_cards.CARDS)>=259  # new schedule cards append, old IDs stable
 assert [c["id"] for c in grammar2_cards.CARDS[:223]]==[
     f"g2261021_{i:03d}" for i in range(1,224)
 ]
