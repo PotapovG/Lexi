@@ -10,6 +10,7 @@ import random
 import re
 import secrets
 import sqlite3
+import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
@@ -366,8 +367,14 @@ def format_question(card,direction,lang,weak=False,variant_index=None):
                      card.get('pl') if card['kind']=='plural' else card.get('gr',''))
     item['greekVariants']=greek_variants.variants(canonical_greek)
     if card['kind']=='grammar':
-        item['choices']=random.sample(card['options'],len(card['options']))
         item['grammarGroup']=card['group']
+        if card.get("typedAnswer"):
+            # Same existing grammar kind, but an explicitly typed-response task.
+            # Never send the internal correct/distractor forms to the browser.
+            item['choices']=[]
+            item['typedAnswer']=True
+        else:
+            item['choices']=random.sample(card['options'],len(card['options']))
     if card['kind']=='enclitic':
         item['choices']=random.sample(card['options'],len(card['options']))
         item['wordAudio']=_word_audio.lookup(card['correct'],listening)
@@ -694,8 +701,15 @@ def mark(user_id,body,injected_db=None):
     if card['kind']=='clock':
         correct=selected==correct_answer
     elif card['kind']=='grammar':
-        if selected not in card['options']:raise ValueError('invalid grammar form')
-        correct=selected==correct_answer
+        if card.get("typedAnswer"):
+            # Typed Greek form: preserve stress/orthography, accept case and
+            # surrounding whitespace only. Bad forms grade WRONG, not HTTP400,
+            # so they can enter the existing weak/SRS remediation queue.
+            correct=(unicodedata.normalize("NFC",selected.strip()).casefold()
+                     ==unicodedata.normalize("NFC",correct_answer).casefold())
+        else:
+            if selected not in card['options']:raise ValueError('invalid grammar form')
+            correct=selected==correct_answer
     elif card['kind']=='enclitic':
         if selected not in card['options']:raise ValueError('invalid enclitic variant')
         correct=selected==correct_answer

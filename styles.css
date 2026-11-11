@@ -742,3 +742,32 @@ body{background:radial-gradient(circle at 95% 0%,#1b3447 0,#0b1a29 45%,#091522 8
  .lesson-feedback .lesson-primary{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.lesson-progress-fill{transition:none}}
+
+
+/* Typed response within existing grammar questions (not a new mode). */
+.answers.typed-grammar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: stretch;
+}
+.grammar-typed-answer {
+  box-sizing: border-box;
+  min-width: 0;
+  flex: 2 1 14rem;
+  border: 1px solid var(--border, #718096);
+  border-radius: .75rem;
+  padding: .85rem 1rem;
+  font: inherit;
+  font-size: 1.15rem;
+  background: var(--card-bg, #fff);
+  color: var(--text, #17212d);
+}
+.grammar-typed-answer:focus-visible {
+  outline: 3px solid #3986df;
+  outline-offset: 2px;
+}
+.answers .grammar-typed-submit {
+  flex: 1 1 8rem;
+  min-height: 2.9rem;
+}

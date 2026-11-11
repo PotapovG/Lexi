@@ -1184,6 +1184,41 @@
     if(q.kind==="verb"&&state.mode==="weak"&&q.direction==="translate"){renderVerbTranslation();return;}
     $("feedback").className="feedback";
     const answers=$("answers");answers.replaceChildren();
+    if(q.kind==="grammar"&&q.typedAnswer){
+      // This is the SAME grammar exercise, with a productive Greek answer
+      // instead of a multiple-choice bank. No new mode or state machine.
+      answers.classList.remove("accent-letters");
+      answers.classList.add("wide-choices","typed-grammar");
+      const labels={
+        ru:["Введи греческую форму","Проверить"],
+        en:["Type the Greek form","Check answer"],
+        zh:["输入希腊语动词形式","检查答案"],
+        ar:["اكتب الصيغة اليونانية","تحقق من الإجابة"],
+        es:["Escribe la forma griega","Comprobar"],
+        pt:["Escreve a forma grega","Verificar"]
+      };
+      const label=labels[q.lang||state.settings.lang]||labels.en;
+      const field=document.createElement("input");
+      field.type="text";field.className="grammar-typed-answer";
+      field.lang="el";field.dir="ltr";field.autocomplete="off";
+      field.autocapitalize="off";field.spellcheck=false;field.maxLength=80;
+      field.setAttribute("aria-label",label[0]);
+      field.placeholder=label[0];
+      const submit=document.createElement("button");
+      submit.type="button";submit.className="answer grammar-typed-submit";
+      submit.textContent=label[1];
+      const send=()=>{
+        const answer=field.value.trim();
+        if(answer)choose(-1,answer);
+      };
+      field.addEventListener("keydown",event=>{
+        if(event.key==="Enter"){event.preventDefault();send();}
+      });
+      submit.addEventListener("click",send);
+      answers.append(field,submit);
+      return;
+    }
+    answers.classList.remove("typed-grammar");
     const isAccent=q.kind==="accent";
     answers.classList.toggle("accent-letters",isAccent);
     // Readable answer choices: long phrases/sentences and very long translations
@@ -1385,7 +1420,7 @@
     const isTranslation=q.kind==="verb"&&state.verbStage===2;
     const actualDirection=q.kind==="dialogue"?"gap"+q.gapIndices[state.dialogueStep]:(isTranslation?"translate":q.direction);
     const options=isTranslation?q.phraseChoices:(q.kind==="order"?q.tokens:q.choices);
-    const selected=q.kind==="order"?overrideSelected:(q.kind==="accent"?String(index):options[index]);
+    const selected=(q.kind==="order"||q.typedAnswer)?overrideSelected:(q.kind==="accent"?String(index):options[index]);
     if(q.kind==="accent" && (!q.letters || index<0 || index>=q.letters.length || !q.accentableIndices.includes(index)))return;
     if(selected===undefined)return;
     state.busy=true;
@@ -1411,7 +1446,7 @@
         : (q.semanticId||q.id));
       if(result.correct)state.correct++;else state.wrong++;
       buttons.forEach((b,i)=>{
-        if(q.kind==="order")return;
+        if(q.kind==="order"||q.typedAnswer)return;
         if(q.kind==="accent" ? i===result.correctIndex :
            q.kind==="verb"&&!isTranslation ? result.conjugation?.accepted.includes(q.choices[i]) :
            (result.acceptedAnswers||[result.answer]).includes(options[i]))
