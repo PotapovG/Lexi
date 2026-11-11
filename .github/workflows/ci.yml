@@ -23,6 +23,7 @@ jobs:
           python3 qa_possessives.py
           python3 qa_verb_a_present.py
           python3 qa_verb_b1_present.py
+          python3 qa_verb_b2_present.py
           node --check app.js
       - name: A1 dialogue expansion and legacy dialogue integrity
         run: |
