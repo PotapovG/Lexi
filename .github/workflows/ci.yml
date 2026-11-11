@@ -27,6 +27,7 @@ jobs:
           python3 qa_likes_dislikes.py
           python3 qa_week_agenda.py
           python3 qa_duration.py
+          python3 qa_weather.py
           node --check app.js
       - name: A1 dialogue expansion and legacy dialogue integrity
         run: |
