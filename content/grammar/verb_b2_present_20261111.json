@@ -214,7 +214,7 @@
         "es": "No puedes venir hoy.",
         "pt": "Não podes vir hoje."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -299,7 +299,7 @@
         "es": "Hoy no conducen el autobús.",
         "pt": "Eles não conduzem o autocarro hoje."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -383,7 +383,7 @@
         "es": "No llamamos a nuestros amigos por la noche.",
         "pt": "Não telefonamos aos nossos amigos à noite."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -468,7 +468,7 @@
         "es": "No estás de acuerdo con tu amigo.",
         "pt": "Não concordas com o teu amigo."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -552,7 +552,7 @@
         "es": "No discrepan de la decisión.",
         "pt": "Eles não discordam da decisão."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -636,7 +636,7 @@
         "es": "No llegamos tarde al autobús.",
         "pt": "Não nos atrasamos para o autocarro."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -721,7 +721,7 @@
         "es": "Todavía no perdonas a tu hermano.",
         "pt": "Ainda não perdoas ao teu irmão."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -806,7 +806,7 @@
         "es": "No intentan terminar rápido.",
         "pt": "Eles não tentam acabar depressa."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -890,7 +890,7 @@
         "es": "No pedimos dinero.",
         "pt": "Não pedimos dinheiro."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
@@ -975,7 +975,7 @@
         "es": "No explicas bien la pregunta.",
         "pt": "Não explicas bem a pergunta."
       },
-      "polarity": "positive",
+      "polarity": "negative",
       "question": false
     },
     {
