@@ -1,0 +1,777 @@
+{
+  "version": 1,
+  "expressions": [
+    {
+      "code": "sun",
+      "symbol": "☀",
+      "positive": "έχει ήλιο",
+      "negative": "δεν έχει ήλιο",
+      "meaning": {
+        "ru": "солнечно",
+        "en": "it is sunny",
+        "zh": "阳光明媚",
+        "ar": "الجو مشمس",
+        "es": "hace sol",
+        "pt": "faz sol"
+      },
+      "negativeMeaning": {
+        "ru": "нет солнца",
+        "en": "it is not sunny",
+        "zh": "没有阳光",
+        "ar": "لا توجد شمس",
+        "es": "no hace sol",
+        "pt": "não faz sol"
+      }
+    },
+    {
+      "code": "cloud",
+      "symbol": "☁",
+      "positive": "έχει συννεφιά",
+      "negative": "δεν έχει συννεφιά",
+      "meaning": {
+        "ru": "облачно",
+        "en": "it is cloudy",
+        "zh": "多云",
+        "ar": "الجو غائم",
+        "es": "está nublado",
+        "pt": "está nublado"
+      },
+      "negativeMeaning": {
+        "ru": "нет облачности",
+        "en": "it is not cloudy",
+        "zh": "不是阴天",
+        "ar": "الجو ليس غائماً",
+        "es": "no está nublado",
+        "pt": "não está nublado"
+      }
+    },
+    {
+      "code": "rain",
+      "symbol": "☂",
+      "positive": "βρέχει",
+      "negative": "δεν βρέχει",
+      "meaning": {
+        "ru": "идёт дождь",
+        "en": "it is raining",
+        "zh": "正在下雨",
+        "ar": "إنها تمطر",
+        "es": "llueve",
+        "pt": "está a chover"
+      },
+      "negativeMeaning": {
+        "ru": "дождя нет",
+        "en": "it is not raining",
+        "zh": "没有下雨",
+        "ar": "لا تمطر",
+        "es": "no llueve",
+        "pt": "não está a chover"
+      }
+    },
+    {
+      "code": "snow",
+      "symbol": "❄",
+      "positive": "χιονίζει",
+      "negative": "δεν χιονίζει",
+      "meaning": {
+        "ru": "идёт снег",
+        "en": "it is snowing",
+        "zh": "正在下雪",
+        "ar": "تتساقط الثلوج",
+        "es": "nieva",
+        "pt": "está a nevar"
+      },
+      "negativeMeaning": {
+        "ru": "снег не идёт",
+        "en": "it is not snowing",
+        "zh": "没有下雪",
+        "ar": "لا تتساقط الثلوج",
+        "es": "no nieva",
+        "pt": "não está a nevar"
+      }
+    },
+    {
+      "code": "wind",
+      "symbol": "≋",
+      "positive": "φυσάει",
+      "negative": "δεν φυσάει",
+      "meaning": {
+        "ru": "ветрено",
+        "en": "it is windy",
+        "zh": "刮风",
+        "ar": "الرياح تهب",
+        "es": "hace viento",
+        "pt": "faz vento"
+      },
+      "negativeMeaning": {
+        "ru": "нет ветра",
+        "en": "it is not windy",
+        "zh": "没有风",
+        "ar": "لا تهب الرياح",
+        "es": "no hace viento",
+        "pt": "não faz vento"
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": "g2261021_340",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "sun",
+      "prompt": "Κάρτα καιρού · Δευτέρα στην πόλη · ☀\nΣήμερα ___.",
+      "correct": "έχει ήλιο",
+      "wrong": [
+        "έχει συννεφιά",
+        "βρέχει",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Понедельник в городе: солнечно.",
+        "en": "Monday in the city: it is sunny.",
+        "zh": "周一在城里: 阳光明媚。",
+        "ar": "الاثنين في المدينة: الجو مشمس.",
+        "es": "Lunes en la ciudad: hace sol.",
+        "pt": "Segunda-feira na cidade: faz sol."
+      }
+    },
+    {
+      "id": "g2261021_341",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "cloud",
+      "prompt": "Κάρτα καιρού · Τρίτη στο χωριό · ☁\nΣήμερα ___.",
+      "correct": "έχει συννεφιά",
+      "wrong": [
+        "έχει ήλιο",
+        "βρέχει",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Вторник в деревне: облачно.",
+        "en": "Tuesday in the village: it is cloudy.",
+        "zh": "周二在村里: 多云。",
+        "ar": "الثلاثاء في القرية: الجو غائم.",
+        "es": "Martes en el pueblo: está nublado.",
+        "pt": "Terça-feira na aldeia: está nublado."
+      }
+    },
+    {
+      "id": "g2261021_342",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "rain",
+      "prompt": "Κάρτα καιρού · Τετάρτη το πρωί · ☂\nΣήμερα ___.",
+      "correct": "βρέχει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Среда утром: идёт дождь.",
+        "en": "Wednesday morning: it is raining.",
+        "zh": "周三早上: 正在下雨。",
+        "ar": "صباح الأربعاء: إنها تمطر.",
+        "es": "Miércoles por la mañana: llueve.",
+        "pt": "Quarta-feira de manhã: está a chover."
+      }
+    },
+    {
+      "id": "g2261021_343",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "snow",
+      "prompt": "Κάρτα καιρού · Πέμπτη το βράδυ · ❄\nΣήμερα ___.",
+      "correct": "χιονίζει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "βρέχει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Четверг вечером: идёт снег.",
+        "en": "Thursday evening: it is snowing.",
+        "zh": "周四晚上: 正在下雪。",
+        "ar": "مساء الخميس: تتساقط الثلوج.",
+        "es": "Jueves por la noche: nieva.",
+        "pt": "Quinta-feira à noite: está a nevar."
+      }
+    },
+    {
+      "id": "g2261021_344",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "wind",
+      "prompt": "Κάρτα καιρού · Παρασκευή στο πάρκο · ≋\nΣήμερα ___.",
+      "correct": "φυσάει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "βρέχει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Пятница в парке: ветрено.",
+        "en": "Friday in the park: it is windy.",
+        "zh": "周五在公园: 刮风。",
+        "ar": "الجمعة في الحديقة: الرياح تهب.",
+        "es": "Viernes en el parque: hace viento.",
+        "pt": "Sexta-feira no parque: faz vento."
+      }
+    },
+    {
+      "id": "g2261021_345",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "sun",
+      "prompt": "Κάρτα καιρού · Σάββατο στην πόλη · ☀\nΣήμερα ___.",
+      "correct": "έχει ήλιο",
+      "wrong": [
+        "έχει συννεφιά",
+        "βρέχει",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Суббота в городе: солнечно.",
+        "en": "Saturday in the city: it is sunny.",
+        "zh": "周六在城里: 阳光明媚。",
+        "ar": "السبت في المدينة: الجو مشمس.",
+        "es": "Sábado en la ciudad: hace sol.",
+        "pt": "Sábado na cidade: faz sol."
+      }
+    },
+    {
+      "id": "g2261021_346",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "cloud",
+      "prompt": "Κάρτα καιρού · Κυριακή στο χωριό · ☁\nΣήμερα ___.",
+      "correct": "έχει συννεφιά",
+      "wrong": [
+        "έχει ήλιο",
+        "βρέχει",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Воскресенье в деревне: облачно.",
+        "en": "Sunday in the village: it is cloudy.",
+        "zh": "周日在村里: 多云。",
+        "ar": "الأحد في القرية: الجو غائم.",
+        "es": "Domingo en el pueblo: está nublado.",
+        "pt": "Domingo na aldeia: está nublado."
+      }
+    },
+    {
+      "id": "g2261021_347",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "rain",
+      "prompt": "Κάρτα καιρού · Δευτέρα το απόγευμα · ☂\nΣήμερα ___.",
+      "correct": "βρέχει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Понедельник после полудня: идёт дождь.",
+        "en": "Monday afternoon: it is raining.",
+        "zh": "周一下午: 正在下雨。",
+        "ar": "بعد ظهر الاثنين: إنها تمطر.",
+        "es": "Lunes por la tarde: llueve.",
+        "pt": "Segunda-feira à tarde: está a chover."
+      }
+    },
+    {
+      "id": "g2261021_348",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "snow",
+      "prompt": "Κάρτα καιρού · Τρίτη στη Λευκωσία · ❄\nΣήμερα ___.",
+      "correct": "χιονίζει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "βρέχει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Вторник в Никосии: идёт снег.",
+        "en": "Tuesday in Nicosia: it is snowing.",
+        "zh": "周二在尼科西亚: 正在下雪。",
+        "ar": "الثلاثاء في نيقوسيا: تتساقط الثلوج.",
+        "es": "Martes en Nicosia: nieva.",
+        "pt": "Terça-feira em Nicósia: está a nevar."
+      }
+    },
+    {
+      "id": "g2261021_349",
+      "chapter": 7,
+      "skill": "symbol",
+      "weather": "wind",
+      "prompt": "Κάρτα καιρού · Τετάρτη κοντά στη θάλασσα · ≋\nΣήμερα ___.",
+      "correct": "φυσάει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "βρέχει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Среда у моря: ветрено.",
+        "en": "Wednesday near the sea: it is windy.",
+        "zh": "周三在海边: 刮风。",
+        "ar": "الأربعاء قرب البحر: الرياح تهب.",
+        "es": "Miércoles cerca del mar: hace viento.",
+        "pt": "Quarta-feira perto do mar: faz vento."
+      }
+    },
+    {
+      "id": "g2261021_350",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "sun",
+      "prompt": "Κάρτα καιρού · Πέμπτη το βράδυ · ☀ (όχι)\nΣήμερα ___.",
+      "correct": "δεν έχει ήλιο",
+      "wrong": [
+        "δεν έχει συννεφιά",
+        "δεν βρέχει",
+        "δεν χιονίζει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Четверг вечером: нет солнца.",
+        "en": "Thursday evening: it is not sunny.",
+        "zh": "周四晚上: 没有阳光。",
+        "ar": "مساء الخميس: لا توجد شمس.",
+        "es": "Jueves por la noche: no hace sol.",
+        "pt": "Quinta-feira à noite: não faz sol."
+      }
+    },
+    {
+      "id": "g2261021_351",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "cloud",
+      "prompt": "Κάρτα καιρού · Παρασκευή στο πάρκο · ☁ (όχι)\nΣήμερα ___.",
+      "correct": "δεν έχει συννεφιά",
+      "wrong": [
+        "δεν έχει ήλιο",
+        "δεν βρέχει",
+        "δεν χιονίζει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Пятница в парке: нет облачности.",
+        "en": "Friday in the park: it is not cloudy.",
+        "zh": "周五在公园: 不是阴天。",
+        "ar": "الجمعة في الحديقة: الجو ليس غائماً.",
+        "es": "Viernes en el parque: no está nublado.",
+        "pt": "Sexta-feira no parque: não está nublado."
+      }
+    },
+    {
+      "id": "g2261021_352",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "rain",
+      "prompt": "Κάρτα καιρού · Σάββατο στην πόλη · ☂ (όχι)\nΣήμερα ___.",
+      "correct": "δεν βρέχει",
+      "wrong": [
+        "δεν έχει ήλιο",
+        "δεν έχει συννεφιά",
+        "δεν χιονίζει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Суббота в городе: дождя нет.",
+        "en": "Saturday in the city: it is not raining.",
+        "zh": "周六在城里: 没有下雨。",
+        "ar": "السبت في المدينة: لا تمطر.",
+        "es": "Sábado en la ciudad: no llueve.",
+        "pt": "Sábado na cidade: não está a chover."
+      }
+    },
+    {
+      "id": "g2261021_353",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "snow",
+      "prompt": "Κάρτα καιρού · Κυριακή στο χωριό · ❄ (όχι)\nΣήμερα ___.",
+      "correct": "δεν χιονίζει",
+      "wrong": [
+        "δεν έχει ήλιο",
+        "δεν έχει συννεφιά",
+        "δεν βρέχει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Воскресенье в деревне: снег не идёт.",
+        "en": "Sunday in the village: it is not snowing.",
+        "zh": "周日在村里: 没有下雪。",
+        "ar": "الأحد في القرية: لا تتساقط الثلوج.",
+        "es": "Domingo en el pueblo: no nieva.",
+        "pt": "Domingo na aldeia: não está a nevar."
+      }
+    },
+    {
+      "id": "g2261021_354",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "wind",
+      "prompt": "Κάρτα καιρού · Δευτέρα το απόγευμα · ≋ (όχι)\nΣήμερα ___.",
+      "correct": "δεν φυσάει",
+      "wrong": [
+        "δεν έχει ήλιο",
+        "δεν έχει συννεφιά",
+        "δεν βρέχει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Понедельник после полудня: нет ветра.",
+        "en": "Monday afternoon: it is not windy.",
+        "zh": "周一下午: 没有风。",
+        "ar": "بعد ظهر الاثنين: لا تهب الرياح.",
+        "es": "Lunes por la tarde: no hace viento.",
+        "pt": "Segunda-feira à tarde: não faz vento."
+      }
+    },
+    {
+      "id": "g2261021_355",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "sun",
+      "prompt": "Κάρτα καιρού · Τρίτη στη Λευκωσία · ☀ (όχι)\nΣήμερα ___.",
+      "correct": "δεν έχει ήλιο",
+      "wrong": [
+        "δεν έχει συννεφιά",
+        "δεν βρέχει",
+        "δεν χιονίζει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Вторник в Никосии: нет солнца.",
+        "en": "Tuesday in Nicosia: it is not sunny.",
+        "zh": "周二在尼科西亚: 没有阳光。",
+        "ar": "الثلاثاء في نيقوسيا: لا توجد شمس.",
+        "es": "Martes en Nicosia: no hace sol.",
+        "pt": "Terça-feira em Nicósia: não faz sol."
+      }
+    },
+    {
+      "id": "g2261021_356",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "cloud",
+      "prompt": "Κάρτα καιρού · Τετάρτη κοντά στη θάλασσα · ☁ (όχι)\nΣήμερα ___.",
+      "correct": "δεν έχει συννεφιά",
+      "wrong": [
+        "δεν έχει ήλιο",
+        "δεν βρέχει",
+        "δεν χιονίζει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Среда у моря: нет облачности.",
+        "en": "Wednesday near the sea: it is not cloudy.",
+        "zh": "周三在海边: 不是阴天。",
+        "ar": "الأربعاء قرب البحر: الجو ليس غائماً.",
+        "es": "Miércoles cerca del mar: no está nublado.",
+        "pt": "Quarta-feira perto do mar: não está nublado."
+      }
+    },
+    {
+      "id": "g2261021_357",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "rain",
+      "prompt": "Κάρτα καιρού · Δευτέρα στην πόλη · ☂ (όχι)\nΣήμερα ___.",
+      "correct": "δεν βρέχει",
+      "wrong": [
+        "δεν έχει ήλιο",
+        "δεν έχει συννεφιά",
+        "δεν χιονίζει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Понедельник в городе: дождя нет.",
+        "en": "Monday in the city: it is not raining.",
+        "zh": "周一在城里: 没有下雨。",
+        "ar": "الاثنين في المدينة: لا تمطر.",
+        "es": "Lunes en la ciudad: no llueve.",
+        "pt": "Segunda-feira na cidade: não está a chover."
+      }
+    },
+    {
+      "id": "g2261021_358",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "snow",
+      "prompt": "Κάρτα καιρού · Τρίτη στο χωριό · ❄ (όχι)\nΣήμερα ___.",
+      "correct": "δεν χιονίζει",
+      "wrong": [
+        "δεν έχει ήλιο",
+        "δεν έχει συννεφιά",
+        "δεν βρέχει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Вторник в деревне: снег не идёт.",
+        "en": "Tuesday in the village: it is not snowing.",
+        "zh": "周二在村里: 没有下雪。",
+        "ar": "الثلاثاء في القرية: لا تتساقط الثلوج.",
+        "es": "Martes en el pueblo: no nieva.",
+        "pt": "Terça-feira na aldeia: não está a nevar."
+      }
+    },
+    {
+      "id": "g2261021_359",
+      "chapter": 7,
+      "skill": "negative",
+      "weather": "wind",
+      "prompt": "Κάρτα καιρού · Τετάρτη το πρωί · ≋ (όχι)\nΣήμερα ___.",
+      "correct": "δεν φυσάει",
+      "wrong": [
+        "δεν έχει ήλιο",
+        "δεν έχει συννεφιά",
+        "δεν βρέχει"
+      ],
+      "polarity": "negative",
+      "translations": {
+        "ru": "Среда утром: нет ветра.",
+        "en": "Wednesday morning: it is not windy.",
+        "zh": "周三早上: 没有风。",
+        "ar": "صباح الأربعاء: لا تهب الرياح.",
+        "es": "Miércoles por la mañana: no hace viento.",
+        "pt": "Quarta-feira de manhã: não faz vento."
+      }
+    },
+    {
+      "id": "g2261021_360",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "sun",
+      "prompt": "☀ · Η Άννα πάει στο πάρκο, γιατί ___.",
+      "correct": "έχει ήλιο",
+      "wrong": [
+        "έχει συννεφιά",
+        "βρέχει",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Анна идёт в парк, потому что солнечно.",
+        "en": "Anna goes to the park because it is sunny.",
+        "zh": "安娜去公园，因为阳光明媚。",
+        "ar": "تذهب آنا إلى الحديقة لأن الجو مشمس.",
+        "es": "Ana va al parque porque hace sol.",
+        "pt": "A Ana vai ao parque porque faz sol."
+      }
+    },
+    {
+      "id": "g2261021_361",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "cloud",
+      "prompt": "☁ · Δεν βλέπω τον ήλιο από το παράθυρο, γιατί ___.",
+      "correct": "έχει συννεφιά",
+      "wrong": [
+        "έχει ήλιο",
+        "βρέχει",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Я не вижу солнца из окна, потому что облачно.",
+        "en": "I cannot see the sun from the window because it is cloudy.",
+        "zh": "我从窗户看不到太阳，因为天阴了。",
+        "ar": "لا أرى الشمس من النافذة لأن الجو غائم.",
+        "es": "No veo el sol desde la ventana porque está nublado.",
+        "pt": "Não vejo o sol pela janela porque está nublado."
+      }
+    },
+    {
+      "id": "g2261021_362",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "rain",
+      "prompt": "☂ · Η Μαρία παίρνει την ομπρέλα, γιατί ___.",
+      "correct": "βρέχει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Мария берёт зонт, потому что идёт дождь.",
+        "en": "Maria takes the umbrella because it is raining.",
+        "zh": "玛丽亚带雨伞，因为下雨了。",
+        "ar": "تأخذ ماريا المظلة لأنها تمطر.",
+        "es": "María coge el paraguas porque llueve.",
+        "pt": "A Maria leva o guarda-chuva porque está a chover."
+      }
+    },
+    {
+      "id": "g2261021_363",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "snow",
+      "prompt": "❄ · Ο Νίκος μένει στο σπίτι, γιατί ___.",
+      "correct": "χιονίζει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "βρέχει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Никос остаётся дома, потому что идёт снег.",
+        "en": "Nikos stays at home because it is snowing.",
+        "zh": "尼科斯待在家里，因为下雪了。",
+        "ar": "يبقى نيكوس في البيت لأن الثلج يتساقط.",
+        "es": "Nikos se queda en casa porque nieva.",
+        "pt": "O Nikos fica em casa porque está a nevar."
+      }
+    },
+    {
+      "id": "g2261021_364",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "wind",
+      "prompt": "≋ · Κλείνω το παράθυρο, γιατί ___.",
+      "correct": "φυσάει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "βρέχει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Я закрываю окно, потому что ветрено.",
+        "en": "I close the window because it is windy.",
+        "zh": "我关窗，因为刮风了。",
+        "ar": "أغلق النافذة لأن الرياح تهب.",
+        "es": "Cierro la ventana porque hace viento.",
+        "pt": "Fecho a janela porque faz vento."
+      }
+    },
+    {
+      "id": "g2261021_365",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "sun",
+      "prompt": "☀ · Οι φίλοι κάνουν βόλτα στο χωριό, γιατί ___.",
+      "correct": "έχει ήλιο",
+      "wrong": [
+        "έχει συννεφιά",
+        "βρέχει",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Друзья гуляют по деревне, потому что солнечно.",
+        "en": "The friends walk around the village because it is sunny.",
+        "zh": "朋友们在村里散步，因为天气晴朗。",
+        "ar": "يتنزه الأصدقاء في القرية لأن الجو مشمس.",
+        "es": "Los amigos pasean por el pueblo porque hace sol.",
+        "pt": "Os amigos passeiam pela aldeia porque faz sol."
+      }
+    },
+    {
+      "id": "g2261021_366",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "cloud",
+      "prompt": "☁ · Η Ελένη βλέπει πολλά σύννεφα. Σήμερα ___.",
+      "correct": "έχει συννεφιά",
+      "wrong": [
+        "έχει ήλιο",
+        "βρέχει",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Элени видит много облаков. Сегодня облачно.",
+        "en": "Eleni sees many clouds. Today it is cloudy.",
+        "zh": "埃莱妮看到许多云。今天多云。",
+        "ar": "ترى إليني سحباً كثيرة. الجو غائم اليوم.",
+        "es": "Eleni ve muchas nubes. Hoy está nublado.",
+        "pt": "A Eleni vê muitas nuvens. Hoje está nublado."
+      }
+    },
+    {
+      "id": "g2261021_367",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "rain",
+      "prompt": "☂ · Δεν πάμε στο πάρκο, γιατί ___.",
+      "correct": "βρέχει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "χιονίζει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Мы не идём в парк, потому что идёт дождь.",
+        "en": "We do not go to the park because it is raining.",
+        "zh": "我们不去公园，因为下雨了。",
+        "ar": "لا نذهب إلى الحديقة لأنها تمطر.",
+        "es": "No vamos al parque porque llueve.",
+        "pt": "Não vamos ao parque porque está a chover."
+      }
+    },
+    {
+      "id": "g2261021_368",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "snow",
+      "prompt": "❄ · Το παιδί βλέπει χιόνι. Τώρα ___.",
+      "correct": "χιονίζει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "βρέχει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Ребёнок видит снег. Сейчас идёт снег.",
+        "en": "The child sees snow. It is snowing now.",
+        "zh": "孩子看到了雪。现在正在下雪。",
+        "ar": "يرى الطفل الثلج. الثلج يتساقط الآن.",
+        "es": "El niño ve nieve. Ahora nieva.",
+        "pt": "A criança vê neve. Agora está a nevar."
+      }
+    },
+    {
+      "id": "g2261021_369",
+      "chapter": 7,
+      "skill": "activity",
+      "weather": "wind",
+      "prompt": "≋ · Δεν ανοίγω το παράθυρο, γιατί ___.",
+      "correct": "φυσάει",
+      "wrong": [
+        "έχει ήλιο",
+        "έχει συννεφιά",
+        "βρέχει"
+      ],
+      "polarity": "positive",
+      "translations": {
+        "ru": "Я не открываю окно, потому что ветрено.",
+        "en": "I do not open the window because it is windy.",
+        "zh": "我不开窗，因为刮风了。",
+        "ar": "لا أفتح النافذة لأن الرياح تهب.",
+        "es": "No abro la ventana porque hace viento.",
+        "pt": "Não abro a janela porque faz vento."
+      }
+    }
+  ]
+}
