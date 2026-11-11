@@ -31,6 +31,13 @@ assert all(c["curriculum_ready_unit"]<=c["chapter"] and c["kind"]=="grammar"
            and c["group"]=="verb_core" for c in cards)
 assert all(not any(v in c["prompt"] for v in ("χθες","θα "," να ")) for c in cards)
 assert len({c["prompt"] for c in cards})==48
+for c in cards:
+    if c["skill"]=="semantic":
+        assert {core.EXISTING_CONTRASTS[x][0] for x in c["options"][1:]}=={
+            "A","B1","B2"
+        }
+        assert all(core.EXISTING_CONTRASTS[x][1]<=c["chapter"]
+                   for x in c["options"][1:])
 assert all(len(c["options"])==len(set(c["options"]))==4 for c in cards)
 assert len(server.vocab.VOCAB)==1700
 assert all(c["id"] in server.GRAMMAR2_BY_ID for c in cards)
