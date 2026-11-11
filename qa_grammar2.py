@@ -16,7 +16,7 @@ for c in gc.CARDS:
  assert c['correct'] in c['options'] and not c.get('book_page_verified')
  assert c['source'].startswith('independent_')
  assert c['prompt'].count('___')==1
- assert c['chapter'] in (2,3,4,6,7,8,9,11,12,13,14,16,17)
+ assert c['chapter'] in (2,3,4,6,7,8,9,11,12,14,16,17)
  assert all(c[l] for l in ('ru','en','zh','ar','es','pt'))
 with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
  original=server.DB;server.DB=str(Path(d)/'student.sqlite3')
@@ -45,7 +45,7 @@ with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
     body['selected']=c['options'][1]
     wrong=server.mark('learner',body)
     assert not wrong['correct'] and wrong['answer']==c['correct'] and wrong['explanation']
-  for max_ch in (2,3,4,6,7,8,9,11,12,13,14,16,17):
+  for max_ch in (2,3,4,6,7,8,9,11,12,14,16,17):
    params={'scope':['chapters'],'chapters':[str(max_ch)],
            'types':['grammar'],'count':['60'],'lang':['ru']}
    quiz=server.make_quiz('new',params)
@@ -53,7 +53,7 @@ with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
    assert all(q['kind']=='grammar' for q in quiz['questions'])
    assert 0<quiz['count']<=min(60,collections.Counter(c['chapter'] for c in gc.CARDS)[max_ch]),(max_ch,quiz['count'])
   # Selected chapter range sees only stage-appropriate material.
-  params={'scope':['chapters'],'chapters':['1,2,3,4,6,7,8,9,11,12,13,14,16,17'],
+  params={'scope':['chapters'],'chapters':['1,2,3,4,6,7,8,9,11,12,14,16,17'],
           'types':['grammar'],'count':['60'],'lang':['en']}
   quiz=server.make_quiz('new',params)
   assert quiz['count']==60 and 130<=quiz['available']<=259  # semantic dedup; 60 question cap
