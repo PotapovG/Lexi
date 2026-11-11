@@ -692,15 +692,15 @@
       "lemma": "αγοράζω",
       "chapter": 8,
       "person": 0,
-      "prompt": "Εγώ ___ ένα βιβλίο.",
+      "prompt": "Εγώ ___ ένα τετράδιο.",
       "correct": "αγοράζω",
       "translations": {
-        "ru": "Я покупаю книгу.",
-        "en": "I buy a book.",
-        "zh": "我买一本书。",
-        "ar": "أنا أشتري كتاباً.",
-        "es": "Compro un libro.",
-        "pt": "Eu compro um livro."
+        "ru": "Я покупаю тетрадь.",
+        "en": "I buy a notebook.",
+        "zh": "我买一本笔记本。",
+        "ar": "أنا أشتري دفتراً.",
+        "es": "Compro un cuaderno.",
+        "pt": "Eu compro um caderno."
       },
       "polarity": "positive",
       "question": false
