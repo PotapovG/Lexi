@@ -675,6 +675,90 @@
         "es": "Estudio griego desde hace dos años.",
         "pt": "Aprendo grego há dois anos."
       }
+    },
+    {
+      "id": "g2261021_336",
+      "chapter": 7,
+      "skill": "preposition",
+      "prompt": "Ωράριο βιβλιοθήκης: είναι ανοιχτή ___ τις εννέα μέχρι τις πέντε.",
+      "correct": "από",
+      "wrong": [
+        "για",
+        "στις",
+        "πριν"
+      ],
+      "context": "starting",
+      "translations": {
+        "ru": "Библиотека открыта с девяти до пяти.",
+        "en": "The library is open from nine to five.",
+        "zh": "图书馆从九点开到五点。",
+        "ar": "المكتبة مفتوحة من التاسعة حتى الخامسة.",
+        "es": "La biblioteca abre de nueve a cinco.",
+        "pt": "A biblioteca está aberta das nove às cinco."
+      }
+    },
+    {
+      "id": "g2261021_337",
+      "chapter": 7,
+      "skill": "preposition",
+      "prompt": "Το μαγαζί είναι κλειστό ___ δύο εβδομάδες.",
+      "correct": "για",
+      "wrong": [
+        "από",
+        "στις",
+        "μέχρι"
+      ],
+      "context": "duration",
+      "translations": {
+        "ru": "Магазин закрыт на две недели.",
+        "en": "The shop is closed for two weeks.",
+        "zh": "商店关闭两周。",
+        "ar": "المتجر مغلق لمدة أسبوعين.",
+        "es": "La tienda cierra durante dos semanas.",
+        "pt": "A loja está fechada durante duas semanas."
+      }
+    },
+    {
+      "id": "g2261021_338",
+      "chapter": 7,
+      "skill": "preposition",
+      "prompt": "Τώρα είναι μεσημέρι και είμαι στο γραφείο ___ τις οκτώ το πρωί.",
+      "correct": "από",
+      "wrong": [
+        "για",
+        "στις",
+        "πριν"
+      ],
+      "context": "starting",
+      "translations": {
+        "ru": "Сейчас полдень, я в офисе с восьми утра.",
+        "en": "It is noon now, and I have been at the office since eight in the morning.",
+        "zh": "现在是中午，我从早上八点就在办公室。",
+        "ar": "الآن الظهر وأنا في المكتب منذ الثامنة صباحاً.",
+        "es": "Ahora es mediodía y estoy en la oficina desde las ocho de la mañana.",
+        "pt": "Agora é meio-dia e estou no escritório desde as oito da manhã."
+      }
+    },
+    {
+      "id": "g2261021_339",
+      "chapter": 11,
+      "skill": "preposition",
+      "prompt": "Το εισιτήριο ισχύει ___ τρεις μέρες.",
+      "correct": "για",
+      "wrong": [
+        "από",
+        "στις",
+        "μέχρι"
+      ],
+      "context": "duration",
+      "translations": {
+        "ru": "Билет действителен три дня.",
+        "en": "The ticket is valid for three days.",
+        "zh": "这张票有效期为三天。",
+        "ar": "التذكرة صالحة لمدة ثلاثة أيام.",
+        "es": "El billete es válido durante tres días.",
+        "pt": "O bilhete é válido durante três dias."
+      }
     }
   ]
 }
