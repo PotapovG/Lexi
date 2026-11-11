@@ -4,11 +4,11 @@ import collections,tempfile,uuid
 from pathlib import Path
 import server,grammar2_cards as gc
 assert len(server.ALL)>=1795 and len(server.EXTRA_ALL)==26
-assert len(server.GRAMMAR2_ALL)==335 and len(server.PRACTICE_ALL)>=2287
+assert len(server.GRAMMAR2_ALL)==339 and len(server.PRACTICE_ALL)>=2291
 assert len(server.vocab.VOCAB)==1700
 assert not server.LISTENING_ENABLED or len(server.LISTEN_CARDS)==717
 assert collections.Counter(c['group'] for c in gc.CARDS)=={
- 'case':10,'agreement':10,'comparison':10,'past':10,'future':8,'subjunctive':8,'gender':20,'possessive':35,'verb_A':36,'verb_B1':36,'verb_B2':40,'likes':36,'schedule':42,'duration':34}
+ 'case':10,'agreement':10,'comparison':10,'past':10,'future':8,'subjunctive':8,'gender':20,'possessive':35,'verb_A':36,'verb_B1':36,'verb_B2':40,'likes':36,'schedule':42,'duration':38}
 assert len({c['id'] for c in server.PRACTICE_ALL})==len(server.PRACTICE_ALL)
 for c in gc.CARDS:
  assert c['kind']=='grammar' and c['curriculum_ready_unit']<=c['chapter']
@@ -56,12 +56,12 @@ with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
   params={'scope':['chapters'],'chapters':['1,2,3,4,6,7,8,9,11,12,13,14,16,17'],
           'types':['grammar'],'count':['60'],'lang':['en']}
   quiz=server.make_quiz('new',params)
-  assert quiz['count']==60 and 130<=quiz['available']<=335  # semantic dedup; 60 question cap
+  assert quiz['count']==60 and 130<=quiz['available']<=339  # semantic dedup; 60 question cap
   # Weak practice and SRS retain permanent keys across six locales.
   with server.conn() as db:
    saved=db.execute("SELECT SUM(attempts),COUNT(*) FROM progress WHERE user_id=?",
                     ('learner',)).fetchone()
-   assert saved[0]==335*6*2
+   assert saved[0]==339*6*2
    assert db.execute('pragma quick_check').fetchone()[0]=='ok'
   assert server.GRAMMAR2_BY_ID[gc.CARDS[0]['id']]['id']==gc.CARDS[0]['id']
   # Original textbook ID and audio unaffected.
@@ -69,5 +69,5 @@ with tempfile.TemporaryDirectory(prefix='grammar2-') as d:
  finally:
   server.DB=original
   server.auth.SECRET_FILE=original_secret
-print('PASS GRAMMAR2: 335 morphology cards x 6 locales x correct/wrong (4020 scores), '
+print('PASS GRAMMAR2: 339 morphology cards x 6 locales x correct/wrong (4068 scores), '
       '4 credible choices, chapter gates and original 1795/717/1700 unchanged')
