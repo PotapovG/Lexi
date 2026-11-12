@@ -107,7 +107,7 @@ with tempfile.TemporaryDirectory(prefix="lexi-core-verbs-") as folder:
                         attempts+=1
                         approved+=1
                         assert variant["correct"] and variant["acceptedVariant"]
-                        assert alt in variant["clozeGreek"].casefold()
+                        assert alt.casefold() in variant["clozeGreek"].casefold()
                 # Wrong person on form cards, wrong verb on mini-dialogues.
                 wrong=server.mark(user,{
                     "id":card["id"],"direction":"grammar_fill",
