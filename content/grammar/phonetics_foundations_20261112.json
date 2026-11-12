@@ -1,0 +1,653 @@
+{
+  "version": 1,
+  "phonemes": [
+    {
+      "code": "a",
+      "ipa": "/a/",
+      "graphemes": [
+        "α"
+      ],
+      "tip": "α"
+    },
+    {
+      "code": "o",
+      "ipa": "/o/",
+      "graphemes": [
+        "ο",
+        "ω"
+      ],
+      "tip": "ο, ω"
+    },
+    {
+      "code": "i",
+      "ipa": "/i/",
+      "graphemes": [
+        "ι",
+        "η",
+        "υ",
+        "ει",
+        "οι"
+      ],
+      "tip": "ι, η, υ, ει, οι"
+    },
+    {
+      "code": "e",
+      "ipa": "/e/",
+      "graphemes": [
+        "ε",
+        "αι"
+      ],
+      "tip": "ε, αι"
+    },
+    {
+      "code": "u",
+      "ipa": "/u/",
+      "graphemes": [
+        "ου"
+      ],
+      "tip": "ου"
+    }
+  ],
+  "wordSpelling": [
+    {
+      "id": "g2261021_418",
+      "sound": "a",
+      "chapter": 3,
+      "word": "μαμά",
+      "masked": "μ◇μά",
+      "correct": "α",
+      "meanings": {
+        "ru": "мама",
+        "en": "mother",
+        "zh": "妈妈",
+        "ar": "أم",
+        "es": "mamá",
+        "pt": "mãe"
+      }
+    },
+    {
+      "id": "g2261021_419",
+      "sound": "a",
+      "chapter": 3,
+      "word": "πατέρας",
+      "masked": "π◇τέρας",
+      "correct": "α",
+      "meanings": {
+        "ru": "отец",
+        "en": "father",
+        "zh": "父亲",
+        "ar": "أب",
+        "es": "padre",
+        "pt": "pai"
+      }
+    },
+    {
+      "id": "g2261021_420",
+      "sound": "a",
+      "chapter": 7,
+      "word": "καφές",
+      "masked": "κ◇φές",
+      "correct": "α",
+      "meanings": {
+        "ru": "кофе",
+        "en": "coffee",
+        "zh": "咖啡",
+        "ar": "قهوة",
+        "es": "café",
+        "pt": "café"
+      }
+    },
+    {
+      "id": "g2261021_421",
+      "sound": "a",
+      "chapter": 7,
+      "word": "γάλα",
+      "masked": "γ◇λα",
+      "correct": "ά",
+      "meanings": {
+        "ru": "молоко",
+        "en": "milk",
+        "zh": "牛奶",
+        "ar": "حليب",
+        "es": "leche",
+        "pt": "leite"
+      }
+    },
+    {
+      "id": "g2261021_422",
+      "sound": "a",
+      "chapter": 8,
+      "word": "αγορά",
+      "masked": "◇γορά",
+      "correct": "α",
+      "meanings": {
+        "ru": "рынок",
+        "en": "market",
+        "zh": "市场",
+        "ar": "سوق",
+        "es": "mercado",
+        "pt": "mercado"
+      }
+    },
+    {
+      "id": "g2261021_423",
+      "sound": "o",
+      "chapter": 7,
+      "word": "νερό",
+      "masked": "νερ◇",
+      "correct": "ό",
+      "meanings": {
+        "ru": "вода",
+        "en": "water",
+        "zh": "水",
+        "ar": "ماء",
+        "es": "agua",
+        "pt": "água"
+      }
+    },
+    {
+      "id": "g2261021_424",
+      "sound": "o",
+      "chapter": 1,
+      "word": "εγώ",
+      "masked": "εγ◇",
+      "correct": "ώ",
+      "meanings": {
+        "ru": "я",
+        "en": "I",
+        "zh": "我",
+        "ar": "أنا",
+        "es": "yo",
+        "pt": "eu"
+      }
+    },
+    {
+      "id": "g2261021_425",
+      "sound": "o",
+      "chapter": 7,
+      "word": "τώρα",
+      "masked": "τ◇ρα",
+      "correct": "ώ",
+      "meanings": {
+        "ru": "сейчас",
+        "en": "now",
+        "zh": "现在",
+        "ar": "الآن",
+        "es": "ahora",
+        "pt": "agora"
+      }
+    },
+    {
+      "id": "g2261021_426",
+      "sound": "o",
+      "chapter": 1,
+      "word": "όνομα",
+      "masked": "◇νομα",
+      "correct": "ό",
+      "meanings": {
+        "ru": "имя",
+        "en": "name",
+        "zh": "名字",
+        "ar": "اسم",
+        "es": "nombre",
+        "pt": "nome"
+      }
+    },
+    {
+      "id": "g2261021_427",
+      "sound": "o",
+      "chapter": 2,
+      "word": "πόλη",
+      "masked": "π◇λη",
+      "correct": "ό",
+      "meanings": {
+        "ru": "город",
+        "en": "city",
+        "zh": "城市",
+        "ar": "مدينة",
+        "es": "ciudad",
+        "pt": "cidade"
+      }
+    },
+    {
+      "id": "g2261021_428",
+      "sound": "i",
+      "chapter": 2,
+      "word": "σπίτι",
+      "masked": "σπ◇τι",
+      "correct": "ί",
+      "meanings": {
+        "ru": "дом",
+        "en": "home",
+        "zh": "家",
+        "ar": "بيت",
+        "es": "casa",
+        "pt": "casa"
+      }
+    },
+    {
+      "id": "g2261021_429",
+      "sound": "i",
+      "chapter": 3,
+      "word": "μητέρα",
+      "masked": "μ◇τέρα",
+      "correct": "η",
+      "meanings": {
+        "ru": "мать",
+        "en": "mother",
+        "zh": "母亲",
+        "ar": "أم",
+        "es": "madre",
+        "pt": "mãe"
+      }
+    },
+    {
+      "id": "g2261021_430",
+      "sound": "i",
+      "chapter": 1,
+      "word": "κύριος",
+      "masked": "κ◇ριος",
+      "correct": "ύ",
+      "meanings": {
+        "ru": "господин",
+        "en": "mister",
+        "zh": "先生",
+        "ar": "سيد",
+        "es": "señor",
+        "pt": "senhor"
+      }
+    },
+    {
+      "id": "g2261021_431",
+      "sound": "i",
+      "chapter": 1,
+      "word": "είμαι",
+      "masked": "◇μαι",
+      "correct": "εί",
+      "meanings": {
+        "ru": "я есть / я являюсь",
+        "en": "I am",
+        "zh": "我是",
+        "ar": "أنا أكون",
+        "es": "soy / estoy",
+        "pt": "sou / estou"
+      }
+    },
+    {
+      "id": "g2261021_432",
+      "sound": "i",
+      "chapter": 8,
+      "word": "οι φίλοι",
+      "masked": "◇ φίλοι",
+      "correct": "οι",
+      "meanings": {
+        "ru": "друзья (мн. ч.)",
+        "en": "the friends (plural)",
+        "zh": "朋友们（复数）",
+        "ar": "الأصدقاء (جمع)",
+        "es": "los amigos (plural)",
+        "pt": "os amigos (plural)"
+      }
+    },
+    {
+      "id": "g2261021_433",
+      "sound": "e",
+      "chapter": 1,
+      "word": "εδώ",
+      "masked": "◇δώ",
+      "correct": "ε",
+      "meanings": {
+        "ru": "здесь",
+        "en": "here",
+        "zh": "这里",
+        "ar": "هنا",
+        "es": "aquí",
+        "pt": "aqui"
+      }
+    },
+    {
+      "id": "g2261021_434",
+      "sound": "e",
+      "chapter": 3,
+      "word": "παιδί",
+      "masked": "π◇δί",
+      "correct": "αι",
+      "meanings": {
+        "ru": "ребёнок",
+        "en": "child",
+        "zh": "孩子",
+        "ar": "طفل",
+        "es": "niño / niña",
+        "pt": "criança"
+      }
+    },
+    {
+      "id": "g2261021_435",
+      "sound": "e",
+      "chapter": 1,
+      "word": "καλημέρα",
+      "masked": "καλημ◇ρα",
+      "correct": "έ",
+      "meanings": {
+        "ru": "доброе утро",
+        "en": "good morning",
+        "zh": "早上好",
+        "ar": "صباح الخير",
+        "es": "buenos días",
+        "pt": "bom dia"
+      }
+    },
+    {
+      "id": "g2261021_436",
+      "sound": "e",
+      "chapter": 1,
+      "word": "και",
+      "masked": "κ◇",
+      "correct": "αι",
+      "meanings": {
+        "ru": "и",
+        "en": "and",
+        "zh": "和",
+        "ar": "و",
+        "es": "y",
+        "pt": "e"
+      }
+    },
+    {
+      "id": "g2261021_437",
+      "sound": "e",
+      "chapter": 8,
+      "word": "λεμόνι",
+      "masked": "λ◇μόνι",
+      "correct": "ε",
+      "meanings": {
+        "ru": "лимон",
+        "en": "lemon",
+        "zh": "柠檬",
+        "ar": "ليمون",
+        "es": "limón",
+        "pt": "limão"
+      }
+    },
+    {
+      "id": "g2261021_438",
+      "sound": "u",
+      "chapter": 7,
+      "word": "ουρανός",
+      "masked": "◇ρανός",
+      "correct": "ου",
+      "meanings": {
+        "ru": "небо",
+        "en": "sky",
+        "zh": "天空",
+        "ar": "سماء",
+        "es": "cielo",
+        "pt": "céu"
+      }
+    },
+    {
+      "id": "g2261021_439",
+      "sound": "u",
+      "chapter": 7,
+      "word": "λουλούδι",
+      "masked": "λ◇λούδι",
+      "correct": "ου",
+      "meanings": {
+        "ru": "цветок",
+        "en": "flower",
+        "zh": "花",
+        "ar": "زهرة",
+        "es": "flor",
+        "pt": "flor"
+      }
+    },
+    {
+      "id": "g2261021_440",
+      "sound": "u",
+      "chapter": 7,
+      "word": "μουσική",
+      "masked": "μ◇σική",
+      "correct": "ου",
+      "meanings": {
+        "ru": "музыка",
+        "en": "music",
+        "zh": "音乐",
+        "ar": "موسيقى",
+        "es": "música",
+        "pt": "música"
+      }
+    },
+    {
+      "id": "g2261021_441",
+      "sound": "u",
+      "chapter": 3,
+      "word": "δουλειά",
+      "masked": "δ◇λειά",
+      "correct": "ου",
+      "meanings": {
+        "ru": "работа",
+        "en": "work",
+        "zh": "工作",
+        "ar": "عمل",
+        "es": "trabajo",
+        "pt": "trabalho"
+      }
+    },
+    {
+      "id": "g2261021_442",
+      "sound": "u",
+      "chapter": 2,
+      "word": "πού",
+      "masked": "π◇",
+      "correct": "ού",
+      "meanings": {
+        "ru": "где?",
+        "en": "where?",
+        "zh": "哪里？",
+        "ar": "أين؟",
+        "es": "¿dónde?",
+        "pt": "onde?"
+      }
+    }
+  ],
+  "soundSpelling": [
+    {
+      "id": "g2261021_443",
+      "chapter": 1,
+      "sound": "a",
+      "ipa": "/a/",
+      "correct": "α",
+      "accepted": [
+        "α"
+      ]
+    },
+    {
+      "id": "g2261021_444",
+      "chapter": 1,
+      "sound": "o",
+      "ipa": "/o/",
+      "correct": "ο",
+      "accepted": [
+        "ο",
+        "ω"
+      ]
+    },
+    {
+      "id": "g2261021_445",
+      "chapter": 1,
+      "sound": "i",
+      "ipa": "/i/",
+      "correct": "ι",
+      "accepted": [
+        "ι",
+        "η",
+        "υ",
+        "ει",
+        "οι"
+      ]
+    },
+    {
+      "id": "g2261021_446",
+      "chapter": 1,
+      "sound": "e",
+      "ipa": "/e/",
+      "correct": "ε",
+      "accepted": [
+        "ε",
+        "αι"
+      ]
+    },
+    {
+      "id": "g2261021_447",
+      "chapter": 1,
+      "sound": "u",
+      "ipa": "/u/",
+      "correct": "ου",
+      "accepted": [
+        "ου"
+      ]
+    }
+  ],
+  "syllableDivision": [
+    {
+      "id": "g2261021_448",
+      "chapter": 1,
+      "word": "Μαρία",
+      "correct": "Μα-ρί-α",
+      "meanings": {
+        "ru": "Мария",
+        "en": "Maria",
+        "zh": "玛丽亚",
+        "ar": "ماريا",
+        "es": "María",
+        "pt": "Maria"
+      }
+    },
+    {
+      "id": "g2261021_449",
+      "chapter": 1,
+      "word": "Νίκος",
+      "correct": "Νί-κος",
+      "meanings": {
+        "ru": "Никос",
+        "en": "Nikos",
+        "zh": "尼科斯",
+        "ar": "نيكوس",
+        "es": "Nikos",
+        "pt": "Nikos"
+      }
+    },
+    {
+      "id": "g2261021_450",
+      "chapter": 7,
+      "word": "γάλα",
+      "correct": "γά-λα",
+      "meanings": {
+        "ru": "молоко",
+        "en": "milk",
+        "zh": "牛奶",
+        "ar": "حليب",
+        "es": "leche",
+        "pt": "leite"
+      }
+    },
+    {
+      "id": "g2261021_451",
+      "chapter": 3,
+      "word": "παππούς",
+      "correct": "παπ-πούς",
+      "meanings": {
+        "ru": "дедушка",
+        "en": "grandfather",
+        "zh": "爷爷",
+        "ar": "جد",
+        "es": "abuelo",
+        "pt": "avô"
+      }
+    },
+    {
+      "id": "g2261021_452",
+      "chapter": 3,
+      "word": "γιατρός",
+      "correct": "για-τρός",
+      "meanings": {
+        "ru": "врач",
+        "en": "doctor",
+        "zh": "医生",
+        "ar": "طبيب",
+        "es": "médico",
+        "pt": "médico"
+      }
+    },
+    {
+      "id": "g2261021_453",
+      "chapter": 2,
+      "word": "πόρτα",
+      "correct": "πόρ-τα",
+      "meanings": {
+        "ru": "дверь",
+        "en": "door",
+        "zh": "门",
+        "ar": "باب",
+        "es": "puerta",
+        "pt": "porta"
+      }
+    },
+    {
+      "id": "g2261021_454",
+      "chapter": 3,
+      "word": "μπαμπάς",
+      "correct": "μπα-μπάς",
+      "meanings": {
+        "ru": "папа",
+        "en": "dad",
+        "zh": "爸爸",
+        "ar": "بابا",
+        "es": "papá",
+        "pt": "papá"
+      }
+    },
+    {
+      "id": "g2261021_455",
+      "chapter": 6,
+      "word": "ποδήλατο",
+      "correct": "πο-δή-λα-το",
+      "meanings": {
+        "ru": "велосипед",
+        "en": "bicycle",
+        "zh": "自行车",
+        "ar": "دراجة",
+        "es": "bicicleta",
+        "pt": "bicicleta"
+      }
+    },
+    {
+      "id": "g2261021_456",
+      "chapter": 3,
+      "word": "αγόρι",
+      "correct": "α-γό-ρι",
+      "meanings": {
+        "ru": "мальчик",
+        "en": "boy",
+        "zh": "男孩",
+        "ar": "ولد",
+        "es": "niño",
+        "pt": "rapaz"
+      }
+    },
+    {
+      "id": "g2261021_457",
+      "chapter": 3,
+      "word": "κορίτσι",
+      "correct": "κο-ρί-τσι",
+      "meanings": {
+        "ru": "девочка",
+        "en": "girl",
+        "zh": "女孩",
+        "ar": "بنت",
+        "es": "niña",
+        "pt": "rapariga"
+      }
+    }
+  ]
+}

@@ -1121,7 +1121,8 @@
     if(!q)return;
     if(state.current?.kind==="listening")try{$("listening-audio").pause();}catch{}
     window.LexiWordAudio?.stop();
-    const phoneticAudio=["accent","syllable","enclitic"].includes(q.kind)&&!!q.wordAudio;
+    const phoneticAudio=(["accent","syllable","enclitic"].includes(q.kind)||
+      (q.kind==="grammar"&&q.grammarGroup==="phonetic"))&&!!q.wordAudio;
     show("word-pronounce-controls",phoneticAudio);
     const phoneticAvailable=window.LexiWordAudio?.available(q.wordAudio)??false;
     $("word-pronounce").disabled=!phoneticAvailable;

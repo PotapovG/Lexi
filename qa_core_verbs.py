@@ -16,7 +16,7 @@ import server
 
 cards=core.CARDS
 assert len(core.PARADIGMS)==6 and len(cards)==48
-assert len(grammar2_cards.CARDS)==417
+assert len(grammar2_cards.CARDS)>=417  # issue #4 appends phonetics; core IDs remain stable
 assert [c["id"] for c in grammar2_cards.CARDS[:369]]==[
     f"g2261021_{i:03d}" for i in range(1,370)
 ]
