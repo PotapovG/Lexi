@@ -100,5 +100,10 @@ assert len(CARDS)==369,len(CARDS)
 from core_verb_cards import CARDS as CORE_VERB_CARDS
 CARDS.extend(CORE_VERB_CARDS)
 assert len(CARDS)==417,len(CARDS)
+# Issue #4: Greek phoneme/spelling and syllable boundary tasks. Existing
+# grammar_fill and SRS; first 417 IDs and all 35 stress-syllable IDs immutable.
+from phonetics_foundations import CARDS as PHONETICS_CARDS
+CARDS.extend(PHONETICS_CARDS)
+assert len(CARDS)==457,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}
