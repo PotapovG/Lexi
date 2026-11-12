@@ -146,7 +146,18 @@ with tempfile.TemporaryDirectory(prefix="lexi-agenda-") as tmp:
             "count":["60"],"lang":["ru"]
         })
         assert quiz["count"]==60 and quiz["available"]>=42
-        assert sum(q["grammarGroup"]=="schedule" for q in quiz["questions"])>=15
+        # This chapter now includes independent weather, duration and core
+        # verbs. A 60-question random sample cannot promise any fixed count
+        # of schedule prompts. Test their *full availability* separately.
+        wanted={c["id"] for c in cards}
+        excluded=",".join(c["id"] for c in server.GRAMMAR2_ALL
+                          if c["chapter"]==7 and c["id"] not in wanted)
+        schedule_only=server.make_quiz("agenda-full-coverage",{
+            "scope":["chapters"],"chapters":["7"],"types":["grammar"],
+            "count":["60"],"lang":["ru"],"exclude":[excluded]
+        })
+        assert schedule_only["available"]==len(wanted)==42
+        assert wanted.issubset({q["id"] for q in schedule_only["questions"]})
         assert not server.make_quiz("not-ready",{
             "scope":["chapters"],"chapters":["6"],"types":["grammar"],
             "lang":["ru"],"count":["60"]

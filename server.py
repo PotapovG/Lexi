@@ -826,6 +826,14 @@ def mark(user_id,body,injected_db=None):
         result['grammarTip']=result.get('clozeFormHint')
         if not correct and result.get('clozeFormHint'):
             result['explanation']=result['clozeFormHint']
+        if card.get("group")=="verb_core" and not correct:
+            from core_verb_cards import classify_mistake
+            error_type,diagnosis=classify_mistake(card,selected,lang)
+            # Localized diagnosis is only emitted after an actual grade.
+            # It distinguishes tonos, wrong person, spelling and semantics.
+            result['answerErrorType']=error_type
+            result['grammarTip']=diagnosis+" "+(result.get('grammarTip') or "")
+            result['explanation']=result['grammarTip']
     if card['kind']=='enclitic':
         result['hasExtraStress']=card['hasExtraStress']
         result['tonosHint']=_enclitic.explanation(card,lang)

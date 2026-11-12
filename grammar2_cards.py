@@ -95,5 +95,10 @@ assert len(CARDS)==339,len(CARDS)
 from weather_cards import CARDS as WEATHER_CARDS
 CARDS.extend(WEATHER_CARDS)
 assert len(CARDS)==369,len(CARDS)
+# Issue #12: six common contracted/special present verbs. Reuse the existing
+# grammar_fill choice/typed questions; all 369 historical IDs remain stable.
+from core_verb_cards import CARDS as CORE_VERB_CARDS
+CARDS.extend(CORE_VERB_CARDS)
+assert len(CARDS)==417,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}

@@ -15,7 +15,7 @@ import weather_cards
 
 cards=weather_cards.CARDS
 langs=weather_cards.LANGS
-assert len(cards)==30 and len(grammar2_cards.CARDS)==369
+assert len(cards)==30 and len(grammar2_cards.CARDS)>=369  # core verbs append; old IDs immutable
 assert [c["id"] for c in grammar2_cards.CARDS[:339]]==[
     f"g2261021_{i:03d}" for i in range(1,340)
 ]
