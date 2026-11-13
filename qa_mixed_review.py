@@ -50,8 +50,14 @@ selected,remainder=selector.select_block(all_entries,60,random.Random(17))
 assert len(selected)==5 and len(remainder)==0
 assert len({x[0]["scenarioId"] for x in selected})==1
 assert [x[0]["scenarioStep"] for x in selected]==[1,2,3,4,5]
-assert selector.select_block(all_entries[:4],60,random.Random(17))[0]==[]
-assert selector.select_block(all_entries,4,random.Random(17))[0]==[]
+assert selector.select_block(all_entries[:4],60,random.Random(17))==([],[])
+assert selector.select_block(all_entries,4,random.Random(17))==([],[])
+# A partially eligible scene must be discarded in normal practice; the
+# existing ordinary grammar item survives both chapter and short caps.
+ordinary_example=(grammar2_cards.CARDS[0],"grammar_fill",3)
+part=all_entries[:4]+[ordinary_example]
+assert selector.select_block(part,60,random.Random(17))==([],[ordinary_example])
+assert selector.select_block(part,4,random.Random(17))==([],[ordinary_example])
 
 js=Path(__file__).with_name("app.js").read_text("utf-8")
 html=Path(__file__).with_name("index.html").read_text("utf-8")
@@ -151,6 +157,31 @@ with tempfile.TemporaryDirectory(prefix="lexi-mixed-a1-") as folder:
                 assert [x["scenarioStep"] for x in first]==[1,2,3,4,5],chapter
             assert not any(x.get("grammarGroup")=="review_scenario" for x in q[5:]),chapter
             assert all(x["chapter"]==chapter for x in q)
+        # Chapter 1 has exactly two scenarios. Exclude one step from
+        # each: the normal 60-question pool must omit all orphaned steps.
+        unavailable=[review.SCENARIOS["hello_class"][0]["id"],
+                     review.SCENARIOS["meet_names"][0]["id"]]
+        filtered=server.make_quiz("fresh",{
+            "scope":["chapters"],"chapters":["1"],
+            "types":["grammar"],"lang":["ru"],"count":["60"],
+            "exclude":[",".join(unavailable)]
+        })
+        assert not any(q.get("grammarGroup")=="review_scenario"
+                       for q in filtered["questions"])
+        short=server.make_quiz("fresh",{
+            "scope":["chapters"],"chapters":["1"],
+            "types":["grammar"],"lang":["ru"],"count":["4"]
+        })
+        assert short["count"]<=4
+        assert not any(q.get("grammarGroup")=="review_scenario"
+                       for q in short["questions"])
+        personalized=server.make_quiz("fresh",{
+            "scope":["chapters"],"chapters":["1"],
+            "types":["grammar"],"lang":["ru"],"count":["60"],
+            "study":["personalized"]
+        })
+        assert not any(q.get("grammarGroup")=="review_scenario"
+                       for q in personalized["questions"])
         # Weak mode keeps precise errored card and does NOT pull whole scene.
         sample=review.SCENARIOS["rainy_day"][0]
         weak_answer=server.mark("review-only",{

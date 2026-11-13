@@ -654,7 +654,7 @@ def make_quiz(user_id,params):
             else:break
         choices=mix
     elif mode!="weak":
-        if ("grammar" in kinds and count>=5 and
+        if ("grammar" in kinds and
                 scope in ("book","pages","chapters") and study=="textbook"):
             # Existing timed Quick/Guided session: one complete A1 story
             # followed by ordinary ranked practice. No new learner mode.
@@ -662,9 +662,15 @@ def make_quiz(user_id,params):
             if linked:
                 choices=linked+_clock_balance.balance(ordinary,count-len(linked))
             else:
-                choices=_clock_balance.balance(choices,count)
+                # IMPORTANT: selector removed orphaned scene fragments.
+                # Do not accidentally reintroduce them from old choices.
+                choices=_clock_balance.balance(ordinary,count)
         else:
-            choices=_clock_balance.balance(choices,count)
+            # Personalized/other ordinary scopes must not leak isolated
+            # scene questions without a complete five-step bundle.
+            ordinary=[row for row in choices
+                      if row[0].get("group")!="review_scenario"]
+            choices=_clock_balance.balance(ordinary,count)
     if mode=="weak":
         available_candidates=len(choices)
     questions=[]
