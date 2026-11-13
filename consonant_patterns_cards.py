@@ -214,10 +214,11 @@ for raw in DATA["soundReadings"]:
     idx=canon.index(group)
     assert canon[idx+len(group)]==following,(raw["id"],word,following)
     expected=("v" if following in VOICED_AFTER else "f")
-    assert raw["correct"]==f'[{group[0]}{expected}]',(raw["id"],raw["correct"])
+    assert raw["correct"]==f'[{"a" if group=="αυ" else "e"}{expected}]',(raw["id"],raw["correct"])
     prompt=f'Λέξη «{word}»\nΠώς ακούγεται το «{group}» εδώ; ___'
     append(raw,"voicing",raw["chapter"],prompt,raw["correct"],
-           list(VOICE_FORMS),raw["translations"],word,group,following)
+           [raw["correct"],*[v for v in VOICE_FORMS if v!=raw["correct"]]],
+           raw["translations"],word,group,following)
 
 assert len(CARDS)==len({x["id"] for x in CARDS})==36
 assert len({x["prompt"] for x in CARDS})==36
