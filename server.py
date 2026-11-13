@@ -662,7 +662,9 @@ def make_quiz(user_id,params):
             if linked:
                 choices=linked+_clock_balance.balance(ordinary,count-len(linked))
             else:
-                choices=_clock_balance.balance(choices,count)
+                # IMPORTANT: selector removed orphaned scene fragments.
+                # Do not accidentally reintroduce them from old choices.
+                choices=_clock_balance.balance(ordinary,count)
         else:
             # Personalized/other ordinary scopes must not leak isolated
             # scene questions without a complete five-step bundle.
