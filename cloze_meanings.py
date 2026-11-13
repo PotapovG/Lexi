@@ -221,14 +221,16 @@ def validate():
     for kind,cards in KINDS.items():
         for lang in ("ru","en"):
             lines=TABLES[kind][lang]
-            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule","duration","weather","verb_core","phonetic")] if kind=="grammar" else cards
+            legacy=[c for c in cards if c.get("group") not in ("possessive","verb_A","verb_B1","verb_B2","likes","schedule","duration","weather","verb_core","phonetic","consonant")] if kind=="grammar" else cards
             assert len(lines)==len(legacy),(kind,lang,len(lines),len(legacy))
             assert all(lines),(kind,lang)
-    assert len(ARTICLES)==24 and len(GRAMMAR)==457
+    assert len(ARTICLES)==24 and len(GRAMMAR)==493
     assert len(CASE_RU)==len(CASE_EN)==10
     return sum(len(cards) for cards in KINDS.values())
 
 def translation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="consonant":
+        return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="phonetic":
         return card["fullTranslations"][lang],lang
     if card["kind"]=="grammar" and card.get("group")=="verb_core":
@@ -561,6 +563,8 @@ def _core_present_explanation(card,lang):
     )
 
 def explanation(card,lang):
+    if card["kind"]=="grammar" and card.get("group")=="consonant":
+        return card["fullTips"][lang]
     if card["kind"]=="grammar" and card.get("group")=="phonetic":
         return card["fullTranslations"][lang]
     if card["kind"]=="grammar" and card.get("group")=="verb_core":
