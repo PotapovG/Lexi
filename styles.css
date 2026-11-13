@@ -795,3 +795,40 @@ body{background:radial-gradient(circle at 95% 0%,#1b3447 0,#0b1a29 45%,#091522 8
     line-height: 1.6;
   }
 }
+
+
+/* Linked A1 scenarios remain ordinary quiz questions; no horizontal layout.
+   The existing result panel now shows weak skills first at 320px too. */
+.finish-skills {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  flex-direction: column;
+  gap: .35rem;
+  margin: 1rem 0;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.finish-skills[hidden] { display: none; }
+.finish-skill-title {
+  font-size: .88rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  margin: .3rem 0;
+}
+.finish-skill-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .4rem 1rem;
+  border-bottom: 1px solid var(--border, #536070);
+  padding: .45rem 0;
+  font-size: clamp(.85rem, 2.5vw, 1rem);
+  min-width: 0;
+}
+@media (max-width: 360px) {
+  .finish-skill-row { font-size: .85rem; }
+}
