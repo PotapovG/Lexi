@@ -541,7 +541,7 @@
       version:2,nickname:state.profile.nickname,deadline:state.deadline,started:state.started,
       sessionId:state.remoteSessionId,
       settings:state.settings,mode:state.mode,questions:state.questions,index:state.index,
-      seen:state.seen,count:state.count,correct:state.correct,wrong:state.wrong,
+      seen:state.seen,sessionSkills:state.sessionSkills,count:state.count,correct:state.correct,wrong:state.wrong,
       answered:state.answered,verbStage:state.verbStage,dialogueStep:state.dialogueStep,
       dialogueFilled:state.dialogueFilled,orderIndices:state.orderIndices,
       pendingAnswer:state.pendingAnswer||null,savedAt:Date.now()
@@ -623,6 +623,8 @@
     state.settings=saved.settings;state.mode=saved.mode||"all";
     state.questions=saved.questions;state.index=saved.index;
     state.seen=Array.isArray(saved.seen)?saved.seen:[];
+    state.sessionSkills=(saved.sessionSkills&&typeof saved.sessionSkills==="object"&&!Array.isArray(saved.sessionSkills))
+      ? saved.sessionSkills : {};
     state.count=Number(saved.count)||0;state.correct=Number(saved.correct)||0;state.wrong=Number(saved.wrong)||0;
     state.started=saved.started;state.deadline=saved.deadline;
     state.finishing=false;state.busy=false;
@@ -658,7 +660,7 @@
   }
 
   const state={joinedLeaderboard:false,catalog:null,topicCatalog:null,profile:null,loggedIn:false,authMode:"register",questions:[],index:0,current:null,mode:"all",answered:false,busy:false,
-    correct:0,wrong:0,seen:[],count:0,deadline:0,started:0,timer:null,finishing:false,settings:null,
+    correct:0,wrong:0,seen:[],sessionSkills:{},count:0,deadline:0,started:0,timer:null,finishing:false,settings:null,
     remoteEpoch:0,remoteSessionId:null,remoteRevision:0,remoteEnabled:true,remoteSynced:false,remoteLost:false};
   const t=key => I18N[$("lang").value]?.[key] ?? I18N.en[key] ?? key;
   const hint=(value,en)=>$("lang").value!=="en"&&en&&value.trim().toLowerCase()!==en.trim().toLowerCase()?value+" ("+en+")":value;
@@ -1088,7 +1090,7 @@
     clearActiveSession();
     state.remoteSessionId=newRequestId();
     state.remoteRevision=0;state.remoteEnabled=true;
-    state.mode=due?"due":weak?"weak":"all";state.seen=[];state.count=0;state.correct=0;state.wrong=0;
+    state.mode=due?"due":weak?"weak":"all";state.seen=[];state.sessionSkills={};state.count=0;state.correct=0;state.wrong=0;
     state.finishing=false;state.answered=false;state.busy=false;
     try{
       const questions=await loadQuestions();
@@ -1122,7 +1124,7 @@
     if(state.current?.kind==="listening")try{$("listening-audio").pause();}catch{}
     window.LexiWordAudio?.stop();
     const phoneticAudio=(["accent","syllable","enclitic"].includes(q.kind)||
-      (q.kind==="grammar"&&["phonetic","consonant"].includes(q.grammarGroup)))&&!!q.wordAudio;
+      (q.kind==="grammar"&&["phonetic","consonant","review_scenario"].includes(q.grammarGroup)))&&!!q.wordAudio;
     show("word-pronounce-controls",phoneticAudio);
     const phoneticAvailable=window.LexiWordAudio?.available(q.wordAudio)??false;
     $("word-pronounce").disabled=!phoneticAvailable;
@@ -1138,7 +1140,8 @@
       q.kind==="grammar"&&q.grammarGroup==="schedule" ||
       q.kind==="grammar"&&q.grammarGroup==="duration" ||
       q.kind==="grammar"&&q.grammarGroup==="weather" ||
-      q.kind==="grammar"&&q.grammarGroup==="consonant");
+      q.kind==="grammar"&&q.grammarGroup==="consonant" ||
+      q.kind==="grammar"&&q.grammarGroup==="review_scenario");
     $("question-prompt").lang=["article","syllable","enclitic","grammar"].includes(q.kind)?"el":$("lang").value;
     $("question-prompt").dir=["article","syllable","enclitic","grammar"].includes(q.kind)?"ltr":"auto";
     txt("next",t("next"));
@@ -1153,6 +1156,9 @@
       q.chapter>0?t("chapter")+" "+q.chapter+" · "+(chapter?.title||q.topic):
        (q.chapter===0?t("alphabetName"):t("review"))+" · "+(chapter?.title||"");
     txt("question-topic",q.page>0?topic+" · p. "+q.page+(q.sourcePageVerified?" ✓":" ~"):topic);
+    if(q.scenarioId&&q.scenarioTitle)
+      txt("question-topic",q.scenarioTitle+" · "+q.scenarioStep+"/"+q.scenarioTotal+
+          " · "+t("chapter")+" "+q.chapter);
     const pageHints={
       ru:"✓ Страница подтверждена по примеру или таблице учебника. Не обязательно первое появление слова.",
       en:"✓ This page contains a verified example or model in the textbook; not necessarily the word's first appearance.",
@@ -1451,6 +1457,12 @@
         ? q.id+":"+actualDirection+(q.kind==="accent"||q.kind==="dialogue"||answerLang==="ru"?"":":"+answerLang)
         : (q.semanticId||q.id));
       if(result.correct)state.correct++;else state.wrong++;
+      // Per-skill reporting in the SAME timed session, including after
+      // resume/handoff. Only grade-confirmed attempts are counted.
+      const skill=(q.reviewSkill||q.grammarGroup||q.kind||"other").slice(0,40);
+      const tally=state.sessionSkills[skill]||{attempts:0,correct:0};
+      tally.attempts++;tally.correct+=Number(!!result.correct);
+      state.sessionSkills[skill]=tally;
       buttons.forEach((b,i)=>{
         if(q.kind==="order"||q.typedAnswer)return;
         if(q.kind==="accent" ? i===result.correctIndex :
@@ -1669,6 +1681,38 @@
     }
     renderQuestion();
   }
+
+  // Existing finish panel now displays a per-skill review, without a new
+  // learner mode or a separate result screen. The weak-review button is
+  // unchanged and still schedules individual failed answer keys.
+  const SESSION_SKILLS={
+    ru:{title:"НАВЫКИ ЗА ЗАНЯТИЕ",greetings:"Приветствия",identity:"Знакомство",possessive:"Принадлежность",verbs:"Глаголы",dialogue:"Диалоги",phonetics:"Чтение и звуки",time:"Время",weather:"Погода",schedule:"Расписание",transport:"Транспорт"},
+    en:{title:"SKILLS THIS SESSION",greetings:"Greetings",identity:"Introductions",possessive:"Ownership",verbs:"Verb forms",dialogue:"Dialogues",phonetics:"Sounds and spelling",time:"Time",weather:"Weather",schedule:"Schedule",transport:"Transport"},
+    zh:{title:"本次练习的技能",greetings:"问候",identity:"自我介绍",possessive:"所属关系",verbs:"动词变位",dialogue:"对话",phonetics:"读音和拼写",time:"时间",weather:"天气",schedule:"日程",transport:"交通"},
+    ar:{title:"مهارات هذه الجلسة",greetings:"التحيات",identity:"التعارف",possessive:"الملكية",verbs:"الأفعال",dialogue:"الحوار",phonetics:"الأصوات والكتابة",time:"الوقت",weather:"الطقس",schedule:"الجدول",transport:"المواصلات"},
+    es:{title:"DESTREZAS DE ESTA SESIÓN",greetings:"Saludos",identity:"Presentaciones",possessive:"Posesión",verbs:"Verbos",dialogue:"Diálogos",phonetics:"Sonidos y grafía",time:"Hora",weather:"Tiempo meteorológico",schedule:"Horario",transport:"Transporte"},
+    pt:{title:"COMPETÊNCIAS DESTA SESSÃO",greetings:"Saudações",identity:"Apresentações",possessive:"Posse",verbs:"Verbos",dialogue:"Diálogos",phonetics:"Sons e escrita",time:"Horas",weather:"Meteorologia",schedule:"Horário",transport:"Transportes"}
+  };
+  function renderSessionSkills(){
+    const box=$("finish-skills");
+    if(!box)return;
+    box.replaceChildren();
+    const rows=Object.entries(state.sessionSkills||{})
+      .filter(([key,v])=>key!=="__proto__" && v && Number(v.attempts)>0)
+      .sort((a,b)=>(a[1].correct/a[1].attempts)-(b[1].correct/b[1].attempts));
+    box.hidden=!rows.length;
+    if(!rows.length)return;
+    const labels=SESSION_SKILLS[$("lang").value]||SESSION_SKILLS.en;
+    const heading=document.createElement("h3");heading.className="finish-skill-title";
+    heading.textContent=labels.title;box.append(heading);
+    for(const [key,value] of rows){
+      const line=document.createElement("div");line.className="finish-skill-row";
+      const skill=document.createElement("span");skill.textContent=labels[key]||key;
+      const count=document.createElement("span");count.textContent=value.correct+"/"+value.attempts;
+      line.append(skill,count);box.append(line);
+    }
+  }
+
   async function finishQuiz(expired=false){
     if(state.finishing)return;
     state.finishing=true;clearInterval(state.timer);
@@ -1682,6 +1726,7 @@
     const total=state.correct+state.wrong,pct=total?Math.round(100*state.correct/total):0;
     txt("finish-title",pct>=90?t("excellent"):pct>=70?t("good"):t("practiceMore"));
     txt("finish-copy",(expired?t("timeOver")+" ":"")+t("result").replace("{good}",state.correct).replace("{total}",total).replace("{pct}",pct).replace("{minutes}",elapsed));
+    renderSessionSkills();
     await refreshStats();
   }
   function drawMetrics(id,metrics){
