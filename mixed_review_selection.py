@@ -14,7 +14,11 @@ def select_block(choices,count,rng=None):
     Each input is a (card,direction,score) tuple already lesson-gated,
     excluded/semantic deduped and ranked by the ordinary quiz code.
     """
-    if count<5:return [],choices
+    # Ordinary practice must NEVER show a fragment of a five-step scene.
+    # This includes short API sessions and partially excluded scene cards.
+    ordinary=[entry for entry in choices
+              if entry[0].get("group")!="review_scenario"]
+    if count<5:return [],ordinary
     groups={}
     for entry in choices:
         card=entry[0]
@@ -27,12 +31,12 @@ def select_block(choices,count,rng=None):
         if [item[0]["scenarioStep"] for item in seq]!=[1,2,3,4,5]:continue
         if len({item[0]["chapter"] for item in seq})!=1:continue
         candidates.append(seq)
-    if not candidates:return [],choices
+    if not candidates:return [],ordinary
     rng=rng or random
     # Shuffle equal-priority scenarios so a learner does not keep receiving the
     # same sequence when earlier mistakes or completion are already recorded.
     rng.shuffle(candidates)
     candidates.sort(key=lambda sequence:-sum(item[2] for item in sequence))
     chosen=candidates[0]
-    remainder=[item for item in choices if item[0].get("group")!="review_scenario"]
+    remainder=ordinary
     return chosen,remainder
