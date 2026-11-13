@@ -16,7 +16,7 @@ import phonetics_foundations as p
 import server
 
 cards=p.CARDS
-assert len(cards)==40 and len(grammar2_cards.CARDS)==457
+assert len(cards)==40 and len(grammar2_cards.CARDS)>=457  # later issue #5 appends, old IDs immutable
 assert [c["id"] for c in grammar2_cards.CARDS[:417]]==[
     f"g2261021_{i:03d}" for i in range(1,418)
 ]
