@@ -368,7 +368,7 @@ def format_question(card,direction,lang,weak=False,variant_index=None):
     item['greekVariants']=greek_variants.variants(canonical_greek)
     if card['kind']=='grammar':
         item['grammarGroup']=card['group']
-        if card.get("group")=="phonetic" and card.get("phoneticWord"):
+        if card.get("group") in ("phonetic","consonant") and card.get("phoneticWord"):
             # Reuse ONLY validated, pre-existing Greek Pocket audio.
             # None available -> disabled client play control and visible
             # text-only fallback; no synthesis or guessed WAV URLs.
