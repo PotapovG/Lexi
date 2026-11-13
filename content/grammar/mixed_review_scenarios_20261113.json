@@ -1,0 +1,1112 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "hello_class",
+      "chapter": 1,
+      "title": {
+        "ru": "В классе",
+        "en": "In class",
+        "zh": "在教室",
+        "ar": "في الصف",
+        "es": "En clase",
+        "pt": "Na aula"
+      },
+      "sourceGreek": "Η Άννα και ο Νίκος είναι στην τάξη.",
+      "steps": [
+        {
+          "id": "g2261021_494",
+          "skill": "greetings",
+          "kind": "typed",
+          "prompt": "Άννα: ___! (πρωί)",
+          "correct": "Καλημέρα",
+          "translations": {
+            "ru": "Анна: Доброе утро!",
+            "en": "Anna: Good morning!",
+            "zh": "安娜：早上好！",
+            "ar": "آنا: صباح الخير!",
+            "es": "Ana: ¡Buenos días!",
+            "pt": "Ana: Bom dia!"
+          },
+          "accepted": [
+            "Καλημέρα"
+          ]
+        },
+        {
+          "id": "g2261021_495",
+          "skill": "greetings",
+          "kind": "choice",
+          "prompt": "Νίκος: ___ είσαι;",
+          "correct": "Πώς",
+          "translations": {
+            "ru": "Никос: Как ты?",
+            "en": "Nikos: How are you?",
+            "zh": "尼科斯：你好吗？",
+            "ar": "نيكوس: كيف حالك؟",
+            "es": "Nikos: ¿Cómo estás?",
+            "pt": "Nikos: Como estás?"
+          },
+          "wrong": [
+            "Πού",
+            "Τι",
+            "Πότε"
+          ]
+        },
+        {
+          "id": "g2261021_496",
+          "skill": "identity",
+          "kind": "typed",
+          "prompt": "Άννα: ___ η Άννα.",
+          "correct": "Είμαι",
+          "translations": {
+            "ru": "Анна: Я Анна.",
+            "en": "Anna: I am Anna.",
+            "zh": "安娜：我是安娜。",
+            "ar": "آنا: أنا آنا.",
+            "es": "Ana: Soy Ana.",
+            "pt": "Ana: Sou a Ana."
+          },
+          "accepted": [
+            "Είμαι"
+          ]
+        },
+        {
+          "id": "g2261021_497",
+          "skill": "identity",
+          "kind": "choice",
+          "prompt": "Νίκος: ___ ο Νίκος.",
+          "correct": "Είμαι",
+          "translations": {
+            "ru": "Никос: Я Никос.",
+            "en": "Nikos: I am Nikos.",
+            "zh": "尼科斯：我是尼科斯。",
+            "ar": "نيكوس: أنا نيكوس.",
+            "es": "Nikos: Soy Nikos.",
+            "pt": "Nikos: Sou o Nikos."
+          },
+          "wrong": [
+            "Είσαι",
+            "Είναι",
+            "Έχω"
+          ]
+        },
+        {
+          "id": "g2261021_498",
+          "skill": "greetings",
+          "kind": "typed",
+          "prompt": "Άννα: ___! (φιλικός χαιρετισμός)",
+          "correct": "Γεια σου",
+          "translations": {
+            "ru": "Анна: Привет!",
+            "en": "Anna: Hello!",
+            "zh": "安娜：你好！",
+            "ar": "آنا: مرحباً!",
+            "es": "Ana: ¡Hola!",
+            "pt": "Ana: Olá!"
+          },
+          "accepted": [
+            "Γεια σου",
+            "Γεια"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "meet_names",
+      "chapter": 1,
+      "title": {
+        "ru": "Новые знакомые",
+        "en": "New acquaintances",
+        "zh": "认识新朋友",
+        "ar": "تعارف جديد",
+        "es": "Nuevos conocidos",
+        "pt": "Novos conhecidos"
+      },
+      "sourceGreek": "Η Ελένη και ο Πέτρος είναι εδώ.",
+      "steps": [
+        {
+          "id": "g2261021_499",
+          "skill": "identity",
+          "kind": "choice",
+          "prompt": "Ελένη: ___ σε λένε;",
+          "correct": "Πώς",
+          "translations": {
+            "ru": "Элени: Как тебя зовут?",
+            "en": "Eleni: What is your name?",
+            "zh": "埃莱妮：你叫什么名字？",
+            "ar": "إليني: ما اسمك؟",
+            "es": "Eleni: ¿Cómo te llamas?",
+            "pt": "Eleni: Como te chamas?"
+          },
+          "wrong": [
+            "Πού",
+            "Τι",
+            "Πότε"
+          ]
+        },
+        {
+          "id": "g2261021_500",
+          "skill": "identity",
+          "kind": "typed",
+          "prompt": "Πέτρος: Με λένε ___.",
+          "correct": "Πέτρο",
+          "translations": {
+            "ru": "Петрос: Меня зовут Петрос.",
+            "en": "Petros: My name is Petros.",
+            "zh": "彼得罗斯：我叫彼得罗斯。",
+            "ar": "بيتروس: اسمي بيتروس.",
+            "es": "Petros: Me llamo Petros.",
+            "pt": "Petros: Chamo-me Petros."
+          },
+          "accepted": [
+            "Πέτρο"
+          ]
+        },
+        {
+          "id": "g2261021_501",
+          "skill": "identity",
+          "kind": "choice",
+          "prompt": "Ελένη: ___ η Ελένη.",
+          "correct": "Είμαι",
+          "translations": {
+            "ru": "Элени: Я Элени.",
+            "en": "Eleni: I am Eleni.",
+            "zh": "埃莱妮：我是埃莱妮。",
+            "ar": "إليني: أنا إليني.",
+            "es": "Eleni: Soy Eleni.",
+            "pt": "Eleni: Sou a Eleni."
+          },
+          "wrong": [
+            "Είσαι",
+            "Είναι",
+            "Έχει"
+          ]
+        },
+        {
+          "id": "g2261021_502",
+          "skill": "phonetics",
+          "kind": "typed",
+          "prompt": "Πέτρος: Μαρ___α. (όνομα)",
+          "correct": "ί",
+          "translations": {
+            "ru": "Имя Мария пишется с «ί».",
+            "en": "The name Maria is spelled with ί.",
+            "zh": "玛丽亚这个名字用 ί 拼写。",
+            "ar": "يُكتب اسم ماريا بحرف ί.",
+            "es": "El nombre María lleva «ί».",
+            "pt": "O nome Maria escreve-se com í."
+          },
+          "accepted": [
+            "ί"
+          ]
+        },
+        {
+          "id": "g2261021_503",
+          "skill": "greetings",
+          "kind": "choice",
+          "prompt": "Πέτρος: ___! (ευγενικός χαιρετισμός)",
+          "correct": "Γεια σας",
+          "translations": {
+            "ru": "Петрос: Здравствуйте!",
+            "en": "Petros: Hello! (polite)",
+            "zh": "彼得罗斯：您好！",
+            "ar": "بيتروس: مرحباً! (رسمي)",
+            "es": "Petros: ¡Hola! (formal)",
+            "pt": "Petros: Olá! (formal)"
+          },
+          "wrong": [
+            "Πού είσαι",
+            "Είμαι",
+            "Τι ώρα"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "my_address",
+      "chapter": 2,
+      "title": {
+        "ru": "Новый адрес",
+        "en": "A new address",
+        "zh": "新地址",
+        "ar": "عنوان جديد",
+        "es": "Una dirección nueva",
+        "pt": "Uma morada nova"
+      },
+      "sourceGreek": "Ο Μάριος έχει τηλέφωνο και μένει στη Λευκωσία.",
+      "steps": [
+        {
+          "id": "g2261021_504",
+          "skill": "verbs",
+          "kind": "choice",
+          "prompt": "Α: Πού ___, Μάριε;",
+          "correct": "μένεις",
+          "translations": {
+            "ru": "Где ты живёшь, Мариос?",
+            "en": "Where do you live, Marios?",
+            "zh": "马里奥斯，你住哪里？",
+            "ar": "أين تسكن يا ماريوس؟",
+            "es": "¿Dónde vives, Marios?",
+            "pt": "Onde moras, Marios?"
+          },
+          "wrong": [
+            "μένει",
+            "μένω",
+            "μένουμε"
+          ]
+        },
+        {
+          "id": "g2261021_505",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Μάριος: ___ στη Λευκωσία.",
+          "correct": "Μένω",
+          "translations": {
+            "ru": "Мариос: Я живу в Никосии.",
+            "en": "Marios: I live in Nicosia.",
+            "zh": "马里奥斯：我住在尼科西亚。",
+            "ar": "ماريوس: أسكن في نيقوسيا.",
+            "es": "Marios: Vivo en Nicosia.",
+            "pt": "Marios: Moro em Nicósia."
+          },
+          "accepted": [
+            "Μένω"
+          ]
+        },
+        {
+          "id": "g2261021_506",
+          "skill": "identity",
+          "kind": "choice",
+          "prompt": "Α: ___ έχεις τηλέφωνο;",
+          "correct": "Εσύ",
+          "translations": {
+            "ru": "А у тебя есть телефон?",
+            "en": "And do you have a phone?",
+            "zh": "那你有电话吗？",
+            "ar": "وهل لديك هاتف؟",
+            "es": "¿Y tú tienes teléfono?",
+            "pt": "E tu tens telefone?"
+          },
+          "wrong": [
+            "Εμείς",
+            "Εκείνοι",
+            "Εγώ"
+          ]
+        },
+        {
+          "id": "g2261021_507",
+          "skill": "identity",
+          "kind": "typed",
+          "prompt": "Μάριος: Έχω ___ τηλέφωνο.",
+          "correct": "ένα",
+          "translations": {
+            "ru": "Мариос: У меня есть телефон.",
+            "en": "Marios: I have a phone.",
+            "zh": "马里奥斯：我有一部电话。",
+            "ar": "ماريوس: لدي هاتف.",
+            "es": "Marios: Tengo un teléfono.",
+            "pt": "Marios: Tenho um telefone."
+          },
+          "accepted": [
+            "ένα"
+          ]
+        },
+        {
+          "id": "g2261021_508",
+          "skill": "identity",
+          "kind": "choice",
+          "prompt": "Α: ___ είναι το τηλέφωνο;",
+          "correct": "Πού",
+          "translations": {
+            "ru": "Где телефон?",
+            "en": "Where is the phone?",
+            "zh": "电话在哪里？",
+            "ar": "أين الهاتف؟",
+            "es": "¿Dónde está el teléfono?",
+            "pt": "Onde está o telefone?"
+          },
+          "wrong": [
+            "Πώς",
+            "Πότε",
+            "Πόσο"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "family_job",
+      "chapter": 3,
+      "title": {
+        "ru": "Семья и работа",
+        "en": "Family and work",
+        "zh": "家庭与工作",
+        "ar": "العائلة والعمل",
+        "es": "Familia y trabajo",
+        "pt": "Família e trabalho"
+      },
+      "sourceGreek": "Η Μαρία είναι γιατρός. Ο Νίκος είναι ο αδελφός της.",
+      "steps": [
+        {
+          "id": "g2261021_509",
+          "skill": "identity",
+          "kind": "typed",
+          "prompt": "Α: Η Μαρία είναι ___.",
+          "correct": "γιατρός",
+          "translations": {
+            "ru": "Мария — врач.",
+            "en": "Maria is a doctor.",
+            "zh": "玛丽亚是一名医生。",
+            "ar": "ماريا طبيبة.",
+            "es": "María es médica.",
+            "pt": "A Maria é médica."
+          },
+          "accepted": [
+            "γιατρός"
+          ]
+        },
+        {
+          "id": "g2261021_510",
+          "skill": "possessive",
+          "kind": "choice",
+          "prompt": "Α: Ο Νίκος είναι ο αδελφός ___ Μαρίας.",
+          "correct": "της",
+          "translations": {
+            "ru": "Никос — брат Марии.",
+            "en": "Nikos is Maria's brother.",
+            "zh": "尼科斯是玛丽亚的兄弟。",
+            "ar": "نيكوس أخو ماريا.",
+            "es": "Nikos es el hermano de María.",
+            "pt": "O Nikos é irmão da Maria."
+          },
+          "wrong": [
+            "του",
+            "μου",
+            "μας"
+          ]
+        },
+        {
+          "id": "g2261021_511",
+          "skill": "identity",
+          "kind": "typed",
+          "prompt": "Μαρία: Έχω ___ αδελφό.",
+          "correct": "έναν",
+          "translations": {
+            "ru": "Мария: У меня один брат.",
+            "en": "Maria: I have one brother.",
+            "zh": "玛丽亚：我有一个兄弟。",
+            "ar": "ماريا: لدي أخ واحد.",
+            "es": "María: Tengo un hermano.",
+            "pt": "Maria: Tenho um irmão."
+          },
+          "accepted": [
+            "έναν"
+          ]
+        },
+        {
+          "id": "g2261021_512",
+          "skill": "verbs",
+          "kind": "choice",
+          "prompt": "Α: Τι δουλειά ___ η Μαρία;",
+          "correct": "κάνει",
+          "translations": {
+            "ru": "Кем работает Мария?",
+            "en": "What does Maria do for work?",
+            "zh": "玛丽亚做什么工作？",
+            "ar": "ما مهنة ماريا؟",
+            "es": "¿A qué se dedica María?",
+            "pt": "O que faz a Maria?"
+          },
+          "wrong": [
+            "κάνω",
+            "κάνεις",
+            "κάνουμε"
+          ]
+        },
+        {
+          "id": "g2261021_513",
+          "skill": "identity",
+          "kind": "typed",
+          "prompt": "Β: Η Μαρία ___ γιατρός.",
+          "correct": "είναι",
+          "translations": {
+            "ru": "Мария работает врачом.",
+            "en": "Maria is a doctor.",
+            "zh": "玛丽亚是一名医生。",
+            "ar": "ماريا طبيبة.",
+            "es": "María es médica.",
+            "pt": "A Maria é médica."
+          },
+          "accepted": [
+            "είναι"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "languages",
+      "chapter": 4,
+      "title": {
+        "ru": "Языковой обмен",
+        "en": "Language exchange",
+        "zh": "语言交流",
+        "ar": "تبادل اللغات",
+        "es": "Intercambio de idiomas",
+        "pt": "Troca de línguas"
+      },
+      "sourceGreek": "Ο Πέτρος μιλάει ελληνικά και η Έλενα μιλάει αγγλικά.",
+      "steps": [
+        {
+          "id": "g2261021_514",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Πέτρος: Εσύ ___ ελληνικά;",
+          "correct": "μιλάς",
+          "translations": {
+            "ru": "Петрос: Ты говоришь по-гречески?",
+            "en": "Petros: Do you speak Greek?",
+            "zh": "彼得罗斯：你会说希腊语吗？",
+            "ar": "بيتروس: هل تتحدث اليونانية؟",
+            "es": "Petros: ¿Hablas griego?",
+            "pt": "Petros: Falas grego?"
+          },
+          "accepted": [
+            "μιλάς"
+          ]
+        },
+        {
+          "id": "g2261021_515",
+          "skill": "dialogue",
+          "kind": "choice",
+          "prompt": "Έλενα: Ποια ___ μιλάς;",
+          "correct": "γλώσσα",
+          "translations": {
+            "ru": "Элена: На каком языке ты говоришь?",
+            "en": "Elena: Which language do you speak?",
+            "zh": "埃莱娜：你说哪种语言？",
+            "ar": "إيلينا: أي لغة تتحدث؟",
+            "es": "Elena: ¿Qué idioma hablas?",
+            "pt": "Elena: Que língua falas?"
+          },
+          "wrong": [
+            "πόλη",
+            "δουλειά",
+            "οικογένεια"
+          ]
+        },
+        {
+          "id": "g2261021_516",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Έλενα: Εγώ ___ αγγλικά.",
+          "correct": "μιλάω",
+          "translations": {
+            "ru": "Элена: Я говорю по-английски.",
+            "en": "Elena: I speak English.",
+            "zh": "埃莱娜：我说英语。",
+            "ar": "إيلينا: أتحدث الإنجليزية.",
+            "es": "Elena: Hablo inglés.",
+            "pt": "Elena: Falo inglês."
+          },
+          "accepted": [
+            "μιλάω",
+            "μιλώ"
+          ]
+        },
+        {
+          "id": "g2261021_517",
+          "skill": "verbs",
+          "kind": "choice",
+          "prompt": "Πέτρος: Η Έλενα ___ αγγλικά.",
+          "correct": "μιλάει",
+          "translations": {
+            "ru": "Элена говорит по-английски.",
+            "en": "Elena speaks English.",
+            "zh": "埃莱娜会说英语。",
+            "ar": "إيلينا تتحدث الإنجليزية.",
+            "es": "Elena habla inglés.",
+            "pt": "A Elena fala inglês."
+          },
+          "wrong": [
+            "μιλάς",
+            "μιλάμε",
+            "μιλάτε"
+          ]
+        },
+        {
+          "id": "g2261021_518",
+          "skill": "phonetics",
+          "kind": "typed",
+          "prompt": "Πέτρος: Μιλάω α___λικά.",
+          "correct": "γγ",
+          "translations": {
+            "ru": "Петрос: Я говорю по-английски (английский пишется с γγ).",
+            "en": "Petros: I speak English (αγγλικά uses γγ).",
+            "zh": "彼得罗斯：我说英语（αγγλικά 使用 γγ）。",
+            "ar": "بيتروس: أتحدث الإنجليزية (تُكتب αγγλικά بـ γγ).",
+            "es": "Petros: Hablo inglés (αγγλικά lleva γγ).",
+            "pt": "Petros: Falo inglês (αγγλικά escreve-se com γγ)."
+          },
+          "accepted": [
+            "γγ"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bus_ticket",
+      "chapter": 6,
+      "title": {
+        "ru": "В билетной кассе",
+        "en": "At the ticket desk",
+        "zh": "在售票处",
+        "ar": "عند شباك التذاكر",
+        "es": "En la taquilla",
+        "pt": "Na bilheteira"
+      },
+      "sourceGreek": "Το λεωφορείο για τη Λεμεσό φεύγει στις οκτώ.",
+      "steps": [
+        {
+          "id": "g2261021_519",
+          "skill": "time",
+          "kind": "choice",
+          "prompt": "Α: ___ ώρα φεύγει το λεωφορείο;",
+          "correct": "Τι",
+          "translations": {
+            "ru": "Во сколько отправляется автобус?",
+            "en": "What time does the bus leave?",
+            "zh": "公交车几点出发？",
+            "ar": "في أي ساعة تغادر الحافلة؟",
+            "es": "¿A qué hora sale el autobús?",
+            "pt": "A que horas parte o autocarro?"
+          },
+          "wrong": [
+            "Πώς",
+            "Πού",
+            "Ποια"
+          ]
+        },
+        {
+          "id": "g2261021_520",
+          "skill": "time",
+          "kind": "typed",
+          "prompt": "Β: Φεύγει στις ___.",
+          "correct": "οκτώ",
+          "translations": {
+            "ru": "Он отправляется в восемь.",
+            "en": "It leaves at eight.",
+            "zh": "它八点出发。",
+            "ar": "تغادر في الثامنة.",
+            "es": "Sale a las ocho.",
+            "pt": "Parte às oito."
+          },
+          "accepted": [
+            "οκτώ",
+            "8"
+          ]
+        },
+        {
+          "id": "g2261021_521",
+          "skill": "verbs",
+          "kind": "choice",
+          "prompt": "Α: Πού ___ το λεωφορείο;",
+          "correct": "πάει",
+          "translations": {
+            "ru": "Куда едет автобус?",
+            "en": "Where does the bus go?",
+            "zh": "公交车去哪里？",
+            "ar": "إلى أين تذهب الحافلة؟",
+            "es": "¿Adónde va el autobús?",
+            "pt": "Para onde vai o autocarro?"
+          },
+          "wrong": [
+            "πας",
+            "πάμε",
+            "πάνε"
+          ]
+        },
+        {
+          "id": "g2261021_522",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Β: Πάει στη ___.",
+          "correct": "Λεμεσό",
+          "translations": {
+            "ru": "Он едет в Лимасол.",
+            "en": "It goes to Limassol.",
+            "zh": "它开往利马索尔。",
+            "ar": "تذهب إلى ليماسول.",
+            "es": "Va a Limassol.",
+            "pt": "Vai para Limassol."
+          },
+          "accepted": [
+            "Λεμεσό"
+          ]
+        },
+        {
+          "id": "g2261021_523",
+          "skill": "dialogue",
+          "kind": "choice",
+          "prompt": "Α: Ένα ___ για τη Λεμεσό, παρακαλώ.",
+          "correct": "εισιτήριο",
+          "translations": {
+            "ru": "Один билет до Лимасола, пожалуйста.",
+            "en": "One ticket to Limassol, please.",
+            "zh": "请给我一张去利马索尔的票。",
+            "ar": "تذكرة واحدة إلى ليماسول من فضلك.",
+            "es": "Un billete a Limassol, por favor.",
+            "pt": "Um bilhete para Limassol, por favor."
+          },
+          "wrong": [
+            "λεωφορείο",
+            "αυτοκίνητο",
+            "τραπέζι"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bus_stop",
+      "chapter": 6,
+      "title": {
+        "ru": "На автобусной остановке",
+        "en": "At the bus stop",
+        "zh": "在公交站",
+        "ar": "عند موقف الحافلة",
+        "es": "En la parada",
+        "pt": "Na paragem"
+      },
+      "sourceGreek": "Ο Νίκος πάει στο σχολείο με το λεωφορείο. Η στάση είναι δίπλα στο πάρκο.",
+      "steps": [
+        {
+          "id": "g2261021_524",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Νίκος: Εγώ ___ στο σχολείο.",
+          "correct": "πάω",
+          "translations": {
+            "ru": "Никос: Я иду в школу.",
+            "en": "Nikos: I go to school.",
+            "zh": "尼科斯：我去学校。",
+            "ar": "نيكوس: أذهب إلى المدرسة.",
+            "es": "Nikos: Voy a la escuela.",
+            "pt": "Nikos: Vou para a escola."
+          },
+          "accepted": [
+            "πάω",
+            "πηγαίνω"
+          ]
+        },
+        {
+          "id": "g2261021_525",
+          "skill": "dialogue",
+          "kind": "choice",
+          "prompt": "Α: Πού είναι η ___;",
+          "correct": "στάση",
+          "translations": {
+            "ru": "Где остановка?",
+            "en": "Where is the stop?",
+            "zh": "车站在哪里？",
+            "ar": "أين الموقف؟",
+            "es": "¿Dónde está la parada?",
+            "pt": "Onde fica a paragem?"
+          },
+          "wrong": [
+            "δρόμος",
+            "σπίτι",
+            "δωμάτιο"
+          ]
+        },
+        {
+          "id": "g2261021_526",
+          "skill": "dialogue",
+          "kind": "typed",
+          "prompt": "Β: Η στάση είναι ___ στο πάρκο.",
+          "correct": "δίπλα",
+          "translations": {
+            "ru": "Остановка рядом с парком.",
+            "en": "The stop is next to the park.",
+            "zh": "车站在公园旁边。",
+            "ar": "الموقف بجانب الحديقة.",
+            "es": "La parada está junto al parque.",
+            "pt": "A paragem fica ao lado do parque."
+          },
+          "accepted": [
+            "δίπλα"
+          ]
+        },
+        {
+          "id": "g2261021_527",
+          "skill": "transport",
+          "kind": "choice",
+          "prompt": "Α: Ο Νίκος πάει στο σχολείο με ___.",
+          "correct": "το λεωφορείο",
+          "translations": {
+            "ru": "Никос едет в школу на автобусе.",
+            "en": "Nikos goes to school by bus.",
+            "zh": "尼科斯坐公交车去学校。",
+            "ar": "نيكوس يذهب إلى المدرسة بالحافلة.",
+            "es": "Nikos va a la escuela en autobús.",
+            "pt": "O Nikos vai para a escola de autocarro."
+          },
+          "wrong": [
+            "το αυτοκίνητο",
+            "το τρένο",
+            "το ταξί"
+          ]
+        },
+        {
+          "id": "g2261021_528",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Α: Εσύ ___ στο σχολείο;",
+          "correct": "πας",
+          "translations": {
+            "ru": "А ты ходишь в школу?",
+            "en": "Do you go to school?",
+            "zh": "你去学校吗？",
+            "ar": "هل تذهب إلى المدرسة؟",
+            "es": "¿Tú vas a la escuela?",
+            "pt": "Tu vais à escola?"
+          },
+          "accepted": [
+            "πας",
+            "πηγαίνεις"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning",
+      "chapter": 7,
+      "title": {
+        "ru": "Утренние дела",
+        "en": "Morning routine",
+        "zh": "早晨安排",
+        "ar": "الروتين الصباحي",
+        "es": "Rutina de mañana",
+        "pt": "Rotina da manhã"
+      },
+      "sourceGreek": "Η Μαρία τρώει πρωινό στις επτά και πηγαίνει στο σχολείο στις οκτώ.",
+      "steps": [
+        {
+          "id": "g2261021_529",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Μαρία: Εγώ ___ πρωινό στις επτά.",
+          "correct": "τρώω",
+          "translations": {
+            "ru": "Мария: Я завтракаю в семь.",
+            "en": "Maria: I have breakfast at seven.",
+            "zh": "玛丽亚：我七点吃早餐。",
+            "ar": "ماريا: أتناول الفطور في السابعة.",
+            "es": "María: Desayuno a las siete.",
+            "pt": "Maria: Tomo o pequeno-almoço às sete."
+          },
+          "accepted": [
+            "τρώω"
+          ]
+        },
+        {
+          "id": "g2261021_530",
+          "skill": "time",
+          "kind": "choice",
+          "prompt": "Α: ___ ώρα τρως πρωινό;",
+          "correct": "Τι",
+          "translations": {
+            "ru": "Во сколько ты завтракаешь?",
+            "en": "What time do you have breakfast?",
+            "zh": "你几点吃早餐？",
+            "ar": "في أي ساعة تتناول الفطور؟",
+            "es": "¿A qué hora desayunas?",
+            "pt": "A que horas tomas o pequeno-almoço?"
+          },
+          "wrong": [
+            "Ποιος",
+            "Πού",
+            "Πώς"
+          ]
+        },
+        {
+          "id": "g2261021_531",
+          "skill": "time",
+          "kind": "typed",
+          "prompt": "Μαρία: Τρώω στις ___.",
+          "correct": "επτά",
+          "translations": {
+            "ru": "Мария: Я ем в семь.",
+            "en": "Maria: I eat at seven.",
+            "zh": "玛丽亚：我七点吃饭。",
+            "ar": "ماريا: آكل في السابعة.",
+            "es": "María: Como a las siete.",
+            "pt": "Maria: Como às sete."
+          },
+          "accepted": [
+            "επτά",
+            "7"
+          ]
+        },
+        {
+          "id": "g2261021_532",
+          "skill": "verbs",
+          "kind": "choice",
+          "prompt": "Α: Στις οκτώ η Μαρία ___ στο σχολείο.",
+          "correct": "πάει",
+          "translations": {
+            "ru": "В восемь Мария идёт в школу.",
+            "en": "At eight Maria goes to school.",
+            "zh": "八点玛丽亚去学校。",
+            "ar": "في الثامنة تذهب ماريا إلى المدرسة.",
+            "es": "A las ocho María va a la escuela.",
+            "pt": "Às oito a Maria vai para a escola."
+          },
+          "wrong": [
+            "τρώει",
+            "λέει",
+            "ακούει"
+          ]
+        },
+        {
+          "id": "g2261021_533",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Μαρία: ___ στο σχολείο στις οκτώ.",
+          "correct": "Πάω",
+          "translations": {
+            "ru": "Мария: Я иду в школу в восемь.",
+            "en": "Maria: I go to school at eight.",
+            "zh": "玛丽亚：我八点去学校。",
+            "ar": "ماريا: أذهب إلى المدرسة في الثامنة.",
+            "es": "María: Voy a la escuela a las ocho.",
+            "pt": "Maria: Vou para a escola às oito."
+          },
+          "accepted": [
+            "Πάω",
+            "Πηγαίνω"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rainy_day",
+      "chapter": 7,
+      "title": {
+        "ru": "Дождливый день",
+        "en": "A rainy day",
+        "zh": "下雨的一天",
+        "ar": "يوم ممطر",
+        "es": "Un día de lluvia",
+        "pt": "Um dia de chuva"
+      },
+      "sourceGreek": "Σήμερα βρέχει. Ο Νίκος είναι στο σπίτι και ακούει μουσική.",
+      "steps": [
+        {
+          "id": "g2261021_534",
+          "skill": "weather",
+          "kind": "choice",
+          "prompt": "Σήμερα ___.",
+          "correct": "βρέχει",
+          "translations": {
+            "ru": "Сегодня идёт дождь.",
+            "en": "It is raining today.",
+            "zh": "今天下雨。",
+            "ar": "تمطر اليوم.",
+            "es": "Hoy llueve.",
+            "pt": "Hoje está a chover."
+          },
+          "wrong": [
+            "χιονίζει",
+            "φυσάει",
+            "έχει ήλιο"
+          ]
+        },
+        {
+          "id": "g2261021_535",
+          "skill": "verbs",
+          "kind": "typed",
+          "prompt": "Νίκος: Εγώ ___ μουσική.",
+          "correct": "ακούω",
+          "translations": {
+            "ru": "Никос: Я слушаю музыку.",
+            "en": "Nikos: I listen to music.",
+            "zh": "尼科斯：我听音乐。",
+            "ar": "نيكوس: أستمع إلى الموسيقى.",
+            "es": "Nikos: Escucho música.",
+            "pt": "Nikos: Ouço música."
+          },
+          "accepted": [
+            "ακούω"
+          ]
+        },
+        {
+          "id": "g2261021_536",
+          "skill": "dialogue",
+          "kind": "choice",
+          "prompt": "Α: Πού είναι ο Νίκος; Β: Στο ___.",
+          "correct": "σπίτι",
+          "translations": {
+            "ru": "Никос дома.",
+            "en": "Nikos is at home.",
+            "zh": "尼科斯在家。",
+            "ar": "نيكوس في البيت.",
+            "es": "Nikos está en casa.",
+            "pt": "O Nikos está em casa."
+          },
+          "wrong": [
+            "σχολείο",
+            "πάρκο",
+            "γραφείο"
+          ]
+        },
+        {
+          "id": "g2261021_537",
+          "skill": "identity",
+          "kind": "typed",
+          "prompt": "Νίκος: ___ στο σπίτι.",
+          "correct": "Είμαι",
+          "translations": {
+            "ru": "Никос: Я дома.",
+            "en": "Nikos: I am at home.",
+            "zh": "尼科斯：我在家。",
+            "ar": "نيكوس: أنا في البيت.",
+            "es": "Nikos: Estoy en casa.",
+            "pt": "Nikos: Estou em casa."
+          },
+          "accepted": [
+            "Είμαι"
+          ]
+        },
+        {
+          "id": "g2261021_538",
+          "skill": "verbs",
+          "kind": "choice",
+          "prompt": "Α: Τι κάνει ο Νίκος; Β: ___ μουσική.",
+          "correct": "Ακούει",
+          "translations": {
+            "ru": "Никос слушает музыку.",
+            "en": "Nikos listens to music.",
+            "zh": "尼科斯听音乐。",
+            "ar": "نيكوس يستمع إلى الموسيقى.",
+            "es": "Nikos escucha música.",
+            "pt": "O Nikos ouve música."
+          },
+          "wrong": [
+            "Τρώει",
+            "Λέει",
+            "Κλαίει"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sunday",
+      "chapter": 7,
+      "title": {
+        "ru": "Воскресный план",
+        "en": "Sunday plans",
+        "zh": "星期日计划",
+        "ar": "خطة يوم الأحد",
+        "es": "Plan del domingo",
+        "pt": "Plano de domingo"
+      },
+      "sourceGreek": "Την Κυριακή η Ελένη είναι στο πάρκο στις έξι. Ο Πέτρος έχει ένα ποδήλατο.",
+      "steps": [
+        {
+          "id": "g2261021_539",
+          "skill": "schedule",
+          "kind": "typed",
+          "prompt": "Ελένη: Την ___ είμαι στο πάρκο.",
+          "correct": "Κυριακή",
+          "translations": {
+            "ru": "Элени: В воскресенье я в парке.",
+            "en": "Eleni: I am in the park on Sunday.",
+            "zh": "埃莱妮：我星期日在公园。",
+            "ar": "إليني: أنا في الحديقة يوم الأحد.",
+            "es": "Eleni: El domingo estoy en el parque.",
+            "pt": "Eleni: No domingo estou no parque."
+          },
+          "accepted": [
+            "Κυριακή"
+          ]
+        },
+        {
+          "id": "g2261021_540",
+          "skill": "time",
+          "kind": "choice",
+          "prompt": "Α: Τι ώρα είναι η Ελένη στο πάρκο; Β: Στις ___.",
+          "correct": "έξι",
+          "translations": {
+            "ru": "Элени в парке в шесть.",
+            "en": "Eleni is in the park at six.",
+            "zh": "埃莱妮六点在公园。",
+            "ar": "إليني في الحديقة في السادسة.",
+            "es": "Eleni está en el parque a las seis.",
+            "pt": "A Eleni está no parque às seis."
+          },
+          "wrong": [
+            "πέντε",
+            "επτά",
+            "εννέα"
+          ]
+        },
+        {
+          "id": "g2261021_541",
+          "skill": "transport",
+          "kind": "typed",
+          "prompt": "Πέτρος: Έχω ένα ___.",
+          "correct": "ποδήλατο",
+          "translations": {
+            "ru": "Петрос: У меня есть велосипед.",
+            "en": "Petros: I have a bicycle.",
+            "zh": "彼得罗斯：我有一辆自行车。",
+            "ar": "بيتروس: لدي دراجة.",
+            "es": "Petros: Tengo una bicicleta.",
+            "pt": "Petros: Tenho uma bicicleta."
+          },
+          "accepted": [
+            "ποδήλατο"
+          ]
+        },
+        {
+          "id": "g2261021_542",
+          "skill": "schedule",
+          "kind": "choice",
+          "prompt": "Α: Ποια μέρα είναι στο πρόγραμμα; Β: ___.",
+          "correct": "Κυριακή",
+          "translations": {
+            "ru": "В расписании воскресенье.",
+            "en": "The schedule shows Sunday.",
+            "zh": "日程表上是星期日。",
+            "ar": "اليوم في الجدول هو الأحد.",
+            "es": "En el programa es domingo.",
+            "pt": "No programa é domingo."
+          },
+          "wrong": [
+            "Δευτέρα",
+            "Τρίτη",
+            "Σάββατο"
+          ]
+        },
+        {
+          "id": "g2261021_543",
+          "skill": "phonetics",
+          "kind": "choice",
+          "prompt": "Α: Το «αυ» στη λέξη «αύριο» ακούγεται ___.",
+          "correct": "[av]",
+          "translations": {
+            "ru": "В слове «αύριο» сочетание «αυ» звучит как [av].",
+            "en": "In «αύριο», αυ sounds [av].",
+            "zh": "在“αύριο”中，αυ 读作 [av]。",
+            "ar": "في كلمة «αύριο» يُنطق αυ بصوت [av].",
+            "es": "En «αύριο», αυ suena [av].",
+            "pt": "Em «αύριο», αυ soa [av]."
+          },
+          "wrong": [
+            "[af]",
+            "[ev]",
+            "[ef]"
+          ]
+        }
+      ]
+    }
+  ]
+}
