@@ -17,7 +17,7 @@ import phonetics_foundations
 import server
 
 cards=phon.CARDS
-assert len(cards)==36 and len(grammar2_cards.CARDS)==493
+assert len(cards)==36 and len(grammar2_cards.CARDS)>=493  # issue #17 appends; all prior IDs unchanged
 assert [c["id"] for c in grammar2_cards.CARDS[:457]]==[
     f"g2261021_{i:03d}" for i in range(1,458)
 ]
@@ -71,7 +71,7 @@ assert "[dz]" in phon.SPELLING_RULES["τζ"]["en"]
 
 client=Path(__file__).with_name("app.js").read_text("utf-8")
 css=Path(__file__).with_name("styles.css").read_text("utf-8")
-assert '["phonetic","consonant"].includes(q.grammarGroup)' in client
+assert '["phonetic","consonant","review_scenario"].includes(q.grammarGroup)' in client
 assert 'q.kind==="grammar"&&q.grammarGroup==="consonant"' in client
 assert "white-space: pre-line" in css and "overflow-wrap: anywhere" in css
 

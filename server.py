@@ -43,6 +43,7 @@ import extra_sentences_20261021 as _extra_sentences
 import order2_cards as _order2
 import clock_cards as _clock
 import quiz_clock_balance as _clock_balance
+import mixed_review_selection as _mixed_review_selection
 import order_valid_permutations as _order_variants
 import answer_idempotency
 import dialogue_translations as _dialogue_glosses
@@ -368,7 +369,14 @@ def format_question(card,direction,lang,weak=False,variant_index=None):
     item['greekVariants']=greek_variants.variants(canonical_greek)
     if card['kind']=='grammar':
         item['grammarGroup']=card['group']
-        if card.get("group") in ("phonetic","consonant") and card.get("phoneticWord"):
+        if card.get('group')=='review_scenario':
+            # Only scene identity, sequence and skill go to the client.
+            item['scenarioId']=card['scenarioId']
+            item['scenarioStep']=card['scenarioStep']
+            item['scenarioTotal']=card['scenarioTotal']
+            item['scenarioTitle']=card['scenarioTitles'][lang]
+            item['reviewSkill']=card['reviewSkill']
+        if card.get("group") in ("phonetic","consonant","review_scenario") and card.get("phoneticWord"):
             # Reuse ONLY validated, pre-existing Greek Pocket audio.
             # None available -> disabled client play control and visible
             # text-only fallback; no synthesis or guessed WAV URLs.
@@ -646,7 +654,17 @@ def make_quiz(user_id,params):
             else:break
         choices=mix
     elif mode!="weak":
-        choices=_clock_balance.balance(choices,count)
+        if ("grammar" in kinds and count>=5 and
+                scope in ("book","pages","chapters") and study=="textbook"):
+            # Existing timed Quick/Guided session: one complete A1 story
+            # followed by ordinary ranked practice. No new learner mode.
+            linked,ordinary=_mixed_review_selection.select_block(choices,count)
+            if linked:
+                choices=linked+_clock_balance.balance(ordinary,count-len(linked))
+            else:
+                choices=_clock_balance.balance(choices,count)
+        else:
+            choices=_clock_balance.balance(choices,count)
     if mode=="weak":
         available_candidates=len(choices)
     questions=[]

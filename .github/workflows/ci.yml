@@ -31,6 +31,7 @@ jobs:
           python3 qa_core_verbs.py
           python3 qa_phonetics_foundations.py
           python3 qa_consonant_patterns.py
+          python3 qa_mixed_review.py
           node --check app.js
       - name: A1 dialogue expansion and legacy dialogue integrity
         run: |

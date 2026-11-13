@@ -110,5 +110,10 @@ assert len(CARDS)==457,len(CARDS)
 from consonant_patterns_cards import CARDS as CONSONANT_CARDS
 CARDS.extend(CONSONANT_CARDS)
 assert len(CARDS)==493,len(CARDS)
+# Issue #17: ten five-question connected scenarios in CURRENT grammar_fill.
+# All original 493 answer IDs and SRS/progress keys remain immutable.
+from mixed_review_cards import CARDS as REVIEW_CARDS
+CARDS.extend(REVIEW_CARDS)
+assert len(CARDS)==543,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}
