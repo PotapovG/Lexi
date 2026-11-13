@@ -71,7 +71,7 @@ assert "[dz]" in phon.SPELLING_RULES["τζ"]["en"]
 
 client=Path(__file__).with_name("app.js").read_text("utf-8")
 css=Path(__file__).with_name("styles.css").read_text("utf-8")
-assert '["phonetic","consonant"].includes(q.grammarGroup)' in client
+assert '["phonetic","consonant","review_scenario"].includes(q.grammarGroup)' in client
 assert 'q.kind==="grammar"&&q.grammarGroup==="consonant"' in client
 assert "white-space: pre-line" in css and "overflow-wrap: anywhere" in css
 
