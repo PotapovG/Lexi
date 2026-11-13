@@ -105,5 +105,10 @@ assert len(CARDS)==417,len(CARDS)
 from phonetics_foundations import CARDS as PHONETICS_CARDS
 CARDS.extend(PHONETICS_CARDS)
 assert len(CARDS)==457,len(CARDS)
+# Issue #5: consonant clusters and αυ/ευ voicing inside existing grammar_fill;
+# all previous 457 immutable grammar IDs, SRS and 35 stressed-syllable cards stay.
+from consonant_patterns_cards import CARDS as CONSONANT_CARDS
+CARDS.extend(CONSONANT_CARDS)
+assert len(CARDS)==493,len(CARDS)
 assert len({x['id'] for x in CARDS})==len(CARDS)
 BY_ID={c['id']:c for c in CARDS}
