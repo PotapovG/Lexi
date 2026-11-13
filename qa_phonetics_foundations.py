@@ -60,7 +60,7 @@ for c in cards:
         assert len(c["acceptedForms"])==3
 
 client=Path(__file__).with_name("app.js").read_text("utf-8")
-assert '(q.kind==="grammar"&&q.grammarGroup==="phonetic")' in client
+assert '(q.kind==="grammar"&&["phonetic","consonant"].includes(q.grammarGroup))' in client
 assert 'window.LexiWordAudio?.available(q.wordAudio)' in client
 assert 'wordAudioUnavailable' in client
 assert 'field.lang="el"' in client
