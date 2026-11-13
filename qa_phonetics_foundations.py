@@ -16,7 +16,7 @@ import phonetics_foundations as p
 import server
 
 cards=p.CARDS
-assert len(cards)==40 and len(grammar2_cards.CARDS)==457
+assert len(cards)==40 and len(grammar2_cards.CARDS)>=457  # later issue #5 appends, old IDs immutable
 assert [c["id"] for c in grammar2_cards.CARDS[:417]]==[
     f"g2261021_{i:03d}" for i in range(1,418)
 ]
@@ -60,7 +60,7 @@ for c in cards:
         assert len(c["acceptedForms"])==3
 
 client=Path(__file__).with_name("app.js").read_text("utf-8")
-assert '(q.kind==="grammar"&&q.grammarGroup==="phonetic")' in client
+assert '(q.kind==="grammar"&&["phonetic","consonant"].includes(q.grammarGroup))' in client
 assert 'window.LexiWordAudio?.available(q.wordAudio)' in client
 assert 'wordAudioUnavailable' in client
 assert 'field.lang="el"' in client

@@ -1122,7 +1122,7 @@
     if(state.current?.kind==="listening")try{$("listening-audio").pause();}catch{}
     window.LexiWordAudio?.stop();
     const phoneticAudio=(["accent","syllable","enclitic"].includes(q.kind)||
-      (q.kind==="grammar"&&q.grammarGroup==="phonetic"))&&!!q.wordAudio;
+      (q.kind==="grammar"&&["phonetic","consonant"].includes(q.grammarGroup)))&&!!q.wordAudio;
     show("word-pronounce-controls",phoneticAudio);
     const phoneticAvailable=window.LexiWordAudio?.available(q.wordAudio)??false;
     $("word-pronounce").disabled=!phoneticAvailable;
@@ -1137,7 +1137,8 @@
     $("question-prompt").classList.toggle("schedule-agenda",
       q.kind==="grammar"&&q.grammarGroup==="schedule" ||
       q.kind==="grammar"&&q.grammarGroup==="duration" ||
-      q.kind==="grammar"&&q.grammarGroup==="weather");
+      q.kind==="grammar"&&q.grammarGroup==="weather" ||
+      q.kind==="grammar"&&q.grammarGroup==="consonant");
     $("question-prompt").lang=["article","syllable","enclitic","grammar"].includes(q.kind)?"el":$("lang").value;
     $("question-prompt").dir=["article","syllable","enclitic","grammar"].includes(q.kind)?"ltr":"auto";
     txt("next",t("next"));

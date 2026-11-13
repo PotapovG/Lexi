@@ -1,0 +1,619 @@
+{
+  "version": 1,
+  "wordSpelling": [
+    {
+      "id": "g2261021_458",
+      "chapter": 3,
+      "group": "μπ",
+      "skill": "spelling",
+      "word": "μπαμπάς",
+      "masked": "Ο ◇αμπάς μου δουλεύει στο γραφείο.",
+      "correct": "μπ",
+      "translations": {
+        "ru": "Мой папа работает в офисе.",
+        "en": "My dad works at the office.",
+        "zh": "我爸爸在办公室工作。",
+        "ar": "أبي يعمل في المكتب.",
+        "es": "Mi papá trabaja en la oficina.",
+        "pt": "O meu pai trabalha no escritório."
+      }
+    },
+    {
+      "id": "g2261021_459",
+      "chapter": 7,
+      "group": "μπ",
+      "skill": "spelling",
+      "word": "μπάλα",
+      "masked": "Η ◇άλα είναι δίπλα στην πόρτα.",
+      "correct": "μπ",
+      "translations": {
+        "ru": "Мяч лежит рядом с дверью.",
+        "en": "The ball is next to the door.",
+        "zh": "球在门旁边。",
+        "ar": "الكرة بجانب الباب.",
+        "es": "La pelota está junto a la puerta.",
+        "pt": "A bola está ao lado da porta."
+      }
+    },
+    {
+      "id": "g2261021_460",
+      "chapter": 11,
+      "group": "μπ",
+      "skill": "spelling",
+      "word": "λάμπα",
+      "masked": "Η λά◇α είναι πάνω στο τραπέζι.",
+      "correct": "μπ",
+      "translations": {
+        "ru": "Лампа стоит на столе.",
+        "en": "The lamp is on the table.",
+        "zh": "灯在桌子上。",
+        "ar": "المصباح على الطاولة.",
+        "es": "La lámpara está encima de la mesa.",
+        "pt": "O candeeiro está em cima da mesa."
+      }
+    },
+    {
+      "id": "g2261021_461",
+      "chapter": 8,
+      "group": "ντ",
+      "skill": "spelling",
+      "word": "ντομάτα",
+      "masked": "Θέλω μία ◇ομάτα για τη σαλάτα.",
+      "correct": "ντ",
+      "translations": {
+        "ru": "Мне нужен один помидор для салата.",
+        "en": "I want one tomato for the salad.",
+        "zh": "我想要一个西红柿做沙拉。",
+        "ar": "أريد حبة طماطم للسلطة.",
+        "es": "Quiero un tomate para la ensalada.",
+        "pt": "Quero um tomate para a salada."
+      }
+    },
+    {
+      "id": "g2261021_462",
+      "chapter": 11,
+      "group": "ντ",
+      "skill": "spelling",
+      "word": "ντουλάπα",
+      "masked": "Η ◇ουλάπα είναι στο υπνοδωμάτιο.",
+      "correct": "ντ",
+      "translations": {
+        "ru": "Шкаф находится в спальне.",
+        "en": "The wardrobe is in the bedroom.",
+        "zh": "衣柜在卧室里。",
+        "ar": "الخزانة في غرفة النوم.",
+        "es": "El armario está en el dormitorio.",
+        "pt": "O guarda-roupa está no quarto."
+      }
+    },
+    {
+      "id": "g2261021_463",
+      "chapter": 2,
+      "group": "ντ",
+      "skill": "spelling",
+      "word": "πέντε",
+      "masked": "Έχω πέ◇ε ευρώ.",
+      "correct": "ντ",
+      "translations": {
+        "ru": "У меня пять евро.",
+        "en": "I have five euros.",
+        "zh": "我有五欧元。",
+        "ar": "لدي خمسة يورو.",
+        "es": "Tengo cinco euros.",
+        "pt": "Tenho cinco euros."
+      }
+    },
+    {
+      "id": "g2261021_464",
+      "chapter": 9,
+      "group": "γκ",
+      "skill": "spelling",
+      "word": "γκρι",
+      "masked": "Το αυτοκίνητο είναι ◇ρι.",
+      "correct": "γκ",
+      "translations": {
+        "ru": "Машина серая.",
+        "en": "The car is grey.",
+        "zh": "汽车是灰色的。",
+        "ar": "السيارة رمادية.",
+        "es": "El coche es gris.",
+        "pt": "O carro é cinzento."
+      }
+    },
+    {
+      "id": "g2261021_465",
+      "chapter": 16,
+      "group": "γκ",
+      "skill": "spelling",
+      "word": "γκολ",
+      "masked": "Ο φίλος μου βλέπει ένα ◇ολ στην τηλεόραση.",
+      "correct": "γκ",
+      "translations": {
+        "ru": "Мой друг смотрит гол по телевизору.",
+        "en": "My friend watches a goal on television.",
+        "zh": "我的朋友在电视上看到了一个进球。",
+        "ar": "يشاهد صديقي هدفاً على التلفاز.",
+        "es": "Mi amigo ve un gol en la televisión.",
+        "pt": "O meu amigo vê um golo na televisão."
+      }
+    },
+    {
+      "id": "g2261021_466",
+      "chapter": 7,
+      "group": "γκ",
+      "skill": "spelling",
+      "word": "παγκάκι",
+      "masked": "Το πα◇άκι είναι στο πάρκο.",
+      "correct": "γκ",
+      "translations": {
+        "ru": "Скамейка находится в парке.",
+        "en": "The bench is in the park.",
+        "zh": "长椅在公园里。",
+        "ar": "المقعد في الحديقة.",
+        "es": "El banco está en el parque.",
+        "pt": "O banco está no parque."
+      }
+    },
+    {
+      "id": "g2261021_467",
+      "chapter": 4,
+      "group": "γγ",
+      "skill": "spelling",
+      "word": "αγγλικά",
+      "masked": "Μιλάω α◇λικά με τον φίλο μου.",
+      "correct": "γγ",
+      "translations": {
+        "ru": "Я говорю с другом по-английски.",
+        "en": "I speak English with my friend.",
+        "zh": "我和朋友说英语。",
+        "ar": "أتحدث الإنجليزية مع صديقي.",
+        "es": "Hablo inglés con mi amigo.",
+        "pt": "Falo inglês com o meu amigo."
+      }
+    },
+    {
+      "id": "g2261021_468",
+      "chapter": 7,
+      "group": "γγ",
+      "skill": "spelling",
+      "word": "φεγγάρι",
+      "masked": "Σήμερα βλέπω το φε◇άρι.",
+      "correct": "γγ",
+      "translations": {
+        "ru": "Сегодня я вижу луну.",
+        "en": "Today I can see the moon.",
+        "zh": "今天我看到了月亮。",
+        "ar": "أرى القمر اليوم.",
+        "es": "Hoy veo la luna.",
+        "pt": "Hoje vejo a lua."
+      }
+    },
+    {
+      "id": "g2261021_469",
+      "chapter": 7,
+      "group": "γγ",
+      "skill": "spelling",
+      "word": "συγγνώμη",
+      "masked": "Λέω «συ◇νώμη» στον φίλο μου.",
+      "correct": "γγ",
+      "translations": {
+        "ru": "Я говорю другу «извини».",
+        "en": "I say sorry to my friend.",
+        "zh": "我对朋友说“对不起”。",
+        "ar": "أقول لصديقي «آسف».",
+        "es": "Le digo «perdón» a mi amigo.",
+        "pt": "Digo «desculpa» ao meu amigo."
+      }
+    },
+    {
+      "id": "g2261021_470",
+      "chapter": 7,
+      "group": "αυ",
+      "skill": "spelling",
+      "word": "αύριο",
+      "masked": "Η συνάντηση είναι ◇ριο.",
+      "correct": "αύ",
+      "translations": {
+        "ru": "Встреча завтра.",
+        "en": "The meeting is tomorrow.",
+        "zh": "会议是明天。",
+        "ar": "اللقاء غداً.",
+        "es": "La reunión es mañana.",
+        "pt": "O encontro é amanhã."
+      }
+    },
+    {
+      "id": "g2261021_471",
+      "chapter": 6,
+      "group": "αυ",
+      "skill": "spelling",
+      "word": "αυτοκίνητο",
+      "masked": "Το ◇τοκίνητο είναι μπροστά στο σπίτι.",
+      "correct": "αυ",
+      "translations": {
+        "ru": "Машина стоит перед домом.",
+        "en": "The car is in front of the house.",
+        "zh": "汽车在房子前面。",
+        "ar": "السيارة أمام المنزل.",
+        "es": "El coche está delante de la casa.",
+        "pt": "O carro está em frente da casa."
+      }
+    },
+    {
+      "id": "g2261021_472",
+      "chapter": 8,
+      "group": "αυ",
+      "skill": "spelling",
+      "word": "αυγό",
+      "masked": "Έχω ένα ◇γό για το πρωινό.",
+      "correct": "αυ",
+      "translations": {
+        "ru": "У меня есть одно яйцо на завтрак.",
+        "en": "I have an egg for breakfast.",
+        "zh": "我有一个鸡蛋当早餐。",
+        "ar": "لدي بيضة للفطور.",
+        "es": "Tengo un huevo para desayunar.",
+        "pt": "Tenho um ovo para o pequeno-almoço."
+      }
+    },
+    {
+      "id": "g2261021_473",
+      "chapter": 1,
+      "group": "ευ",
+      "skill": "spelling",
+      "word": "ευχαριστώ",
+      "masked": "«◇χαριστώ», κυρία Μαρία!",
+      "correct": "ευ",
+      "translations": {
+        "ru": "«Спасибо, госпожа Мария!»",
+        "en": "Thank you, Ms Maria!",
+        "zh": "“谢谢您，玛丽亚女士！”",
+        "ar": "«شكراً، السيدة ماريا!»",
+        "es": "«¡Gracias, señora María!»",
+        "pt": "«Obrigado, senhora Maria!»"
+      }
+    },
+    {
+      "id": "g2261021_474",
+      "chapter": 4,
+      "group": "ευ",
+      "skill": "spelling",
+      "word": "Ευρώπη",
+      "masked": "Η ◇ρώπη είναι μεγάλη.",
+      "correct": "Ευ",
+      "translations": {
+        "ru": "Европа большая.",
+        "en": "Europe is large.",
+        "zh": "欧洲很大。",
+        "ar": "أوروبا كبيرة.",
+        "es": "Europa es grande.",
+        "pt": "A Europa é grande."
+      }
+    },
+    {
+      "id": "g2261021_475",
+      "chapter": 7,
+      "group": "ευ",
+      "skill": "spelling",
+      "word": "εύκολο",
+      "masked": "Το μάθημα είναι ◇κολο.",
+      "correct": "εύ",
+      "translations": {
+        "ru": "Урок простой.",
+        "en": "The lesson is easy.",
+        "zh": "这节课很容易。",
+        "ar": "الدرس سهل.",
+        "es": "La lección es fácil.",
+        "pt": "A aula é fácil."
+      }
+    },
+    {
+      "id": "g2261021_476",
+      "chapter": 8,
+      "group": "τσ",
+      "skill": "spelling",
+      "word": "τσάντα",
+      "masked": "Η ◇άντα είναι στο δωμάτιο.",
+      "correct": "τσ",
+      "translations": {
+        "ru": "Сумка находится в комнате.",
+        "en": "The bag is in the room.",
+        "zh": "包在房间里。",
+        "ar": "الحقيبة في الغرفة.",
+        "es": "La bolsa está en la habitación.",
+        "pt": "A mala está no quarto."
+      }
+    },
+    {
+      "id": "g2261021_477",
+      "chapter": 7,
+      "group": "τσ",
+      "skill": "spelling",
+      "word": "τσάι",
+      "masked": "Το ◇άι είναι ζεστό.",
+      "correct": "τσ",
+      "translations": {
+        "ru": "Чай горячий.",
+        "en": "The tea is hot.",
+        "zh": "茶很热。",
+        "ar": "الشاي ساخن.",
+        "es": "El té está caliente.",
+        "pt": "O chá está quente."
+      }
+    },
+    {
+      "id": "g2261021_478",
+      "chapter": 3,
+      "group": "τσ",
+      "skill": "spelling",
+      "word": "κορίτσι",
+      "masked": "Το κορί◇ι είναι στην τάξη.",
+      "correct": "τσ",
+      "translations": {
+        "ru": "Девочка в классе.",
+        "en": "The girl is in the classroom.",
+        "zh": "女孩在教室里。",
+        "ar": "الفتاة في الصف.",
+        "es": "La niña está en clase.",
+        "pt": "A menina está na sala de aula."
+      }
+    },
+    {
+      "id": "g2261021_479",
+      "chapter": 9,
+      "group": "τζ",
+      "skill": "spelling",
+      "word": "τζιν",
+      "masked": "Το παντελόνι μου είναι ◇ιν.",
+      "correct": "τζ",
+      "translations": {
+        "ru": "Мои брюки джинсовые.",
+        "en": "My trousers are denim.",
+        "zh": "我的裤子是牛仔布的。",
+        "ar": "سروالي من الجينز.",
+        "es": "Mis pantalones son vaqueros.",
+        "pt": "As minhas calças são de ganga."
+      }
+    },
+    {
+      "id": "g2261021_480",
+      "chapter": 11,
+      "group": "τζ",
+      "skill": "spelling",
+      "word": "τζάμι",
+      "masked": "Το ◇άμι του παραθύρου είναι καθαρό.",
+      "correct": "τζ",
+      "translations": {
+        "ru": "Оконное стекло чистое.",
+        "en": "The windowpane is clean.",
+        "zh": "窗玻璃很干净。",
+        "ar": "زجاج النافذة نظيف.",
+        "es": "El cristal de la ventana está limpio.",
+        "pt": "O vidro da janela está limpo."
+      }
+    },
+    {
+      "id": "g2261021_481",
+      "chapter": 11,
+      "group": "τζ",
+      "skill": "spelling",
+      "word": "τζάκι",
+      "masked": "Το ◇άκι είναι στο σαλόνι.",
+      "correct": "τζ",
+      "translations": {
+        "ru": "Камин находится в гостиной.",
+        "en": "The fireplace is in the living room.",
+        "zh": "壁炉在客厅。",
+        "ar": "المدفأة في غرفة المعيشة.",
+        "es": "La chimenea está en el salón.",
+        "pt": "A lareira está na sala de estar."
+      }
+    }
+  ],
+  "soundReadings": [
+    {
+      "id": "g2261021_482",
+      "chapter": 7,
+      "group": "αυ",
+      "skill": "voicing",
+      "word": "αυλή",
+      "correct": "[av]",
+      "following": "λ",
+      "translations": {
+        "ru": "двор",
+        "en": "courtyard",
+        "zh": "庭院",
+        "ar": "فناء",
+        "es": "patio",
+        "pt": "pátio"
+      }
+    },
+    {
+      "id": "g2261021_483",
+      "chapter": 7,
+      "group": "αυ",
+      "skill": "voicing",
+      "word": "αύριο",
+      "correct": "[av]",
+      "following": "ρ",
+      "translations": {
+        "ru": "завтра",
+        "en": "tomorrow",
+        "zh": "明天",
+        "ar": "غداً",
+        "es": "mañana",
+        "pt": "amanhã"
+      }
+    },
+    {
+      "id": "g2261021_484",
+      "chapter": 8,
+      "group": "αυ",
+      "skill": "voicing",
+      "word": "αυγό",
+      "correct": "[av]",
+      "following": "γ",
+      "translations": {
+        "ru": "яйцо",
+        "en": "egg",
+        "zh": "鸡蛋",
+        "ar": "بيضة",
+        "es": "huevo",
+        "pt": "ovo"
+      }
+    },
+    {
+      "id": "g2261021_485",
+      "chapter": 3,
+      "group": "αυ",
+      "skill": "voicing",
+      "word": "αυτός",
+      "correct": "[af]",
+      "following": "τ",
+      "translations": {
+        "ru": "он / этот",
+        "en": "he / this (masculine)",
+        "zh": "他／这个（阳性）",
+        "ar": "هو / هذا",
+        "es": "él / este",
+        "pt": "ele / este"
+      }
+    },
+    {
+      "id": "g2261021_486",
+      "chapter": 4,
+      "group": "αυ",
+      "skill": "voicing",
+      "word": "Αυστρία",
+      "correct": "[af]",
+      "following": "σ",
+      "translations": {
+        "ru": "Австрия",
+        "en": "Austria",
+        "zh": "奥地利",
+        "ar": "النمسا",
+        "es": "Austria",
+        "pt": "Áustria"
+      }
+    },
+    {
+      "id": "g2261021_487",
+      "chapter": 6,
+      "group": "αυ",
+      "skill": "voicing",
+      "word": "αυτοκίνητο",
+      "correct": "[af]",
+      "following": "τ",
+      "translations": {
+        "ru": "автомобиль",
+        "en": "car",
+        "zh": "汽车",
+        "ar": "سيارة",
+        "es": "coche",
+        "pt": "carro"
+      }
+    },
+    {
+      "id": "g2261021_488",
+      "chapter": 4,
+      "group": "ευ",
+      "skill": "voicing",
+      "word": "Ευρώπη",
+      "correct": "[ev]",
+      "following": "ρ",
+      "translations": {
+        "ru": "Европа",
+        "en": "Europe",
+        "zh": "欧洲",
+        "ar": "أوروبا",
+        "es": "Europa",
+        "pt": "Europa"
+      }
+    },
+    {
+      "id": "g2261021_489",
+      "chapter": 7,
+      "group": "ευ",
+      "skill": "voicing",
+      "word": "ευγενικός",
+      "correct": "[ev]",
+      "following": "γ",
+      "translations": {
+        "ru": "вежливый",
+        "en": "polite (masculine)",
+        "zh": "有礼貌的（阳性）",
+        "ar": "مهذب",
+        "es": "educado",
+        "pt": "educado"
+      }
+    },
+    {
+      "id": "g2261021_490",
+      "chapter": 1,
+      "group": "ευ",
+      "skill": "voicing",
+      "word": "Ευαγγελία",
+      "correct": "[ev]",
+      "following": "α",
+      "translations": {
+        "ru": "имя Евангелия",
+        "en": "the name Evangelia",
+        "zh": "名字埃万盖莉娅",
+        "ar": "الاسم إيفانجيليا",
+        "es": "el nombre Evangelia",
+        "pt": "o nome Evangelia"
+      }
+    },
+    {
+      "id": "g2261021_491",
+      "chapter": 1,
+      "group": "ευ",
+      "skill": "voicing",
+      "word": "ευχαριστώ",
+      "correct": "[ef]",
+      "following": "χ",
+      "translations": {
+        "ru": "спасибо",
+        "en": "thank you",
+        "zh": "谢谢",
+        "ar": "شكراً",
+        "es": "gracias",
+        "pt": "obrigado"
+      }
+    },
+    {
+      "id": "g2261021_492",
+      "chapter": 7,
+      "group": "ευ",
+      "skill": "voicing",
+      "word": "εύκολο",
+      "correct": "[ef]",
+      "following": "κ",
+      "translations": {
+        "ru": "легко / простой",
+        "en": "easy",
+        "zh": "容易",
+        "ar": "سهل",
+        "es": "fácil",
+        "pt": "fácil"
+      }
+    },
+    {
+      "id": "g2261021_493",
+      "chapter": 1,
+      "group": "ευ",
+      "skill": "voicing",
+      "word": "Ευτυχία",
+      "correct": "[ef]",
+      "following": "τ",
+      "translations": {
+        "ru": "имя Эвтихия",
+        "en": "the name Eftychia",
+        "zh": "名字埃夫蒂希娅",
+        "ar": "الاسم إفتخيا",
+        "es": "el nombre Eftychia",
+        "pt": "o nome Eftychia"
+      }
+    }
+  ]
+}
