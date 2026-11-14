@@ -12,6 +12,7 @@
 <script src="/greek/life_art.js?v=1" defer></script>
 <script src="/greek/life.js?v=3" defer></script>
 <script src="/greek/vocab.js?v=7" defer></script>
+<script src="/greek/culture_ui.js?v=1" defer></script>
 </head>
 <body>
 <div class="background-ornament" aria-hidden="true">α β γ δ ε ζ η θ</div>
@@ -77,6 +78,7 @@
      <button class="tab" data-page="vocab" data-i18n="vocabTab">Словарь A1/A2</button>
      <button class="tab" data-page="tracks" data-i18n="tracksTab">Карточки · 30</button>
      <button class="tab" data-page="life" data-i18n="lifeTab">Ελληνική Ζωή</button>
+     <button class="tab" data-page="culture">🇨🇾 Cyprus Culture</button>
      <button class="tab" data-page="weak"><span data-i18n="myMistakes">Мои ошибки</span> <span class="bubble" id="weak-bubble">0</span></button>
      <button class="tab" data-page="stats" data-i18n="statistics">Статистика</button>
      <button class="tab" data-page="leaderboard" data-i18n="leaders">Рейтинг</button>
@@ -282,6 +284,43 @@
     <div id="finish-skills" class="finish-skills" aria-live="polite" hidden></div>
     <div class="finish-actions"><button class="primary" id="again" data-i18n="anotherSession">Новое занятие ↗</button><button class="secondary" id="review" data-i18n="reviewMistakes">Повторить ошибки</button></div>
    </section>
+  </section>
+  <section id="culture-view" hidden>
+   <div class="panel culture-panel">
+    <div class="panel-heading">
+      <span class="eyebrow">🇨🇾 Λέξη · Cyprus Culture</span>
+      <h2 id="culture-title">Культура Кипра</h2>
+      <p id="culture-intro">История, государство, география и современная жизнь Кипра — подготовка на греческом.</p>
+    </div>
+    <p class="notice" id="culture-unofficial">Независимый учебный тренажёр, не официальный государственный экзамен.</p>
+    <div class="culture-stats" aria-live="polite">
+      <div class="tile"><span id="culture-available-label">Опубликовано вопросов</span><strong id="culture-available">0</strong></div>
+      <div class="tile"><span id="culture-mastered-label">Освоено фактов</span><strong id="culture-mastered">0</strong></div>
+      <div class="tile"><span id="culture-weak-label">Мои ошибки</span><strong id="culture-weak-count">0</strong></div>
+    </div>
+    <div class="culture-settings">
+      <label for="culture-lang" id="culture-lang-label">Язык перевода
+        <select id="culture-lang">
+          <option value="ru">Русский</option><option value="en">English</option>
+        </select>
+      </label>
+      <label for="culture-duration" id="culture-duration-label">Тренировка
+        <select id="culture-duration">
+          <option value="10">10 мин</option><option value="20" selected>20 мин</option><option value="30">30 мин</option><option value="45">45 мин</option>
+        </select>
+      </label>
+      <label class="culture-srs-option" for="culture-srs"><input type="checkbox" id="culture-srs"/><span id="culture-srs-label">Интервальное повторение (SRS)</span></label>
+    </div>
+    <div class="subheading" id="culture-topics-title">Темы экзамена</div>
+    <div id="culture-topics" class="culture-topics" role="group" aria-labelledby="culture-topics-title"></div>
+    <div class="culture-actions">
+      <button type="button" class="primary" id="culture-start" disabled>Начать тренировку</button>
+      <button type="button" class="secondary" id="culture-review" disabled>Повторить ошибки</button>
+      <button type="button" class="secondary" id="culture-exam" disabled aria-describedby="culture-exam-status">Пробный экзамен · скоро</button>
+    </div>
+    <p id="culture-status" class="quiet" role="status" aria-live="polite"></p>
+    <p id="culture-exam-status" class="quiet">Пробный экзамен 25 вопросов / 45 минут появится после реализации защищённого экзаменационного профиля и проверки банка.</p>
+   </div>
   </section>
   <section id="tracks-view" hidden>
     <div class="panel tracks-panel">
