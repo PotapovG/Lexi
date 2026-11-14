@@ -60,6 +60,10 @@ def test_shared_ledger():
             again=answer_idempotency.score_once(server.conn,server.mark,uid,wrong)
             assert again==outcome,"idempotent retry must replay the receipt"
             assert server.make_quiz(uid,{**params,"mode":["weak"]})["count"]==1
+            assert server.make_quiz(uid,{**params,"mode":["srs_due"]})["count"]==0
+            with server.conn() as db:
+                db.execute("UPDATE srs_schedule SET due_at='2020-01-01T00:00:00+00:00' WHERE user_id=?",
+                           (uid,))
             assert server.make_quiz(uid,{**params,"mode":["srs_due"]})["count"]==1
             assert server.stats(uid)["attempts"]==0, "A1/A2 stats polluted"
             assert server.stats(uid)["weak"]==0, "Culture weak surfaced in Greek study"
