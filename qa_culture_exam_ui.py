@@ -44,7 +44,7 @@ assert 'const result=await examRequest({action:"start"' in app
 assert 'window.lexiCultureBridge.startExam()' in ui
 assert '(stats?.availableFacts||0)>=25' in ui
 assert 'culture-exam").disabled=working||!examReady' in ui
-assert 'function _safe_view(row,now)' in exam
+assert 'def _safe_view(row,now):' in exam
 assert 'if finished:' in exam
 
 assert ".culture-exam-navigation" in css
