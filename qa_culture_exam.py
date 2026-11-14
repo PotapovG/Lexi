@@ -18,7 +18,7 @@ import server
 
 UTC=dt.timezone.utc
 ROOT=Path(__file__).parent
-AT=dt.datetime(2026,11,14,10,0,0,tzinfo=UTC)
+AT=dt.datetime.now(UTC).replace(microsecond=0)
 
 
 def rid():
@@ -34,11 +34,12 @@ def corpus():
         q["id"]=f"cyq_geo_{i+5000:04d}"
         f["id"]=f"cyf_geo_{i+5000:04d}"
         q["fact_id"]=f["id"]
+        q["verified_at"]=f["verified_at"]=AT.date().isoformat()
         q["topic"]=["GEO","GOV","HIS","NEWS"][i%4]
         f["topic"]=q["topic"]
         if q["freshness"]=="current":
-            q["review_due"]=f["review_due"]="2027-01-01"
-            q["valid_until"]=f["valid_until"]="2027-02-01"
+            q["review_due"]=f["review_due"]=(AT.date()+dt.timedelta(days=30)).isoformat()
+            q["valid_until"]=f["valid_until"]=(AT.date()+dt.timedelta(days=60)).isoformat()
         cards[q["id"]]=culture_adapter.to_card(q,f)
     # One more formulation of an existing fact: still only 30 unique facts.
     alt=dict(cards["cyq_geo_5000"])
@@ -88,7 +89,7 @@ def test_server_profile():
                            "optionTranslations","explanation","source","truth",
                            "translations","answerIndex"):
                 assert f'"{secret}"' not in raw,secret
-            assert started["deadlineAt"]=="2026-11-14T10:45:00+00:00"
+            assert started["deadlineAt"]==culture_exam.iso(AT+dt.timedelta(minutes=45))
 
             # First start and same idempotency key return the same server snapshot.
             with server.conn() as db:
@@ -205,7 +206,7 @@ def test_server_profile():
                 expired=culture_exam.get(db,uid,restarted["sessionId"],now=AT+dt.timedelta(minutes=55))
             assert expired["status"]=="finished" and expired["reason"]=="time_expired"
             assert expired["answered"]==0 and expired["score"]==0
-            assert expired["deadlineAt"]=="2026-11-14T10:53:00+00:00"
+            assert expired["deadlineAt"]==culture_exam.iso(AT+dt.timedelta(minutes=53))
 
             # Fewer than 25 different facts must not create a misleading "mock exam".
             smaller={key:val for key,val in list(server.CULTURE_BY_ID.items())[:24]}
