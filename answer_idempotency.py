@@ -24,7 +24,7 @@ def score_once(conn_factory,score,user_id,body,validate_attempt=None):
             return score(user_id,body,injected_db=db)
     if not isinstance(token,str) or not REQUEST_ID.fullmatch(token) or len(token)!=36:
         raise ValueError('invalid request id')
-    fields={k:body.get(k) for k in ('id','direction','selected','lang','srsOptIn')}
+    fields={k:body.get(k) for k in ('id','direction','selected','lang','srsOptIn','assisted')}
     digest=hashlib.sha256(json.dumps(fields,ensure_ascii=False,sort_keys=True,
                     separators=(',',':')).encode('utf-8')).hexdigest()
     with conn_factory() as db:
