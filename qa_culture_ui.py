@@ -45,7 +45,7 @@ for element in ("culture-wording-wrap", "culture-wording-button", "culture-wordi
     assert html.count('id="'+element+'"')==1, element
 for marker in (
     'cultureAssisted:state.cultureAssisted',
-    'state.cultureAssisted=saved.cultureAssisted',
+    'state.cultureAssisted=(saved.cultureAssisted',
     'state.cultureAssisted[state.current.id]=true',
     'assisted:!!state.cultureAssisted[q.id]',
     'state.settings?.mode!=="exam"',
