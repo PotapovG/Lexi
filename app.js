@@ -893,6 +893,7 @@
       await api("auth/logout",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"});
       clearActiveSession();
       localStorage.removeItem(ACCESS_CODE_KEY);state.profile=null;state.loggedIn=false;
+      state.cultureStats=null;state.cultureAssisted={};
       showAccountCode("");setPage("practice");show("setup",true);show("quiz",false);show("finished",false);
       clearInterval(state.timer);state.deadline=0;state.finishing=true;
       await loadProfile();
@@ -1321,6 +1322,7 @@
       (q.articleSpellingVariant?" · "+t("articleVariantHint"):(q.multipleValid&&q.direction!=="ru-gr"?" · "+t("manyCorrect"):""))+greekVariantHint);
     txt("question-prompt",q.kind==="culture"?q.prompt:q.promptEn?hint(q.prompt,q.promptEn):q.prompt);
     show("culture-hint-wrap",q.kind==="culture");
+    $("culture-hint-button").disabled=false;
     if(q.kind==="culture"){
       txt("culture-hint-button",ct("hint"));
       const opened=!!state.cultureAssisted[q.id];
@@ -1728,6 +1730,7 @@
         note.append(heading,document.createTextNode(result.explanation));$("feedback").append(note);
       }
       if(q.kind==="culture"){
+        $("culture-hint-button").disabled=true;
         const panel=document.createElement("div");panel.className="culture-review";
         if(result.translation){
           const p=document.createElement("p");p.className="answer-translation";
