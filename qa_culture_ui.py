@@ -38,3 +38,23 @@ assert ".culture-topics" in css and "@media(max-width:360px)" in css
 for disallowed in ("correctIndex", "correct_index", "answerIndex", "fetch(\"/api/answer\""):
     assert disallowed not in ui, disallowed
 print("PASS CULT-04: one Lexi mode, shared quiz bridge, scoped catalog/stats, no mock-exam impersonation")
+
+
+# CULT-04 assisted wording: question-instruction glosses only, never an answer.
+for element in ("culture-wording-wrap", "culture-wording-button", "culture-wording-text"):
+    assert html.count('id="'+element+'"')==1, element
+for marker in (
+    'cultureAssisted:state.cultureAssisted',
+    'state.cultureAssisted=saved.cultureAssisted',
+    'state.cultureAssisted[state.current.id]=true',
+    'assisted:!!state.cultureAssisted[q.id]',
+    'state.settings?.mode!=="exam"',
+    'function cultureWordingHint(question)',
+    'show("culture-wording-wrap",showHint)',
+    'showCultureWording',
+):
+    assert marker in app, marker
+assert ".culture-hint-wrap" in css
+assert 'id="culture-exam" disabled' in html
+# The full choice translation is still returned only from the server AFTER grading.
+assert 'result.optionTranslations' in app
