@@ -14,6 +14,10 @@ jobs:
           python-version: '3.11'
       - name: Import, isolated HTTP and HTTP origin tests
         run: python3 tests/test_selfhost.py
+      - name: Cyprus Culture content contract and regression tests
+        run: |
+          python3 culture_content.py
+          python3 qa_culture_content.py
       - name: Community content uniqueness, lesson grammar and translations
         run: python3 tests/test_community_content.py
       - name: Noun gender grammar and isolated scoring QA
