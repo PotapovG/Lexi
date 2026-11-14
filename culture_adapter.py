@@ -92,6 +92,10 @@ def after_answer(card: dict, lang: str, selected: str, correct: bool, assisted: 
         "cultureFormat": card["format"],
         "translation": translation["question"],
         "translationChoices": list(translation["options"]),
+        "optionTranslations": [
+            {"el": greek, "translation": gloss}
+            for greek, gloss in zip(card["options"], translation["options"])
+        ],
         "translationLang": lang,
         "explanation": card["explanations"][lang],
         "source": card["source"],
