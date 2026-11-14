@@ -542,7 +542,7 @@
       sessionId:state.remoteSessionId,
       settings:state.settings,mode:state.mode,questions:state.questions,index:state.index,
       seen:state.seen,sessionSkills:state.sessionSkills,count:state.count,correct:state.correct,wrong:state.wrong,
-      answered:state.answered,verbStage:state.verbStage,dialogueStep:state.dialogueStep,
+      answered:state.answered,cultureAssisted:state.cultureAssisted,verbStage:state.verbStage,dialogueStep:state.dialogueStep,
       dialogueFilled:state.dialogueFilled,orderIndices:state.orderIndices,
       pendingAnswer:state.pendingAnswer||null,savedAt:Date.now()
     };
@@ -621,6 +621,8 @@
     }
     state.restoring=true;
     state.settings=saved.settings;state.mode=saved.mode||"all";
+    state.cultureAssisted=(saved.cultureAssisted&&typeof saved.cultureAssisted==="object"&&!Array.isArray(saved.cultureAssisted))
+      ?saved.cultureAssisted:{};
     state.questions=saved.questions;state.index=saved.index;
     state.seen=Array.isArray(saved.seen)?saved.seen:[];
     state.sessionSkills=(saved.sessionSkills&&typeof saved.sessionSkills==="object"&&!Array.isArray(saved.sessionSkills))
@@ -659,7 +661,7 @@
     if(!$("quiz").hidden)txt("resume-message",t(transferred?"resumeRemoteNotice":"resumeNotice"));
   }
 
-  const state={joinedLeaderboard:false,catalog:null,topicCatalog:null,profile:null,loggedIn:false,authMode:"register",questions:[],index:0,current:null,mode:"all",answered:false,busy:false,
+  const state={joinedLeaderboard:false,catalog:null,topicCatalog:null,cultureAssisted:{},profile:null,loggedIn:false,authMode:"register",questions:[],index:0,current:null,mode:"all",answered:false,busy:false,
     correct:0,wrong:0,seen:[],sessionSkills:{},count:0,deadline:0,started:0,timer:null,finishing:false,settings:null,
     remoteEpoch:0,remoteSessionId:null,remoteRevision:0,remoteEnabled:true,remoteSynced:false,remoteLost:false};
   const t=key => I18N[$("lang").value]?.[key] ?? I18N.en[key] ?? key;
@@ -891,7 +893,7 @@
     try{
       await api("auth/logout",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"});
       clearActiveSession();
-      localStorage.removeItem(ACCESS_CODE_KEY);state.profile=null;state.loggedIn=false;
+      localStorage.removeItem(ACCESS_CODE_KEY);state.profile=null;state.loggedIn=false;state.cultureAssisted={};
       showAccountCode("");setPage("practice");show("setup",true);show("quiz",false);show("finished",false);
       clearInterval(state.timer);state.deadline=0;state.finishing=true;
       await loadProfile();
@@ -1096,7 +1098,7 @@
     clearActiveSession();
     state.remoteSessionId=newRequestId();
     state.remoteRevision=0;state.remoteEnabled=true;
-    state.mode=cultureOptions?(cultureOptions.mode==="weak"?"weak":"all"):(due?"due":weak?"weak":"all");state.seen=[];state.sessionSkills={};state.count=0;state.correct=0;state.wrong=0;
+    state.mode=cultureOptions?(cultureOptions.mode==="weak"?"weak":"all"):(due?"due":weak?"weak":"all");state.seen=[];state.sessionSkills={};state.cultureAssisted={};state.count=0;state.correct=0;state.wrong=0;
     state.finishing=false;state.answered=false;state.busy=false;
     try{
       const questions=await loadQuestions();
@@ -1128,6 +1130,39 @@
     await window.LexiWordAudio.play(q.wordAudio,{
       slow,onStatus:code=>{if(state.current===q)txt("word-audio-status",t("wordAudio"+code[0].toUpperCase()+code.slice(1))); }
     });
+  }
+
+  // Only generic exam-instruction vocabulary is revealed here, never an
+  // answer, source or question translation; study-only, not exam tooling.
+  function cultureWordingHint(question){
+    const lang=question.lang==="ru"?"ru":"en";
+    const phrase=String(question.prompt||"").toLocaleLowerCase("el");
+    const glossary=[
+      ["λανθασμέν","неверное утверждение","incorrect statement"],
+      ["δεν ισχύει","не соответствует действительности","is not true"],
+      ["ακόλουθ","из следующих","of the following"],
+      ["χρονολογ","в хронологическом порядке","chronological order"],
+      ["ολογράφως","полностью, без сокращений","in full, not abbreviated"],
+      ["ακρωνύμιο","аббревиатура","acronym"],
+      ["πότε","когда","when"],["ποιο","какой / какое","which"],
+      ["ποια","какая","which"],["πόσα","сколько","how many"],
+      ["έτος","год","year"]
+    ];
+    const matched=glossary.filter(([word])=>phrase.includes(word)).slice(0,4);
+    const intro=lang==="ru"?"Ответ будет отмечен как с подсказкой.":"This answer will be marked assisted.";
+    const empty=lang==="ru"?"Обратите внимание на вопросительные слова и отрицания.":"Look for question words and negations.";
+    return (matched.map(([greek,ru,en])=>greek+" — "+(lang==="ru"?ru:en)).join(" · ")||empty)+"\\n"+intro;
+  }
+  function cultureHintAllowed(q){
+    return q?.kind==="culture"&&state.settings?.scope==="culture"&&state.settings?.mode!=="exam";
+  }
+  function showCultureWording(){
+    if(!cultureHintAllowed(state.current)||state.answered||state.busy)return;
+    state.cultureAssisted[state.current.id]=true;
+    txt("culture-wording-text",cultureWordingHint(state.current));
+    show("culture-wording-text",true);
+    $("culture-wording-button").setAttribute("aria-expanded","true");
+    persistActiveSession();
   }
   function renderQuestion(){
     if(state.finishing)return;
@@ -1189,6 +1224,13 @@
       (q.greekVariants?.length?" · "+greekVariantLabels.more:"");
     txt("question-note",(q.kind==="accent"?t("accentChoiceHelp"):q.kind==="syllable"?t("syllableHelp"):q.note)+(q.articleSpellingVariant?" · "+t("articleVariantHint"):(q.multipleValid&&q.direction!=="ru-gr"?" · "+t("manyCorrect"):""))+greekVariantHint);
     txt("question-prompt",q.promptEn?hint(q.prompt,q.promptEn):q.prompt);
+    const showHint=cultureHintAllowed(q);
+    show("culture-wording-wrap",showHint);
+    $("culture-wording-button").disabled=false;
+    $("culture-wording-button").setAttribute("aria-expanded",String(showHint&&!!state.cultureAssisted[q.id]));
+    txt("culture-wording-button",q.lang==="ru"?"Разобрать формулировку (с подсказкой)":"Explain wording (assisted)");
+    show("culture-wording-text",showHint&&!!state.cultureAssisted[q.id]);
+    txt("culture-wording-text",showHint&&state.cultureAssisted[q.id]?cultureWordingHint(q):"");
     show("clock-face",q.kind==="clock");
     if(q.kind==="clock")renderClock(q);
     show("feedback",false);show("next",false);show("verb-reveal",false);
@@ -1454,7 +1496,7 @@
       ?state.pendingAnswer.body
       :{id:q.id,direction:actualDirection,lang:q.lang||state.settings.lang,selected,requestId,
          srsOptIn:q.kind==="culture"?Boolean(state.settings.srsOptIn):($("srs-optin").checked||state.mode==="due"),
-         ...(q.kind==="culture"?{assisted:false}:{}),
+         ...(q.kind==="culture"?{assisted:!!state.cultureAssisted[q.id]}:{}),
          sessionId:state.remoteSessionId,deviceId};
     state.pendingAnswer={index,overrideSelected,requestId,body:immutableBody};
     persistActiveSession();
@@ -1468,7 +1510,7 @@
       state.answered=true;state.count++;
       const answerLang=q.lang||state.settings.lang;
       state.seen.push((state.mode==="weak"||state.mode==="due")
-        ? q.id+":"+actualDirection+(q.kind==="accent"||q.kind==="dialogue"||answerLang==="ru"?"":":"+answerLang)
+        ? q.id+":"+actualDirection+(q.kind==="culture"||q.kind==="accent"||q.kind==="dialogue"||answerLang==="ru"?"":":"+answerLang)
         : (q.semanticId||q.id));
       if(result.correct)state.correct++;else state.wrong++;
       // Per-skill reporting in the SAME timed session, including after
@@ -1584,6 +1626,12 @@
         $("feedback").append(tip);
       }
       if(q.kind==="culture"){
+        $("culture-wording-button").disabled=true;
+        if(result.assisted){
+          const note=document.createElement("p");note.className="quiet";
+          note.textContent=(q.lang==="ru"?"Ответ с подсказкой — не считается самостоятельным освоением.":"Assisted answer — not counted as independent mastery.");
+          $("feedback").append(note);
+        }
         const panel=document.createElement("div");panel.className="culture-answer-detail";
         const language=q.lang||state.settings.lang;
         const title=document.createElement("strong");
@@ -1945,6 +1993,7 @@
   };
   async function init(){
     const saved=restoreSettings();
+    $("culture-wording-button").addEventListener("click",showCultureWording);
     for(const radio of document.querySelectorAll('input[name=scope]'))radio.addEventListener("change",()=>{showScope();saveSettings();});
     for(const radio of document.querySelectorAll('input[name=training]'))radio.addEventListener("change",()=>{updateTraining();saveSettings();});
     for(const n of ["page-from","page-to"])$(n).addEventListener("change",()=>{updateRangeSummary();saveSettings();});
