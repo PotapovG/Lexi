@@ -1277,11 +1277,11 @@
       q.kind==="grammar"&&q.grammarGroup==="weather" ||
       q.kind==="grammar"&&q.grammarGroup==="consonant" ||
       q.kind==="grammar"&&q.grammarGroup==="review_scenario");
-    $("question-prompt").lang=["article","syllable","enclitic","grammar"].includes(q.kind)?"el":$("lang").value;
-    $("question-prompt").dir=["article","syllable","enclitic","grammar"].includes(q.kind)?"ltr":"auto";
+    $("question-prompt").lang=["article","syllable","enclitic","grammar","culture"].includes(q.kind)?"el":$("lang").value;
+    $("question-prompt").dir=["article","syllable","enclitic","grammar","culture"].includes(q.kind)?"ltr":"auto";
     txt("next",t("next"));
-    txt("quiz-mode",state.mode==="due"?t("srsSession"):
-      state.mode==="weak"?t("weakSession"):t("session"));
+    txt("quiz-mode",q.kind==="culture"?ct(state.mode==="weak"?"reviewTitle":"lesson"):
+      state.mode==="due"?t("srsSession"):state.mode==="weak"?t("weakSession"):t("session"));
     txt("question-num",String(state.count+1).padStart(2,"0"));
     let chapter=(q.kind==="listening"?state.catalog?.listeningChapters:state.catalog?.chapters)?.find(x=>x.id===q.chapter);
     const topic=q.kind==="dialogue"?t("dialogueLabel")+" · "+q.topic :
@@ -1290,7 +1290,10 @@
       q.chapter===-8?(state.topicCatalog?.topics.find(x=>x.id===q.topic)?.[$("lang").value==="ru"?"ru":"en"]||q.topic):
       q.chapter>0?t("chapter")+" "+q.chapter+" · "+(chapter?.title||q.topic):
        (q.chapter===0?t("alphabetName"):t("review"))+" · "+(chapter?.title||"");
-    txt("question-topic",q.page>0?topic+" · p. "+q.page+(q.sourcePageVerified?" ✓":" ~"):topic);
+    txt("question-topic",q.kind==="culture"?
+      (state.cultureCatalog?.topics?.find(x=>x.code===q.topic)?.[q.lang]||q.topic)+
+      " · "+q.cultureFormat:
+      q.page>0?topic+" · p. "+q.page+(q.sourcePageVerified?" ✓":" ~"):topic);
     if(q.scenarioId&&q.scenarioTitle)
       txt("question-topic",q.scenarioTitle+" · "+q.scenarioStep+"/"+q.scenarioTotal+
           " · "+t("chapter")+" "+q.chapter);
@@ -1309,8 +1312,18 @@
     const greekVariantHint=visibleVariant?
       " · "+greekVariantLabels.also+": "+q.greekVariants.join(" / "):
       (q.greekVariants?.length?" · "+greekVariantLabels.more:"");
-    txt("question-note",(q.kind==="accent"?t("accentChoiceHelp"):q.kind==="syllable"?t("syllableHelp"):q.note)+(q.articleSpellingVariant?" · "+t("articleVariantHint"):(q.multipleValid&&q.direction!=="ru-gr"?" · "+t("manyCorrect"):""))+greekVariantHint);
-    txt("question-prompt",q.promptEn?hint(q.prompt,q.promptEn):q.prompt);
+    txt("question-note",q.kind==="culture"?"Α · Β · Γ · Δ":
+      (q.kind==="accent"?t("accentChoiceHelp"):q.kind==="syllable"?t("syllableHelp"):q.note)+
+      (q.articleSpellingVariant?" · "+t("articleVariantHint"):(q.multipleValid&&q.direction!=="ru-gr"?" · "+t("manyCorrect"):""))+greekVariantHint);
+    txt("question-prompt",q.kind==="culture"?q.prompt:q.promptEn?hint(q.prompt,q.promptEn):q.prompt);
+    show("culture-hint-wrap",q.kind==="culture");
+    if(q.kind==="culture"){
+      txt("culture-hint-button",ct("hint"));
+      const opened=!!state.cultureAssisted[q.id];
+      show("culture-hint-text",opened);
+      txt("culture-hint-text",opened?cultureWordingHint(q):"");
+      $("culture-hint-button").setAttribute("aria-expanded",String(opened));
+    }
     show("clock-face",q.kind==="clock");
     if(q.kind==="clock")renderClock(q);
     show("feedback",false);show("next",false);show("verb-reveal",false);
@@ -1370,7 +1383,7 @@
     answers.classList.toggle("accent-letters",isAccent);
     // Readable answer choices: long phrases/sentences and very long translations
     // are full width on mobile, instead of squeezing into two tiny columns.
-    const longChoices=!isAccent && (["phrase","sentence","enclitic","grammar","clock"].includes(q.kind) ||
+    const longChoices=!isAccent && (["phrase","sentence","enclitic","grammar","clock","culture"].includes(q.kind) ||
       q.choices.some((x,i)=>x.length>36||(q.choicesEn?.[i]&&hint(x,q.choicesEn[i]).length>42)));
     answers.classList.toggle("wide-choices",longChoices);
     if(isAccent)$("question-prompt").classList.add("unaccented-word");
@@ -1384,7 +1397,7 @@
         b.setAttribute("aria-label",(i+1)+": "+choice);
         b.title=String(i+1);
       }else{
-        const n=document.createElement("span");n.className="key";n.textContent=String(i+1);
+        const n=document.createElement("span");n.className="key";n.textContent=q.kind==="culture"?["Α","Β","Γ","Δ"][i]:String(i+1);
         const val=document.createElement("span");val.textContent=q.choicesEn?hint(choice,q.choicesEn[i]):choice;
         val.dir="auto";b.append(n,val);
       }
@@ -1575,7 +1588,8 @@
     const immutableBody=(replayId&&state.pendingAnswer?.requestId===replayId&&state.pendingAnswer.body)
       ?state.pendingAnswer.body
       :{id:q.id,direction:actualDirection,lang:q.lang||state.settings.lang,selected,requestId,
-         srsOptIn:$("srs-optin").checked||state.mode==="due",
+         ...(q.kind==="culture"?{assisted:!!state.cultureAssisted[q.id]}:{}),
+         srsOptIn:q.kind==="culture"||$("srs-optin").checked||state.mode==="due",
          sessionId:state.remoteSessionId,deviceId};
     state.pendingAnswer={index,overrideSelected,requestId,body:immutableBody};
     persistActiveSession();
@@ -1589,7 +1603,7 @@
       state.answered=true;state.count++;
       const answerLang=q.lang||state.settings.lang;
       state.seen.push((state.mode==="weak"||state.mode==="due")
-        ? q.id+":"+actualDirection+(q.kind==="accent"||q.kind==="dialogue"||answerLang==="ru"?"":":"+answerLang)
+        ? q.id+":"+actualDirection+(q.kind==="culture"||q.kind==="accent"||q.kind==="dialogue"||answerLang==="ru"?"":":"+answerLang)
         : (q.semanticId||q.id));
       if(result.correct)state.correct++;else state.wrong++;
       // Per-skill reporting in the SAME timed session, including after
@@ -1708,6 +1722,31 @@
         const note=document.createElement("p");note.className="spelling-guidance";
         const heading=document.createElement("strong");heading.textContent=t("explanationTitle")+": ";
         note.append(heading,document.createTextNode(result.explanation));$("feedback").append(note);
+      }
+      if(q.kind==="culture"){
+        const panel=document.createElement("div");panel.className="culture-review";
+        if(result.translation){
+          const p=document.createElement("p");p.className="answer-translation";
+          const title=document.createElement("strong");title.textContent=ct("translation")+": ";
+          p.append(title,document.createTextNode(result.translation));panel.append(p);
+        }
+        if(Array.isArray(result.originalChoices)&&Array.isArray(result.translationChoices)){
+          const heading=document.createElement("strong");heading.textContent=ct("options")+":";
+          const map=new Map(result.originalChoices.map((choice,i)=>[choice,result.translationChoices[i]]));
+          const list=document.createElement("ol");list.className="culture-translation-list";
+          q.choices.forEach((choice)=>{
+            const li=document.createElement("li");li.textContent=choice+" — "+(map.get(choice)||"");
+            list.append(li);
+          });
+          panel.append(heading,list);
+        }
+        if(result.source?.url&&/^https:\/\/[^\s]+$/.test(result.source.url)){
+          const source=document.createElement("a");source.href=result.source.url;
+          source.target="_blank";source.rel="noopener noreferrer";
+          source.textContent=ct("source")+": "+(result.source.title||result.source.url);
+          panel.append(source);
+        }
+        $("feedback").append(panel);
       }
       if(result.spellingNote){
         const note=document.createElement("p");note.className="spelling-guidance";
@@ -1862,6 +1901,10 @@
     txt("finish-title",pct>=90?t("excellent"):pct>=70?t("good"):t("practiceMore"));
     txt("finish-copy",(expired?t("timeOver")+" ":"")+t("result").replace("{good}",state.correct).replace("{total}",total).replace("{pct}",pct).replace("{minutes}",elapsed));
     renderSessionSkills();
+    if(isCulture()){
+      txt("finish-copy",$("finish-copy").textContent+" · "+ct("result"));
+      await openCulture();
+    }
     await refreshStats();
   }
   function drawMetrics(id,metrics){
