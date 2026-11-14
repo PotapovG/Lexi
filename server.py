@@ -961,10 +961,12 @@ def mark(user_id,body,injected_db=None):
                                "person":card["person"]}
     return result
 
-def stats(user_id):
+def stats(user_id,scope="book"):
+    if scope=="culture":
+        return culture_stats(user_id)
     with conn() as db:
-        rows = db.execute("SELECT card_key,kind,unit,correct,created_at FROM attempts WHERE user_id=? ORDER BY id DESC LIMIT 20000",(user_id,)).fetchall()
-        prog = db.execute("SELECT card_key,attempts,correct,miss_debt FROM progress WHERE user_id=?",
+        rows = db.execute("SELECT card_key,kind,unit,correct,created_at FROM attempts WHERE user_id=? AND kind!='culture' ORDER BY id DESC LIMIT 20000",(user_id,)).fetchall()
+        prog = db.execute("SELECT card_key,attempts,correct,miss_debt FROM progress WHERE user_id=? AND substr(card_key,1,4) NOT IN ('cyq_','cyv_')",
                           (user_id,)).fetchall()
     total = len(rows)
     good = sum(r["correct"] for r in rows)
@@ -998,9 +1000,9 @@ def stats(user_id):
                   key=lambda x:(-x["miss_debt"],x["correct"]))
     detailed=learning_engine.detailed_mastery(rows,book_or_audio_card)
     detailed.update(learning_upgrade.knowledge_breakdown(rows,book_or_audio_card))
-    valid,total_weak=valid_weak_entries(user_id)
+    valid,total_weak=valid_weak_entries(user_id,scope="book")
     with conn() as db:
-        srs_status=learning_engine.status(db,user_id)
+        srs_status=learning_engine.status(db,user_id,scope="book")
         detailed['vocabTopics']=learning_upgrade.vocabulary_knowledge(db,user_id,vocab.VOCAB_BY_ID)
     actionable={x["key"] for x in valid}
     archive_count=total_weak-len(valid)
@@ -1060,11 +1062,11 @@ def leaderboard(user_id):
         joined_users={r["user_id"] for r in db.execute("SELECT user_id FROM leaderboard_members")}
         rows=db.execute("""SELECT a.user_id,a.created_at,a.correct
                  FROM attempts a INNER JOIN leaderboard_members m ON m.user_id=a.user_id
-                 WHERE a.created_at>=? ORDER BY a.user_id,a.created_at,a.id""",(since,)).fetchall()
+                 WHERE a.created_at>=? AND a.kind!='culture' ORDER BY a.user_id,a.created_at,a.id""",(since,)).fetchall()
         debt={r["user_id"]:r["n"] for r in db.execute(
             """SELECT p.user_id,COUNT(*) AS n FROM progress p
                INNER JOIN leaderboard_members m ON m.user_id=p.user_id
-               WHERE p.miss_debt>0 GROUP BY p.user_id""")}
+               WHERE p.miss_debt>0 AND substr(p.card_key,1,4) NOT IN ('cyq_','cyv_') GROUP BY p.user_id""")}
     totals={uid:dict(seconds=0,answers=0,correct=0,last=None) for uid in joined_users}
     for row in rows:
         uid=row["user_id"]
@@ -1346,7 +1348,8 @@ class Handler(BaseHTTPRequestHandler):
             with conn() as db:result=_lesson_sync.read(db,uid)
             return self.send_json(200,result,new,uid)
         if path=="/api/srs/status":
-            with conn() as db:result=learning_engine.status(db,uid)
+            scope="culture" if parse_qs(urlparse(self.path).query).get("scope")==["culture"] else "book"
+            with conn() as db:result=learning_engine.status(db,uid,scope=scope)
             return self.send_json(200,result,new,token)
         if path=="/api/personalized/status":
             with conn() as db:summary=personalized.progress_summary(db,uid)
@@ -1412,7 +1415,8 @@ class Handler(BaseHTTPRequestHandler):
             except Exception:
                 return self.send_json(500,{"error":"quiz unavailable"},new,uid)
         if path=="/api/stats":
-            return self.send_json(200,stats(uid),new,uid)
+            scope="culture" if parse_qs(urlparse(self.path).query).get("scope")==["culture"] else "book"
+            return self.send_json(200,stats(uid,scope=scope),new,uid)
         if path=="/api/leaderboard":
             return self.send_json(200,leaderboard(uid),new,uid)
         if path=="/api/topic-words":
@@ -1435,6 +1439,12 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200,dict(topics=TOPICS,counts=counts,levels=["A1","A2"],
                                groups=VERB_GROUPS,verbs=VERB_REFERENCE),new,token)
         if path=="/api/catalog":
+            if parse_qs(urlparse(self.path).query).get("scope")==["culture"]:
+                return self.send_json(200,dict(scope="culture",topics=_culture.topic_counts(CULTURE_CONFIG,CULTURE_BY_ID),
+                    available=len(CULTURE_BY_ID),formats=sorted(_culture.contract.QUESTION_FORMATS),
+                    languages=["ru","en"],contentVersion=_culture.contract.SCHEMA_VERSION,
+                    source="independently authored culture exam preparation, not an official exam"),
+                    new,uid)
             counts={c["id"]:sum(x["chapter"]==c["id"] for x in PRACTICE_ALL) for c in CHAPTERS}
             printed_sections=[c for c in CHAPTERS if c["id"] not in (0,-5)]
             listening_units=[dict(c,id=i) for i,c in enumerate(sorted(printed_sections,key=lambda c:c["start"]),1)]
