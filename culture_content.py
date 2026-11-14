@@ -115,6 +115,12 @@ def _status_and_dates(errors: list[str], path: str, row: dict, today: date) -> N
     _review(errors, path, row)
     if row.get("rights") not in RIGHTS:
         errors.append(f"{path}: content rights must be explicitly declared")
+    if status == "published":
+        source = row.get("source")
+        if isinstance(source, dict) and _is_text(source.get("url")):
+            hostname = urlsplit(source["url"]).hostname
+            if hostname in {"example.org", "example.net", "example.com", "test.invalid"}:
+                errors.append(f"{path}: synthetic placeholder sources may not be published")
 
 
 def _lang_map(errors: list[str], path: str, obj: object, keys: tuple[str, ...]) -> None:
@@ -253,8 +259,13 @@ def validate(
                 if row.get("origin") not in ORIGINS:
                     errors.append(f"{path}: invalid origin")
                 if row.get("origin") == "official_published":
-                    if row.get("rights") != "licensed_with_permission" or not isinstance(row.get("source"), dict) or row["source"].get("kind") != "official":
-                        errors.append(f"{path}: official wording requires official source and confirmed reuse rights")
+                    source = row.get("source")
+                    host = urlsplit(source.get("url", "")).hostname if isinstance(source, dict) else None
+                    if (row.get("rights") != "licensed_with_permission"
+                            or not isinstance(source, dict)
+                            or source.get("kind") != "official"
+                            or not host or not (host == "gov.cy" or host.endswith(".gov.cy"))):
+                        errors.append(f"{path}: official wording requires official .gov.cy source and confirmed reuse rights")
                 if not isinstance(row.get("version"), int) or isinstance(row.get("version"), bool) or row["version"] < 1:
                     errors.append(f"{path}: positive content version required")
                 vocab_ids = row.get("vocab_ids")
@@ -288,6 +299,8 @@ def validate(
             errors.append(f"questions[{index}]: unknown fact_id {row.get('fact_id')}")
         elif fact.get("topic") != row.get("topic"):
             errors.append(f"questions[{index}]: question/fact topic mismatch")
+        elif row.get("status") == "published" and fact.get("status") != "published":
+            errors.append(f"questions[{index}]: published question requires published reviewed fact")
         for vid in row.get("vocab_ids", []) if isinstance(row.get("vocab_ids"), list) else []:
             if vid not in vocabulary_ids:
                 errors.append(f"questions[{index}]: unknown vocab_id {vid}")
