@@ -188,16 +188,27 @@ def _pick(cards, config, rng, now):
     rng.shuffle(picked)
     snapshot=[]
     for card in picked:
-        options=list(card["options"])
+        original_options=list(card["options"])
+        options=list(original_options)
         expected=options[card["answerIndex"]]
         rng.shuffle(options)
+        # Option translations MUST follow the shuffled Greek option order.
+        # Keeping the original indexed glosses would corrupt the post-exam
+        # review even though the server scores the correct Greek answer.
+        aligned_translations={}
+        for lang,localization in card["translations"].items():
+            aligned_translations[lang]={
+                "question":localization["question"],
+                "options":[localization["options"][original_options.index(option)]
+                           for option in options],
+            }
         snapshot.append({
             "id":card["id"],"factId":card["factId"],
             "topic":card["topic"],"format":card["format"],
             "prompt":card["gr"],"choices":options,
             "correctIndex":options.index(expected),
             "selectedIndex":None,"flagged":False,
-            "translations":card["translations"],"explanations":card["explanations"],
+            "translations":aligned_translations,"explanations":card["explanations"],
             "source":card["source"],"contentVersion":card["contentVersion"],
         })
     return snapshot
