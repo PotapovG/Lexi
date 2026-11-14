@@ -489,6 +489,12 @@ def estimate_capacity(user_id,params):
     import math
     lang,mode,kinds,first,last,chapters,count,exclude=parse_options(params)
     scope=params.get("scope",["pages"])[0]
+    if scope=="culture":
+        topics=set(params.get("topics",[""])[0].split(",")) & {t["code"] for t in CULTURE_CONFIG["topics"]}
+        eligible=[c for c in CULTURE_BY_ID.values() if not topics or c["topic"] in topics]
+        unique=len({c["factId"] for c in eligible})
+        return dict(scope="culture",uniqueCards=unique,available=unique,
+                    enoughAt20Seconds=unique>=count,approximate=False)
     levels=set(params.get("levels",["A1,A2"])[0].split(","))&{"A1","A2"}
     groups=set(params.get("groups",["A,B1,B2"])[0].split(","))&set(VERB_GROUPS)
     if scope=="listening" and not LISTENING_ENABLED:
@@ -960,6 +966,47 @@ def mark(user_id,body,injected_db=None):
                                "forms":card["forms"],"accepted":card["accepted"],
                                "person":card["person"]}
     return result
+
+def culture_stats(user_id):
+    """Filtered view of the same attempts/progress/SRS ledger as A1/A2."""
+    with conn() as db:
+        rows=db.execute("""SELECT card_key,correct,assisted,created_at
+          FROM attempts WHERE user_id=? AND kind='culture'
+          ORDER BY id DESC LIMIT 20000""",(user_id,)).fetchall()
+        progress=db.execute("""SELECT card_key,attempts,correct,miss_debt
+          FROM progress WHERE user_id=? AND substr(card_key,1,4)='cyq_'""",
+          (user_id,)).fetchall()
+        srs=learning_engine.status(db,user_id,scope="culture")
+    topics={row["code"]:dict(attempts=0,correct=0,independentCorrect=0,masteredFacts=set())
+            for row in CULTURE_CONFIG["topics"]}
+    practiced=set()
+    mastered=set()
+    for row in rows:
+        cid=row["card_key"].split(":",1)[0]
+        card=CULTURE_BY_ID.get(cid)
+        if not card:continue
+        fact=card["factId"]
+        practiced.add(fact)
+        topic=topics[card["topic"]]
+        topic["attempts"]+=1
+        topic["correct"]+=int(row["correct"])
+        independent=bool(row["correct"] and not row["assisted"])
+        topic["independentCorrect"]+=int(independent)
+        if independent:
+            mastered.add(fact)
+            topic["masteredFacts"].add(fact)
+    weak,total_weak=valid_weak_entries(user_id,scope="culture")
+    return dict(scope="culture",attempts=len(rows),
+                correct=sum(r["correct"] for r in rows),
+                assisted=sum(r["assisted"] for r in rows),
+                practicedFacts=len(practiced),masteredFacts=len(mastered),
+                availableQuestions=len(CULTURE_BY_ID),
+                availableFacts=len({c["factId"] for c in CULTURE_BY_ID.values()}),
+                weak=len(weak),weakOverall=total_weak,srs=srs,
+                topics={code:{key:len(v) if isinstance(v,set) else v
+                              for key,v in info.items()} for code,info in topics.items()},
+                masteredQuestionKeys=sum(bool(r["correct"]) for r in progress))
+
 
 def stats(user_id,scope="book"):
     if scope=="culture":
