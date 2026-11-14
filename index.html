@@ -4,15 +4,15 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1220">
 <title>Λέξη — Greek practice</title>
-<link rel="stylesheet" href="/greek/styles.css?v=42">
+<link rel="stylesheet" href="/greek/styles.css?v=43">
 <script src="/greek/greek_word_audio.js?v=4" defer></script>
-<script src="/greek/app.js?v=47" defer></script>
+<script src="/greek/app.js?v=48" defer></script>
 <script src="/greek/board.js?v=3" defer></script>
 <script src="/greek/tracks.js?v=4" defer></script>
 <script src="/greek/life_art.js?v=1" defer></script>
 <script src="/greek/life.js?v=3" defer></script>
 <script src="/greek/vocab.js?v=7" defer></script>
-<script src="/greek/culture_ui.js?v=1" defer></script>
+<script src="/greek/culture_ui.js?v=2" defer></script>
 </head>
 <body>
 <div class="background-ornament" aria-hidden="true">α β γ δ ε ζ η θ</div>
@@ -277,6 +277,11 @@
     </div>
     <div class="verb-reveal" id="verb-reveal" hidden></div>
     <div class="feedback" id="feedback" hidden></div>
+    <div id="culture-exam-navigation" class="culture-exam-navigation" hidden role="group" aria-label="Mock exam navigation">
+      <button type="button" id="culture-exam-prev" class="secondary compact">← Previous</button>
+      <button type="button" id="culture-exam-flag" class="secondary compact" aria-pressed="false">Flag for review</button>
+      <button type="button" id="culture-exam-next" class="secondary compact">Next →</button>
+    </div>
     <p id="recovery-note" class="quiet" hidden></p>
     <button id="retry-answer" class="secondary compact" type="button" data-i18n="retryAnswer" hidden>Повторить отправку ответа</button>
     <p class="quiet" id="resume-message" role="status"></p>
@@ -289,6 +294,7 @@
     <span class="end-icon">✓</span><span class="eyebrow" data-i18n="complete">ЗАНЯТИЕ ЗАВЕРШЕНО</span>
     <h2 id="finish-title">Πολύ καλά!</h2><p id="finish-copy"></p>
     <div id="finish-skills" class="finish-skills" aria-live="polite" hidden></div>
+    <div id="culture-exam-review" class="culture-exam-review" aria-live="polite" hidden></div>
     <div class="finish-actions"><button class="primary" id="again" data-i18n="anotherSession">Новое занятие ↗</button><button class="secondary" id="review" data-i18n="reviewMistakes">Повторить ошибки</button></div>
    </section>
   </section>
