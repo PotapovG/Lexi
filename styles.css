@@ -832,3 +832,37 @@ body{background:radial-gradient(circle at 95% 0%,#1b3447 0,#0b1a29 45%,#091522 8
 @media (max-width: 360px) {
   .finish-skill-row { font-size: .85rem; }
 }
+
+/* Cyprus Culture: one learning section, using existing Lexi quiz UI. */
+#culture-view{max-width:960px;margin:0 auto;min-width:0}
+.culture-panel{display:flex;flex-direction:column;gap:17px}
+.culture-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.culture-stat-grid>div{border:1px solid var(--line);background:#132940;border-radius:13px;padding:15px 12px;min-width:0}
+.culture-stat-grid strong{display:block;color:var(--accent);font-size:25px;font-variant-numeric:tabular-nums}
+.culture-stat-grid span{display:block;color:var(--muted);font-size:12px;overflow-wrap:anywhere}
+.culture-controls label{display:flex;flex-direction:column;gap:7px;max-width:300px}
+.culture-controls .stage-select{width:100%}
+.culture-topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.culture-topic{display:flex;align-items:center;gap:10px;min-width:0;border:1px solid var(--line);
+ background:#12283b;border-radius:12px;padding:12px;cursor:pointer}
+.culture-topic:has(input:disabled){opacity:.65;cursor:default}
+.culture-topic input{flex:0 0 auto;width:18px;height:18px;accent-color:var(--accent)}
+.culture-topic span{flex:1 1 auto;min-width:0;overflow-wrap:anywhere;font-size:14px}
+.culture-topic small{flex:0 0 auto;font-variant-numeric:tabular-nums;color:var(--muted)}
+.culture-actions{display:flex;flex-wrap:wrap;gap:10px}
+.culture-actions button{min-height:46px}
+.culture-panel h3{margin:8px 0 0}
+.culture-hint-wrap{margin:8px 0 16px}
+.culture-hint-wrap p{white-space:pre-line;margin:11px 0 0;padding:12px;border:1px solid var(--line);border-radius:9px}
+.culture-review{margin-top:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.culture-review a{overflow-wrap:anywhere}
+.culture-translation-list{padding-left:25px;margin:4px 0}
+.culture-translation-list li{margin:6px 0;overflow-wrap:anywhere}
+@media(max-width:600px){
+ .culture-topics{grid-template-columns:1fr}
+ .culture-stat-grid{gap:6px}
+ .culture-stat-grid>div{padding:11px 8px}
+ .culture-stat-grid strong{font-size:22px}
+ .culture-actions{flex-direction:column}
+ .culture-actions button{width:100%}
+}
