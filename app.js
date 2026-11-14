@@ -760,6 +760,7 @@
     document.querySelector(".brand").setAttribute("aria-label",t("footerBrand"));
     if($("auth-lang"))$("auth-lang").value=$("lang").value;
     if(window.lexiVocab)window.lexiVocab.onLanguageChange();
+    window.lexiCulture?.onLanguageChange();
     if(state.catalog)renderChapters();
     showScope();
     if(state.profile?.registered)txt("student-nickname",state.profile.nickname);
@@ -1024,7 +1025,7 @@
     finally{button.disabled=false;}
   }
   function setPage(page){
-    for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life","board"])show(id+"-view",id===page);
+    for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life","board","culture"])show(id+"-view",id===page);
     const extra=$("additional-modes");
     if(extra){
       extra.open=false;
@@ -1046,6 +1047,7 @@
     else if(page==="vocab")window.lexiVocab?.onOpen();
     else if(page==="life")window.lexiLife?.onOpen();
     else if(page==="board")window.lexiBoard?.onOpen();
+    else if(page==="culture")window.lexiCulture?.onOpen();
     else if(page==="tracks")window.lexiTracks?.onOpen();
     else if(page!=="practice")refreshStats();
   }
@@ -1075,39 +1077,49 @@
     if(!state.deadline||state.finishing)return;
     const remain=Math.max(0,state.deadline-Date.now());
     txt("time-left",formatClock(remain));
-    $("progress-fill").style.width=(100*(1-remain/(duration()*60000)))+"%";
+    $("progress-fill").style.width=(100*(1-remain/((Number(state.settings?.duration)||duration())*60000)))+"%";
     if(remain<=0)finishQuiz(true);
   }
-  async function startQuiz(weak,due=false){
+  async function startQuiz(weak,due=false,cultureOptions=null){
     if(state.deadline&&!state.finishing)return;
     if(!state.loggedIn){show("auth-gate",true);return;}
-    try{state.settings=due?{mode:"srs_due",lang:$("lang").value,count:"60"}:
-      (weak?{mode:"weak_all",lang:$("lang").value,count:"60"}:config(false));
+    try{state.settings=cultureOptions?
+      {scope:"culture",mode:cultureOptions.mode==="weak"?"weak":"all",
+       topics:cultureOptions.topics,lang:cultureOptions.lang,count:String(cultureOptions.count||25),
+       duration:String(cultureOptions.duration||20),srsOptIn:cultureOptions.srsOptIn===true}:
+      (due?{mode:"srs_due",lang:$("lang").value,count:"60"}:
+      (weak?{mode:"weak_all",lang:$("lang").value,count:"60"}:config(false)));
       show("setup-error",false);}
     catch(err){txt("setup-error",err.message);show("setup-error",true);return;}
-    saveSettings();
+    if(!cultureOptions)saveSettings();
     $("start").disabled=true;$("weak-start").disabled=true;
     clearActiveSession();
     state.remoteSessionId=newRequestId();
     state.remoteRevision=0;state.remoteEnabled=true;
-    state.mode=due?"due":weak?"weak":"all";state.seen=[];state.sessionSkills={};state.count=0;state.correct=0;state.wrong=0;
+    state.mode=cultureOptions?(cultureOptions.mode==="weak"?"weak":"all"):(due?"due":weak?"weak":"all");state.seen=[];state.sessionSkills={};state.count=0;state.correct=0;state.wrong=0;
     state.finishing=false;state.answered=false;state.busy=false;
     try{
       const questions=await loadQuestions();
       if(!questions.length){
+        if(cultureOptions){setPage("culture");return false;}
         if(weak){txt("weak-empty",t("weakNoAvailable"));setPage("weak");}
         else {txt("setup-error",t(due?"srsEmpty":"noCards"));show("setup-error",true);}
-        return;
+        return false;
       }
       state.questions=questions;state.index=0;
-      state.started=Date.now();state.deadline=state.started+duration()*60000;
+      state.started=Date.now();state.deadline=state.started+(Number(state.settings?.duration)||duration())*60000;
       persistActiveSession();
       $("lang").disabled=true;
       show("setup",false);show("quiz",true);show("finished",false);
       setPage("practice");renderQuestion();
       updateTimer();clearInterval(state.timer);state.timer=setInterval(updateTimer,1000);
       $("practice-view").scrollIntoView({behavior:"smooth",block:"start"});
-    }catch(err){txt("setup-error",t("failed")+err.message);show("setup-error",true);}
+      return true;
+    }catch(err){
+      if(cultureOptions){setPage("culture");throw err;}
+      txt("setup-error",t("failed")+err.message);show("setup-error",true);
+      return false;
+    }
     finally{$("start").disabled=false;$("weak-start").disabled=false;}
   }
   async function playCurrentWord(slow=false){
@@ -1142,14 +1154,15 @@
       q.kind==="grammar"&&q.grammarGroup==="weather" ||
       q.kind==="grammar"&&q.grammarGroup==="consonant" ||
       q.kind==="grammar"&&q.grammarGroup==="review_scenario");
-    $("question-prompt").lang=["article","syllable","enclitic","grammar"].includes(q.kind)?"el":$("lang").value;
-    $("question-prompt").dir=["article","syllable","enclitic","grammar"].includes(q.kind)?"ltr":"auto";
+    $("question-prompt").lang=["article","syllable","enclitic","grammar","culture"].includes(q.kind)?"el":$("lang").value;
+    $("question-prompt").dir=["article","syllable","enclitic","grammar","culture"].includes(q.kind)?"ltr":"auto";
     txt("next",t("next"));
-    txt("quiz-mode",state.mode==="due"?t("srsSession"):
+    txt("quiz-mode",q.kind==="culture"?"🇨🇾 Cyprus Culture":state.mode==="due"?t("srsSession"):
       state.mode==="weak"?t("weakSession"):t("session"));
     txt("question-num",String(state.count+1).padStart(2,"0"));
     let chapter=(q.kind==="listening"?state.catalog?.listeningChapters:state.catalog?.chapters)?.find(x=>x.id===q.chapter);
-    const topic=q.kind==="dialogue"?t("dialogueLabel")+" · "+q.topic :
+    const topic=q.kind==="culture"?"🇨🇾 "+(window.lexiCulture?.topicLabel(q.topic,q.lang)||q.topic) :
+      q.kind==="dialogue"?t("dialogueLabel")+" · "+q.topic :
       q.kind==="word"&&q.chapter===-10?t("personalizedTraining") :
       q.kind==="verb"?"Ρήματα · "+q.verbGroup :
       q.chapter===-8?(state.topicCatalog?.topics.find(x=>x.id===q.topic)?.[$("lang").value==="ru"?"ru":"en"]||q.topic):
@@ -1235,7 +1248,7 @@
     answers.classList.toggle("accent-letters",isAccent);
     // Readable answer choices: long phrases/sentences and very long translations
     // are full width on mobile, instead of squeezing into two tiny columns.
-    const longChoices=!isAccent && (["phrase","sentence","enclitic","grammar","clock"].includes(q.kind) ||
+    const longChoices=!isAccent && (["phrase","sentence","enclitic","grammar","clock","culture"].includes(q.kind) ||
       q.choices.some((x,i)=>x.length>36||(q.choicesEn?.[i]&&hint(x,q.choicesEn[i]).length>42)));
     answers.classList.toggle("wide-choices",longChoices);
     if(isAccent)$("question-prompt").classList.add("unaccented-word");
@@ -1440,7 +1453,8 @@
     const immutableBody=(replayId&&state.pendingAnswer?.requestId===replayId&&state.pendingAnswer.body)
       ?state.pendingAnswer.body
       :{id:q.id,direction:actualDirection,lang:q.lang||state.settings.lang,selected,requestId,
-         srsOptIn:$("srs-optin").checked||state.mode==="due",
+         srsOptIn:q.kind==="culture"?Boolean(state.settings.srsOptIn):($("srs-optin").checked||state.mode==="due"),
+         ...(q.kind==="culture"?{assisted:false}:{}),
          sessionId:state.remoteSessionId,deviceId};
     state.pendingAnswer={index,overrideSelected,requestId,body:immutableBody};
     persistActiveSession();
@@ -1568,6 +1582,31 @@
         const label=document.createElement("strong");label.textContent=t("grammarExplanation")+": ";
         tip.append(label,document.createTextNode(result.grammarTip));
         $("feedback").append(tip);
+      }
+      if(q.kind==="culture"){
+        const panel=document.createElement("div");panel.className="culture-answer-detail";
+        const language=q.lang||state.settings.lang;
+        const title=document.createElement("strong");
+        title.textContent=language==="ru"?"Перевод вопроса: ":"Question translation: ";
+        const translated=document.createElement("span");translated.textContent=result.translation||"";
+        panel.append(title,translated);
+        if(Array.isArray(result.optionTranslations)){
+          const list=document.createElement("ul");
+          for(const choice of q.choices){
+            const match=result.optionTranslations.find(x=>x.el===choice);
+            const li=document.createElement("li");li.lang=language;
+            li.textContent=choice+" — "+(match?.translation||"");
+            list.append(li);
+          }
+          panel.append(list);
+        }
+        if(result.source?.url?.startsWith("https://")){
+          const link=document.createElement("a");
+          link.href=result.source.url;link.target="_blank";link.rel="noopener noreferrer";
+          link.textContent=language==="ru"?"Источник факта":"Fact source";
+          panel.append(link);
+        }
+        $("feedback").append(panel);
       }
       if(result.explanation){
         const note=document.createElement("p");note.className="spelling-guidance";
@@ -1728,6 +1767,7 @@
     txt("finish-copy",(expired?t("timeOver")+" ":"")+t("result").replace("{good}",state.correct).replace("{total}",total).replace("{pct}",pct).replace("{minutes}",elapsed));
     renderSessionSkills();
     await refreshStats();
+    if(state.settings?.scope==="culture")window.lexiCulture?.onSessionFinished();
   }
   function drawMetrics(id,metrics){
     const el=$(id);el.replaceChildren();
@@ -1899,6 +1939,10 @@
       show("auth-gate",true);
     }
   }
+  window.lexiCultureBridge={
+    api,loggedIn:()=>state.loggedIn,
+    start:options=>startQuiz(options.mode==="weak",false,options)
+  };
   async function init(){
     const saved=restoreSettings();
     for(const radio of document.querySelectorAll('input[name=scope]'))radio.addEventListener("change",()=>{showScope();saveSettings();});
@@ -1955,7 +1999,11 @@
     $("leader-toggle").addEventListener("click",toggleLeaderboard);
     $("start").addEventListener("click",()=>startQuiz(false));
     $("weak-start").addEventListener("click",()=>startQuiz(true));
-    $("review").addEventListener("click",()=>{state.finishing=false;startQuiz(true);});
+    $("review").addEventListener("click",()=>{
+      state.finishing=false;
+      if(state.settings?.scope==="culture")startQuiz(true,false,{...state.settings,mode:"weak"});
+      else startQuiz(true);
+    });
     $("finish-now").addEventListener("click",()=>finishQuiz(false));
     $("next").addEventListener("click",nextQuestion);
     $("retry-answer").addEventListener("click",retryPendingAnswer);
@@ -1966,7 +2014,11 @@
   $("order-check").addEventListener("click",submitOrder);
   $("order-undo").addEventListener("click",()=>editOrder("undo"));
   $("order-reset").addEventListener("click",()=>editOrder("reset"));
-    $("again").addEventListener("click",()=>{state.finishing=false;show("finished",false);show("setup",true);});
+    $("again").addEventListener("click",()=>{
+      state.finishing=false;
+      if(state.settings?.scope==="culture"){setPage("culture");window.lexiCulture?.onOpen();}
+      else {show("finished",false);show("setup",true);}
+    });
     window.addEventListener("keydown",event=>{
       if($("quiz").hidden||event.altKey||event.ctrlKey||event.metaKey||["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName))return;
       if(/^[1-9]$/.test(event.key)&&!state.answered){event.preventDefault();choose(Number(event.key)-1);}
