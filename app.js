@@ -659,7 +659,7 @@
     if(!$("quiz").hidden)txt("resume-message",t(transferred?"resumeRemoteNotice":"resumeNotice"));
   }
 
-  const state={joinedLeaderboard:false,catalog:null,topicCatalog:null,profile:null,loggedIn:false,authMode:"register",questions:[],index:0,current:null,mode:"all",answered:false,busy:false,
+  const state={joinedLeaderboard:false,catalog:null,topicCatalog:null,cultureCatalog:null,cultureStats:null,cultureAssisted:{},profile:null,loggedIn:false,authMode:"register",questions:[],index:0,current:null,mode:"all",answered:false,busy:false,
     correct:0,wrong:0,seen:[],sessionSkills:{},count:0,deadline:0,started:0,timer:null,finishing:false,settings:null,
     remoteEpoch:0,remoteSessionId:null,remoteRevision:0,remoteEnabled:true,remoteSynced:false,remoteLost:false};
   const t=key => I18N[$("lang").value]?.[key] ?? I18N.en[key] ?? key;
@@ -1023,8 +1023,130 @@
     }catch(err){txt("capacity-result",t("failed")+err.message);}
     finally{button.disabled=false;}
   }
+
+  // A single Culture option inside the existing Lexi navigation/quiz/session.
+  // No duplicated frontend app, quiz renderer, scoring or persistence.
+  const CULTURE_UI={
+    ru:{tab:"🇨🇾 Культура Кипра",subtitle:"Изучайте факты и формулировки экзамена на греческом.",
+      disclaimer:"Независимый тренажёр, не официальный государственный экзамен.",
+      available:"Опубликованных вопросов",practiced:"Изученных фактов",weak:"К повторению",
+      locale:"Язык объяснений",topics:"Темы экзамена",topicNote:"Выберите темы для практики. Здесь показываются только проверенные и опубликованные вопросы.",
+      start:"Тренировать вопросы",review:"Повторить ошибки",exam:"Пробный экзамен",
+      examNote:"25 вопросов · 45 минут. Безопасный экзаменационный профиль будет подключён в CULT-06.",
+      examSoon:"Экзамен ещё недоступен",vocab:"Словарь",
+      vocabNote:"Термины экзамена будут подключены к существующему словарю Lexi в CULT-05.",
+      noCards:"Пока нет опубликованных вопросов. Черновики не доступны обучающимся.",
+      choose:"Отметьте хотя бы одну тему с вопросами.",noWeak:"В выбранных темах пока нет ошибок для повтора.",
+      ready:"Доступно вопросов: {count}.",error:"Не удалось загрузить данные Culture: ",
+      hint:"Разобрать формулировку (с подсказкой)",hintOpened:"Формулировка разобрана · ответ будет отмечен как с подсказкой.",
+      hintEmpty:"Обратите внимание на вопросительные слова и отрицания в греческом тексте.",
+      translation:"Перевод после ответа",options:"Перевод вариантов",source:"Источник",
+      lesson:"Обучение · Культура Кипра",reviewTitle:"Работа над ошибками · Культура Кипра",
+      result:"Результат практики. Это не официальный пробный экзамен.",languageNotice:"Объяснения Culture пока доступны только на русском и английском."},
+    en:{tab:"🇨🇾 Cyprus Culture",subtitle:"Study Greek exam questions and facts about Cyprus.",
+      disclaimer:"Independent study resource, not an official government examination.",
+      available:"Published questions",practiced:"Facts studied",weak:"To review",
+      locale:"Explanation language",topics:"Exam topics",topicNote:"Choose subjects for practice. Only verified, published questions appear.",
+      start:"Practice questions",review:"Review mistakes",exam:"Mock examination",
+      examNote:"25 questions · 45 minutes. The secure exam session will arrive in CULT-06.",
+      examSoon:"Exam not available yet",vocab:"Vocabulary",
+      vocabNote:"Culture terms will use the existing Lexi vocabulary feature in CULT-05.",
+      noCards:"No published questions yet. Drafts are not accessible to learners.",
+      choose:"Select at least one topic containing questions.",noWeak:"No mistakes to review in these topics.",
+      ready:"Available questions: {count}.",error:"Cannot load Culture: ",
+      hint:"Explain question wording (assisted)",hintOpened:"Wording hint shown · this answer will count as assisted.",
+      hintEmpty:"Look for question words and negations in the Greek prompt.",
+      translation:"Translation after answering",options:"Options in translation",source:"Source",
+      lesson:"Practice · Cyprus Culture",reviewTitle:"Mistake review · Cyprus Culture",
+      result:"Practice result. This is not an official mock examination.",languageNotice:"Culture explanations are currently available only in Russian and English."}
+  };
+  const cultureLocale=()=>$("culture-language").value;
+  const ct=key=>CULTURE_UI[cultureLocale()]?.[key]||CULTURE_UI.en[key]||key;
+  const isCulture=()=>state.settings?.scope==="culture";
+  const sessionMinutes=()=>isCulture()?Number(state.settings.duration||20):duration();
+  function cultureSelectedTopics(){
+    return Array.from($("culture-topics").querySelectorAll("input:checked")).map(x=>x.value);
+  }
+  function renderCulture(){
+    const catalog=state.cultureCatalog;
+    const stats=state.cultureStats;
+    $("culture-view").lang=cultureLocale();
+    const strings={title:"tab",subtitle:"subtitle",disclaimer:"disclaimer",language:"locale",
+      "topics-title":"topics","topics-notice":"topicNote",start:"start","weak-start":"review",
+      "exam-title":"exam","exam-description":"examNote",exam:"examSoon",
+      "vocab-title":"vocab","vocab-description":"vocabNote",
+      "available-label":"available","practiced-label":"practiced","weak-label":"weak"};
+    for(const [id,key] of Object.entries(strings))txt("culture-"+id,ct(key));
+    const old=new Set(cultureSelectedTopics());
+    const hadControls=$("culture-topics").children.length>0;
+    $("culture-topics").replaceChildren();
+    for(const item of catalog?.topics||[]){
+      const label=document.createElement("label");label.className="culture-topic";
+      const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.value=item.code;
+      checkbox.disabled=!item.count;checkbox.checked=!!item.count&&(!hadControls||old.has(item.code));
+      checkbox.addEventListener("change",updateCultureActions);
+      const title=document.createElement("span");title.textContent=item[cultureLocale()]||item.en;
+      const count=document.createElement("small");count.textContent=String(item.count||0);
+      label.append(checkbox,title,count);$("culture-topics").append(label);
+    }
+    txt("culture-available",catalog?.available??"—");
+    txt("culture-practiced",stats?.practicedFacts??"—");
+    txt("culture-weak-count",stats?.weak??"—");
+    if(["zh","ar","es","pt"].includes($("lang").value)){
+      txt("culture-message",ct("languageNotice")+" "+(catalog?.available?ct("ready").replace("{count}",catalog.available):ct("noCards")));
+    }else{
+      txt("culture-message",catalog?.available?ct("ready").replace("{count}",catalog.available):ct("noCards"));
+    }
+    updateCultureActions();
+  }
+  function updateCultureActions(){
+    const count=cultureSelectedTopics().reduce((sum,code)=>
+      sum+(state.cultureCatalog?.topics?.find(t=>t.code===code)?.count||0),0);
+    $("culture-start").disabled=!state.loggedIn||!count||!!state.deadline;
+    $("culture-weak-start").disabled=!state.loggedIn||!count||!state.cultureStats?.weak||!!state.deadline;
+  }
+  async function openCulture(){
+    if(!state.loggedIn)return;
+    try{
+      const [catalog,stats]=await Promise.all([api("catalog?scope=culture"),api("stats?scope=culture")]);
+      state.cultureCatalog=catalog;state.cultureStats=stats;
+      renderCulture();
+    }catch(err){txt("culture-message",ct("error")+err.message);updateCultureActions();}
+  }
+  function cultureWordingHint(q){
+    const phrase=String(q.prompt||"").toLocaleLowerCase("el");
+    const glossary=[
+      ["λανθασμέν","неверное утверждение","incorrect statement"],
+      ["δεν ισχύει","не соответствует действительности","is not true"],
+      ["ακόλουθ","из следующих","of the following"],
+      ["χρονολογ","в хронологическом порядке","chronological order"],
+      ["πότε","когда","when"],["ποιο","какой / какое","which"],
+      ["ποια","какая","which"],["πόσα","сколько","how many"],
+      ["έτος","год","year"],["χρόνια","годы","years"]
+    ];
+    const found=glossary.filter(([word])=>phrase.includes(word)).slice(0,4);
+    return (found.map(([word,ru,en])=>word+" — "+(cultureLocale()==="ru"?ru:en)).join(" · ")||ct("hintEmpty"))+"\n"+ct("hintOpened");
+  }
+  function showCultureWordingHint(){
+    if(state.current?.kind!=="culture"||state.answered||state.busy)return;
+    state.cultureAssisted[state.current.id]=true;
+    txt("culture-hint-text",cultureWordingHint(state.current));
+    show("culture-hint-text",true);
+    $("culture-hint-button").setAttribute("aria-expanded","true");
+    persistActiveSession();
+  }
+  async function startCulture(weak=false){
+    if(state.deadline){txt("culture-message",ct("choose"));return;}
+    if(!cultureSelectedTopics().length){txt("culture-message",ct("choose"));return;}
+    await startQuiz(weak,false,true);
+  }
   function setPage(page){
-    for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life","board"])show(id+"-view",id===page);
+    const cultureSession=page==="culture"&&isCulture()&&(!$("quiz").hidden||!$("finished").hidden);
+    for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life","board","culture"])
+      show(id+"-view",id===page&&!cultureSession||id==="practice"&&cultureSession);
+    if(page==="practice"&&isCulture()&&!state.deadline){
+      show("setup",true);show("quiz",false);show("finished",false);
+    }
     const extra=$("additional-modes");
     if(extra){
       extra.open=false;
@@ -1047,6 +1169,7 @@
     else if(page==="life")window.lexiLife?.onOpen();
     else if(page==="board")window.lexiBoard?.onOpen();
     else if(page==="tracks")window.lexiTracks?.onOpen();
+    else if(page==="culture"){if(!cultureSession)openCulture();}
     else if(page!=="practice")refreshStats();
   }
   async function loadQuestions(){
