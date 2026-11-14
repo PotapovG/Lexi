@@ -1144,7 +1144,9 @@
       button.addEventListener("click",()=>changeCultureExamAnswer(question.selectedIndex===index?null:index));
       host.append(button);
     });
-    for(const id of ("clock-face word-pronounce-controls listening-controls listening-reveal dialogue-lines order-builder order-tools verb-reveal feedback next retry-answer culture-wording-wrap").split(" ")){
+    // The shared study glossary is explicitly forbidden during a mock exam.
+    show("culture-wording-wrap",false);
+    for(const id of ("clock-face word-pronounce-controls listening-controls listening-reveal dialogue-lines order-builder order-tools verb-reveal feedback next retry-answer").split(" ")){
       show(id,false);
     }
     show("question-prompt",true);
