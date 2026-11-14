@@ -860,3 +860,9 @@ body{background:radial-gradient(circle at 95% 0%,#1b3447 0,#0b1a29 45%,#091522 8
 .culture-answer-detail a{display:inline-block;color:var(--accent);margin-top:9px}
 @media(max-width:760px){.culture-topics{grid-template-columns:1fr}.culture-panel{padding:22px 16px}.culture-stats .tile{padding:14px}.culture-stats .tile strong{font-size:29px}.culture-settings>label{flex:1 1 130px}.culture-actions button{flex:1 1 100%;width:100%}}
 @media(max-width:360px){.culture-stats{gap:6px}.culture-stats .tile{padding:10px}.culture-stats .tile span{font-size:11px}.culture-stats .tile strong{font-size:25px}}
+
+/* Culture study-only Greek wording hint; shared card renderer. */
+.culture-hint-wrap{margin:8px 0 16px}
+.culture-hint-wrap p{white-space:pre-line;margin:11px 0 0;padding:12px;border:1px solid var(--line);
+ border-radius:10px;line-height:1.55;overflow-wrap:anywhere}
+.culture-hint-wrap button{max-width:100%;white-space:normal;text-align:left;min-height:44px}

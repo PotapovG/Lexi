@@ -4,9 +4,9 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1220">
 <title>Λέξη — Greek practice</title>
-<link rel="stylesheet" href="/greek/styles.css?v=41">
+<link rel="stylesheet" href="/greek/styles.css?v=42">
 <script src="/greek/greek_word_audio.js?v=4" defer></script>
-<script src="/greek/app.js?v=46" defer></script>
+<script src="/greek/app.js?v=47" defer></script>
 <script src="/greek/board.js?v=3" defer></script>
 <script src="/greek/tracks.js?v=4" defer></script>
 <script src="/greek/life_art.js?v=1" defer></script>
@@ -242,6 +242,13 @@
     <span class="eyebrow" id="question-topic">УРОК 1</span>
     <p class="question-subtitle" id="question-note">Выбери перевод</p>
     <h2 class="question-text" id="question-prompt"></h2>
+    <div id="culture-wording-wrap" class="culture-hint-wrap" hidden>
+      <button type="button" class="secondary compact" id="culture-wording-button"
+              aria-controls="culture-wording-text" aria-expanded="false">
+        Разобрать формулировку
+      </button>
+      <p id="culture-wording-text" class="quiet" role="status" aria-live="polite" hidden></p>
+    </div>
     <div class="clock-face" id="clock-face" hidden></div>
     <div id="word-pronounce-controls" class="pronounce-controls" hidden>
       <button class="secondary compact" type="button" id="word-pronounce" data-i18n="wordListen">🔊 Послушать слово</button>
