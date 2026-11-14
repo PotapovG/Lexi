@@ -18,6 +18,7 @@ jobs:
         run: |
           python3 culture_content.py
           python3 qa_culture_content.py
+          python3 qa_culture_batch01.py
       - name: Cyprus Culture integration with existing quiz and SQLite/SRS
         run: python3 qa_culture_integration.py
       - name: Community content uniqueness, lesson grammar and translations

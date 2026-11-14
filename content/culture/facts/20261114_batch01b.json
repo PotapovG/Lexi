@@ -1,0 +1,162 @@
+[
+  {
+    "id": "cyf_trad_0002",
+    "topic": "TRAD",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Visit Cyprus — Troodos Region",
+      "url": "https://www.visitcyprus.com/discover-cyprus/regions-cities/troodos-regions-cities/troodos-region/"
+    },
+    "statement_el": "Δέκα ζωγραφισμένες βυζαντινές εκκλησίες του Τροόδους περιλαμβάνονται στον Κατάλογο Παγκόσμιας Κληρονομιάς της UNESCO."
+  },
+  {
+    "id": "cyf_econ_0001",
+    "topic": "ECON",
+    "status": "draft",
+    "freshness": "current",
+    "verified_at": "2026-11-14",
+    "review_due": "2026-12-15",
+    "valid_until": "2027-06-30",
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Statistical Service — Tourism Statistics 2025",
+      "url": "https://www.gov.cy/en/economy-and-finance/tourism-statistics-2025/"
+    },
+    "statement_el": "Το 2025 το Ηνωμένο Βασίλειο ήταν η μεγαλύτερη χώρα προέλευσης τουριστών για την Κύπρο."
+  },
+  {
+    "id": "cyf_health_0001",
+    "topic": "HEALTH",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Statistical Service — Health and Hospital Statistics 2024",
+      "url": "https://www.gov.cy/en/economy-and-finance/health-and-hospital-statistics-2024/"
+    },
+    "statement_el": "Η σταδιακή εφαρμογή του Γενικού Συστήματος Υγείας (ΓεΣΥ) ξεκίνησε τον Ιούνιο του 2019."
+  },
+  {
+    "id": "cyf_holidays_0001",
+    "topic": "HOLIDAYS",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Ministry of Defence — Independence Day 2026 parade announcement",
+      "url": "https://www.gov.cy/mod/mi-katigoriopoiimeno/stratiotiki-parelasi-tis-1is-oktovrioy-2026/"
+    },
+    "statement_el": "Η Ημέρα Ανεξαρτησίας της Κυπριακής Δημοκρατίας εορτάζεται την 1η Οκτωβρίου."
+  },
+  {
+    "id": "cyf_transport_0001",
+    "topic": "TRANSPORT",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Visit Cyprus — Health & Safety, driving safely",
+      "url": "https://www.visitcyprus.com/useful-info/health-safety/"
+    },
+    "statement_el": "Στην Κύπρο τα οχήματα κινούνται στην αριστερή πλευρά του δρόμου."
+  },
+  {
+    "id": "cyf_lang_0001",
+    "topic": "LANG",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "European Union — Cyprus country profile",
+      "url": "https://european-union.europa.eu/principles-countries-history/eu-countries/cyprus_en"
+    },
+    "statement_el": "Η ελληνική και η τουρκική είναι επίσημες γλώσσες της Κυπριακής Δημοκρατίας, αλλά μόνο η ελληνική είναι επίσημη γλώσσα της ΕΕ."
+  },
+  {
+    "id": "cyf_entry_0001",
+    "topic": "ENTRY",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Gov.cy — Visa requirements and EU citizens",
+      "url": "https://www.gov.cy/en/information/visas/"
+    },
+    "statement_el": "Πολίτες της ΕΕ μπορούν να εισέλθουν στην Κύπρο με έγκυρη ταυτότητα που φέρει φωτογραφία."
+  },
+  {
+    "id": "cyf_telecom_0001",
+    "topic": "TELECOM",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Cyta — Chronology of Telecommunications",
+      "url": "https://www.cyta.com.cy/chronology/en"
+    },
+    "statement_el": "Το 1961 η CITA μετονομάστηκε σε Αρχή Τηλεπικοινωνιών Κύπρου (CYTA)."
+  },
+  {
+    "id": "cyf_climate_0001",
+    "topic": "CLIMATE",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Visit Cyprus — Climate & weather",
+      "url": "https://www.visitcyprus.com/useful-info/climate-weather/"
+    },
+    "statement_el": "Η Κύπρος έχει μεσογειακό κλίμα με μακρά ξηρά καλοκαίρια και ήπιους χειμώνες."
+  },
+  {
+    "id": "cyf_currency_0001",
+    "topic": "CURRENCY",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Cyprus EU Council Presidency — Cyprus in the EU",
+      "url": "https://cyprus-presidency.consilium.europa.eu/en/presidency/cyprus-in-the-eu/"
+    },
+    "statement_el": "Η Κύπρος εντάχθηκε στην ΕΕ το 2004, υιοθέτησε το ευρώ το 2008 και άσκησε για δεύτερη φορά την Προεδρία του Συμβουλίου της ΕΕ το 2026."
+  }
+]
