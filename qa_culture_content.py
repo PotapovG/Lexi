@@ -98,7 +98,12 @@ class CultureContentContract(unittest.TestCase):
         review = {"editor": "TEST_ONLY", "at": "2026-11-14", "checks":
                   {name: True for name in culture.REVIEW_CHECKS}}
         self.payload[2][0]["review"] = review
-        self.assertEqual(validate(self.payload), [])  # fixture is not shipped
+        assert_error(validate(self.payload), "published question requires published reviewed fact")
+        self.payload[1][0]["status"] = "published"
+        self.payload[1][0]["review"] = copy.deepcopy(review)
+        self.payload[1][0]["source"]["url"] = "https://www.gov.cy/"
+        self.payload[2][0]["source"]["url"] = "https://www.gov.cy/"
+        self.assertEqual(validate(self.payload), [])  # synthetic test-only content
         self.payload[2][0]["review"]["checks"]["facts"] = False
         assert_error(validate(self.payload), "editorial checks")
 
