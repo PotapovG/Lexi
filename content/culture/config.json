@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "program_basis": "Cyprus exam thematic syllabus (14 buckets); topic codes are Lexi's grouping, not official numbering",
+  "exam_format_weights": {
+    "DIRECT": 17,
+    "CLOZE": 37,
+    "NEGATIVE": 19,
+    "CHRONOLOGY": 2
+  },
+  "exam": {
+    "question_count": 25,
+    "duration_minutes": 45,
+    "passing_scores": {
+      "citizenship": 15,
+      "long_term_resident_provisional": 13
+    }
+  },
+  "topics": [
+    {
+      "code": "GEO",
+      "el": "Γεωγραφία",
+      "ru": "География",
+      "en": "Geography"
+    },
+    {
+      "code": "GOV",
+      "el": "Πολιτικό σύστημα και δημόσιες υπηρεσίες",
+      "ru": "Государство и учреждения",
+      "en": "Government and institutions"
+    },
+    {
+      "code": "HIS",
+      "el": "Ιστορία",
+      "ru": "История",
+      "en": "History"
+    },
+    {
+      "code": "NEWS",
+      "el": "Επικαιρότητα",
+      "ru": "Современные события",
+      "en": "Current affairs"
+    },
+    {
+      "code": "TRAD",
+      "el": "Πολιτισμός και παραδόσεις",
+      "ru": "Культура и традиции",
+      "en": "Culture and traditions"
+    },
+    {
+      "code": "ECON",
+      "el": "Οικονομία",
+      "ru": "Экономика",
+      "en": "Economy"
+    },
+    {
+      "code": "HEALTH",
+      "el": "Υγεία και ασφάλεια",
+      "ru": "Здоровье и безопасность",
+      "en": "Health and safety"
+    },
+    {
+      "code": "HOLIDAYS",
+      "el": "Αργίες και ωράρια",
+      "ru": "Праздники и рабочее время",
+      "en": "Holidays and business hours"
+    },
+    {
+      "code": "TRANSPORT",
+      "el": "Μεταφορές",
+      "ru": "Транспорт",
+      "en": "Transport"
+    },
+    {
+      "code": "LANG",
+      "el": "Γλώσσες και θρησκείες",
+      "ru": "Языки и религии",
+      "en": "Languages and religions"
+    },
+    {
+      "code": "ENTRY",
+      "el": "Είσοδος στην Κυπριακή Δημοκρατία",
+      "ru": "Правила въезда",
+      "en": "Entry requirements"
+    },
+    {
+      "code": "TELECOM",
+      "el": "Τηλεπικοινωνίες",
+      "ru": "Телекоммуникации",
+      "en": "Telecommunications"
+    },
+    {
+      "code": "CLIMATE",
+      "el": "Κλίμα και καιρός",
+      "ru": "Климат и погода",
+      "en": "Climate and weather"
+    },
+    {
+      "code": "CURRENCY",
+      "el": "Νόμισμα και συναλλαγές",
+      "ru": "Валюта и операции",
+      "en": "Currency and transactions"
+    }
+  ]
+}

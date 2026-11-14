@@ -1,0 +1,372 @@
+{
+  "facts": [
+    {
+      "id": "cyf_geo_0001",
+      "topic": "GEO",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "statement_el": "Στο φανταστικό παράδειγμα, η Πόλη Α είναι η πρωτεύουσα."
+    },
+    {
+      "id": "cyf_gov_0002",
+      "topic": "GOV",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "statement_el": "Στο φανταστικό παράδειγμα, τρεις από τέσσερις δηλώσεις είναι αληθείς."
+    },
+    {
+      "id": "cyf_his_0003",
+      "topic": "HIS",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "statement_el": "Στο παράδειγμα, το 1960 προηγείται του 2004, και το 2004 του 2008."
+    },
+    {
+      "id": "cyf_news_0004",
+      "topic": "NEWS",
+      "freshness": "current",
+      "verified_at": "2026-11-14",
+      "review_due": "2026-12-01",
+      "valid_until": "2027-01-01",
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "statement_el": "Στο φανταστικό παράδειγμα, το συμβάν έγινε το 2026."
+    }
+  ],
+  "questions": [
+    {
+      "id": "cyq_geo_0001",
+      "topic": "GEO",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "fact_id": "cyf_geo_0001",
+      "format": "DIRECT",
+      "difficulty": 1,
+      "question_el": "Ποια πόλη είναι η πρωτεύουσα στο φανταστικό παράδειγμα;",
+      "options_el": [
+        "Πόλη Α",
+        "Πόλη Β",
+        "Πόλη Γ",
+        "Πόλη Δ"
+      ],
+      "correct_index": 0,
+      "translations": {
+        "ru": {
+          "question": "Какой город является столицей в вымышленном примере?",
+          "options": [
+            "Город А",
+            "Город Б",
+            "Город В",
+            "Город Г"
+          ]
+        },
+        "en": {
+          "question": "Which city is the capital in the fictional example?",
+          "options": [
+            "City A",
+            "City B",
+            "City C",
+            "City D"
+          ]
+        }
+      },
+      "explanation": {
+        "ru": "В тестовом примере правильный вариант — город А.",
+        "en": "The synthetic example defines City A as correct."
+      },
+      "vocab_ids": [
+        "cyv_polia_0001"
+      ],
+      "origin": "original",
+      "version": 1
+    },
+    {
+      "id": "cyq_gov_0002",
+      "topic": "GOV",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "fact_id": "cyf_gov_0002",
+      "format": "NEGATIVE",
+      "difficulty": 2,
+      "question_el": "Ποια από τις ακόλουθες δηλώσεις είναι λανθασμένη στο παράδειγμα;",
+      "options_el": [
+        "Η πρώτη δήλωση είναι αληθής.",
+        "Η δεύτερη δήλωση είναι αληθής.",
+        "Η τρίτη δήλωση είναι αληθής.",
+        "Η πρώτη δήλωση είναι ψευδής."
+      ],
+      "correct_index": 3,
+      "option_truth": [
+        true,
+        true,
+        true,
+        false
+      ],
+      "translations": {
+        "ru": {
+          "question": "Какое утверждение в примере неверно?",
+          "options": [
+            "Первое утверждение истинно.",
+            "Второе утверждение истинно.",
+            "Третье утверждение истинно.",
+            "Первое утверждение ложно."
+          ]
+        },
+        "en": {
+          "question": "Which statement is false in the example?",
+          "options": [
+            "The first statement is true.",
+            "The second statement is true.",
+            "The third statement is true.",
+            "The first statement is false."
+          ]
+        }
+      },
+      "explanation": {
+        "ru": "Первое утверждение истинно по условию примера. Четвёртый вариант, утверждающий обратное, — единственный ложный.",
+        "en": "The first statement is true by construction; the fourth option contradicts it and is the sole false statement."
+      },
+      "vocab_ids": [
+        "cyv_lanth_0002"
+      ],
+      "origin": "original",
+      "version": 1
+    },
+    {
+      "id": "cyq_his_0003",
+      "topic": "HIS",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "fact_id": "cyf_his_0003",
+      "format": "CHRONOLOGY",
+      "difficulty": 2,
+      "question_el": "Ποια είναι η σωστή χρονολογική σειρά στο παράδειγμα;",
+      "options_el": [
+        "1960, 2004, 2008",
+        "2004, 1960, 2008",
+        "2008, 2004, 1960",
+        "1960, 2008, 2004"
+      ],
+      "correct_index": 0,
+      "translations": {
+        "ru": {
+          "question": "Каков правильный хронологический порядок в примере?",
+          "options": [
+            "1960, 2004, 2008",
+            "2004, 1960, 2008",
+            "2008, 2004, 1960",
+            "1960, 2008, 2004"
+          ]
+        },
+        "en": {
+          "question": "What is the correct chronological order in the example?",
+          "options": [
+            "1960, 2004, 2008",
+            "2004, 1960, 2008",
+            "2008, 2004, 1960",
+            "1960, 2008, 2004"
+          ]
+        }
+      },
+      "explanation": {
+        "ru": "Годы расположены по возрастанию.",
+        "en": "Years are arranged in ascending order."
+      },
+      "vocab_ids": [],
+      "origin": "original",
+      "version": 1
+    },
+    {
+      "id": "cyq_news_0004",
+      "topic": "NEWS",
+      "freshness": "current",
+      "verified_at": "2026-11-14",
+      "review_due": "2026-12-01",
+      "valid_until": "2027-01-01",
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "fact_id": "cyf_news_0004",
+      "format": "CLOZE",
+      "difficulty": 1,
+      "question_el": "Το γεγονός του φανταστικού παραδείγματος συνέβη το ___.",
+      "options_el": [
+        "2024",
+        "2025",
+        "2026",
+        "2027"
+      ],
+      "correct_index": 2,
+      "translations": {
+        "ru": {
+          "question": "Событие вымышленного примера произошло в ___ году.",
+          "options": [
+            "2024",
+            "2025",
+            "2026",
+            "2027"
+          ]
+        },
+        "en": {
+          "question": "The event in the fictional example happened in ___.",
+          "options": [
+            "2024",
+            "2025",
+            "2026",
+            "2027"
+          ]
+        }
+      },
+      "explanation": {
+        "ru": "Для синтетического примера выбран 2026 год.",
+        "en": "The synthetic example designates 2026."
+      },
+      "vocab_ids": [],
+      "origin": "original",
+      "version": 1
+    }
+  ],
+  "vocabulary": [
+    {
+      "id": "cyv_polia_0001",
+      "topic": "GEO",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "lemma_el": "η πόλη",
+      "translations": {
+        "ru": "город",
+        "en": "city"
+      },
+      "example_el": "Ποια πόλη είναι η πρωτεύουσα;",
+      "example_translations": {
+        "ru": "Какой город — столица?",
+        "en": "Which city is the capital?"
+      }
+    },
+    {
+      "id": "cyv_lanth_0002",
+      "topic": "GOV",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "lemma_el": "λανθασμένη",
+      "translations": {
+        "ru": "неверная, ошибочная",
+        "en": "incorrect, mistaken"
+      },
+      "example_el": "Ποια δήλωση είναι λανθασμένη;",
+      "example_translations": {
+        "ru": "Какое утверждение неверно?",
+        "en": "Which statement is incorrect?"
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "cyl_geo_0001",
+      "topic": "GEO",
+      "freshness": "evergreen",
+      "verified_at": "2026-11-14",
+      "review_due": null,
+      "valid_until": null,
+      "status": "draft",
+      "rights": "independently_authored",
+      "source": {
+        "kind": "institutional",
+        "title": "Synthetic QA fixture: not a source for publication",
+        "url": "https://example.org/synthetic-cyprus-culture"
+      },
+      "title": {
+        "ru": "Столица в примерах",
+        "en": "Capital examples"
+      },
+      "body": {
+        "ru": "Только искусственный тестовый материал, не факты о Кипре.",
+        "en": "Synthetic test data only, not Cyprus facts."
+      },
+      "question_ids": [
+        "cyq_geo_0001"
+      ]
+    }
+  ]
+}
