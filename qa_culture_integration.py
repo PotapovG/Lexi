@@ -23,10 +23,12 @@ def test_shared_ledger():
     card=culture_adapter.to_card(q,f)
     key=card["id"]+":"+culture_adapter.CULTURE_DIRECTION
     old_db=server.DB
+    old_pepper=server.auth.SECRET_FILE
     old_cards=dict(server.CULTURE_BY_ID)
     try:
         with tempfile.TemporaryDirectory(prefix="lexi-culture-integration-") as tmp:
             server.DB=str(Path(tmp)/"data.sqlite3")
+            server.auth.SECRET_FILE=Path(tmp)/"login-pepper"
             server.CULTURE_BY_ID.clear()
             server.CULTURE_BY_ID[card["id"]]=card
             server.init_db()
@@ -115,6 +117,7 @@ def test_shared_ledger():
             else:raise AssertionError("out-of-pool culture answer was accepted")
     finally:
         server.DB=old_db
+        server.auth.SECRET_FILE=old_pepper
         server.CULTURE_BY_ID.clear()
         server.CULTURE_BY_ID.update(old_cards)
 
