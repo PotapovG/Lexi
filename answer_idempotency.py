@@ -33,13 +33,21 @@ def score_once(conn_factory,score,user_id,body,validate_attempt=None):
                     separators=(',',':')).encode('utf-8')).hexdigest()
     with conn_factory() as db:
         db.execute('BEGIN IMMEDIATE')
+        # A previously stored Culture receipt includes the correct answer.
+        # During an active mock exam it must not be replayable as a side door.
+        # Check inside the same SQLite write lock to avoid start/score races.
+        checked_culture=(isinstance(body.get('id'),str) and
+                         body['id'].startswith('cyq_'))
+        if validate_attempt and checked_culture:
+            validate_attempt(db,user_id,body)
         seen=db.execute("""SELECT request_hash,response FROM answer_receipts
             WHERE user_id=? AND request_id=?""",(user_id,token)).fetchone()
         if seen:
             if seen['request_hash']!=digest:
                 raise ValueError('request id reused for different answer')
             return json.loads(seen['response'])
-        if validate_attempt:validate_attempt(db,user_id,body)
+        if validate_attempt and not checked_culture:
+            validate_attempt(db,user_id,body)
         result=score(user_id,body,injected_db=db)
         db.execute("""INSERT INTO answer_receipts
             (user_id,request_id,request_hash,response,created_at) VALUES (?,?,?,?,?)""",
