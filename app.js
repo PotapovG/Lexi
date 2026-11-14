@@ -2079,6 +2079,11 @@
   }
   async function init(){
     const saved=restoreSettings();
+    $("culture-language").value=$("lang").value==="ru"?"ru":"en";
+    $("culture-language").addEventListener("change",()=>renderCulture());
+    $("culture-start").addEventListener("click",()=>startCulture(false));
+    $("culture-weak-start").addEventListener("click",()=>startCulture(true));
+    $("culture-hint-button").addEventListener("click",showCultureWordingHint);
     for(const radio of document.querySelectorAll('input[name=scope]'))radio.addEventListener("change",()=>{showScope();saveSettings();});
     for(const radio of document.querySelectorAll('input[name=training]'))radio.addEventListener("change",()=>{updateTraining();saveSettings();});
     for(const n of ["page-from","page-to"])$(n).addEventListener("change",()=>{updateRangeSummary();saveSettings();});
@@ -2109,10 +2114,14 @@
     $("verb-max-unit").addEventListener("change",()=>{renderVerbReference();renderVerbStageSummary();saveSettings();});
     $("verb-group-options").addEventListener("change",()=>{renderVerbStageSummary();saveSettings();});
     $("level-options").addEventListener("change",()=>{renderVerbReference();renderVerbStageSummary();saveSettings();});
-    $("lang").addEventListener("change",()=>{updateLanguage();saveSettings();
+    $("lang").addEventListener("change",()=>{
+      $("culture-language").value=$("lang").value==="ru"?"ru":"en";
+      updateLanguage();saveSettings();
       if(!$("board-view").hidden)window.lexiBoard?.onOpen();});
     $("auth-lang").addEventListener("change",()=>{
-      $("lang").value=$("auth-lang").value;updateLanguage();saveSettings();
+      $("lang").value=$("auth-lang").value;
+      $("culture-language").value=$("lang").value==="ru"?"ru":"en";
+      updateLanguage();saveSettings();
     });
     $("preview-topic-words").addEventListener("click",toggleTopicWords);
     const persistChapterChecks=()=>{
@@ -2133,7 +2142,11 @@
     $("leader-toggle").addEventListener("click",toggleLeaderboard);
     $("start").addEventListener("click",()=>startQuiz(false));
     $("weak-start").addEventListener("click",()=>startQuiz(true));
-    $("review").addEventListener("click",()=>{state.finishing=false;startQuiz(true);});
+    $("review").addEventListener("click",()=>{
+      state.finishing=false;
+      if(isCulture())startCulture(true);
+      else startQuiz(true);
+    });
     $("finish-now").addEventListener("click",()=>finishQuiz(false));
     $("next").addEventListener("click",nextQuestion);
     $("retry-answer").addEventListener("click",retryPendingAnswer);
@@ -2144,7 +2157,10 @@
   $("order-check").addEventListener("click",submitOrder);
   $("order-undo").addEventListener("click",()=>editOrder("undo"));
   $("order-reset").addEventListener("click",()=>editOrder("reset"));
-    $("again").addEventListener("click",()=>{state.finishing=false;show("finished",false);show("setup",true);});
+    $("again").addEventListener("click",()=>{
+      state.finishing=false;show("finished",false);show("setup",true);
+      if(isCulture())setPage("culture");
+    });
     window.addEventListener("keydown",event=>{
       if($("quiz").hidden||event.altKey||event.ctrlKey||event.metaKey||["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName))return;
       if(/^[1-9]$/.test(event.key)&&!state.answered){event.preventDefault();choose(Number(event.key)-1);}
