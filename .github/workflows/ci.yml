@@ -22,6 +22,7 @@ jobs:
         run: |
           python3 qa_culture_integration.py
           python3 qa_culture_exam.py
+          python3 qa_culture_exam_ui.py
           python3 qa_culture_ui.py
           node --check culture_ui.js
       - name: Community content uniqueness, lesson grammar and translations
