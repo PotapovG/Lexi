@@ -126,7 +126,8 @@ def init_db():
           kind TEXT NOT NULL,
           unit INTEGER NOT NULL,
           correct INTEGER NOT NULL,
-          created_at TEXT NOT NULL
+          created_at TEXT NOT NULL,
+          assisted INTEGER NOT NULL DEFAULT 0
         );
         CREATE INDEX IF NOT EXISTS ix_attempts_user_time ON attempts(user_id,id);
         CREATE INDEX IF NOT EXISTS ix_attempts_created ON attempts(created_at,user_id);
@@ -145,6 +146,10 @@ def init_db():
         );
         """)
     with conn() as db:
+        # Add one metadata column to the existing log; no parallel Culture DB.
+        columns={col["name"] for col in db.execute("PRAGMA table_info(attempts)")}
+        if "assisted" not in columns:
+            db.execute("ALTER TABLE attempts ADD COLUMN assisted INTEGER NOT NULL DEFAULT 0")
         answer_idempotency.schema(db)
         _lesson_sync.schema(db)
         auth.schema(db)
@@ -782,13 +787,17 @@ def mark(user_id,body,injected_db=None):
         raise ValueError("listening_alpha_disabled")
     if not card or not isinstance(selected,str) or len(selected)>500:
         raise ValueError("invalid answer")
-    directions=(tuple(f"gap{i}" for i in range(len(card["gaps"]))) if card["kind"]=="dialogue" else ("conjugate","translate") if card["kind"]=="verb" else ("grammar_fill",) if card["kind"]=="grammar" else ("stress_enclitic",) if card["kind"]=="enclitic" else ("stress_syllable",) if card["kind"]=="syllable" else ("accent",) if card["kind"]=="accent" else
+    directions=((_culture.CULTURE_DIRECTION,) if card["kind"]=="culture" else tuple(f"gap{i}" for i in range(len(card["gaps"]))) if card["kind"]=="dialogue" else ("conjugate","translate") if card["kind"]=="verb" else ("grammar_fill",) if card["kind"]=="grammar" else ("stress_enclitic",) if card["kind"]=="enclitic" else ("stress_syllable",) if card["kind"]=="syllable" else ("accent",) if card["kind"]=="accent" else
                 ("listen",) if card['kind']=='listening' else ("read",) if card["kind"]=="clock" else
                 ("fill",) if card['kind']=='article' else ("arrange",) if card['kind']=='order' else
                 (("sg-pl","pl-sg") if card["kind"]=="plural" else ("gr-ru","ru-gr")))
     if direction not in directions:raise ValueError("invalid direction")
     correct_answer=shape(card,direction,lang)[1]
-    if card['kind']=='clock':
+    if card["kind"]=="culture":
+        if lang not in ("ru","en") or selected not in card["options"]:
+            raise ValueError("invalid culture selection")
+        correct=selected==correct_answer
+    elif card['kind']=='clock':
         correct=selected==correct_answer
     elif card['kind']=='grammar':
         if card.get("typedAnswer"):
@@ -829,6 +838,10 @@ def mark(user_id,body,injected_db=None):
                       if card["kind"]=="dialogue" else None)
     if dialogue_valid is not None:
         correct=selected in dialogue_valid
+    if "assisted" in body and type(body["assisted"]) is not bool:
+        raise ValueError("invalid assisted flag")
+    assisted=card["kind"]=="culture" and body.get("assisted") is True
+    progress_correct=correct and not assisted
     key=card_key(card,direction,lang)
     now=dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     if injected_db is None:
@@ -838,21 +851,26 @@ def mark(user_id,body,injected_db=None):
     row=db.execute("SELECT attempts,correct,miss_debt FROM progress WHERE user_id=? AND card_key=?",
                    (user_id,key)).fetchone()
     if row:
-        miss_debt=max(0,row["miss_debt"]-1) if correct else min(7,row["miss_debt"]+2)
+        miss_debt=(row["miss_debt"] if assisted else
+                   max(0,row["miss_debt"]-1) if correct else min(7,row["miss_debt"]+2))
         db.execute("""UPDATE progress SET attempts=attempts+1,correct=correct+?,miss_debt=?,updated_at=?
-                       WHERE user_id=? AND card_key=?""",(int(correct),miss_debt,now,user_id,key))
+                       WHERE user_id=? AND card_key=?""",(int(progress_correct),miss_debt,now,user_id,key))
     else:
-        miss_debt=0 if correct else 2
+        miss_debt=0 if progress_correct or assisted else 2
         db.execute("""INSERT INTO progress(user_id,card_key,attempts,correct,miss_debt,updated_at)
-                      VALUES(?,?,?,?,?,?)""",(user_id,key,1,int(correct),miss_debt,now))
-    db.execute("""INSERT INTO attempts(user_id,card_key,kind,unit,correct,created_at)
-                  VALUES(?,?,?,?,?,?)""",(user_id,key,card["kind"],card["unit"],int(correct),now))
+                      VALUES(?,?,?,?,?,?)""",(user_id,key,1,int(progress_correct),miss_debt,now))
+    db.execute("""INSERT INTO attempts(user_id,card_key,kind,unit,correct,created_at,assisted)
+                  VALUES(?,?,?,?,?,?,?)""",(user_id,key,card["kind"],card["unit"],int(correct),now,int(assisted)))
     srs_info=(learning_engine.update(db,user_id,key,correct,now)
-              if body.get('srsOptIn') is True else None)
+              if body.get('srsOptIn') is True and not assisted else None)
     # For genuine alternatives, return the student's accepted wording.
     # The client fills the dialogue with result.answer after scoring.
     shown_answer = selected if dialogue_valid is not None and correct else correct_answer
     result=dict(correct=correct,answer=shown_answer,missDebt=miss_debt)
+    if card["kind"]=="culture":
+        result.update(_culture.after_answer(card,lang,selected,correct,assisted))
+        if srs_info:result.update(srs_info)
+        return result
     if dialogue_valid is not None:
         result['acceptedAnswers']=list(dialogue_valid)
         result['acceptedVariant']=bool(correct and selected!=correct_answer)
