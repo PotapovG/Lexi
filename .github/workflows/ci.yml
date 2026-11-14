@@ -18,6 +18,8 @@ jobs:
         run: |
           python3 culture_content.py
           python3 qa_culture_content.py
+      - name: Cyprus Culture integration with existing quiz and SQLite/SRS
+        run: python3 qa_culture_integration.py
       - name: Community content uniqueness, lesson grammar and translations
         run: python3 tests/test_community_content.py
       - name: Noun gender grammar and isolated scoring QA

@@ -25,6 +25,10 @@ def score_once(conn_factory,score,user_id,body,validate_attempt=None):
     if not isinstance(token,str) or not REQUEST_ID.fullmatch(token) or len(token)!=36:
         raise ValueError('invalid request id')
     fields={k:body.get(k) for k in ('id','direction','selected','lang','srsOptIn')}
+    # Preserve the exact legacy digest for old 5-field receipts and retries.
+    # A Culture hint flag is only signed when the client actually sends it.
+    if "assisted" in body:
+        fields["assisted"]=body["assisted"]
     digest=hashlib.sha256(json.dumps(fields,ensure_ascii=False,sort_keys=True,
                     separators=(',',':')).encode('utf-8')).hexdigest()
     with conn_factory() as db:

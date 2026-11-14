@@ -31,6 +31,7 @@ import final_n_guidance
 import verb_curriculum
 import accent_guidance
 import learning_engine
+import culture_adapter as _culture
 import learning_upgrade
 import advanced_syllables as _syllables
 import enclitic_stress as _enclitic
@@ -91,9 +92,10 @@ GRAMMAR2_BY_ID=_grammar2.BY_ID
 PRACTICE_ALL=ALL+EXTRA_ALL+SYLLABLE_ALL+ENCLITIC_ALL+GRAMMAR2_ALL+ORDER2_ALL+CLOCK_ALL
 _ORDER_VARIANT_COUNT=_order_variants.validate({**BY_ID,**ORDER2_BY_ID})
 def book_or_audio_card(cid):
-    return BY_ID.get(cid) or EXTRA_BY_ID.get(cid) or SYLLABLE_BY_ID.get(cid) or ENCLITIC_BY_ID.get(cid) or GRAMMAR2_BY_ID.get(cid) or ORDER2_BY_ID.get(cid) or CLOCK_BY_ID.get(cid) or LISTEN_BY_ID.get(cid)
+    return BY_ID.get(cid) or EXTRA_BY_ID.get(cid) or SYLLABLE_BY_ID.get(cid) or ENCLITIC_BY_ID.get(cid) or GRAMMAR2_BY_ID.get(cid) or ORDER2_BY_ID.get(cid) or CLOCK_BY_ID.get(cid) or LISTEN_BY_ID.get(cid) or CULTURE_BY_ID.get(cid)
 
 ROOT = Path(__file__).parent
+CULTURE_CONFIG,CULTURE_BY_ID=_culture.load(ROOT)
 DB = os.environ.get("GREEK_DB", "/var/lib/greek-trainer/progress.sqlite3")
 ORIGIN = os.environ.get("GREEK_ORIGIN", "https://potapovfamily.com").rstrip("/")
 COOKIE = "greek_session"
@@ -124,7 +126,8 @@ def init_db():
           kind TEXT NOT NULL,
           unit INTEGER NOT NULL,
           correct INTEGER NOT NULL,
-          created_at TEXT NOT NULL
+          created_at TEXT NOT NULL,
+          assisted INTEGER NOT NULL DEFAULT 0
         );
         CREATE INDEX IF NOT EXISTS ix_attempts_user_time ON attempts(user_id,id);
         CREATE INDEX IF NOT EXISTS ix_attempts_created ON attempts(created_at,user_id);
@@ -143,6 +146,10 @@ def init_db():
         );
         """)
     with conn() as db:
+        # Add one metadata column to the existing log; no parallel Culture DB.
+        columns={col["name"] for col in db.execute("PRAGMA table_info(attempts)")}
+        if "assisted" not in columns:
+            db.execute("ALTER TABLE attempts ADD COLUMN assisted INTEGER NOT NULL DEFAULT 0")
         answer_idempotency.schema(db)
         _lesson_sync.schema(db)
         auth.schema(db)
@@ -156,10 +163,14 @@ def allowed_kinds(s):
 
 def card_key(card, direction, lang="ru"):
     # Keep original keys stable to preserve Russian learning history.
-    suffix="" if (lang=="ru" or card["kind"] in ("accent","dialogue","article","order","syllable","enclitic","grammar","clock")) else ":"+lang
+    suffix="" if (lang=="ru" or card["kind"] in ("accent","dialogue","article","order","syllable","enclitic","grammar","clock","culture")) else ":"+lang
     return card["id"]+":"+direction+suffix
 
 def shape(card, direction, lang="ru"):
+    if card["kind"]=="culture":
+        if direction!=_culture.CULTURE_DIRECTION or lang not in ("ru","en"):
+            raise ValueError("invalid culture direction or locale")
+        return card["gr"],card["options"][card["answerIndex"]],""
     if card['kind']=='clock':
         if direction!='read':raise ValueError('invalid clock direction')
         return 'Τι ώρα είναι;',card['gr'],_clock.HELP[lang]
@@ -304,7 +315,7 @@ def parse_options(params):
     return lang,mode,kinds,page_from,page_to,chapters,count,exclude
 
 
-def valid_weak_entries(user_id, display_lang="ru"):
+def valid_weak_entries(user_id, display_lang="ru", scope="book"):
     """Return recoverable due answers, preserving the language of each old key.
 
     Legacy IDs and unsupported old locales remain in the SQLite history but
@@ -317,6 +328,8 @@ def valid_weak_entries(user_id, display_lang="ru"):
         results=[]
         for row in rows:
             key=row["card_key"]
+            is_culture=key.startswith(("cyq_","cyv_"))
+            if (scope=="culture")!=is_culture:continue
             bits=key.split(":")
             if len(bits) not in (2,3):continue
             cid,direction=bits[:2]
@@ -326,7 +339,9 @@ def valid_weak_entries(user_id, display_lang="ru"):
                 if wid in vocab.VOCAB_BY_ID and personalized.is_learned(db,user_id,wid):
                     card=personalized.to_card(vocab.VOCAB_BY_ID[wid])
             if not card:continue
-            if card['kind']=='listening' and not LISTENING_ENABLED:continue
+            if card["kind"]=="culture":
+                allowed={_culture.CULTURE_DIRECTION}
+            elif card['kind']=='listening' and not LISTENING_ENABLED:continue
             elif card['kind']=='listening':allowed={'listen'}
             elif card['kind']=='clock':allowed={'read'}
             elif card['kind']=='article':allowed={'fill'}
@@ -343,15 +358,23 @@ def valid_weak_entries(user_id, display_lang="ru"):
             else:allowed={"gr-ru","ru-gr"}
             if direction not in allowed:continue
             source_lang=bits[2] if len(bits)==3 else ("ru" if card["kind"] not in ("accent","dialogue","article","order","syllable","enclitic","grammar") else display_lang)
+            if card["kind"]=="culture":
+                source_lang=display_lang if display_lang in ("ru","en") else "ru"
             if source_lang not in ("ru","en","zh","ar","es","pt"):continue
             if card_key(card,direction,source_lang)!=key:continue
             results.append(dict(card=card,direction=direction,lang=source_lang,
                                 key=key,missDebt=row["miss_debt"],attempts=row["attempts"]))
-    return results,len(rows)
+    return results,sum(
+        row["card_key"].startswith(("cyq_","cyv_"))==(scope=="culture")
+        for row in rows
+    )
 
 
 def format_question(card,direction,lang,weak=False,variant_index=None):
     """One canonical question renderer for all normal/scoped/global review modes."""
+    if card["kind"]=="culture":
+        if direction!=_culture.CULTURE_DIRECTION:raise ValueError("invalid culture direction")
+        return _culture.format_card(card,lang)
     prompt,correct,note=shape(card,direction,lang)
     item=dict(id=card["id"],direction=direction,kind=card["kind"],unit=card["unit"],
               chapter=card["chapter"],page=card["page"],topic=card["topic"],prompt=prompt,
@@ -466,6 +489,12 @@ def estimate_capacity(user_id,params):
     import math
     lang,mode,kinds,first,last,chapters,count,exclude=parse_options(params)
     scope=params.get("scope",["pages"])[0]
+    if scope=="culture":
+        topics=set(params.get("topics",[""])[0].split(",")) & {t["code"] for t in CULTURE_CONFIG["topics"]}
+        eligible=[c for c in CULTURE_BY_ID.values() if not topics or c["topic"] in topics]
+        unique=len({c["factId"] for c in eligible})
+        return dict(scope="culture",uniqueCards=unique,available=unique,
+                    enoughAt20Seconds=unique>=count,approximate=False)
     levels=set(params.get("levels",["A1,A2"])[0].split(","))&{"A1","A2"}
     groups=set(params.get("groups",["A,B1,B2"])[0].split(","))&set(VERB_GROUPS)
     if scope=="listening" and not LISTENING_ENABLED:
@@ -518,7 +547,7 @@ def make_srs_due_quiz(user_id,params,display_lang,count,exclude):
         questions=[]
         for row in rows:
             key=row['card_key']
-            if key in exclude:continue
+            if key.startswith(("cyq_","cyv_")) or key in exclude:continue
             bits=key.split(':')
             if len(bits) not in (2,3):continue
             cid,direction=bits[:2]
@@ -554,8 +583,51 @@ def make_global_weak_quiz(user_id,params,display_lang,count,exclude):
                 count=len(questions),mode="weak_all",pagePrecision="approximate",lang=display_lang)
 
 
+def make_culture_quiz(user_id,params,lang,mode,count,exclude):
+    """Culture uses existing format_question/mark/SQLite/SRS, not another engine."""
+    if lang not in ("ru","en"):
+        raise ValueError("culture requires ru/en locale")
+    if mode not in ("all","weak","weak_all","srs_due"):
+        raise ValueError("invalid culture practice mode")
+    topics=set(params.get("topics",[""])[0].split(",")) & {t["code"] for t in CULTURE_CONFIG["topics"]}
+    cards=[c for c in CULTURE_BY_ID.values() if not topics or c["topic"] in topics]
+    with conn() as db:
+        records=db.execute("""SELECT card_key,miss_debt,attempts FROM progress
+             WHERE user_id=? AND substr(card_key,1,4)='cyq_'""",(user_id,)).fetchall()
+        due={r["card_key"] for r in learning_engine.due_entries(db,user_id)}
+    debts={r["card_key"]:r["miss_debt"] for r in records}
+    attempted={r["card_key"]:r["attempts"] for r in records}
+    random.shuffle(cards)
+    choices=[]
+    for card in cards:
+        key=card_key(card,_culture.CULTURE_DIRECTION,lang)
+        if card["id"] in exclude or card["factId"] in exclude or key in exclude:
+            continue
+        if mode in ("weak","weak_all") and debts.get(key,0)<=0:
+            continue
+        if mode=="srs_due" and key not in due:
+            continue
+        # Reuse Lexi's practice ranking: weak first, new facts receive a boost.
+        score=10*debts.get(key,0)+max(0,5-attempted.get(key,0))
+        choices.append((card,score+random.uniform(-5,5)))
+    choices.sort(key=lambda c:-c[1])
+    distinct=[]
+    used=set()
+    for card,_score in choices:
+        if card["factId"] in used:continue
+        used.add(card["factId"])
+        distinct.append(card)
+    questions=[format_question(c,_culture.CULTURE_DIRECTION,lang,weak=mode!="all")
+               for c in distinct[:count]]
+    return dict(questions=questions,available=len(distinct),count=len(questions),
+                scope="culture",mode=mode,lang=lang,pagePrecision="not_applicable",
+                topics=sorted(topics),mixedListening=0,mixedListeningAvailable=0)
+
+
 def make_quiz(user_id,params):
     lang,mode,kinds,first,last,chapters,count,exclude=parse_options(params)
+    if params.get("scope",["book"])[0]=="culture":
+        return make_culture_quiz(user_id,params,lang,mode,count,exclude)
     if mode=="weak_all":
         return make_global_weak_quiz(user_id,params,lang,count,exclude)
     if mode=="srs_due":
@@ -721,13 +793,17 @@ def mark(user_id,body,injected_db=None):
         raise ValueError("listening_alpha_disabled")
     if not card or not isinstance(selected,str) or len(selected)>500:
         raise ValueError("invalid answer")
-    directions=(tuple(f"gap{i}" for i in range(len(card["gaps"]))) if card["kind"]=="dialogue" else ("conjugate","translate") if card["kind"]=="verb" else ("grammar_fill",) if card["kind"]=="grammar" else ("stress_enclitic",) if card["kind"]=="enclitic" else ("stress_syllable",) if card["kind"]=="syllable" else ("accent",) if card["kind"]=="accent" else
+    directions=((_culture.CULTURE_DIRECTION,) if card["kind"]=="culture" else tuple(f"gap{i}" for i in range(len(card["gaps"]))) if card["kind"]=="dialogue" else ("conjugate","translate") if card["kind"]=="verb" else ("grammar_fill",) if card["kind"]=="grammar" else ("stress_enclitic",) if card["kind"]=="enclitic" else ("stress_syllable",) if card["kind"]=="syllable" else ("accent",) if card["kind"]=="accent" else
                 ("listen",) if card['kind']=='listening' else ("read",) if card["kind"]=="clock" else
                 ("fill",) if card['kind']=='article' else ("arrange",) if card['kind']=='order' else
                 (("sg-pl","pl-sg") if card["kind"]=="plural" else ("gr-ru","ru-gr")))
     if direction not in directions:raise ValueError("invalid direction")
     correct_answer=shape(card,direction,lang)[1]
-    if card['kind']=='clock':
+    if card["kind"]=="culture":
+        if lang not in ("ru","en") or selected not in card["options"]:
+            raise ValueError("invalid culture selection")
+        correct=selected==correct_answer
+    elif card['kind']=='clock':
         correct=selected==correct_answer
     elif card['kind']=='grammar':
         if card.get("typedAnswer"):
@@ -768,6 +844,10 @@ def mark(user_id,body,injected_db=None):
                       if card["kind"]=="dialogue" else None)
     if dialogue_valid is not None:
         correct=selected in dialogue_valid
+    if "assisted" in body and type(body["assisted"]) is not bool:
+        raise ValueError("invalid assisted flag")
+    assisted=card["kind"]=="culture" and body.get("assisted") is True
+    progress_correct=correct and not assisted
     key=card_key(card,direction,lang)
     now=dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     if injected_db is None:
@@ -777,21 +857,26 @@ def mark(user_id,body,injected_db=None):
     row=db.execute("SELECT attempts,correct,miss_debt FROM progress WHERE user_id=? AND card_key=?",
                    (user_id,key)).fetchone()
     if row:
-        miss_debt=max(0,row["miss_debt"]-1) if correct else min(7,row["miss_debt"]+2)
+        miss_debt=(row["miss_debt"] if assisted else
+                   max(0,row["miss_debt"]-1) if correct else min(7,row["miss_debt"]+2))
         db.execute("""UPDATE progress SET attempts=attempts+1,correct=correct+?,miss_debt=?,updated_at=?
-                       WHERE user_id=? AND card_key=?""",(int(correct),miss_debt,now,user_id,key))
+                       WHERE user_id=? AND card_key=?""",(int(progress_correct),miss_debt,now,user_id,key))
     else:
-        miss_debt=0 if correct else 2
+        miss_debt=0 if progress_correct or assisted else 2
         db.execute("""INSERT INTO progress(user_id,card_key,attempts,correct,miss_debt,updated_at)
-                      VALUES(?,?,?,?,?,?)""",(user_id,key,1,int(correct),miss_debt,now))
-    db.execute("""INSERT INTO attempts(user_id,card_key,kind,unit,correct,created_at)
-                  VALUES(?,?,?,?,?,?)""",(user_id,key,card["kind"],card["unit"],int(correct),now))
+                      VALUES(?,?,?,?,?,?)""",(user_id,key,1,int(progress_correct),miss_debt,now))
+    db.execute("""INSERT INTO attempts(user_id,card_key,kind,unit,correct,created_at,assisted)
+                  VALUES(?,?,?,?,?,?,?)""",(user_id,key,card["kind"],card["unit"],int(correct),now,int(assisted)))
     srs_info=(learning_engine.update(db,user_id,key,correct,now)
-              if body.get('srsOptIn') is True else None)
+              if body.get('srsOptIn') is True and not assisted else None)
     # For genuine alternatives, return the student's accepted wording.
     # The client fills the dialogue with result.answer after scoring.
     shown_answer = selected if dialogue_valid is not None and correct else correct_answer
     result=dict(correct=correct,answer=shown_answer,missDebt=miss_debt)
+    if card["kind"]=="culture":
+        result.update(_culture.after_answer(card,lang,selected,correct,assisted))
+        if srs_info:result.update(srs_info)
+        return result
     if dialogue_valid is not None:
         result['acceptedAnswers']=list(dialogue_valid)
         result['acceptedVariant']=bool(correct and selected!=correct_answer)
@@ -882,10 +967,53 @@ def mark(user_id,body,injected_db=None):
                                "person":card["person"]}
     return result
 
-def stats(user_id):
+def culture_stats(user_id):
+    """Filtered view of the same attempts/progress/SRS ledger as A1/A2."""
     with conn() as db:
-        rows = db.execute("SELECT card_key,kind,unit,correct,created_at FROM attempts WHERE user_id=? ORDER BY id DESC LIMIT 20000",(user_id,)).fetchall()
-        prog = db.execute("SELECT card_key,attempts,correct,miss_debt FROM progress WHERE user_id=?",
+        rows=db.execute("""SELECT card_key,correct,assisted,created_at
+          FROM attempts WHERE user_id=? AND kind='culture'
+          ORDER BY id DESC LIMIT 20000""",(user_id,)).fetchall()
+        progress=db.execute("""SELECT card_key,attempts,correct,miss_debt
+          FROM progress WHERE user_id=? AND substr(card_key,1,4)='cyq_'""",
+          (user_id,)).fetchall()
+        srs=learning_engine.status(db,user_id,scope="culture")
+    topics={row["code"]:dict(attempts=0,correct=0,independentCorrect=0,masteredFacts=set())
+            for row in CULTURE_CONFIG["topics"]}
+    practiced=set()
+    mastered=set()
+    for row in rows:
+        cid=row["card_key"].split(":",1)[0]
+        card=CULTURE_BY_ID.get(cid)
+        if not card:continue
+        fact=card["factId"]
+        practiced.add(fact)
+        topic=topics[card["topic"]]
+        topic["attempts"]+=1
+        topic["correct"]+=int(row["correct"])
+        independent=bool(row["correct"] and not row["assisted"])
+        topic["independentCorrect"]+=int(independent)
+        if independent:
+            mastered.add(fact)
+            topic["masteredFacts"].add(fact)
+    weak,total_weak=valid_weak_entries(user_id,scope="culture")
+    return dict(scope="culture",attempts=len(rows),
+                correct=sum(r["correct"] for r in rows),
+                assisted=sum(r["assisted"] for r in rows),
+                practicedFacts=len(practiced),masteredFacts=len(mastered),
+                availableQuestions=len(CULTURE_BY_ID),
+                availableFacts=len({c["factId"] for c in CULTURE_BY_ID.values()}),
+                weak=len(weak),weakOverall=total_weak,srs=srs,
+                topics={code:{key:len(v) if isinstance(v,set) else v
+                              for key,v in info.items()} for code,info in topics.items()},
+                masteredQuestionKeys=sum(bool(r["correct"]) for r in progress))
+
+
+def stats(user_id,scope="book"):
+    if scope=="culture":
+        return culture_stats(user_id)
+    with conn() as db:
+        rows = db.execute("SELECT card_key,kind,unit,correct,created_at FROM attempts WHERE user_id=? AND kind!='culture' ORDER BY id DESC LIMIT 20000",(user_id,)).fetchall()
+        prog = db.execute("SELECT card_key,attempts,correct,miss_debt FROM progress WHERE user_id=? AND substr(card_key,1,4) NOT IN ('cyq_','cyv_')",
                           (user_id,)).fetchall()
     total = len(rows)
     good = sum(r["correct"] for r in rows)
@@ -919,9 +1047,9 @@ def stats(user_id):
                   key=lambda x:(-x["miss_debt"],x["correct"]))
     detailed=learning_engine.detailed_mastery(rows,book_or_audio_card)
     detailed.update(learning_upgrade.knowledge_breakdown(rows,book_or_audio_card))
-    valid,total_weak=valid_weak_entries(user_id)
+    valid,total_weak=valid_weak_entries(user_id,scope="book")
     with conn() as db:
-        srs_status=learning_engine.status(db,user_id)
+        srs_status=learning_engine.status(db,user_id,scope="book")
         detailed['vocabTopics']=learning_upgrade.vocabulary_knowledge(db,user_id,vocab.VOCAB_BY_ID)
     actionable={x["key"] for x in valid}
     archive_count=total_weak-len(valid)
@@ -981,11 +1109,11 @@ def leaderboard(user_id):
         joined_users={r["user_id"] for r in db.execute("SELECT user_id FROM leaderboard_members")}
         rows=db.execute("""SELECT a.user_id,a.created_at,a.correct
                  FROM attempts a INNER JOIN leaderboard_members m ON m.user_id=a.user_id
-                 WHERE a.created_at>=? ORDER BY a.user_id,a.created_at,a.id""",(since,)).fetchall()
+                 WHERE a.created_at>=? AND a.kind!='culture' ORDER BY a.user_id,a.created_at,a.id""",(since,)).fetchall()
         debt={r["user_id"]:r["n"] for r in db.execute(
             """SELECT p.user_id,COUNT(*) AS n FROM progress p
                INNER JOIN leaderboard_members m ON m.user_id=p.user_id
-               WHERE p.miss_debt>0 GROUP BY p.user_id""")}
+               WHERE p.miss_debt>0 AND substr(p.card_key,1,4) NOT IN ('cyq_','cyv_') GROUP BY p.user_id""")}
     totals={uid:dict(seconds=0,answers=0,correct=0,last=None) for uid in joined_users}
     for row in rows:
         uid=row["user_id"]
@@ -1267,7 +1395,8 @@ class Handler(BaseHTTPRequestHandler):
             with conn() as db:result=_lesson_sync.read(db,uid)
             return self.send_json(200,result,new,uid)
         if path=="/api/srs/status":
-            with conn() as db:result=learning_engine.status(db,uid)
+            scope="culture" if parse_qs(urlparse(self.path).query).get("scope")==["culture"] else "book"
+            with conn() as db:result=learning_engine.status(db,uid,scope=scope)
             return self.send_json(200,result,new,token)
         if path=="/api/personalized/status":
             with conn() as db:summary=personalized.progress_summary(db,uid)
@@ -1333,7 +1462,8 @@ class Handler(BaseHTTPRequestHandler):
             except Exception:
                 return self.send_json(500,{"error":"quiz unavailable"},new,uid)
         if path=="/api/stats":
-            return self.send_json(200,stats(uid),new,uid)
+            scope="culture" if parse_qs(urlparse(self.path).query).get("scope")==["culture"] else "book"
+            return self.send_json(200,stats(uid,scope=scope),new,uid)
         if path=="/api/leaderboard":
             return self.send_json(200,leaderboard(uid),new,uid)
         if path=="/api/topic-words":
@@ -1356,6 +1486,12 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200,dict(topics=TOPICS,counts=counts,levels=["A1","A2"],
                                groups=VERB_GROUPS,verbs=VERB_REFERENCE),new,token)
         if path=="/api/catalog":
+            if parse_qs(urlparse(self.path).query).get("scope")==["culture"]:
+                return self.send_json(200,dict(scope="culture",topics=_culture.topic_counts(CULTURE_CONFIG,CULTURE_BY_ID),
+                    available=len(CULTURE_BY_ID),formats=sorted(_culture.contract.QUESTION_FORMATS),
+                    languages=["ru","en"],contentVersion=_culture.contract.SCHEMA_VERSION,
+                    source="independently authored culture exam preparation, not an official exam"),
+                    new,uid)
             counts={c["id"]:sum(x["chapter"]==c["id"] for x in PRACTICE_ALL) for c in CHAPTERS}
             printed_sections=[c for c in CHAPTERS if c["id"] not in (0,-5)]
             listening_units=[dict(c,id=i) for i,c in enumerate(sorted(printed_sections,key=lambda c:c["start"]),1)]
