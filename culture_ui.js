@@ -10,8 +10,9 @@
       available:"Опубликовано вопросов",mastered:"Освоено фактов",weak:"Мои ошибки",
       language:"Язык перевода",duration:"Тренировка",srs:"Интервальное повторение (SRS)",
       topics:"Темы экзамена",start:"Начать тренировку",review:"Повторить ошибки",
-      exam:"Пробный экзамен · скоро",
-      examInfo:"Экзамен 25 вопросов / 45 минут станет доступен после реализации защищённой экзаменационной сессии и редакторской проверки банка.",
+      exam:"Пробный экзамен · 25/45",
+      examInfo:"Для пробного экзамена нужны минимум 25 опубликованных и проверенных разных фактов. Черновики не учитываются.",
+      examReady:"Доступен пробный экзамен: 25 вопросов за 45 минут, без переводов и подсказок до завершения.",
       empty:"Пока нет вопросов, прошедших независимую редакторскую проверку. Черновики не выдаются пользователям как проверенный материал.",
       noWeak:"Ошибок для повторения пока нет.",loading:"Загружаю темы и прогресс…",
       failed:"Не удалось загрузить Culture: ",noSelection:"Выбери хотя бы одну доступную тему.",
@@ -25,8 +26,9 @@
       available:"Published questions",mastered:"Facts mastered",weak:"Mistakes",
       language:"Translation language",duration:"Study session",srs:"Spaced repetition (SRS)",
       topics:"Exam topics",start:"Start practice",review:"Review mistakes",
-      exam:"Mock exam · coming soon",
-      examInfo:"The 25-question, 45-minute mock exam will be enabled after the secure exam session and independent editorial review are complete.",
+      exam:"Mock exam · 25/45",
+      examInfo:"At least 25 independently reviewed and published distinct facts are required before starting the mock exam. Drafts do not count.",
+      examReady:"Mock exam available: 25 questions in 45 minutes, with no translations or hints until completion.",
       empty:"No questions have passed independent editorial review yet. Draft questions are not shown as verified material.",
       noWeak:"No mistakes to review yet.",loading:"Loading topics and progress…",
       failed:"Could not load Culture: ",noSelection:"Select at least one available topic.",
@@ -82,7 +84,11 @@
     const hasItems=(meta?.available||0)>0;
     $("culture-start").disabled=working||!hasItems;
     $("culture-review").disabled=working||!hasItems||!(stats?.weak>0);
-    $("culture-exam").disabled=true; // #39 requires a trusted server-side session.
+    // Server has a sealed exam profile. Never enable with draft questions or
+    // repeated formulations of fewer than 25 distinct reviewed facts.
+    const examReady=(stats?.availableFacts||0)>=25&&(meta?.available||0)>=25;
+    $("culture-exam").disabled=working||!examReady;
+    $("culture-exam-status").textContent=examReady?t("examReady"):t("examInfo");
     if(loaded&&!hasItems)err(t("empty"));
     else if(loaded&&!stats?.weak&&hasItems)err(t("noWeak"));
     if(!["ru","en"].includes($("lang").value)&&loaded&&hasItems){
@@ -117,6 +123,15 @@
     }catch(error){err(t("failed")+String(error.message||error));}
     finally{working=false;render();}
   }
+  async function mockExam(){
+    if(working||(stats?.availableFacts||0)<25)return;
+    working=true;render();err(t("started"));
+    try{
+      await window.lexiCultureBridge.startExam();
+    }catch(error){
+      err(t("failed")+String(error.message||error));
+    }finally{working=false;render();}
+  }
   function onLanguageChange(){
     if(!$("culture-view").hidden)render();
   }
@@ -134,6 +149,7 @@
     $(id).addEventListener("change",save);
   $("culture-start").addEventListener("click",()=>practice("all"));
   $("culture-review").addEventListener("click",()=>practice("weak"));
+  $("culture-exam").addEventListener("click",mockExam);
   window.lexiCulture={onOpen:open,onLanguageChange,onSessionFinished,
     topicLabel:(code,lang)=>topicName(meta?.topics?.find(x=>x.code===code),lang||$("culture-lang").value)};
 })();
