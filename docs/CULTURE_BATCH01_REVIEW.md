@@ -31,7 +31,7 @@
 | CURRENCY | 1 |
 | **Total** | **20** |
 
-**Formats:** DIRECT=10, CLOZE=5, NEGATIVE=2, CHRONOLOGY=1, plus remaining DIRECT counting to 20: automated CI report is authoritative for exact distribution. This draft batch does not claim to match official exam weighting.
+**Formats:** DIRECT=12, CLOZE=5, NEGATIVE=2, CHRONOLOGY=1. These are first-batch authoring counts, not official exam weights. This draft batch does not claim to match official exam weighting.
 
 ## Items needing particular editorial attention
 
