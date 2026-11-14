@@ -28,7 +28,9 @@ for marker in (
     assert marker in app, marker
 assert 'bridge.api("catalog?scope=culture")' in ui
 assert 'bridge.api("stats?scope=culture")' in ui
-assert 'culture-exam").disabled=true' in ui
+assert 'const examReady=' in ui and '(stats?.availableFacts||0)>=25' in ui
+assert 'culture-exam").disabled=working||!examReady' in ui
+assert 'window.lexiCultureBridge.startExam()' in ui
 assert 'if(!meta?.available' not in ui # only verified bank enables start
 assert "window.lexiCultureBridge.start" in ui
 assert 'card["options"]' in adapter and '"optionTranslations"' in adapter
