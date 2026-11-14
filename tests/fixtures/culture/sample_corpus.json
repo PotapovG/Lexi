@@ -143,7 +143,7 @@
         "Η πρώτη δήλωση είναι αληθής.",
         "Η δεύτερη δήλωση είναι αληθής.",
         "Η τρίτη δήλωση είναι αληθής.",
-        "Η τέταρτη δήλωση είναι ψευδής."
+        "Η πρώτη δήλωση είναι ψευδής."
       ],
       "correct_index": 3,
       "option_truth": [
@@ -159,7 +159,7 @@
             "Первое утверждение истинно.",
             "Второе утверждение истинно.",
             "Третье утверждение истинно.",
-            "Четвёртое утверждение ложно."
+            "Первое утверждение ложно."
           ]
         },
         "en": {
@@ -168,13 +168,13 @@
             "The first statement is true.",
             "The second statement is true.",
             "The third statement is true.",
-            "The fourth statement is false."
+            "The first statement is false."
           ]
         }
       },
       "explanation": {
-        "ru": "Это искусственный пример для проверки трёх true и одного false; фактическим вопросом не является.",
-        "en": "Synthetic only: the fourth option is designated false for testing validation."
+        "ru": "Первое утверждение истинно по условию примера. Четвёртый вариант, утверждающий обратное, — единственный ложный.",
+        "en": "The first statement is true by construction; the fourth option contradicts it and is the sole false statement."
       },
       "vocab_ids": [
         "cyv_lanth_0002"
