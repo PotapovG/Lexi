@@ -186,6 +186,15 @@ def test_server_profile():
             assert all("correctIndex" in q and "optionTranslations" in q
                        and "explanation" in q and "source" in q
                        for q in done["questions"])
+            # Review glosses must stay matched to Greek options even after
+            # each question's options were shuffled before exam start.
+            for row in done["questions"]:
+                original=server.CULTURE_BY_ID[row["id"]]
+                raw=list(original["options"])
+                expected_glosses=original["translations"]["ru"]["options"]
+                assert row["optionTranslations"]==[
+                    expected_glosses[raw.index(choice)] for choice in row["choices"]
+                ], row["id"]
             with server.conn() as db:
                 assert not culture_exam.has_live_exam(db,uid,AT+dt.timedelta(minutes=6))
                 completed_again=culture_exam.action(db,uid,{"action":"finish",
