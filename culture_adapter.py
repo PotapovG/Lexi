@@ -36,6 +36,11 @@ def to_card(question: dict, fact: dict) -> dict:
         "contentVersion": question["version"],
         "vocabIds": tuple(question["vocab_ids"]),
         "verifiedAt": question["verified_at"],
+        # Exam selection checks deadlines again after long-running server uptime.
+        "reviewDue": question.get("review_due"),
+        "validUntil": question.get("valid_until"),
+        "factReviewDue": fact.get("review_due"),
+        "factValidUntil": fact.get("valid_until"),
     }
 
 

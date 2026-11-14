@@ -32,6 +32,7 @@ import verb_curriculum
 import accent_guidance
 import learning_engine
 import culture_adapter as _culture
+import culture_exam as _culture_exam
 import learning_upgrade
 import advanced_syllables as _syllables
 import enclitic_stress as _enclitic
@@ -152,6 +153,7 @@ def init_db():
             db.execute("ALTER TABLE attempts ADD COLUMN assisted INTEGER NOT NULL DEFAULT 0")
         answer_idempotency.schema(db)
         _lesson_sync.schema(db)
+        _culture_exam.schema(db)
         auth.schema(db)
         vocab.schema(db)
         _tracks.schema(db)
@@ -587,6 +589,10 @@ def make_culture_quiz(user_id,params,lang,mode,count,exclude):
     """Culture uses existing format_question/mark/SQLite/SRS, not another engine."""
     if lang not in ("ru","en"):
         raise ValueError("culture requires ru/en locale")
+    # Exam question bank cannot be probed via normal study endpoints mid-exam.
+    with conn() as exam_db:
+        if _culture_exam.has_live_exam(exam_db,user_id):
+            raise ValueError("active_culture_exam")
     if mode not in ("all","weak","weak_all","srs_due"):
         raise ValueError("invalid culture practice mode")
     topics=set(params.get("topics",[""])[0].split(",")) & {t["code"] for t in CULTURE_CONFIG["topics"]}
@@ -854,6 +860,8 @@ def mark(user_id,body,injected_db=None):
         with conn() as own_db:
             return mark(user_id,body,injected_db=own_db)
     db=injected_db
+    if card["kind"]=="culture" and _culture_exam.has_live_exam(db,user_id):
+        raise ValueError("active_culture_exam")
     row=db.execute("SELECT attempts,correct,miss_debt FROM progress WHERE user_id=? AND card_key=?",
                    (user_id,key)).fetchone()
     if row:
@@ -1380,8 +1388,16 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200,dict(registered=bool(account),
                  nickname=account["nickname"] if account else None,
                  avatar=pseudonym(uid)["avatar"] if account else None),new,token)
-        if path in ("/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene","/api/board") and not account:
+        if path in ("/api/culture/exam","/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene","/api/board") and not account:
             return self.send_json(401,{"error":"login_required"},new,token)
+        if path=="/api/culture/exam":
+            qp=parse_qs(urlparse(self.path).query)
+            try:
+                with conn() as db:
+                    output=_culture_exam.get(db,uid,qp.get("sessionId",[None])[0])
+                return self.send_json(200,output,new,uid)
+            except ValueError:
+                return self.send_json(400,{"error":"invalid exam request"},new,uid)
         if path=="/api/board":
             qp=parse_qs(urlparse(self.path).query)
             language=qp.get("lang",["ru"])[0]
@@ -1459,6 +1475,10 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 result=make_quiz(uid,parse_qs(urlparse(self.path).query))
                 return self.send_json(200,result,new,uid)
+            except ValueError as error:
+                if str(error)=="active_culture_exam":
+                    return self.send_json(409,{"error":"active_culture_exam"},new,uid)
+                return self.send_json(400,{"error":"invalid quiz request"},new,uid)
             except Exception:
                 return self.send_json(500,{"error":"quiz unavailable"},new,uid)
         if path=="/api/stats":
@@ -1519,7 +1539,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_json(404,{"error":"not found"},new,uid)
     def do_POST(self):
         path=request_path(self.path)
-        if path not in ("/api/answer","/api/leaderboard/join","/api/leaderboard/leave",
+        if path not in ("/api/culture/exam","/api/answer","/api/leaderboard/join","/api/leaderboard/leave",
                          "/api/auth/register","/api/auth/login","/api/auth/logout",
                          "/api/vocab/answer","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene","/api/board"):
             self.close_connection=True  # Avoid leaving unread POST bodies on reused HTTP/1.1 connections.
@@ -1555,6 +1575,10 @@ class Handler(BaseHTTPRequestHandler):
             if path=="/api/auth/logout":
                 with conn() as db:auth.logout(db,token)
                 return self.send_json(200,{"loggedOut":True},True,secrets.token_hex(16))
+            if path=="/api/culture/exam":
+                with conn() as db:
+                    result=_culture_exam.action(db,uid,body,CULTURE_BY_ID,CULTURE_CONFIG)
+                return self.send_json(200,result,new,uid)
             if path=="/api/board":
                 with conn() as db:
                     result=_board.board_action(db,uid,body.get("lang","ru"),body,mark,
@@ -1600,12 +1624,20 @@ class Handler(BaseHTTPRequestHandler):
                     else:
                         db.execute("DELETE FROM leaderboard_members WHERE user_id=?",(uid,))
                 return self.send_json(200,{"joined":path.endswith("/join")},new,uid)
-            return self.send_json(200,answer_idempotency.score_once(conn,mark,uid,body,validate_attempt=_lesson_sync.assert_owner),new,uid)
+            def validate_answer(db,user_id,attempt):
+                # This runs BEFORE any stored-receipt replay for Culture cards,
+                # and inside the existing BEGIN IMMEDIATE scoring transaction.
+                if (isinstance(attempt.get("id"),str) and
+                        attempt["id"].startswith("cyq_") and
+                        _culture_exam.has_live_exam(db,user_id)):
+                    raise ValueError("active_culture_exam")
+                _lesson_sync.assert_owner(db,user_id,attempt)
+            return self.send_json(200,answer_idempotency.score_once(conn,mark,uid,body,validate_attempt=validate_answer),new,uid)
         except (ValueError,json.JSONDecodeError) as error:
             self.close_connection=True
             reason=str(error)
-            status=429 if reason=="rate_limited" else 409 if reason in ("nickname_taken","already_registered","session_conflict","stale_track") else 401 if reason=="invalid_credentials" else 400
-            return self.send_json(status,{"error":reason if reason in ("nickname_invalid","nickname_taken","already_registered","invalid_credentials","rate_limited","session_conflict","stale_track") else "invalid request"})
+            status=429 if reason=="rate_limited" else 409 if reason in ("nickname_taken","already_registered","session_conflict","stale_track","active_culture_exam","stale_exam_revision") else 401 if reason=="invalid_credentials" else 400
+            return self.send_json(status,{"error":reason if reason in ("nickname_invalid","nickname_taken","already_registered","invalid_credentials","rate_limited","session_conflict","stale_track","active_culture_exam","stale_exam_revision","not_enough_reviewed_culture_facts","exam_already_finished") else "invalid request"})
         except Exception:
             self.close_connection=True
             return self.send_json(500,{"error":"write failed"})
