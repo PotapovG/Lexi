@@ -1151,7 +1151,7 @@
     const matched=glossary.filter(([word])=>phrase.includes(word)).slice(0,4);
     const intro=lang==="ru"?"Ответ будет отмечен как с подсказкой.":"This answer will be marked assisted.";
     const empty=lang==="ru"?"Обратите внимание на вопросительные слова и отрицания.":"Look for question words and negations.";
-    return (matched.map(([greek,ru,en])=>greek+" — "+(lang==="ru"?ru:en)).join(" · ")||empty)+"\\n"+intro;
+    return (matched.map(([greek,ru,en])=>greek+" — "+(lang==="ru"?ru:en)).join(" · ")||empty)+"\n"+intro;
   }
   function cultureHintAllowed(q){
     return q?.kind==="culture"&&state.settings?.scope==="culture"&&state.settings?.mode!=="exam";
