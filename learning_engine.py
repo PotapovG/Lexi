@@ -43,11 +43,15 @@ def update(db,user_id,key,correct,now):
                (user_id,key,days,streak,due_iso,now))
     return dict(nextReview=due_iso,srsIntervalDays=days)
 
-def status(db,user_id,now=None):
+def status(db,user_id,now=None,scope="all"):
     now=now or dt.datetime.now(UTC).isoformat(timespec="seconds")
+    if scope not in ("all","book","culture"):raise ValueError("invalid srs scope")
+    clause=("" if scope=="all" else
+            " AND substr(card_key,1,4) IN ('cyq_','cyv_')" if scope=="culture" else
+            " AND substr(card_key,1,4) NOT IN ('cyq_','cyv_')")
     row=db.execute("""SELECT COUNT(*) AS total,
                        SUM(CASE WHEN due_at<=? THEN 1 ELSE 0 END) AS due
-                      FROM srs_schedule WHERE user_id=?""",(now,user_id)).fetchone()
+                      FROM srs_schedule WHERE user_id=?"""+clause,(now,user_id)).fetchone()
     return dict(scheduled=row["total"],due=row["due"] or 0,optInOnly=True)
 
 def due_entries(db,user_id,now=None,limit=500):
@@ -59,7 +63,7 @@ def due_entries(db,user_id,now=None,limit=500):
 
 def pace_seconds(db,user_id):
     """Robust observed pace from nearby answers. Long breaks are ignored."""
-    rows=db.execute("SELECT created_at FROM attempts WHERE user_id=? ORDER BY id DESC LIMIT 110",
+    rows=db.execute("SELECT created_at FROM attempts WHERE user_id=? AND kind!='culture' ORDER BY id DESC LIMIT 110",
                     (user_id,)).fetchall()
     times=[dt.datetime.fromisoformat(r["created_at"]) for r in rows]
     intervals=[(a-b).total_seconds() for a,b in zip(times,times[1:])]
@@ -74,7 +78,7 @@ def stage(kind):
 
 def adaptive_order(db,user_id,choices):
     """Within already user-filtered cards only. Never widen chapter/grammar scope."""
-    recents=db.execute("SELECT correct FROM attempts WHERE user_id=? ORDER BY id DESC LIMIT 40",
+    recents=db.execute("SELECT correct FROM attempts WHERE user_id=? AND kind!='culture' ORDER BY id DESC LIMIT 40",
                        (user_id,)).fetchall()
     n=len(recents)
     acc=sum(row["correct"] for row in recents)/n if n else 0
