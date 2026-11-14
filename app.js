@@ -536,6 +536,8 @@
     remoteTimer=setTimeout(flushRemoteSnapshot,200);
   }
   function persistActiveSession(){
+    // The exam uses sealed server-owned snapshots, never client lesson snapshots.
+    if(state.exam?.status==="active")return;
     if(state.restoring||!state.loggedIn||!state.profile?.nickname||!state.deadline||state.finishing)return;
     const snapshot={
       version:2,nickname:state.profile.nickname,deadline:state.deadline,started:state.started,
@@ -661,7 +663,7 @@
     if(!$("quiz").hidden)txt("resume-message",t(transferred?"resumeRemoteNotice":"resumeNotice"));
   }
 
-  const state={joinedLeaderboard:false,catalog:null,topicCatalog:null,cultureAssisted:{},profile:null,loggedIn:false,authMode:"register",questions:[],index:0,current:null,mode:"all",answered:false,busy:false,
+  const state={joinedLeaderboard:false,catalog:null,topicCatalog:null,cultureAssisted:{},exam:null,examIndex:0,examSkew:0,examBusy:false,profile:null,loggedIn:false,authMode:"register",questions:[],index:0,current:null,mode:"all",answered:false,busy:false,
     correct:0,wrong:0,seen:[],sessionSkills:{},count:0,deadline:0,started:0,timer:null,finishing:false,settings:null,
     remoteEpoch:0,remoteSessionId:null,remoteRevision:0,remoteEnabled:true,remoteSynced:false,remoteLost:false};
   const t=key => I18N[$("lang").value]?.[key] ?? I18N.en[key] ?? key;
@@ -893,6 +895,7 @@
     try{
       await api("auth/logout",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"});
       clearActiveSession();
+      state.exam=null;state.examBusy=false;
       localStorage.removeItem(ACCESS_CODE_KEY);state.profile=null;state.loggedIn=false;state.cultureAssisted={};
       showAccountCode("");setPage("practice");show("setup",true);show("quiz",false);show("finished",false);
       clearInterval(state.timer);state.deadline=0;state.finishing=true;
@@ -1027,6 +1030,7 @@
     finally{button.disabled=false;}
   }
   function setPage(page){
+    if(page==="culture"&&state.exam?.status==="active")page="practice";
     for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life","board","culture"])show(id+"-view",id===page);
     const extra=$("additional-modes");
     if(extra){
@@ -1077,14 +1081,222 @@
   }
   function updateTimer(){
     if(!state.deadline||state.finishing)return;
-    const remain=Math.max(0,state.deadline-Date.now());
+    const remain=Math.max(0,state.deadline-(Date.now()+(state.exam?.status==="active"?state.examSkew:0)));
     txt("time-left",formatClock(remain));
-    $("progress-fill").style.width=(100*(1-remain/((Number(state.settings?.duration)||duration())*60000)))+"%";
-    if(remain<=0)finishQuiz(true);
+    const total=state.exam?.status==="active"?45:(Number(state.settings?.duration)||duration());
+    $("progress-fill").style.width=(100*(1-remain/(total*60000)))+"%";
+    if(remain<=0){
+      if(state.exam?.status==="active"){if(!state.examBusy)finishCultureExam(true);}
+      else finishQuiz(true);
+    }
   }
+
+  // Reuse the existing #quiz, #answers, #finished and Lexi navigation.
+  // Only the session semantics differ: no per-question grading until finish.
+  const EXAM_UI={
+    ru:{title:"ПРОБНЫЙ ЭКЗАМЕН",prompt:"Выберите ответ. Его можно изменить до завершения.",
+      flag:"Отметить",unflag:"Снять отметку",prev:"← Назад",next:"Далее →",
+      submit:"Завершить экзамен",answered:"Отвечено {n} из 25",
+      confirm:"Есть вопросы без ответа. Завершить экзамен?",right:"Верно",wrong:"Ошибка",
+      result:"Результат симуляции: {score} из 25 ({pct}%). Проходной ориентир для гражданства: 15/25.",
+      complete:"Экзамен завершён",review:"Разбор ответов",translation:"Перевод",
+      explanation:"Объяснение",source:"Источник",connection:"Не удалось сохранить ответ. Проверяем состояние на сервере.",
+      expiry:"Время вышло. Проверяем результат на сервере."},
+    en:{title:"MOCK EXAM",prompt:"Choose an answer. You can change it before submitting.",
+      flag:"Flag",unflag:"Unflag",prev:"← Previous",next:"Next →",
+      submit:"Submit exam",answered:"Answered {n} of 25",
+      confirm:"Some questions are unanswered. Submit exam anyway?",right:"Correct",wrong:"Incorrect",
+      result:"Simulator result: {score}/25 ({pct}%). Citizenship reference threshold: 15/25.",
+      complete:"Exam complete",review:"Answer review",translation:"Translation",
+      explanation:"Explanation",source:"Source",connection:"Could not save the answer. Checking server state.",
+      expiry:"Time expired. Checking the server result."}
+  };
+  const ex=key=>EXAM_UI[state.exam?.lang==="ru"?"ru":"en"][key]||key;
+  const currentExamQuestion=()=>state.exam?.questions?.[state.examIndex];
+  async function examRequest(payload){
+    return api("culture/exam",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)});
+  }
+  function renderCultureExam(){
+    if(state.exam?.status!=="active")return;
+    const question=currentExamQuestion();
+    if(!question)return;
+    state.current={...question,kind:"culture"};
+    txt("quiz-mode",ex("title"));
+    txt("question-num",(state.examIndex+1)+"/25");
+    txt("question-topic",window.lexiCulture?.topicLabel?.(question.topic,state.exam.lang)||question.topic);
+    txt("question-note",ex("prompt"));
+    txt("question-prompt",question.prompt);
+    $("question-prompt").lang="el";$("question-prompt").dir="ltr";
+    $("question-prompt").classList.remove("schedule-agenda","unaccented-word");
+    const host=$("answers");host.replaceChildren();
+    host.classList.remove("accent-letters","typed-grammar","order-tokens");
+    host.classList.add("wide-choices");
+    question.choices.forEach((option,index)=>{
+      const button=document.createElement("button");button.type="button";
+      button.className="answer"+(question.selectedIndex===index?" exam-selected":"");
+      button.disabled=state.examBusy;
+      button.setAttribute("aria-pressed",String(question.selectedIndex===index));
+      const letter=document.createElement("span");letter.className="key";
+      letter.textContent=["Α","Β","Γ","Δ"][index];
+      const label=document.createElement("span");label.lang="el";label.dir="ltr";label.textContent=option;
+      button.append(letter,label);
+      button.addEventListener("click",()=>changeCultureExamAnswer(question.selectedIndex===index?null:index));
+      host.append(button);
+    });
+    // The shared study glossary is explicitly forbidden during a mock exam.
+    show("culture-wording-wrap",false);
+    for(const id of ("clock-face word-pronounce-controls listening-controls listening-reveal dialogue-lines order-builder order-tools verb-reveal feedback next retry-answer").split(" ")){
+      show(id,false);
+    }
+    show("question-prompt",true);
+    show("culture-exam-navigation",true);
+    show("culture-exam-review",false);
+    txt("culture-exam-prev",ex("prev"));txt("culture-exam-next",ex("next"));
+    txt("culture-exam-flag",question.flagged?ex("unflag"):ex("flag"));
+    $("culture-exam-flag").setAttribute("aria-pressed",String(question.flagged));
+    $("culture-exam-prev").disabled=state.examBusy||state.examIndex===0;
+    $("culture-exam-next").disabled=state.examBusy||state.examIndex===24;
+    $("culture-exam-flag").disabled=state.examBusy;
+    txt("finish-now",ex("submit"));
+    txt("resume-message",ex("answered").replace("{n}",state.exam.answered));
+    updateTimer();
+  }
+  function enterCultureExam(result,preferredIndex=0){
+    state.exam=result;
+    state.examSkew=Date.parse(result.serverNow)-Date.now();
+    state.examIndex=Math.min(Math.max(0,preferredIndex),24);
+    if(result.status!=="active"){renderCultureExamFinished(result);return true;}
+    state.settings={scope:"culture",mode:"exam",lang:result.lang,duration:"45"};
+    state.mode="exam";
+    state.started=Date.parse(result.startedAt);state.deadline=Date.parse(result.deadlineAt);
+    state.finishing=false;state.busy=false;state.examBusy=false;state.cultureAssisted={};
+    state.questions=result.questions;state.index=state.examIndex;
+    $("lang").disabled=true;
+    show("setup",false);show("finished",false);show("quiz",true);
+    setPage("practice");
+    renderCultureExam();
+    clearInterval(state.timer);
+    state.timer=setInterval(updateTimer,1000);
+    return true;
+  }
+  async function startCultureExam(){
+    if(!state.loggedIn){show("auth-gate",true);return false;}
+    if(state.deadline&&!state.exam){return false;}
+    if(state.exam?.status==="active"){enterCultureExam(state.exam,state.examIndex);return true;}
+    clearActiveSession(true);
+    const result=await examRequest({action:"start",requestId:newRequestId(),
+      lang:$("culture-lang").value,goal:"citizenship"});
+    return enterCultureExam(result);
+  }
+  async function restoreCultureExam(){
+    if(!state.loggedIn)return false;
+    try{
+      const result=await api("culture/exam");
+      if(result?.status!=="active")return false;
+      clearActiveSession(true);
+      return enterCultureExam(result);
+    }catch{return false;}
+  }
+  async function syncCultureExam(){
+    if(!state.exam?.sessionId)return;
+    const result=await api("culture/exam?sessionId="+encodeURIComponent(state.exam.sessionId));
+    enterCultureExam(result,state.examIndex);
+  }
+  async function writeCultureExam(action,details){
+    if(state.exam?.status!=="active"||state.examBusy)return;
+    state.examBusy=true;
+    const oldIndex=state.examIndex;
+    renderCultureExam();
+    try{
+      const result=await examRequest({action,sessionId:state.exam.sessionId,
+        revision:state.exam.revision,requestId:newRequestId(),...details});
+      enterCultureExam(result,oldIndex);
+    }catch(error){
+      txt("resume-message",ex("connection"));
+      try{await syncCultureExam();}catch{
+        txt("resume-message",ex("connection")+" "+error.message);
+      }
+    }finally{state.examBusy=false;if(state.exam?.status==="active")renderCultureExam();}
+  }
+  async function changeCultureExamAnswer(index){
+    const q=currentExamQuestion();
+    if(q)await writeCultureExam("answer",{questionId:q.id,selectedIndex:index});
+  }
+  async function flagCultureExamQuestion(){
+    const q=currentExamQuestion();
+    if(q)await writeCultureExam("flag",{questionId:q.id,flagged:!q.flagged});
+  }
+  function navigateCultureExam(step){
+    if(state.exam?.status!=="active"||state.examBusy)return;
+    state.examIndex=Math.min(24,Math.max(0,state.examIndex+step));
+    renderCultureExam();
+  }
+  async function finishCultureExam(expired=false){
+    if(state.exam?.status!=="active"||state.examBusy)return;
+    if(!expired&&state.exam.answered<25&&!window.confirm(ex("confirm")))return;
+    state.examBusy=true;
+    try{
+      const result=expired?
+        await api("culture/exam?sessionId="+encodeURIComponent(state.exam.sessionId)):
+        await examRequest({action:"finish",sessionId:state.exam.sessionId,
+                           revision:state.exam.revision});
+      enterCultureExam(result,state.examIndex);
+      if(result.status==="active"&&expired)txt("resume-message",ex("expiry"));
+    }catch(error){
+      try{await syncCultureExam();}catch{
+        txt("resume-message",error.message);
+      }
+    }finally{state.examBusy=false;}
+  }
+  function renderCultureExamFinished(result){
+    clearInterval(state.timer);
+    state.exam=result;state.deadline=0;state.current=null;state.examBusy=false;
+    state.finishing=false;
+    $("lang").disabled=false;
+    show("quiz",false);show("finished",true);show("setup",false);
+    show("culture-exam-navigation",false);
+    show("finish-skills",false);show("review",false);
+    show("culture-exam-review",true);
+    txt("finish-title",ex("complete"));
+    txt("finish-copy",ex("result").replace("{score}",result.score)
+      .replace("{pct}",result.percent));
+    const host=$("culture-exam-review");host.replaceChildren();
+    const heading=document.createElement("h3");heading.textContent=ex("review");host.append(heading);
+    for(const [index,q] of result.questions.entries()){
+      const block=document.createElement("details");block.className="culture-exam-review-item";
+      const summary=document.createElement("summary");
+      summary.textContent=(index+1)+". "+(q.correct?ex("right"):ex("wrong"))+" · "+q.prompt;
+      block.append(summary);
+      const original=document.createElement("p");original.lang="el";original.dir="ltr";
+      original.textContent=q.prompt;block.append(original);
+      const translated=document.createElement("p");
+      translated.textContent=ex("translation")+": "+q.translation;block.append(translated);
+      const choices=document.createElement("ol");
+      for(const [i,option] of q.choices.entries()){
+        const li=document.createElement("li");
+        li.textContent=option+" — "+(q.optionTranslations?.[i]||"")+
+          (i===q.correctIndex?" ✓":"")+(i===q.selectedIndex?" ●":"");
+        choices.append(li);
+      }
+      block.append(choices);
+      const explanation=document.createElement("p");
+      explanation.textContent=ex("explanation")+": "+q.explanation;block.append(explanation);
+      if(q.source?.url?.startsWith("https://")){
+        const link=document.createElement("a");link.href=q.source.url;
+        link.target="_blank";link.rel="noopener noreferrer";
+        link.textContent=ex("source");block.append(link);
+      }
+      host.append(block);
+    }
+  }
+
   async function startQuiz(weak,due=false,cultureOptions=null){
+    if(state.exam?.status==="active")return;
     if(state.deadline&&!state.finishing)return;
     if(!state.loggedIn){show("auth-gate",true);return;}
+    show("culture-exam-navigation",false);show("culture-exam-review",false);
+    show("review",true);
     try{state.settings=cultureOptions?
       {scope:"culture",mode:cultureOptions.mode==="weak"?"weak":"all",
        topics:cultureOptions.topics,lang:cultureOptions.lang,count:String(cultureOptions.count||25),
@@ -1801,6 +2013,7 @@
   }
 
   async function finishQuiz(expired=false){
+    if(state.exam?.status==="active")return finishCultureExam(expired);
     if(state.finishing)return;
     state.finishing=true;clearInterval(state.timer);
     await Promise.race([flushRemoteSnapshot(),new Promise(resolve=>setTimeout(resolve,1600))]);
@@ -1989,11 +2202,15 @@
   }
   window.lexiCultureBridge={
     api,loggedIn:()=>state.loggedIn,
-    start:options=>startQuiz(options.mode==="weak",false,options)
+    start:options=>startQuiz(options.mode==="weak",false,options),
+    startExam:()=>startCultureExam()
   };
   async function init(){
     const saved=restoreSettings();
     $("culture-wording-button").addEventListener("click",showCultureWording);
+    $("culture-exam-prev").addEventListener("click",()=>navigateCultureExam(-1));
+    $("culture-exam-next").addEventListener("click",()=>navigateCultureExam(1));
+    $("culture-exam-flag").addEventListener("click",flagCultureExamQuestion);
     for(const radio of document.querySelectorAll('input[name=scope]'))radio.addEventListener("change",()=>{showScope();saveSettings();});
     for(const radio of document.querySelectorAll('input[name=training]'))radio.addEventListener("change",()=>{updateTraining();saveSettings();});
     for(const n of ["page-from","page-to"])$(n).addEventListener("change",()=>{updateRangeSummary();saveSettings();});
@@ -2053,7 +2270,7 @@
       if(state.settings?.scope==="culture")startQuiz(true,false,{...state.settings,mode:"weak"});
       else startQuiz(true);
     });
-    $("finish-now").addEventListener("click",()=>finishQuiz(false));
+    $("finish-now").addEventListener("click",()=>state.exam?.status==="active"?finishCultureExam(false):finishQuiz(false));
     $("next").addEventListener("click",nextQuestion);
     $("retry-answer").addEventListener("click",retryPendingAnswer);
     $("listen-play").addEventListener("click",()=>playListening(false));
@@ -2065,11 +2282,18 @@
   $("order-reset").addEventListener("click",()=>editOrder("reset"));
     $("again").addEventListener("click",()=>{
       state.finishing=false;
+      state.exam=null;show("culture-exam-review",false);show("culture-exam-navigation",false);show("review",true);
       if(state.settings?.scope==="culture"){setPage("culture");window.lexiCulture?.onOpen();}
       else {show("finished",false);show("setup",true);}
     });
     window.addEventListener("keydown",event=>{
       if($("quiz").hidden||event.altKey||event.ctrlKey||event.metaKey||["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName))return;
+      if(state.exam?.status==="active"){
+        if(/^[1-4]$/.test(event.key)){event.preventDefault();changeCultureExamAnswer(Number(event.key)-1);}
+        else if(event.key==="ArrowLeft"){event.preventDefault();navigateCultureExam(-1);}
+        else if(event.key==="ArrowRight"){event.preventDefault();navigateCultureExam(1);}
+        return;
+      }
       if(/^[1-9]$/.test(event.key)&&!state.answered){event.preventDefault();choose(Number(event.key)-1);}
       else if(event.key==="Enter"&&state.answered){event.preventDefault();nextQuestion();}
     });
@@ -2088,7 +2312,8 @@
     }catch(err){txt("setup-error",t("failed")+err.message);show("setup-error",true);}
     updateLanguage();
     await loadProfile();
-    await restoreActiveSession();
+    const examRestored=await restoreCultureExam();
+    if(!examRestored)await restoreActiveSession();
     if(!state.deadline)
       setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");
   }

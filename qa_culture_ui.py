@@ -14,7 +14,7 @@ adapter=(root/"culture_adapter.py").read_text(encoding="utf-8")
 
 assert html.count('data-page="culture"')==1, "one navigation entry, not parallel learner modes"
 assert html.count('id="culture-view"')==1
-assert 'culture_ui.js?v=1' in html
+assert 'culture_ui.js?v=2' in html
 for element in ("culture-start","culture-review","culture-exam","culture-status",
                 "culture-topics","culture-duration","culture-lang","culture-srs"):
     assert html.count('id="'+element+'"')==1, element
@@ -28,7 +28,9 @@ for marker in (
     assert marker in app, marker
 assert 'bridge.api("catalog?scope=culture")' in ui
 assert 'bridge.api("stats?scope=culture")' in ui
-assert 'culture-exam").disabled=true' in ui
+assert 'const examReady=' in ui and '(stats?.availableFacts||0)>=25' in ui
+assert 'culture-exam").disabled=working||!examReady' in ui
+assert 'window.lexiCultureBridge.startExam()' in ui
 assert 'if(!meta?.available' not in ui # only verified bank enables start
 assert "window.lexiCultureBridge.start" in ui
 assert 'card["options"]' in adapter and '"optionTranslations"' in adapter

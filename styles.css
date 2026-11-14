@@ -866,3 +866,16 @@ body{background:radial-gradient(circle at 95% 0%,#1b3447 0,#0b1a29 45%,#091522 8
 .culture-hint-wrap p{white-space:pre-line;margin:11px 0 0;padding:12px;border:1px solid var(--line);
  border-radius:10px;line-height:1.55;overflow-wrap:anywhere}
 .culture-hint-wrap button{max-width:100%;white-space:normal;text-align:left;min-height:44px}
+
+/* CULT-06: sealed mock exam uses the same Lexi quiz/answer/finish panels. */
+.culture-exam-navigation{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:15px 0;padding:12px 0;border-top:1px solid #425d75}
+.culture-exam-navigation button{min-height:44px;flex:1 1 130px}
+.answers .answer.exam-selected{outline:3px solid var(--accent);outline-offset:2px;background:#29465b}
+.culture-exam-review{margin:20px 0 16px;display:grid;gap:10px}
+.culture-exam-review-item{border:1px solid #435c73;border-radius:12px;background:#14293f;padding:11px 15px;overflow-wrap:anywhere}
+.culture-exam-review-item>summary{cursor:pointer;font-weight:650;padding:6px 0;line-height:1.5;overflow-wrap:anywhere}
+.culture-exam-review-item p{line-height:1.6;overflow-wrap:anywhere}
+.culture-exam-review-item ol{padding-inline-start:24px;display:grid;gap:7px}
+.culture-exam-review-item a{color:var(--accent);font-weight:650}
+.culture-exam-navigation[hidden],.culture-exam-review[hidden]{display:none!important}
+@media(max-width:360px){.culture-exam-navigation{gap:7px}.culture-exam-navigation button{flex:1 1 100%;min-width:0}}
