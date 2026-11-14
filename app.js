@@ -1028,6 +1028,10 @@
 
   // A single Culture option inside the existing Lexi navigation/quiz/session.
   // No duplicated frontend app, quiz renderer, scoring or persistence.
+  for(const [lang,label] of Object.entries({
+    ru:"🇨🇾 Культура Кипра",en:"🇨🇾 Cyprus Culture",zh:"🇨🇾 塞浦路斯文化",
+    ar:"🇨🇾 ثقافة قبرص",es:"🇨🇾 Cultura de Chipre",pt:"🇨🇾 Cultura de Chipre"
+  }))I18N[lang].cultureTab=label;
   const CULTURE_UI={
     ru:{tab:"🇨🇾 Культура Кипра",subtitle:"Изучайте факты и формулировки экзамена на греческом.",
       disclaimer:"Независимый тренажёр, не официальный государственный экзамен.",
