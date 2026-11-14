@@ -14,7 +14,7 @@ adapter=(root/"culture_adapter.py").read_text(encoding="utf-8")
 
 assert html.count('data-page="culture"')==1, "one navigation entry, not parallel learner modes"
 assert html.count('id="culture-view"')==1
-assert 'culture_ui.js?v=1' in html
+assert 'culture_ui.js?v=2' in html
 for element in ("culture-start","culture-review","culture-exam","culture-status",
                 "culture-topics","culture-duration","culture-lang","culture-srs"):
     assert html.count('id="'+element+'"')==1, element
