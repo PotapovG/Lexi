@@ -359,7 +359,10 @@ def valid_weak_entries(user_id, display_lang="ru", scope="book"):
             if card_key(card,direction,source_lang)!=key:continue
             results.append(dict(card=card,direction=direction,lang=source_lang,
                                 key=key,missDebt=row["miss_debt"],attempts=row["attempts"]))
-    return results,len(rows)
+    return results,sum(
+        row["card_key"].startswith(("cyq_","cyv_"))==(scope=="culture")
+        for row in rows
+    )
 
 
 def format_question(card,direction,lang,weak=False,variant_index=None):
@@ -567,6 +570,47 @@ def make_global_weak_quiz(user_id,params,display_lang,count,exclude):
         if len(questions)>=count:break
     return dict(questions=questions,available=len(entries),unavailable=total-len(entries),
                 count=len(questions),mode="weak_all",pagePrecision="approximate",lang=display_lang)
+
+
+def make_culture_quiz(user_id,params,lang,mode,count,exclude):
+    """Culture uses existing format_question/mark/SQLite/SRS, not another engine."""
+    if lang not in ("ru","en"):
+        raise ValueError("culture requires ru/en locale")
+    if mode not in ("all","weak","weak_all","srs_due"):
+        raise ValueError("invalid culture practice mode")
+    topics=set(params.get("topics",[""])[0].split(",")) & {t["code"] for t in CULTURE_CONFIG["topics"]}
+    cards=[c for c in CULTURE_BY_ID.values() if not topics or c["topic"] in topics]
+    with conn() as db:
+        records=db.execute("""SELECT card_key,miss_debt,attempts FROM progress
+             WHERE user_id=? AND substr(card_key,1,4)='cyq_'""",(user_id,)).fetchall()
+        due={r["card_key"] for r in learning_engine.due_entries(db,user_id)}
+    debts={r["card_key"]:r["miss_debt"] for r in records}
+    attempted={r["card_key"]:r["attempts"] for r in records}
+    random.shuffle(cards)
+    choices=[]
+    for card in cards:
+        key=card_key(card,_culture.CULTURE_DIRECTION,lang)
+        if card["id"] in exclude or card["factId"] in exclude or key in exclude:
+            continue
+        if mode in ("weak","weak_all") and debts.get(key,0)<=0:
+            continue
+        if mode=="srs_due" and key not in due:
+            continue
+        # Reuse Lexi's practice ranking: weak first, new facts receive a boost.
+        score=10*debts.get(key,0)+max(0,5-attempted.get(key,0))
+        choices.append((card,score+random.uniform(-5,5)))
+    choices.sort(key=lambda c:-c[1])
+    distinct=[]
+    used=set()
+    for card,_score in choices:
+        if card["factId"] in used:continue
+        used.add(card["factId"])
+        distinct.append(card)
+    questions=[format_question(c,_culture.CULTURE_DIRECTION,lang,weak=mode!="all")
+               for c in distinct[:count]]
+    return dict(questions=questions,available=len(distinct),count=len(questions),
+                scope="culture",mode=mode,lang=lang,pagePrecision="not_applicable",
+                topics=sorted(topics),mixedListening=0,mixedListeningAvailable=0)
 
 
 def make_quiz(user_id,params):
