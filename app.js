@@ -542,7 +542,7 @@
       sessionId:state.remoteSessionId,
       settings:state.settings,mode:state.mode,questions:state.questions,index:state.index,
       seen:state.seen,sessionSkills:state.sessionSkills,count:state.count,correct:state.correct,wrong:state.wrong,
-      answered:state.answered,verbStage:state.verbStage,dialogueStep:state.dialogueStep,
+      answered:state.answered,cultureAssisted:state.cultureAssisted,verbStage:state.verbStage,dialogueStep:state.dialogueStep,
       dialogueFilled:state.dialogueFilled,orderIndices:state.orderIndices,
       pendingAnswer:state.pendingAnswer||null,savedAt:Date.now()
     };
@@ -621,6 +621,7 @@
     }
     state.restoring=true;
     state.settings=saved.settings;state.mode=saved.mode||"all";
+    state.cultureAssisted=saved.cultureAssisted&&typeof saved.cultureAssisted==="object"?saved.cultureAssisted:{};
     state.questions=saved.questions;state.index=saved.index;
     state.seen=Array.isArray(saved.seen)?saved.seen:[];
     state.sessionSkills=(saved.sessionSkills&&typeof saved.sessionSkills==="object"&&!Array.isArray(saved.sessionSkills))
@@ -629,7 +630,7 @@
     state.started=saved.started;state.deadline=saved.deadline;
     state.finishing=false;state.busy=false;
     $("lang").value=state.settings.lang||"ru";updateLanguage();$("lang").disabled=true;
-    show("setup",false);show("quiz",true);show("finished",false);setPage("practice");
+    show("setup",false);show("quiz",true);show("finished",false);setPage(isCulture()?"culture":"practice");
     renderQuestion();
     if(saved.verbStage===2&&state.current.kind==="verb")renderVerbTranslation();
     if(state.current.kind==="dialogue"&&saved.dialogueStep>0){
@@ -771,6 +772,7 @@
     show("translation-note",["zh","ar","es","pt"].includes($("lang").value));
     txt("translation-note",t("translationNote"));
     if(state.loggedIn)refreshStats();
+    if(state.cultureCatalog&&!$("culture-view").hidden)renderCulture();
   }
   function showScope(){
     const value=mode();
@@ -1198,40 +1200,50 @@
     if(!state.deadline||state.finishing)return;
     const remain=Math.max(0,state.deadline-Date.now());
     txt("time-left",formatClock(remain));
-    $("progress-fill").style.width=(100*(1-remain/(duration()*60000)))+"%";
+    $("progress-fill").style.width=(100*(1-remain/(sessionMinutes()*60000)))+"%";
     if(remain<=0)finishQuiz(true);
   }
-  async function startQuiz(weak,due=false){
+  async function startQuiz(weak,due=false,culture=false){
     if(state.deadline&&!state.finishing)return;
     if(!state.loggedIn){show("auth-gate",true);return;}
-    try{state.settings=due?{mode:"srs_due",lang:$("lang").value,count:"60"}:
+    try{state.settings=culture?
+      {scope:"culture",mode:weak?"weak":"all",lang:cultureLocale(),
+        topics:cultureSelectedTopics().join(","),count:"60",duration:20}:
+      due?{mode:"srs_due",lang:$("lang").value,count:"60"}:
       (weak?{mode:"weak_all",lang:$("lang").value,count:"60"}:config(false));
       show("setup-error",false);}
     catch(err){txt("setup-error",err.message);show("setup-error",true);return;}
-    saveSettings();
+    if(!culture)saveSettings();
     $("start").disabled=true;$("weak-start").disabled=true;
+    if(culture){$("culture-start").disabled=true;$("culture-weak-start").disabled=true;}
     clearActiveSession();
     state.remoteSessionId=newRequestId();
     state.remoteRevision=0;state.remoteEnabled=true;
-    state.mode=due?"due":weak?"weak":"all";state.seen=[];state.sessionSkills={};state.count=0;state.correct=0;state.wrong=0;
+    state.mode=due?"due":weak?"weak":"all";state.seen=[];state.sessionSkills={};state.cultureAssisted={};state.count=0;state.correct=0;state.wrong=0;
     state.finishing=false;state.answered=false;state.busy=false;
     try{
       const questions=await loadQuestions();
       if(!questions.length){
-        if(weak){txt("weak-empty",t("weakNoAvailable"));setPage("weak");}
+        if(culture){txt("culture-message",ct(weak?"noWeak":"noCards"));setPage("culture");}
+        else if(weak){txt("weak-empty",t("weakNoAvailable"));setPage("weak");}
         else {txt("setup-error",t(due?"srsEmpty":"noCards"));show("setup-error",true);}
         return;
       }
       state.questions=questions;state.index=0;
-      state.started=Date.now();state.deadline=state.started+duration()*60000;
+      state.started=Date.now();state.deadline=state.started+sessionMinutes()*60000;
       persistActiveSession();
       $("lang").disabled=true;
       show("setup",false);show("quiz",true);show("finished",false);
-      setPage("practice");renderQuestion();
+      setPage(culture?"culture":"practice");renderQuestion();
       updateTimer();clearInterval(state.timer);state.timer=setInterval(updateTimer,1000);
       $("practice-view").scrollIntoView({behavior:"smooth",block:"start"});
-    }catch(err){txt("setup-error",t("failed")+err.message);show("setup-error",true);}
-    finally{$("start").disabled=false;$("weak-start").disabled=false;}
+    }catch(err){
+      if(culture)txt("culture-message",ct("error")+err.message);
+      else{txt("setup-error",t("failed")+err.message);show("setup-error",true);}
+    }finally{
+      $("start").disabled=false;$("weak-start").disabled=false;
+      if(culture)updateCultureActions();
+    }
   }
   async function playCurrentWord(slow=false){
     const q=state.current;
