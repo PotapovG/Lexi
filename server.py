@@ -31,6 +31,7 @@ import final_n_guidance
 import verb_curriculum
 import accent_guidance
 import learning_engine
+import culture_adapter as _culture
 import learning_upgrade
 import advanced_syllables as _syllables
 import enclitic_stress as _enclitic
@@ -91,9 +92,10 @@ GRAMMAR2_BY_ID=_grammar2.BY_ID
 PRACTICE_ALL=ALL+EXTRA_ALL+SYLLABLE_ALL+ENCLITIC_ALL+GRAMMAR2_ALL+ORDER2_ALL+CLOCK_ALL
 _ORDER_VARIANT_COUNT=_order_variants.validate({**BY_ID,**ORDER2_BY_ID})
 def book_or_audio_card(cid):
-    return BY_ID.get(cid) or EXTRA_BY_ID.get(cid) or SYLLABLE_BY_ID.get(cid) or ENCLITIC_BY_ID.get(cid) or GRAMMAR2_BY_ID.get(cid) or ORDER2_BY_ID.get(cid) or CLOCK_BY_ID.get(cid) or LISTEN_BY_ID.get(cid)
+    return BY_ID.get(cid) or EXTRA_BY_ID.get(cid) or SYLLABLE_BY_ID.get(cid) or ENCLITIC_BY_ID.get(cid) or GRAMMAR2_BY_ID.get(cid) or ORDER2_BY_ID.get(cid) or CLOCK_BY_ID.get(cid) or LISTEN_BY_ID.get(cid) or CULTURE_BY_ID.get(cid)
 
 ROOT = Path(__file__).parent
+CULTURE_CONFIG,CULTURE_BY_ID=_culture.load(ROOT)
 DB = os.environ.get("GREEK_DB", "/var/lib/greek-trainer/progress.sqlite3")
 ORIGIN = os.environ.get("GREEK_ORIGIN", "https://potapovfamily.com").rstrip("/")
 COOKIE = "greek_session"
@@ -156,10 +158,14 @@ def allowed_kinds(s):
 
 def card_key(card, direction, lang="ru"):
     # Keep original keys stable to preserve Russian learning history.
-    suffix="" if (lang=="ru" or card["kind"] in ("accent","dialogue","article","order","syllable","enclitic","grammar","clock")) else ":"+lang
+    suffix="" if (lang=="ru" or card["kind"] in ("accent","dialogue","article","order","syllable","enclitic","grammar","clock","culture")) else ":"+lang
     return card["id"]+":"+direction+suffix
 
 def shape(card, direction, lang="ru"):
+    if card["kind"]=="culture":
+        if direction!=_culture.CULTURE_DIRECTION or lang not in ("ru","en"):
+            raise ValueError("invalid culture direction or locale")
+        return card["gr"],card["options"][card["answerIndex"]],""
     if card['kind']=='clock':
         if direction!='read':raise ValueError('invalid clock direction')
         return 'Τι ώρα είναι;',card['gr'],_clock.HELP[lang]
@@ -304,7 +310,7 @@ def parse_options(params):
     return lang,mode,kinds,page_from,page_to,chapters,count,exclude
 
 
-def valid_weak_entries(user_id, display_lang="ru"):
+def valid_weak_entries(user_id, display_lang="ru", scope="book"):
     """Return recoverable due answers, preserving the language of each old key.
 
     Legacy IDs and unsupported old locales remain in the SQLite history but
@@ -317,6 +323,8 @@ def valid_weak_entries(user_id, display_lang="ru"):
         results=[]
         for row in rows:
             key=row["card_key"]
+            is_culture=key.startswith(("cyq_","cyv_"))
+            if (scope=="culture")!=is_culture:continue
             bits=key.split(":")
             if len(bits) not in (2,3):continue
             cid,direction=bits[:2]
@@ -326,7 +334,9 @@ def valid_weak_entries(user_id, display_lang="ru"):
                 if wid in vocab.VOCAB_BY_ID and personalized.is_learned(db,user_id,wid):
                     card=personalized.to_card(vocab.VOCAB_BY_ID[wid])
             if not card:continue
-            if card['kind']=='listening' and not LISTENING_ENABLED:continue
+            if card["kind"]=="culture":
+                allowed={_culture.CULTURE_DIRECTION}
+            elif card['kind']=='listening' and not LISTENING_ENABLED:continue
             elif card['kind']=='listening':allowed={'listen'}
             elif card['kind']=='clock':allowed={'read'}
             elif card['kind']=='article':allowed={'fill'}
@@ -343,6 +353,8 @@ def valid_weak_entries(user_id, display_lang="ru"):
             else:allowed={"gr-ru","ru-gr"}
             if direction not in allowed:continue
             source_lang=bits[2] if len(bits)==3 else ("ru" if card["kind"] not in ("accent","dialogue","article","order","syllable","enclitic","grammar") else display_lang)
+            if card["kind"]=="culture":
+                source_lang=display_lang if display_lang in ("ru","en") else "ru"
             if source_lang not in ("ru","en","zh","ar","es","pt"):continue
             if card_key(card,direction,source_lang)!=key:continue
             results.append(dict(card=card,direction=direction,lang=source_lang,
@@ -352,6 +364,9 @@ def valid_weak_entries(user_id, display_lang="ru"):
 
 def format_question(card,direction,lang,weak=False,variant_index=None):
     """One canonical question renderer for all normal/scoped/global review modes."""
+    if card["kind"]=="culture":
+        if direction!=_culture.CULTURE_DIRECTION:raise ValueError("invalid culture direction")
+        return _culture.format_card(card,lang)
     prompt,correct,note=shape(card,direction,lang)
     item=dict(id=card["id"],direction=direction,kind=card["kind"],unit=card["unit"],
               chapter=card["chapter"],page=card["page"],topic=card["topic"],prompt=prompt,
@@ -518,7 +533,7 @@ def make_srs_due_quiz(user_id,params,display_lang,count,exclude):
         questions=[]
         for row in rows:
             key=row['card_key']
-            if key in exclude:continue
+            if key.startswith(("cyq_","cyv_")) or key in exclude:continue
             bits=key.split(':')
             if len(bits) not in (2,3):continue
             cid,direction=bits[:2]
@@ -556,6 +571,8 @@ def make_global_weak_quiz(user_id,params,display_lang,count,exclude):
 
 def make_quiz(user_id,params):
     lang,mode,kinds,first,last,chapters,count,exclude=parse_options(params)
+    if params.get("scope",["book"])[0]=="culture":
+        return make_culture_quiz(user_id,params,lang,mode,count,exclude)
     if mode=="weak_all":
         return make_global_weak_quiz(user_id,params,lang,count,exclude)
     if mode=="srs_due":
