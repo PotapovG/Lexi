@@ -92,6 +92,7 @@ def after_answer(card: dict, lang: str, selected: str, correct: bool, assisted: 
         "cultureFormat": card["format"],
         "translation": translation["question"],
         "translationChoices": list(translation["options"]),
+        "originalChoices": list(card["options"]),  # Post-grade only: aligns translated options after shuffle.
         "translationLang": lang,
         "explanation": card["explanations"][lang],
         "source": card["source"],
