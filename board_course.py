@@ -394,10 +394,7 @@ def _view(s,rev,lang):
         node={"index":i,"number":i%PER_CHAPTER+1,"state":status}
         if status in ("completed","current"):
             if status=="completed" and i in done:node["name"]=done[i]["name"]
-            elif family=="clock" and chapter<6:node["name"]="Практика фраз" if lang=="ru" else "Phrase practice"
-            elif family=="grammar" and chapter<4:node["name"]="Повторение языка" if lang=="ru" else "Language review"
-            elif family=="verb" and chapter<2:node["name"]="Повторение слов" if lang=="ru" else "Word review"
-            else:node["name"]=labels[family]
+            else:node["name"]=_meta(s,i,lang)["name"]
             node["family"]=family
         if status=="completed":
             info=done[i]
