@@ -192,6 +192,7 @@ def _scoped_quiz_options(q,card,chapter,cards,uid,pos,slot):
 def _direction(card,rng):
     kind=card["kind"]
     if kind=="dialogue":return "gap0"
+    if kind=="listening":return "listen"
     if kind=="clock":return "read"
     if kind=="verb":return "conjugate"
     if kind=="grammar":return "grammar_fill"
@@ -305,7 +306,8 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
                     if q is None:
                         q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
                 else:
-                    q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
+                    q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,
+                                   cards if card["kind"]=="listening" else base)
             except (ValueError,KeyError):
                 # Try another eligible card instead of introducing a future one.
                 used.add(card["id"])
@@ -341,7 +343,9 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
                     ready(card)>chapter):continue
             if card["kind"] in ("word","number","phrase","sentence") and card not in base:
                 continue
-            try:q=_as_question(card,uid,pos,len(items),lang,fmt,audio,chapter,base)
+            try:
+                q=_as_question(card,uid,pos,len(items),lang,fmt,audio,chapter,
+                               cards if card["kind"]=="listening" else base)
             except (ValueError,KeyError):continue
         if not q or q["id"] in used:continue
         q["family"]=family;q["review"]=True

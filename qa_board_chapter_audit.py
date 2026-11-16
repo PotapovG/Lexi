@@ -21,7 +21,7 @@ for chapter in range(1,8):
                lessons=[],backlog={},active=None)
         lesson=board._build_lesson(s,"qa_user","ru",cards,server.vocab.VOCAB,
             server.format_question,server._grammar_guard.milestone,
-            server.LISTENING_ENABLED,lambda gr:None)
+            True,lambda gr:None)  # Force full audio-enabled path, even in CI without WAV assets
         assert lesson["items"],(chapter,family,"empty")
         assert all(1<=q["chapter"]<=chapter for q in lesson["items"]),(chapter,family,"future chapter")
         assert len(lesson["items"])<=board.TARGETS[family_index]
