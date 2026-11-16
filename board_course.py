@@ -418,6 +418,26 @@ def _view(s,rev,lang):
                       "answers":sum(x["attempts"] for x in s["lessons"]),
                       "errors":sum(x["errors"] for x in s["lessons"])}}
 
+def _retitle_current(view,lang,materials):
+    """Preview the *actual* lesson family instead of a misleading locked title.
+
+    No generation or DB mutation: the preview reads only candidate availability.
+    """
+    if not materials:return view
+    cards,_,_,ready,listening_on,_=materials
+    for node in view["nodes"]:
+        if node["state"]!="current":continue
+        meta=_meta(None,node["index"],lang)
+        family=meta["family"]
+        if not _candidates(family,meta["chapter"],cards,ready,listening_on) and family!="life":
+            node["name"]="Практика главы" if lang=="ru" else "Chapter practice"
+            node["family"]="book"
+        elif family=="listening" and not listening_on:
+            node["name"]="Практика фраз" if lang=="ru" else "Phrase practice"
+            node["family"]="book"
+    return view
+
+
 def board_get(db,uid,lang,*_ignored):
     if lang not in tracks.LANGUAGES:raise ValueError("invalid_language")
     db.execute("BEGIN IMMEDIATE")
@@ -425,7 +445,7 @@ def board_get(db,uid,lang,*_ignored):
     if migrate:
         tracks._save(db,uid,"board","shared",s,rev);rev+=1
     # Do NOT generate future lessons on GET. Locked lesson content is unknown.
-    return _view(s,rev,lang)
+    return _retitle_current(_view(s,rev,lang),lang,_ignored)
 
 def _record_error(s,q,chapter):
     key=q["kind"]+":"+q["id"]
@@ -565,6 +585,6 @@ def board_action(db,uid,lang,body,scorer,materials=None):
                 feedback["roundFinished"]=True
     else:raise ValueError("invalid_board_action")
     tracks._save(db,uid,"board","shared",s,rev)
-    out=_view(s,rev+1,lang)
+    out=_retitle_current(_view(s,rev+1,lang),lang,materials)
     out["feedback"]=feedback
     return out
