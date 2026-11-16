@@ -343,7 +343,9 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
                     ready(card)>chapter):continue
             if card["kind"] in ("word","number","phrase","sentence") and card not in base:
                 continue
-            try:q=_as_question(card,uid,pos,len(items),lang,fmt,audio,chapter,base)
+            try:
+                q=_as_question(card,uid,pos,len(items),lang,fmt,audio,chapter,
+                               cards if card["kind"]=="listening" else base)
             except (ValueError,KeyError):continue
         if not q or q["id"] in used:continue
         q["family"]=family;q["review"]=True
