@@ -34,7 +34,7 @@ for chapter in range(1,8):
                  "Часы и расписание":{"clock"},
                  "Реальная жизнь":{"life"},
                  "Практика фраз":{"phrase","sentence"},
-                 "Повторение слов":{"word","number"},
+                 "Повторение слов":{"word","number","lexicon"},
                  "Слова главы":{"word","number","lexicon"}}
         if lesson["name"] in primary:
             assert all(q["kind"] in primary[lesson["name"]] for q in lesson["items"]),(
