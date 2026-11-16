@@ -192,6 +192,7 @@ def _scoped_quiz_options(q,card,chapter,cards,uid,pos,slot):
 def _direction(card,rng):
     kind=card["kind"]
     if kind=="dialogue":return "gap0"
+    if kind=="listening":return "listen"
     if kind=="clock":return "read"
     if kind=="verb":return "conjugate"
     if kind=="grammar":return "grammar_fill"
@@ -303,7 +304,8 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
                 if family=="lexicon":
                     q=_lexicon(scoped_vocab,uid,pos,slot,lang,audio,used,allowed_words,focus=card["gr"])
                     if q is None:
-                        q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
+                        q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,
+                                   cards if card["kind"]=="listening" else base)
                 else:
                     q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
             except (ValueError,KeyError):
