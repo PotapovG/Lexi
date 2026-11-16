@@ -45,7 +45,8 @@ for chapter in range(1,8):
                 continue
             scope={"word","number"} if q["kind"] in ("word","number") else (
                 {"listening"} if q["kind"]=="listening" else {"phrase","sentence"})
-            known={c["ru"] for c in base if c["kind"] in scope}
+            known={(c["ru"] if q["direction"]=="gr-ru" else c["gr"])
+                   for c in base if c["kind"] in scope}
             if q["kind"]=="listening":
                 known={c["ru"] for c in server.LISTEN_CARDS if c["chapter"]<=chapter}
             assert set(q["choices"])<=known,(
