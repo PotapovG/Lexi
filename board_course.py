@@ -137,13 +137,14 @@ def _scoped_quiz_options(q,card,chapter,cards,uid,pos,slot):
     Normal scoring remains owned by the existing quiz engine. Only its
     distractors are replaced with options from previously introduced chapters.
     """
-    if card["kind"] not in ("word","number","phrase","sentence"):
+    if card["kind"] not in ("word","number","phrase","sentence","listening"):
         return q
     direction=q["direction"]
-    if direction not in ("gr-ru","ru-gr"):return q
+    if direction not in ("gr-ru","ru-gr","listen"):return q
     kinds=({"word","number"} if card["kind"] in ("word","number")
+           else {"listening"} if card["kind"]=="listening"
            else {"phrase","sentence"})
-    answer=card[q["lang"]] if direction=="gr-ru" else card["gr"]
+    answer=card[q["lang"]] if direction in ("gr-ru","listen") else card["gr"]
     rng=_rng(uid,pos,slot,"distractors")
     pool=[c for c in cards if c["kind"] in kinds and c["id"]!=card["id"]
           and c.get("chapter",99)<=chapter and c.get("chapter",0)>0
@@ -158,7 +159,7 @@ def _scoped_quiz_options(q,card,chapter,cards,uid,pos,slot):
     meanings={tracks._normalized(card.get("en",""))}
     pairs=[(answer,card.get("en",""))]
     for other in pool:
-        value=other[q["lang"]] if direction=="gr-ru" else other["gr"]
+        value=other[q["lang"]] if direction in ("gr-ru","listen") else other["gr"]
         norm=tracks._normalized(value)
         meaning=tracks._normalized(other.get("en",""))
         if not norm or norm in seen or (meaning and meaning in meanings):
@@ -170,7 +171,7 @@ def _scoped_quiz_options(q,card,chapter,cards,uid,pos,slot):
         raise ValueError("not_enough_scoped_distractors")
     rng.shuffle(pairs)
     q["choices"]=[p[0] for p in pairs]
-    if direction=="gr-ru" and q["lang"]!="en":
+    if direction in ("gr-ru","listen") and q["lang"]!="en":
         q["choicesEn"]=[p[1] for p in pairs]
     return q
 
@@ -185,13 +186,16 @@ def _direction(card,rng):
     if kind=="listening":return "listen"
     return rng.choice(("gr-ru","ru-gr"))
 
-def _lexicon(vocab,uid,pos,slot,lang,audio,seen,allowed_words):
+def _lexicon(vocab,uid,pos,slot,lang,audio,seen,allowed_words,fixed_id=None,focus=None):
     """Use only words explicitly introduced by this chapter's book catalog."""
     words=[w for w in vocab if w.get(lang) and w["gr"] in allowed_words
            and w["id"] not in seen]
     if not words:return None
     rng=_rng(uid,pos,slot,"vocab")
-    word=_pick(words,rng,seen)
+    word=(next((w for w in words if w["id"]==fixed_id),None) if fixed_id else
+          next((w for w in words if w["gr"]==focus),None) if focus else None)
+    if word is None:word=_pick(words,rng,seen)
+    if word is None:return None
     seen_values={tracks._normalized(word[lang])}
     distractors=[]
     for item in sorted(words,key=lambda w:w["id"]):
@@ -284,7 +288,7 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
             if not card:break
             try:
                 if family=="lexicon":
-                    q=_lexicon(scoped_vocab,uid,pos,slot,lang,audio,used,allowed_words)
+                    q=_lexicon(scoped_vocab,uid,pos,slot,lang,audio,used,allowed_words,focus=card["gr"])
                     if q is None:
                         q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
                 else:
@@ -311,8 +315,7 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
         if info["kind"]=="lexicon":
             word=by_vocab.get(rid)
             if not word:continue
-            word_set={word["gr"]}
-            q=_lexicon(scoped_vocab,uid,pos,len(items),lang,audio,used,word_set)
+            q=_lexicon(scoped_vocab,uid,pos,len(items),lang,audio,used,allowed_words,fixed_id=rid)
         elif info["kind"]=="life":
             scene=greek_life.BY_ID.get(rid)
             if not scene or scene["chapter"]>chapter:continue
