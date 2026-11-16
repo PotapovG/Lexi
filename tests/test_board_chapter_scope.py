@@ -102,6 +102,16 @@ class BoardChapterScope(unittest.TestCase):
         self.assertEqual(lesson["name"],"Практика фраз")
         self.assertTrue(all(q["kind"] in ("phrase","sentence") for q in lesson["items"]))
 
+    def test_current_node_previews_truthful_fallback(self):
+        s=state((7-1)*8+board.FAMILIES.index("dialogue"))
+        view=board._view(s,0,"ru")
+        materials=(self.cards,self.words,formatter,
+                   lambda c:c.get("chapter",99),False,lambda text:None)
+        view=board._retitle_current(view,"ru",materials)
+        current=next(n for n in view["nodes"] if n["state"]=="current")
+        self.assertEqual(current["name"],"Практика главы")
+        self.assertEqual(current["family"],"book")
+
     def test_current_chapter_first(self):
         lesson=self.build(4,"book")
         self.assertTrue(all(q["chapter"]==4 for q in lesson["items"]))
