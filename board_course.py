@@ -74,6 +74,12 @@ def _meta(s,pos,lang):
     chapter=pos//PER_CHAPTER+1
     family=FAMILIES[pos%PER_CHAPTER]
     name=TITLE.get(lang,TITLE["en"])[family]
+    # Printed chapter 5 is a review of chapters 1–4, not new chapter-5
+    # vocabulary. Preserve the board slot identities, but label it honestly.
+    if chapter==5 and family=="book":
+        name="Повторение глав 1–4" if lang=="ru" else "Review chapters 1–4"
+    if chapter==5 and family=="lexicon":
+        name="Повторение слов" if lang=="ru" else "Vocabulary review"
     if family=="clock" and chapter<6:
         name="Практика фраз" if lang=="ru" else "Phrase practice"
     if family=="grammar" and chapter<4:
@@ -96,7 +102,7 @@ def _book_base(chapter,cards,ready):
             and 1 <= c.get("chapter",0) <= chapter
             and ready(c) <= chapter
             and (chapter > 7 or c.get("source","original") in
-                 ("original","original-from-book-syllabus"))]
+                 ("original","original-from-book-syllabus","review-original"))]
 
 
 def _candidates(family,chapter,cards,ready,listening_on):
