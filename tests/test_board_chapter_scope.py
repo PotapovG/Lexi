@@ -103,6 +103,24 @@ class BoardChapterScope(unittest.TestCase):
         self.assertEqual(lesson["name"],"Практика фраз")
         self.assertTrue(all(q["kind"] in ("phrase","sentence") for q in lesson["items"]))
 
+    def test_audio_enabled_uses_listen_direction_and_scoped_options(self):
+        import random
+        self.assertEqual(board._direction({"kind":"listening"},random.Random(1)),"listen")
+        listening=[]
+        for i in range(10):
+            source=self.cards[i]
+            listening.append(dict(source,id="listen_"+source["id"],
+                                  kind="listening",chapter=1))
+        data=self.cards+listening
+        s=state(board.FAMILIES.index("listening"))
+        out=board._build_lesson(s,"student","ru",data,self.words,formatter,
+                                lambda card:card["chapter"],True,lambda text:None)
+        self.assertTrue(out["items"])
+        self.assertEqual(out["name"],"Слушаем греческий")
+        self.assertTrue(all(q["direction"]=="listen" for q in out["items"]))
+        valid={q["ru"] for q in listening}
+        self.assertTrue(all(set(q["choices"])<=valid for q in out["items"]))
+
     def test_current_node_previews_truthful_fallback(self):
         s=state((7-1)*8+board.FAMILIES.index("dialogue"))
         view=board._view(s,0,"ru")
