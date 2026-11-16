@@ -14,6 +14,10 @@ jobs:
           python-version: '3.11'
       - name: Import, isolated HTTP and HTTP origin tests
         run: python3 tests/test_selfhost.py
+      - name: Board chapter scope and honest lesson labels (1–7)
+        run: python3 tests/test_board_chapter_scope.py
+      - name: Real chapter catalog board audit (1–7)
+        run: python3 qa_board_chapter_audit.py
       - name: Cyprus Culture content contract and regression tests
         run: |
           python3 culture_content.py

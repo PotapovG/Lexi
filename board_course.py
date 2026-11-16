@@ -19,11 +19,11 @@ PER_CHAPTER=8
 MAX_CHAPTER=20
 TARGETS=(14,14,12,12,12,12,12,10)
 TITLE={
-    "ru":{"book":"Учебник и фразы","lexicon":"Слова уровня A1",
+    "ru":{"book":"Учебник и фразы","lexicon":"Слова главы",
           "verb":"Глаголы в действии","grammar":"Грамматика",
           "listening":"Слушаем греческий","dialogue":"Разговоры",
           "clock":"Часы и расписание","life":"Реальная жизнь"},
-    "en":{"book":"Textbook and phrases","lexicon":"A1 vocabulary",
+    "en":{"book":"Textbook and phrases","lexicon":"Chapter vocabulary",
           "verb":"Verbs in action","grammar":"Grammar",
           "listening":"Greek listening","dialogue":"Conversations",
           "clock":"Time and schedules","life":"Everyday life"}
@@ -46,6 +46,12 @@ def _load(db,uid):
     s,revision=tracks._load(db,uid,"board","shared",lambda:dict(DEFAULT))
     if s.get("schema")==2:
         s.setdefault("roundSeen",[])
+        # An unanswered pre-fix lesson is safe to rebuild. Retain sessions
+        # with recorded answers to avoid rewriting an in-progress score.
+        active=s.get("active")
+        if active and active.get("at",0)==0 and active.get("generatorVersion",0)<3:
+            s["active"]=None
+            return s,revision,True
         return s,revision,False
     # v1's one-question board moves are not the equivalent of full lessons.
     # Archive all old counters and choose the chapter previously reached.
@@ -74,6 +80,12 @@ def _meta(s,pos,lang):
     chapter=pos//PER_CHAPTER+1
     family=FAMILIES[pos%PER_CHAPTER]
     name=TITLE.get(lang,TITLE["en"])[family]
+    # Printed chapter 5 is a review of chapters 1–4, not new chapter-5
+    # vocabulary. Preserve the board slot identities, but label it honestly.
+    if chapter==5 and family=="book":
+        name="Повторение глав 1–4" if lang=="ru" else "Review chapters 1–4"
+    if chapter==5 and family=="lexicon":
+        name="Повторение слов" if lang=="ru" else "Vocabulary review"
     if family=="clock" and chapter<6:
         name="Практика фраз" if lang=="ru" else "Phrase practice"
     if family=="grammar" and chapter<4:
@@ -84,29 +96,98 @@ def _meta(s,pos,lang):
                 name=name,
                 target=TARGETS[pos%PER_CHAPTER])
 
+def _book_base(chapter,cards,ready):
+    """Textbook-path candidates, not the unrelated A1/A2 vocabulary atlas.
+
+    Printed-book chapter anchors are editorial estimates; only independently
+    authored, chapter-scoped catalog items are eligible by default. Unreviewed
+    community additions are not automatically treated as taught vocabulary.
+    """
+    return [c for c in cards
+            if c.get("kind") in ("word","number","phrase","sentence")
+            and 1 <= c.get("chapter",0) <= chapter
+            and ready(c) <= chapter
+            and (chapter > 7 or c.get("source","original") in
+                 ("original","original-from-book-syllabus","review-original"))]
+
+
 def _candidates(family,chapter,cards,ready,listening_on):
-    def early(c):return c.get("chapter",99)<=chapter and ready(c)<=chapter
-    base=[c for c in cards if c.get("kind") in ("word","number","phrase","sentence")
-          and early(c)]
+    base=_book_base(chapter,cards,ready)
     if family=="book":
-        exact=[c for c in base if c["chapter"]==chapter]
-        return exact+ [c for c in base if c["chapter"]!=chapter]
+        return base
+    if family=="lexicon":
+        return [c for c in base if c["kind"] in ("word","number")]
     if family=="verb":
-        primary=[c for c in cards if c["kind"]=="verb" and
-                 c.get("introducedUnit",99)<=chapter and c.get("level")=="A1"]
-    elif family=="grammar":
-        primary=[c for c in cards if c["kind"] in ("grammar","article") and early(c)]
-    elif family=="listening":
-        primary=[c for c in cards if c["kind"]=="listening" and early(c)] if listening_on else []
-    elif family=="dialogue":
-        primary=[c for c in cards if c["kind"]=="dialogue" and early(c)]
-    elif family=="clock":
-        primary=[c for c in cards if c["kind"]=="clock"] if chapter>=6 else []
-    else:
-        primary=[]
-    # Fallback never introduces grammar beyond chapter, and prevents
-    # a 1-card 'lesson' when an early chapter has few verb forms.
-    return primary+base
+        if chapter<2:
+            return [c for c in base if c["kind"] in ("word","number")]
+        return [c for c in cards if c["kind"]=="verb"
+                and 1<=c.get("chapter",0)<=chapter
+                and c.get("introducedUnit",99)<=chapter
+                and c.get("level")=="A1" and ready(c)<=chapter]
+    if family=="grammar":
+        if chapter<4:return base
+        return [c for c in cards if c["kind"] in ("grammar","article")
+                and 1<=c.get("chapter",0)<=chapter and ready(c)<=chapter]
+    if family=="listening":
+        if not listening_on:
+            return [c for c in base if c["kind"] in ("phrase","sentence")]
+        return [c for c in cards if c["kind"]=="listening"
+                and 1<=c.get("chapter",0)<=chapter and ready(c)<=chapter]
+    if family=="dialogue":
+        return [c for c in cards if c["kind"]=="dialogue"
+                and 1<=c.get("chapter",0)<=chapter and ready(c)<=chapter]
+    if family=="clock":
+        if chapter<6:
+            return [c for c in base if c["kind"] in ("phrase","sentence")]
+        return [c for c in cards if c["kind"]=="clock"
+                and 1<=c.get("chapter",0)<=chapter and ready(c)<=chapter]
+    return []  # life scenes have their own chapter-aware generator
+
+
+def _scoped_quiz_options(q,card,chapter,cards,uid,pos,slot):
+    """Never display a future/unseen word as a supposedly wrong answer.
+
+    Normal scoring remains owned by the existing quiz engine. Only its
+    distractors are replaced with options from previously introduced chapters.
+    """
+    if card["kind"] not in ("word","number","phrase","sentence","listening"):
+        return q
+    direction=q["direction"]
+    if direction not in ("gr-ru","ru-gr","listen"):return q
+    kinds=({"word","number"} if card["kind"] in ("word","number")
+           else {"listening"} if card["kind"]=="listening"
+           else {"phrase","sentence"})
+    answer=card[q["lang"]] if direction in ("gr-ru","listen") else card["gr"]
+    rng=_rng(uid,pos,slot,"distractors")
+    pool=[c for c in cards if c["kind"] in kinds and c["id"]!=card["id"]
+          and c.get("chapter",99)<=chapter and c.get("chapter",0)>0
+          and (chapter>7 or c.get("source","original") in
+               ("original","original-from-book-syllabus"))]
+    rng.shuffle(pool)
+    pool.sort(key=lambda c:(c.get("chapter")!=card.get("chapter"),
+                            c["kind"]!=card["kind"],
+                            abs(len(c.get("gr",""))-len(card.get("gr","")))))
+    # Reject duplicate meanings too, not just identical displayed strings.
+    seen={tracks._normalized(answer)}
+    meanings={tracks._normalized(card.get("en",""))}
+    pairs=[(answer,card.get("en",""))]
+    for other in pool:
+        value=other[q["lang"]] if direction in ("gr-ru","listen") else other["gr"]
+        norm=tracks._normalized(value)
+        meaning=tracks._normalized(other.get("en",""))
+        if not norm or norm in seen or (meaning and meaning in meanings):
+            continue
+        seen.add(norm);meanings.add(meaning)
+        pairs.append((value,other.get("en","")))
+        if len(pairs)==8:break
+    if len(pairs)<2:
+        raise ValueError("not_enough_scoped_distractors")
+    rng.shuffle(pairs)
+    q["choices"]=[p[0] for p in pairs]
+    if direction in ("gr-ru","listen") and q["lang"]!="en":
+        q["choicesEn"]=[p[1] for p in pairs]
+    return q
+
 
 def _direction(card,rng):
     kind=card["kind"]
@@ -118,37 +199,46 @@ def _direction(card,rng):
     if kind=="listening":return "listen"
     return rng.choice(("gr-ru","ru-gr"))
 
-def _lexicon(vocab,uid,pos,slot,lang,audio,seen):
-    words=[w for w in vocab if w.get("level")=="A1" and w.get(lang) and w["id"] not in seen]
+def _lexicon(vocab,uid,pos,slot,lang,audio,seen,allowed_words,fixed_id=None,focus=None):
+    """Use only words explicitly introduced by this chapter's book catalog."""
+    words=[w for w in vocab if w.get(lang) and w["gr"] in allowed_words
+           and w["id"] not in seen]
     if not words:return None
     rng=_rng(uid,pos,slot,"vocab")
-    word=_pick(words,rng,seen)
-    others={tracks._normalized(word[lang])}
+    word=(next((w for w in words if w["id"]==fixed_id),None) if fixed_id else
+          next((w for w in words if w["gr"]==focus),None) if focus else None)
+    if word is None:word=_pick(words,rng,seen)
+    if word is None:return None
+    seen_values={tracks._normalized(word[lang])}
     distractors=[]
     for item in sorted(words,key=lambda w:w["id"]):
         val=item[lang]
         normalized=tracks._normalized(val)
-        if normalized not in others:
-            distractors.append(val);others.add(normalized)
-    if len(distractors)<3:return None
-    opts=rng.sample(distractors,3)+[word[lang]]
+        if normalized not in seen_values:
+            distractors.append(val);seen_values.add(normalized)
+    if len(distractors)<1:return None
+    opts=rng.sample(distractors,min(7,len(distractors)))+[word[lang]]
     rng.shuffle(opts)
     return dict(type="lexicon",id=word["id"],kind="lexicon",chapter=pos//PER_CHAPTER+1,
                 family="lexicon",direction="gr-ru",prompt=word["gr"],choices=opts,
                 lang=lang,note="Ελληνικά → ?",wordAudio=audio(word["gr"]))
 
+
 def _life_scene(uid,pos,slot,chapter,lang,seen):
     choices=[s for s in greek_life.SCENES if s["chapter"]<=chapter and s["id"] not in seen]
     if not choices:return None
+    current=[s for s in choices if s["chapter"]==chapter]
     rng=_rng(uid,pos,slot,"life")
-    scene=_pick(choices,rng,seen)
+    scene=_pick(current or choices,rng,seen)
     return dict(type="life",id=scene["id"],kind="life",chapter=scene["chapter"],
                 family="life",prompt=scene["prompt"] if lang=="ru" else scene["promptEN"],
                 promptLang="ru" if lang=="ru" else "en",lang=lang)
 
-def _as_question(card,uid,pos,slot,lang,fmt,audio):
+def _as_question(card,uid,pos,slot,lang,fmt,audio,chapter=None,cards=None):
     direction=_direction(card,_rng(uid,pos,slot,"direction"))
     q=fmt(card,direction,lang)
+    if chapter is not None and cards is not None:
+        q=_scoped_quiz_options(q,card,chapter,cards,uid,pos,slot)
     if card["kind"]=="word" and direction=="gr-ru":
         q["wordAudio"]=audio(card["gr"])
     q["type"]="quiz"
@@ -173,65 +263,94 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
     pos=s["position"]
     meta=_meta(s,pos,lang)
     chapter=meta["chapter"];family=meta["family"];target=meta["target"]
+    base=_book_base(chapter,cards,ready)
     pool=_candidates(family,chapter,cards,ready,listening_on)
+    name=meta["name"]
+    # Family-specific content must NEVER be padded by random, unrelated A1
+    # words. A no-content family becomes an honestly named textbook drill.
+    if not pool and family not in ("life",):
+        pool=[c for c in base if c["kind"] in ("phrase","sentence")]
+        if not pool:pool=base
+        name=("Практика главы" if lang=="ru" else "Chapter practice")
+        family="book"
+    elif family=="listening" and not listening_on:
+        name=("Практика фраз" if lang=="ru" else "Phrase practice")
+        family="book"
+    # Book vocabulary is a chapter-by-chapter subset of the independently
+    # authored catalog, NEVER every CEFR-A1 word in the separate atlas.
+    allowed_words={c["gr"] for c in base if c["kind"]=="word"}
+    scoped_vocab=[w for w in vocab if w.get("gr") in allowed_words]
     used=set();items=[]
-    # Two review questions per ordinary lesson; a dedicated review backlog
-    # is also surfaced in summaries. Do not expose future syllabus content.
-    by_id={c["id"]:c for c in cards}
-    word_by_id={w["id"]:w for w in vocab}
-    for rid,info in _review_candidates(s,chapter,cards,vocab,lang,fmt,audio)[:2]:
-        if len(items)>=target:break
-        if info["kind"]=="life" and rid in greek_life.BY_ID:
-            scene=greek_life.BY_ID[rid]
-            q=dict(type="life",id=rid,kind="life",chapter=scene["chapter"],
-                   family="life",prompt=scene["prompt"] if lang=="ru" else scene["promptEN"],
-                   promptLang="ru" if lang=="ru" else "en",lang=lang)
-        elif info["kind"]=="lexicon" and rid in word_by_id:
-            q=_lexicon(vocab,uid,pos,len(items),lang,audio,used)
-            if q is None or q["id"]!=rid:
-                word=word_by_id[rid]
-                rng=_rng(uid,pos,len(items),"review")
-                distractors=sorted({w[lang] for w in vocab if w.get("level")=="A1" and
-                                   w.get(lang) and tracks._normalized(w[lang])!=tracks._normalized(word[lang])})
-                if len(distractors)<3:continue
-                opts=rng.sample(distractors,3)+[word[lang]];rng.shuffle(opts)
-                q=dict(type="lexicon",id=rid,kind="lexicon",chapter=chapter,
-                       family=family,direction="gr-ru",prompt=word["gr"],lang=lang,
-                       choices=opts,wordAudio=audio(word["gr"]))
-        else:
-            card=by_id[rid]
-            try:q=_as_question(card,uid,pos,len(items),lang,fmt,audio)
-            except (ValueError,KeyError):continue
+    # Lesson's named skill is taught first; no review is allowed to displace it.
+    if family=="life":
+        for slot in range(min(target,len(greek_life.SCENES))):
+            q=_life_scene(uid,pos,slot,chapter,lang,used)
+            if not q:break
+            q["review"]=False;items.append(q);used.add(q["id"])
+    else:
+        ordered=[c for c in pool if c.get("chapter")==chapter]+[
+            c for c in pool if c.get("chapter")!=chapter]
+        for slot in range(target):
+            remaining=[c for c in ordered if c["id"] not in used]
+            if not remaining:break
+            # Prioritize introducing this chapter before revisiting prior units.
+            local=[c for c in remaining if c.get("chapter")==chapter]
+            choice_pool=local or remaining
+            rng=_rng(uid,pos,slot,family)
+            card=_pick(choice_pool,rng,used)
+            if not card:break
+            try:
+                if family=="lexicon":
+                    q=_lexicon(scoped_vocab,uid,pos,slot,lang,audio,used,allowed_words,focus=card["gr"])
+                    if q is None:
+                        q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
+                else:
+                    q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
+            except (ValueError,KeyError):
+                # Try another eligible card instead of introducing a future one.
+                used.add(card["id"])
+                continue
             q["family"]=family
-        if q["id"] in used:continue
-        q["review"]=True
-        items.append(q);used.add(q["id"])
-    scene_max=3 if family=="life" else 0
-    scene_count=0
-    for slot in range(target-len(items)):
-        index=len(items)
-        q=None
-        if family=="life" and scene_count<scene_max:
-            q=_life_scene(uid,pos,index,chapter,lang,used)
-            if q:scene_count+=1
-        if q is None and family=="lexicon":
-            q=_lexicon(vocab,uid,pos,index,lang,audio,used)
-        if q is None:
-            card=_pick([x for x in pool if x["id"] not in used],_rng(uid,pos,index,family),used)
-            if card:
-                q=_as_question(card,uid,pos,index,lang,fmt,audio)
-                q["family"]=family
-        if q is None:
-            q=_lexicon(vocab,uid,pos,index,lang,audio,used)
-        if q is None:break
-        q["review"]=False
-        items.append(q);used.add(q["id"])
-    if len(items)<8:
+            q["review"]=False;items.append(q)
+            used.add(q["id"])
+            if family=="lexicon":used.add(card["id"])
+    if not items:
         raise ValueError("not_enough_lesson_material")
+    # A review item never accounts for more than 20% of a completed lesson.
+    # Legacy backlog is retained, but exercises with unverified syllabus
+    # eligibility (including old unrestricted atlas words) are not resurfaced.
+    by_id={c["id"]:c for c in cards}
+    by_vocab={w["id"]:w for w in scoped_vocab}
+    max_review=min(2,len(items)//4,target-len(items))
+    for rid,info in _review_candidates(s,chapter,cards,scoped_vocab,lang,fmt,audio):
+        if max_review<=0:break
+        if info.get("family")!=family:continue
+        if info["kind"]=="lexicon":
+            word=by_vocab.get(rid)
+            if not word:continue
+            q=_lexicon(scoped_vocab,uid,pos,len(items),lang,audio,used,allowed_words,fixed_id=rid)
+        elif info["kind"]=="life":
+            scene=greek_life.BY_ID.get(rid)
+            if not scene or scene["chapter"]>chapter:continue
+            q=dict(type="life",id=rid,kind="life",chapter=scene["chapter"],
+                   family=family,prompt=scene["prompt"] if lang=="ru" else scene["promptEN"],
+                   promptLang="ru" if lang=="ru" else "en",lang=lang)
+        else:
+            card=by_id.get(rid)
+            if (not card or card.get("chapter",99)>chapter or
+                    ready(card)>chapter):continue
+            if card["kind"] in ("word","number","phrase","sentence") and card not in base:
+                continue
+            try:q=_as_question(card,uid,pos,len(items),lang,fmt,audio,chapter,base)
+            except (ValueError,KeyError):continue
+        if not q or q["id"] in used:continue
+        q["family"]=family;q["review"]=True
+        items.append(q);used.add(q["id"]);max_review-=1
     stamp=_stamp()
-    return dict(index=pos,chapter=chapter,family=family,name=meta["name"],
+    return dict(index=pos,chapter=chapter,family=family,name=name,generatorVersion=3,
                 items=items,at=0,startedAt=stamp,lastAt=stamp,activeSeconds=0,
                 attempts=0,errors=0,correct=0,skips=0,paused=False)
+
 
 def _backlog_view(s):
     due=[{k:v for k,v in item.items() if k in ("id","kind","chapter","prompt","errors","lastWrong","family")}
@@ -281,10 +400,7 @@ def _view(s,rev,lang):
         node={"index":i,"number":i%PER_CHAPTER+1,"state":status}
         if status in ("completed","current"):
             if status=="completed" and i in done:node["name"]=done[i]["name"]
-            elif family=="clock" and chapter<6:node["name"]="Практика фраз" if lang=="ru" else "Phrase practice"
-            elif family=="grammar" and chapter<4:node["name"]="Повторение языка" if lang=="ru" else "Language review"
-            elif family=="verb" and chapter<2:node["name"]="Повторение слов" if lang=="ru" else "Word review"
-            else:node["name"]=labels[family]
+            else:node["name"]=_meta(s,i,lang)["name"]
             node["family"]=family
         if status=="completed":
             info=done[i]
@@ -308,6 +424,26 @@ def _view(s,rev,lang):
                       "answers":sum(x["attempts"] for x in s["lessons"]),
                       "errors":sum(x["errors"] for x in s["lessons"])}}
 
+def _retitle_current(view,lang,materials):
+    """Preview the *actual* lesson family instead of a misleading locked title.
+
+    No generation or DB mutation: the preview reads only candidate availability.
+    """
+    if not materials:return view
+    cards,_,_,ready,listening_on,_=materials
+    for node in view["nodes"]:
+        if node["state"]!="current":continue
+        meta=_meta(None,node["index"],lang)
+        family=meta["family"]
+        if not _candidates(family,meta["chapter"],cards,ready,listening_on) and family!="life":
+            node["name"]="Практика главы" if lang=="ru" else "Chapter practice"
+            node["family"]="book"
+        elif family=="listening" and not listening_on:
+            node["name"]="Практика фраз" if lang=="ru" else "Phrase practice"
+            node["family"]="book"
+    return view
+
+
 def board_get(db,uid,lang,*_ignored):
     if lang not in tracks.LANGUAGES:raise ValueError("invalid_language")
     db.execute("BEGIN IMMEDIATE")
@@ -315,7 +451,7 @@ def board_get(db,uid,lang,*_ignored):
     if migrate:
         tracks._save(db,uid,"board","shared",s,rev);rev+=1
     # Do NOT generate future lessons on GET. Locked lesson content is unknown.
-    return _view(s,rev,lang)
+    return _retitle_current(_view(s,rev,lang),lang,_ignored)
 
 def _record_error(s,q,chapter):
     key=q["kind"]+":"+q["id"]
@@ -416,7 +552,10 @@ def board_action(db,uid,lang,body,scorer,materials=None):
                            "Review this meaning; the word will return.")}
                 s["canSkip"]=False
             else:
-                if selected not in q["choices"]:raise ValueError("invalid_choice")
+                # Grammar-fill cards may use an authored free-text answer,
+                # with no multiple-choice options at all.
+                if not q.get("typedAnswer") and selected not in q.get("choices",[]):
+                    raise ValueError("invalid_choice")
                 feedback=scorer(uid,{"id":q["id"],"direction":q["direction"],"lang":q["lang"],
                               "selected":selected},injected_db=db)
                 s["canSkip"]=False
@@ -452,6 +591,6 @@ def board_action(db,uid,lang,body,scorer,materials=None):
                 feedback["roundFinished"]=True
     else:raise ValueError("invalid_board_action")
     tracks._save(db,uid,"board","shared",s,rev)
-    out=_view(s,rev+1,lang)
+    out=_retitle_current(_view(s,rev+1,lang),lang,materials)
     out["feedback"]=feedback
     return out
