@@ -10,6 +10,7 @@ import copy
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import board_course as board
@@ -138,6 +139,25 @@ class BoardChapterScope(unittest.TestCase):
         s["active"]=dict(self.build(1,"book"),at=0)
         self.assertEqual(board._view(s,0,"ru")["lesson"]["count"],len(s["active"]["items"]))
         self.assertEqual(board._view(s,0,"ru")["lesson"]["question"],s["active"]["items"][0])
+
+    def test_unanswered_legacy_lesson_refreshes_without_erasing_progress(self):
+        old=state(0)
+        old["active"]=dict(self.build(1,"book"),at=0)
+        old["active"].pop("generatorVersion",None)
+        old["backlog"]={"old":dict(due=True,errors=1)}
+        with patch.object(board.tracks,"_load",return_value=(old,5)):
+            updated,revision,migrated=board._load(None,"student")
+        self.assertEqual(revision,5)
+        self.assertTrue(migrated)
+        self.assertIsNone(updated["active"])
+        self.assertIn("old",updated["backlog"])
+        partially_answered=state(0)
+        partially_answered["active"]=dict(self.build(1,"book"),at=2)
+        partially_answered["active"].pop("generatorVersion",None)
+        with patch.object(board.tracks,"_load",return_value=(partially_answered,6)):
+            preserved,revision,migrated=board._load(None,"student")
+        self.assertFalse(migrated)
+        self.assertEqual(preserved["active"]["at"],2)
 
     def test_sparse_chapter_remains_short_and_on_topic(self):
         cards=[c for c in self.cards if c["chapter"]==1 and c["kind"]=="word"][:2]
