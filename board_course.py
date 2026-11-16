@@ -304,10 +304,10 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
                 if family=="lexicon":
                     q=_lexicon(scoped_vocab,uid,pos,slot,lang,audio,used,allowed_words,focus=card["gr"])
                     if q is None:
-                        q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,
-                                   cards if card["kind"]=="listening" else base)
+                        q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
                 else:
-                    q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
+                    q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,
+                                   cards if card["kind"]=="listening" else base)
             except (ValueError,KeyError):
                 # Try another eligible card instead of introducing a future one.
                 used.add(card["id"])
