@@ -522,7 +522,10 @@ def board_action(db,uid,lang,body,scorer,materials=None):
                            "Review this meaning; the word will return.")}
                 s["canSkip"]=False
             else:
-                if selected not in q["choices"]:raise ValueError("invalid_choice")
+                # Grammar-fill cards may use an authored free-text answer,
+                # with no multiple-choice options at all.
+                if not q.get("typedAnswer") and selected not in q.get("choices",[]):
+                    raise ValueError("invalid_choice")
                 feedback=scorer(uid,{"id":q["id"],"direction":q["direction"],"lang":q["lang"],
                               "selected":selected},injected_db=db)
                 s["canSkip"]=False
