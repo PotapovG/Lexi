@@ -109,6 +109,7 @@ def _candidates(family,chapter,cards,ready,listening_on):
         if chapter<2:
             return [c for c in base if c["kind"] in ("word","number")]
         return [c for c in cards if c["kind"]=="verb"
+                and 1<=c.get("chapter",0)<=chapter
                 and c.get("introducedUnit",99)<=chapter
                 and c.get("level")=="A1" and ready(c)<=chapter]
     if family=="grammar":
