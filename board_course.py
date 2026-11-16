@@ -46,6 +46,12 @@ def _load(db,uid):
     s,revision=tracks._load(db,uid,"board","shared",lambda:dict(DEFAULT))
     if s.get("schema")==2:
         s.setdefault("roundSeen",[])
+        # An unanswered pre-fix lesson is safe to rebuild. Retain sessions
+        # with recorded answers to avoid rewriting an in-progress score.
+        active=s.get("active")
+        if active and active.get("at",0)==0 and active.get("generatorVersion",0)<3:
+            s["active"]=None
+            return s,revision,True
         return s,revision,False
     # v1's one-question board moves are not the equivalent of full lessons.
     # Archive all old counters and choose the chapter previously reached.
@@ -341,7 +347,7 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
         q["family"]=family;q["review"]=True
         items.append(q);used.add(q["id"]);max_review-=1
     stamp=_stamp()
-    return dict(index=pos,chapter=chapter,family=family,name=name,
+    return dict(index=pos,chapter=chapter,family=family,name=name,generatorVersion=3,
                 items=items,at=0,startedAt=stamp,lastAt=stamp,activeSeconds=0,
                 attempts=0,errors=0,correct=0,skips=0,paused=False)
 
