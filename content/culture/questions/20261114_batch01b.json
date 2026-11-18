@@ -1,0 +1,538 @@
+[
+  {
+    "id": "cyq_trad_0002",
+    "topic": "TRAD",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Visit Cyprus — Troodos Region",
+      "url": "https://www.visitcyprus.com/discover-cyprus/regions-cities/troodos-regions-cities/troodos-region/"
+    },
+    "fact_id": "cyf_trad_0002",
+    "format": "CLOZE",
+    "difficulty": 1,
+    "question_el": "Στον Κατάλογο Παγκόσμιας Κληρονομιάς της UNESCO περιλαμβάνονται ___ ζωγραφισμένες εκκλησίες του Τροόδους.",
+    "options_el": [
+      "πέντε",
+      "επτά",
+      "δέκα",
+      "δεκαπέντε"
+    ],
+    "correct_index": 2,
+    "translations": {
+      "ru": {
+        "question": "В Список всемирного наследия ЮНЕСКО включены ___ расписных церквей Троодоса.",
+        "options": [
+          "пять",
+          "семь",
+          "десять",
+          "пятнадцать"
+        ]
+      },
+      "en": {
+        "question": "The UNESCO World Heritage List includes ___ painted churches of the Troodos region.",
+        "options": [
+          "five",
+          "seven",
+          "ten",
+          "fifteen"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "В горном районе Троодос десять расписных византийских церквей входят в список ЮНЕСКО.",
+      "en": "Ten Byzantine painted churches of Troodos are listed as UNESCO World Heritage."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_econ_0001",
+    "topic": "ECON",
+    "status": "draft",
+    "freshness": "current",
+    "verified_at": "2026-11-14",
+    "review_due": "2026-12-15",
+    "valid_until": "2027-06-30",
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Statistical Service — Tourism Statistics 2025",
+      "url": "https://www.gov.cy/en/economy-and-finance/tourism-statistics-2025/"
+    },
+    "fact_id": "cyf_econ_0001",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Ποια χώρα ήταν η σημαντικότερη πηγή τουριστών για την Κύπρο το 2025;",
+    "options_el": [
+      "Το Ηνωμένο Βασίλειο",
+      "Το Ισραήλ",
+      "Η Πολωνία",
+      "Η Γερμανία"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "Какая страна была крупнейшим источником туристов для Кипра в 2025 году?",
+        "options": [
+          "Великобритания",
+          "Израиль",
+          "Польша",
+          "Германия"
+        ]
+      },
+      "en": {
+        "question": "Which country was the largest source of tourists for Cyprus in 2025?",
+        "options": [
+          "United Kingdom",
+          "Israel",
+          "Poland",
+          "Germany"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Согласно Статистической службе Кипра, на Великобританию пришлось 31,8% туристов в 2025 году.",
+      "en": "According to Cyprus's Statistical Service, the UK accounted for 31.8% of tourists in 2025."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_health_0001",
+    "topic": "HEALTH",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Statistical Service — Health and Hospital Statistics 2024",
+      "url": "https://www.gov.cy/en/economy-and-finance/health-and-hospital-statistics-2024/"
+    },
+    "fact_id": "cyf_health_0001",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Πότε ξεκίνησε η σταδιακή εφαρμογή του Γενικού Συστήματος Υγείας (ΓεΣΥ) στην Κύπρο;",
+    "options_el": [
+      "Τον Ιούνιο του 2015",
+      "Τον Ιούνιο του 2017",
+      "Τον Ιούνιο του 2019",
+      "Τον Ιούνιο του 2022"
+    ],
+    "correct_index": 2,
+    "translations": {
+      "ru": {
+        "question": "Когда началось поэтапное внедрение Всеобщей системы здравоохранения (ГеСИ) на Кипре?",
+        "options": [
+          "В июне 2015 года",
+          "В июне 2017 года",
+          "В июне 2019 года",
+          "В июне 2022 года"
+        ]
+      },
+      "en": {
+        "question": "When did the phased implementation of the General Healthcare System (GeSY) begin in Cyprus?",
+        "options": [
+          "June 2015",
+          "June 2017",
+          "June 2019",
+          "June 2022"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "ГеСИ начали внедрять в июне 2019 года с амбулаторной помощи; стационарная помощь добавилась с июня 2020 года.",
+      "en": "GeSY began in June 2019 with outpatient care and expanded to inpatient care from June 2020."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_holidays_0001",
+    "topic": "HOLIDAYS",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Ministry of Defence — Independence Day 2026 parade announcement",
+      "url": "https://www.gov.cy/mod/mi-katigoriopoiimeno/stratiotiki-parelasi-tis-1is-oktovrioy-2026/"
+    },
+    "fact_id": "cyf_holidays_0001",
+    "format": "CLOZE",
+    "difficulty": 1,
+    "question_el": "Η Ημέρα Ανεξαρτησίας της Κυπριακής Δημοκρατίας γιορτάζεται την ___.",
+    "options_el": [
+      "1η Απριλίου",
+      "16η Αυγούστου",
+      "1η Οκτωβρίου",
+      "28η Οκτωβρίου"
+    ],
+    "correct_index": 2,
+    "translations": {
+      "ru": {
+        "question": "День независимости Республики Кипр празднуется ___.",
+        "options": [
+          "1 апреля",
+          "16 августа",
+          "1 октября",
+          "28 октября"
+        ]
+      },
+      "en": {
+        "question": "The Independence Day of the Republic of Cyprus is celebrated on ___.",
+        "options": [
+          "1 April",
+          "16 August",
+          "1 October",
+          "28 October"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Государственный День независимости отмечают 1 октября. Это не дата формального провозглашения независимости (16 августа 1960 года).",
+      "en": "Independence Day is celebrated on 1 October, distinct from the proclamation of independence on 16 August 1960."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_transport_0001",
+    "topic": "TRANSPORT",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Visit Cyprus — Health & Safety, driving safely",
+      "url": "https://www.visitcyprus.com/useful-info/health-safety/"
+    },
+    "fact_id": "cyf_transport_0001",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Σε ποια πλευρά του δρόμου οδηγούν τα οχήματα στην Κύπρο;",
+    "options_el": [
+      "Στην αριστερή",
+      "Στη δεξιά",
+      "Ανάλογα με την πόλη",
+      "Μόνο στη μεσαία λωρίδα"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "По какой стороне дороги движутся автомобили на Кипре?",
+        "options": [
+          "По левой",
+          "По правой",
+          "В зависимости от города",
+          "Только по средней полосе"
+        ]
+      },
+      "en": {
+        "question": "On which side of the road do vehicles drive in Cyprus?",
+        "options": [
+          "On the left",
+          "On the right",
+          "It depends on the city",
+          "Only in the middle lane"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "На Кипре левостороннее движение.",
+      "en": "Cyprus drives on the left side of the road."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_lang_0001",
+    "topic": "LANG",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "European Union — Cyprus country profile",
+      "url": "https://european-union.europa.eu/principles-countries-history/eu-countries/cyprus_en"
+    },
+    "fact_id": "cyf_lang_0001",
+    "format": "NEGATIVE",
+    "difficulty": 2,
+    "question_el": "Ποια από τις ακόλουθες δηλώσεις για τις γλώσσες της Κύπρου είναι λανθασμένη;",
+    "options_el": [
+      "Η ελληνική είναι επίσημη γλώσσα της Κυπριακής Δημοκρατίας.",
+      "Η τουρκική είναι επίσημη γλώσσα της Κυπριακής Δημοκρατίας.",
+      "Η τουρκική είναι επίσημη γλώσσα της Ευρωπαϊκής Ένωσης.",
+      "Η ελληνική είναι επίσημη γλώσσα της Ευρωπαϊκής Ένωσης."
+    ],
+    "correct_index": 2,
+    "option_truth": [
+      true,
+      true,
+      false,
+      true
+    ],
+    "translations": {
+      "ru": {
+        "question": "Какое утверждение о языках Кипра неверно?",
+        "options": [
+          "Греческий — официальный язык Республики Кипр.",
+          "Турецкий — официальный язык Республики Кипр.",
+          "Турецкий — официальный язык Европейского союза.",
+          "Греческий — официальный язык Европейского союза."
+        ]
+      },
+      "en": {
+        "question": "Which statement about the languages of Cyprus is incorrect?",
+        "options": [
+          "Greek is an official language of the Republic of Cyprus.",
+          "Turkish is an official language of the Republic of Cyprus.",
+          "Turkish is an official language of the European Union.",
+          "Greek is an official language of the European Union."
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Официальные языки Республики Кипр — греческий и турецкий, но из этих двух только греческий является официальным языком ЕС.",
+      "en": "Greek and Turkish are official languages in Cyprus, but only Greek is an official language of the EU."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_entry_0001",
+    "topic": "ENTRY",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Gov.cy — Visa requirements and EU citizens",
+      "url": "https://www.gov.cy/en/information/visas/"
+    },
+    "fact_id": "cyf_entry_0001",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Ποιο έγγραφο μπορούν να χρησιμοποιήσουν πολίτες της ΕΕ για να εισέλθουν στην Κύπρο, εφόσον φέρει φωτογραφία;",
+    "options_el": [
+      "Εθνική ταυτότητα",
+      "Άδεια οδήγησης",
+      "Κάρτα βιβλιοθήκης",
+      "Μαθητική κάρτα"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "Какой документ с фотографией граждане ЕС могут использовать для въезда на Кипр?",
+        "options": [
+          "Национальное удостоверение личности",
+          "Водительское удостоверение",
+          "Библиотечный билет",
+          "Школьный билет"
+        ]
+      },
+      "en": {
+        "question": "Which photo-bearing document may EU citizens use to enter Cyprus?",
+        "options": [
+          "National identity card",
+          "Driving licence",
+          "Library card",
+          "Student card"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Граждане ЕС могут въезжать с действующим национальным ID с фотографией (или паспортом).",
+      "en": "EU citizens may enter with a valid national photo identity card (or passport)."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_telecom_0001",
+    "topic": "TELECOM",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Cyta — Chronology of Telecommunications",
+      "url": "https://www.cyta.com.cy/chronology/en"
+    },
+    "fact_id": "cyf_telecom_0001",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Ποιο έτος μετονομάστηκε η CITA σε Αρχή Τηλεπικοινωνιών Κύπρου (CYTA);",
+    "options_el": [
+      "1955",
+      "1961",
+      "1974",
+      "2004"
+    ],
+    "correct_index": 1,
+    "translations": {
+      "ru": {
+        "question": "В каком году CITA была переименована в Кипрское управление телекоммуникаций (CYTA)?",
+        "options": [
+          "1955",
+          "1961",
+          "1974",
+          "2004"
+        ]
+      },
+      "en": {
+        "question": "In which year was CITA renamed the Cyprus Telecommunications Authority (CYTA)?",
+        "options": [
+          "1955",
+          "1961",
+          "1974",
+          "2004"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "По хронологии CYTA, переименование произошло в 1961 году, когда организация приняла на себя внешние телекоммуникации.",
+      "en": "Cyta's chronology records the renaming in 1961, when the authority assumed external telecommunications."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_climate_0001",
+    "topic": "CLIMATE",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Visit Cyprus — Climate & weather",
+      "url": "https://www.visitcyprus.com/useful-info/climate-weather/"
+    },
+    "fact_id": "cyf_climate_0001",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Ποια περιγραφή χαρακτηρίζει καλύτερα το κλίμα της Κύπρου;",
+    "options_el": [
+      "Μακρά ξηρά καλοκαίρια και ήπιοι χειμώνες",
+      "Ψυχρά καλοκαίρια και πολύ μακροί παγετοί",
+      "Βροχές όλο το καλοκαίρι και χιόνι στις ακτές",
+      "Ίδιες θερμοκρασίες όλο τον χρόνο"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "Какое описание лучше всего характеризует климат Кипра?",
+        "options": [
+          "Долгое сухое лето и мягкая зима",
+          "Холодное лето и очень долгие морозы",
+          "Дожди всё лето и снег на побережье",
+          "Одинаковые температуры круглый год"
+        ]
+      },
+      "en": {
+        "question": "Which description best characterizes the climate of Cyprus?",
+        "options": [
+          "Long dry summers and mild winters",
+          "Cold summers and prolonged frosts",
+          "Rain all summer and snow on the coast",
+          "The same temperatures throughout the year"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "На Кипре средиземноморский климат: длительное сухое лето и сравнительно мягкая дождливая зима.",
+      "en": "Cyprus has a Mediterranean climate with long dry summers and relatively mild, wetter winters."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_currency_0001",
+    "topic": "CURRENCY",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Cyprus EU Council Presidency — Cyprus in the EU",
+      "url": "https://cyprus-presidency.consilium.europa.eu/en/presidency/cyprus-in-the-eu/"
+    },
+    "fact_id": "cyf_currency_0001",
+    "format": "CHRONOLOGY",
+    "difficulty": 2,
+    "question_el": "Ποια είναι η σωστή χρονολογική σειρά για τα ακόλουθα γεγονότα της Κύπρου;",
+    "options_el": [
+      "Ένταξη στην ΕΕ → υιοθέτηση του ευρώ → δεύτερη Προεδρία του Συμβουλίου της ΕΕ",
+      "Υιοθέτηση του ευρώ → ένταξη στην ΕΕ → δεύτερη Προεδρία του Συμβουλίου της ΕΕ",
+      "Δεύτερη Προεδρία του Συμβουλίου της ΕΕ → ένταξη στην ΕΕ → υιοθέτηση του ευρώ",
+      "Ένταξη στην ΕΕ → δεύτερη Προεδρία του Συμβουλίου της ΕΕ → υιοθέτηση του ευρώ"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "Какова правильная хронологическая последовательность следующих событий Кипра?",
+        "options": [
+          "Вступление в ЕС → введение евро → второе председательство в Совете ЕС",
+          "Введение евро → вступление в ЕС → второе председательство в Совете ЕС",
+          "Второе председательство в Совете ЕС → вступление в ЕС → введение евро",
+          "Вступление в ЕС → второе председательство в Совете ЕС → введение евро"
+        ]
+      },
+      "en": {
+        "question": "Which is the correct chronological order of these Cyprus milestones?",
+        "options": [
+          "EU accession → euro adoption → second Council Presidency",
+          "Euro adoption → EU accession → second Council Presidency",
+          "Second Council Presidency → EU accession → euro adoption",
+          "EU accession → second Council Presidency → euro adoption"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Правильный порядок: вступление в ЕС — 2004, переход на евро — 2008, второе председательство в Совете ЕС — 2026.",
+      "en": "The sequence is EU accession in 2004, euro adoption in 2008, and the second Council Presidency in 2026."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  }
+]

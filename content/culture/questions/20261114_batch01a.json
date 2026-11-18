@@ -1,0 +1,538 @@
+[
+  {
+    "id": "cyq_geo_0001",
+    "topic": "GEO",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "European Union — Cyprus country profile",
+      "url": "https://european-union.europa.eu/principles-countries-history/eu-countries/cyprus_en"
+    },
+    "fact_id": "cyf_geo_0001",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Ποια είναι η πρωτεύουσα της Κυπριακής Δημοκρατίας;",
+    "options_el": [
+      "Λευκωσία",
+      "Λεμεσός",
+      "Λάρνακα",
+      "Πάφος"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "Какова столица Республики Кипр?",
+        "options": [
+          "Никосия",
+          "Лимассол",
+          "Ларнака",
+          "Пафос"
+        ]
+      },
+      "en": {
+        "question": "What is the capital of the Republic of Cyprus?",
+        "options": [
+          "Nicosia",
+          "Limassol",
+          "Larnaca",
+          "Paphos"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Столица Республики Кипр — Никосия (Λευκωσία).",
+      "en": "The capital of the Republic of Cyprus is Nicosia (Lefkosia)."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_geo_0002",
+    "topic": "GEO",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Cyprus District Administration Offices — Who we are",
+      "url": "https://www.gov.cy/moi-districtadm/en/organisation/who-we-are/"
+    },
+    "fact_id": "cyf_geo_0002",
+    "format": "CLOZE",
+    "difficulty": 1,
+    "question_el": "Η Κύπρος διαιρείται διοικητικά σε ___ επαρχίες.",
+    "options_el": [
+      "τέσσερις",
+      "πέντε",
+      "έξι",
+      "επτά"
+    ],
+    "correct_index": 2,
+    "translations": {
+      "ru": {
+        "question": "Кипр административно разделён на ___ районов.",
+        "options": [
+          "четыре",
+          "пять",
+          "шесть",
+          "семь"
+        ]
+      },
+      "en": {
+        "question": "Cyprus is administratively divided into ___ districts.",
+        "options": [
+          "four",
+          "five",
+          "six",
+          "seven"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Административных районов шесть: Никосия, Лимассол, Ларнака, Пафос, Фамагуста и Кирения.",
+      "en": "The six districts are Nicosia, Limassol, Larnaca, Paphos, Famagusta and Kyrenia."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_gov_0001",
+    "topic": "GOV",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "European Union — Cyprus country profile",
+      "url": "https://european-union.europa.eu/principles-countries-history/eu-countries/cyprus_en"
+    },
+    "fact_id": "cyf_gov_0001",
+    "format": "NEGATIVE",
+    "difficulty": 2,
+    "question_el": "Ποια από τις ακόλουθες προτάσεις για το πολίτευμα της Κύπρου είναι λανθασμένη;",
+    "options_el": [
+      "Η Κύπρος είναι προεδρική δημοκρατία.",
+      "Ο Πρόεδρος είναι αρχηγός του κράτους.",
+      "Ο Πρόεδρος είναι επίσης επικεφαλής της κυβέρνησης.",
+      "Η Κύπρος είναι κοινοβουλευτική δημοκρατία."
+    ],
+    "correct_index": 3,
+    "option_truth": [
+      true,
+      true,
+      true,
+      false
+    ],
+    "translations": {
+      "ru": {
+        "question": "Какое из следующих утверждений о государственном устройстве Кипра неверно?",
+        "options": [
+          "Кипр — президентская республика.",
+          "Президент — глава государства.",
+          "Президент также возглавляет правительство.",
+          "Кипр — парламентская республика."
+        ]
+      },
+      "en": {
+        "question": "Which of the following statements about Cyprus's political system is incorrect?",
+        "options": [
+          "Cyprus is a presidential republic.",
+          "The President is head of state.",
+          "The President also heads the government.",
+          "Cyprus is a parliamentary republic."
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Кипр — президентская, а не парламентская республика. Президент одновременно глава государства и правительства.",
+      "en": "Cyprus is a presidential, not parliamentary, republic; the President is both head of state and government."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_gov_0002",
+    "topic": "GOV",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Ministry of Interior — Parliamentary elections: general background",
+      "url": "https://www.gov.cy/moi-elections/en/documents/parliamentary-elections-2026/general-background/"
+    },
+    "fact_id": "cyf_gov_0002",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Για πόσα χρόνια εκλέγεται η Βουλή των Αντιπροσώπων;",
+    "options_el": [
+      "Τρία χρόνια",
+      "Τέσσερα χρόνια",
+      "Πέντε χρόνια",
+      "Έξι χρόνια"
+    ],
+    "correct_index": 2,
+    "translations": {
+      "ru": {
+        "question": "На сколько лет избирается Палата представителей?",
+        "options": [
+          "Три года",
+          "Четыре года",
+          "Пять лет",
+          "Шесть лет"
+        ]
+      },
+      "en": {
+        "question": "For how many years is the House of Representatives elected?",
+        "options": [
+          "Three years",
+          "Four years",
+          "Five years",
+          "Six years"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Срок полномочий Палаты представителей — пять лет, хотя она может быть распущена досрочно.",
+      "en": "The House of Representatives is elected for a five-year term, though it can dissolve earlier."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_his_0001",
+    "topic": "HIS",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Council of Ministers — Background",
+      "url": "https://www.gov.cy/cm/en/council-of-ministers/background/"
+    },
+    "fact_id": "cyf_his_0001",
+    "format": "CLOZE",
+    "difficulty": 1,
+    "question_el": "Η Κυπριακή Δημοκρατία ανακηρύχθηκε ανεξάρτητη στις ___.",
+    "options_el": [
+      "16 Αυγούστου 1960",
+      "1 Οκτωβρίου 1960",
+      "1 Μαΐου 2004",
+      "1 Ιανουαρίου 2008"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "Республика Кипр была провозглашена независимой ___.",
+        "options": [
+          "16 августа 1960 года",
+          "1 октября 1960 года",
+          "1 мая 2004 года",
+          "1 января 2008 года"
+        ]
+      },
+      "en": {
+        "question": "The Republic of Cyprus was proclaimed independent on ___.",
+        "options": [
+          "16 August 1960",
+          "1 October 1960",
+          "1 May 2004",
+          "1 January 2008"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Дата провозглашения независимости — 16 августа 1960 года. Официальный День независимости отмечают 1 октября.",
+      "en": "Independence was proclaimed on 16 August 1960; Independence Day is celebrated on 1 October."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_his_0002",
+    "topic": "HIS",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Council of Ministers — Background",
+      "url": "https://www.gov.cy/cm/en/council-of-ministers/background/"
+    },
+    "fact_id": "cyf_his_0002",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Σε ποιες συμφωνίες βασίστηκε η ανεξαρτησία της Κύπρου το 1960;",
+    "options_el": [
+      "Στις Συμφωνίες Ζυρίχης–Λονδίνου",
+      "Στη Συμφωνία Σένγκεν",
+      "Στη Συνθήκη του Μάαστριχτ",
+      "Στη Συνθήκη της Λισαβόνας"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "На каких соглашениях основывалась независимость Кипра в 1960 году?",
+        "options": [
+          "На Цюрихско-Лондонских соглашениях",
+          "На Шенгенском соглашении",
+          "На Маастрихтском договоре",
+          "На Лиссабонском договоре"
+        ]
+      },
+      "en": {
+        "question": "Which agreements formed the basis of Cyprus's independence in 1960?",
+        "options": [
+          "The Zurich–London Agreements",
+          "The Schengen Agreement",
+          "The Maastricht Treaty",
+          "The Treaty of Lisbon"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Основой независимости были Цюрихско-Лондонские соглашения 1959 года.",
+      "en": "The Zurich–London Agreements of 1959 laid the foundation for independence."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_his_0003",
+    "topic": "HIS",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Government of Cyprus — The Cyprus Question (2025)",
+      "url": "https://publications.gov.cy/assets/user/publications/2025/2025_151/HTML/index.html"
+    },
+    "fact_id": "cyf_his_0003",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Ποιο έτος έγινε η τουρκική εισβολή στην Κύπρο;",
+    "options_el": [
+      "1960",
+      "1963",
+      "1974",
+      "2004"
+    ],
+    "correct_index": 2,
+    "translations": {
+      "ru": {
+        "question": "В каком году произошло турецкое вторжение на Кипр?",
+        "options": [
+          "1960",
+          "1963",
+          "1974",
+          "2004"
+        ]
+      },
+      "en": {
+        "question": "In what year did the Turkish invasion of Cyprus occur?",
+        "options": [
+          "1960",
+          "1963",
+          "1974",
+          "2004"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Турецкое вторжение на Кипр произошло в 1974 году.",
+      "en": "The Turkish invasion of Cyprus occurred in 1974."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_news_0001",
+    "topic": "NEWS",
+    "status": "draft",
+    "freshness": "current",
+    "verified_at": "2026-11-14",
+    "review_due": "2026-12-15",
+    "valid_until": "2027-06-30",
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Cyprus Presidency — Cyprus in the EU",
+      "url": "https://cyprus-presidency.consilium.europa.eu/en/presidency/cyprus-in-the-eu/"
+    },
+    "fact_id": "cyf_news_0001",
+    "format": "CLOZE",
+    "difficulty": 1,
+    "question_el": "Κατά το πρώτο εξάμηνο του 2026, η Κύπρος ανέλαβε την εκ περιτροπής Προεδρία του ___.",
+    "options_el": [
+      "Συμβουλίου της Ευρωπαϊκής Ένωσης",
+      "Ευρωπαϊκού Κοινοβουλίου",
+      "Ευρωπαϊκής Επιτροπής",
+      "Ευρωπαϊκής Κεντρικής Τράπεζας"
+    ],
+    "correct_index": 0,
+    "translations": {
+      "ru": {
+        "question": "В первой половине 2026 года Кипр председательствовал в ___.",
+        "options": [
+          "Совете Европейского союза",
+          "Европейском парламенте",
+          "Европейской комиссии",
+          "Европейском центральном банке"
+        ]
+      },
+      "en": {
+        "question": "In the first half of 2026, Cyprus held the rotating Presidency of the ___.",
+        "options": [
+          "Council of the European Union",
+          "European Parliament",
+          "European Commission",
+          "European Central Bank"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "С 1 января по 30 июня 2026 года Кипр председательствовал в Совете ЕС.",
+      "en": "From 1 January to 30 June 2026 Cyprus held the Presidency of the Council of the EU."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_news_0002",
+    "topic": "NEWS",
+    "status": "draft",
+    "freshness": "current",
+    "verified_at": "2026-11-14",
+    "review_due": "2026-12-15",
+    "valid_until": "2027-06-30",
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Cyprus Presidency — Cyprus in the EU",
+      "url": "https://cyprus-presidency.consilium.europa.eu/en/presidency/cyprus-in-the-eu/"
+    },
+    "fact_id": "cyf_news_0002",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Πότε ανέλαβε η Κύπρος για πρώτη φορά την Προεδρία του Συμβουλίου της ΕΕ;",
+    "options_el": [
+      "Το 2004",
+      "Το 2008",
+      "Το 2012",
+      "Το 2026"
+    ],
+    "correct_index": 2,
+    "translations": {
+      "ru": {
+        "question": "Когда Кипр впервые председательствовал в Совете ЕС?",
+        "options": [
+          "В 2004 году",
+          "В 2008 году",
+          "В 2012 году",
+          "В 2026 году"
+        ]
+      },
+      "en": {
+        "question": "When did Cyprus first hold the Presidency of the Council of the EU?",
+        "options": [
+          "In 2004",
+          "In 2008",
+          "In 2012",
+          "In 2026"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Первое председательство Кипра пришлось на июль–декабрь 2012 года, второе — на январь–июнь 2026-го.",
+      "en": "Cyprus first held the rotating Council Presidency in July–December 2012, and again in January–June 2026."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  },
+  {
+    "id": "cyq_trad_0001",
+    "topic": "TRAD",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Gastronomy in Cyprus — Halloumi PDO",
+      "url": "https://publications.gov.cy/en/assets/user/publications/2022/2022_041/HTML/"
+    },
+    "fact_id": "cyf_trad_0001",
+    "format": "DIRECT",
+    "difficulty": 1,
+    "question_el": "Ποιο έτος καταχωρίστηκε το χαλλούμι ως προϊόν Προστατευόμενης Ονομασίας Προέλευσης (ΠΟΠ);",
+    "options_el": [
+      "Το 2004",
+      "Το 2008",
+      "Το 2021",
+      "Το 2026"
+    ],
+    "correct_index": 2,
+    "translations": {
+      "ru": {
+        "question": "В каком году халлуми зарегистрировали как продукт с защищённым наименованием места происхождения (PDO)?",
+        "options": [
+          "В 2004 году",
+          "В 2008 году",
+          "В 2021 году",
+          "В 2026 году"
+        ]
+      },
+      "en": {
+        "question": "In which year was halloumi registered as a Protected Designation of Origin (PDO) product?",
+        "options": [
+          "In 2004",
+          "In 2008",
+          "In 2021",
+          "In 2026"
+        ]
+      }
+    },
+    "explanation": {
+      "ru": "Халлуми получил статус PDO в апреле 2021 года.",
+      "en": "Halloumi was registered as PDO in April 2021."
+    },
+    "vocab_ids": [],
+    "origin": "original",
+    "version": 1
+  }
+]

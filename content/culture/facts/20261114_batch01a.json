@@ -1,0 +1,162 @@
+[
+  {
+    "id": "cyf_geo_0001",
+    "topic": "GEO",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "European Union — Cyprus country profile",
+      "url": "https://european-union.europa.eu/principles-countries-history/eu-countries/cyprus_en"
+    },
+    "statement_el": "Η Λευκωσία είναι η πρωτεύουσα της Κυπριακής Δημοκρατίας."
+  },
+  {
+    "id": "cyf_geo_0002",
+    "topic": "GEO",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Cyprus District Administration Offices — Who we are",
+      "url": "https://www.gov.cy/moi-districtadm/en/organisation/who-we-are/"
+    },
+    "statement_el": "Η Κύπρος διαιρείται διοικητικά σε έξι επαρχίες."
+  },
+  {
+    "id": "cyf_gov_0001",
+    "topic": "GOV",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "European Union — Cyprus country profile",
+      "url": "https://european-union.europa.eu/principles-countries-history/eu-countries/cyprus_en"
+    },
+    "statement_el": "Η Κυπριακή Δημοκρατία είναι προεδρική δημοκρατία· ο Πρόεδρος είναι αρχηγός του κράτους και της κυβέρνησης."
+  },
+  {
+    "id": "cyf_gov_0002",
+    "topic": "GOV",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Ministry of Interior — Parliamentary elections: general background",
+      "url": "https://www.gov.cy/moi-elections/en/documents/parliamentary-elections-2026/general-background/"
+    },
+    "statement_el": "Η Βουλή των Αντιπροσώπων εκλέγεται για πενταετή θητεία."
+  },
+  {
+    "id": "cyf_his_0001",
+    "topic": "HIS",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Council of Ministers — Background",
+      "url": "https://www.gov.cy/cm/en/council-of-ministers/background/"
+    },
+    "statement_el": "Η Κυπριακή Δημοκρατία ανακηρύχθηκε ανεξάρτητη στις 16 Αυγούστου 1960."
+  },
+  {
+    "id": "cyf_his_0002",
+    "topic": "HIS",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Council of Ministers — Background",
+      "url": "https://www.gov.cy/cm/en/council-of-ministers/background/"
+    },
+    "statement_el": "Η ανεξαρτησία της Κύπρου βασίστηκε στις Συμφωνίες Ζυρίχης–Λονδίνου."
+  },
+  {
+    "id": "cyf_his_0003",
+    "topic": "HIS",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Government of Cyprus — The Cyprus Question (2025)",
+      "url": "https://publications.gov.cy/assets/user/publications/2025/2025_151/HTML/index.html"
+    },
+    "statement_el": "Η τουρκική εισβολή στην Κύπρο έγινε το 1974."
+  },
+  {
+    "id": "cyf_news_0001",
+    "topic": "NEWS",
+    "status": "draft",
+    "freshness": "current",
+    "verified_at": "2026-11-14",
+    "review_due": "2026-12-15",
+    "valid_until": "2027-06-30",
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Cyprus Presidency — Cyprus in the EU",
+      "url": "https://cyprus-presidency.consilium.europa.eu/en/presidency/cyprus-in-the-eu/"
+    },
+    "statement_el": "Η Κύπρος άσκησε την εκ περιτροπής Προεδρία του Συμβουλίου της ΕΕ από την 1η Ιανουαρίου έως τις 30 Ιουνίου 2026."
+  },
+  {
+    "id": "cyf_news_0002",
+    "topic": "NEWS",
+    "status": "draft",
+    "freshness": "current",
+    "verified_at": "2026-11-14",
+    "review_due": "2026-12-15",
+    "valid_until": "2027-06-30",
+    "rights": "independently_authored",
+    "source": {
+      "kind": "institutional",
+      "title": "Cyprus Presidency — Cyprus in the EU",
+      "url": "https://cyprus-presidency.consilium.europa.eu/en/presidency/cyprus-in-the-eu/"
+    },
+    "statement_el": "Η πρώτη κυπριακή Προεδρία του Συμβουλίου της ΕΕ πραγματοποιήθηκε το δεύτερο εξάμηνο του 2012."
+  },
+  {
+    "id": "cyf_trad_0001",
+    "topic": "TRAD",
+    "status": "draft",
+    "freshness": "evergreen",
+    "verified_at": "2026-11-14",
+    "review_due": null,
+    "valid_until": null,
+    "rights": "independently_authored",
+    "source": {
+      "kind": "official",
+      "title": "Gastronomy in Cyprus — Halloumi PDO",
+      "url": "https://publications.gov.cy/en/assets/user/publications/2022/2022_041/HTML/"
+    },
+    "statement_el": "Το χαλλούμι καταχωρίστηκε ως προϊόν Προστατευόμενης Ονομασίας Προέλευσης το 2021."
+  }
+]

@@ -39,11 +39,14 @@ class CultureContentContract(unittest.TestCase):
         self.assertEqual({q["format"] for q in self.payload[2]}, culture.QUESTION_FORMATS)
         self.assertEqual({q["origin"] for q in self.payload[2]}, {"original"})
 
-    def test_default_released_bank_starts_empty(self):
+    def test_repository_bank_is_valid_and_unreviewed_content_ineligible(self):
         root = ROOT / "content" / "culture"
-        result = culture.read_bank(root)
-        self.assertEqual(validate(result), [])
-        self.assertTrue(all(not entries for entries in result[1:]))
+        config, facts, questions, vocabulary, lessons = culture.read_bank(root)
+        self.assertEqual(validate((config, facts, questions, vocabulary, lessons)), [])
+        fact_by_id = {row["id"]: row for row in facts}
+        for question in questions:
+            if question["status"] != "published":
+                self.assertFalse(culture.exam_eligible(question, fact_by_id[question["fact_id"]]))
 
     def test_reject_incomplete_topic_configuration(self):
         self.payload[0]["topics"].pop()
