@@ -82,7 +82,7 @@ const server=http.createServer((req,res)=>{
       const timer=window.setTimeout;window.setTimeout=(fn,delay,...rest)=>timer(fn,delay===2000?1:delay,...rest);
     });
     const state={caps:copy(caps),jobs:new Map(),ops:new Map(),conversations:new Map(),readingJobs:new Map(),summary:null,
-      calls:[],count:0,pendingAlways:false,dropAfterCommit:false,dropBeforeCommit:false,uncertainNext:false,erased:false,...config};
+      readingRepeats:new Map(),calls:[],count:0,pendingAlways:false,dropAfterCommit:false,dropBeforeCommit:false,uncertainNext:false,erased:false,...config};
     if(config.disabled)state.caps.enabled=false;
     if(config.cached){
       state.summary={id:"cached-summary",kind:"summary",runId,status:"succeeded",result:copy(summaryResult),reported:false};
@@ -96,8 +96,11 @@ const server=http.createServer((req,res)=>{
       if(!["queued","running"].includes(value.status)||state.pendingAlways)return;
       value.status="succeeded";value.usageState="known";
       if(value.kind==="summary")value.result=copy(summaryResult);
-      else if(value.kind==="reading")value.result={kind:"reading",readingId:"dlg001",reference:reading.text,transcript:"Καλησπέρα. Με λένε Μαρία.",
-        origin:"asr",edited:false,comparison:[{type:"replace",expected:"Καλημέρα",recognized:"Καλησπέρα"}],matchingContent:false,hasMoreDifferences:false,pronunciationAssessed:false,languageErrors:null,revision:0};
+      else if(value.kind==="reading")value.result=value.fragment?
+        {kind:"reading",readingId:"dlg001",reference:value.fragment.text,transcript:value.fragment.text,
+          fragment:copy(value.fragment),origin:"asr",edited:false,comparison:[],matchingContent:true,hasMoreDifferences:false,pronunciationAssessed:false,languageErrors:null,revision:0}:
+        {kind:"reading",readingId:"dlg001",reference:reading.text,transcript:"Καλησπέρα. Με λένε Μαρία.",
+          origin:"asr",edited:false,comparison:[{type:"replace",expected:"Καλημέρα",recognized:"Καλησπέρα"}],matchingContent:false,hasMoreDifferences:false,pronunciationAssessed:false,languageErrors:null,revision:0};
       else{
         const c=state.conversations.get(value.conversationId);c.pendingJob=null;
         if(state.uncertainNext){state.uncertainNext=false;value.result={kind:"dialogue",status:"recognition_uncertain",transcript:"δοκιμή",origin:"asr",languageErrors:null};return;}
@@ -123,7 +126,7 @@ const server=http.createServer((req,res)=>{
       if(method==="GET"&&endpoint==="ai/options"){
         if(state.erased)return send({error:"lesson_evidence_unavailable"},404);
         return send({runId,chapter:3,readings:[reading],dialogues:[{id:"dlg001",firstQuestion:"Πώς σε λένε;"}],dialogueTurns:[4,5],
-          existingSummary:state.summary,readingJobs:[...state.readingJobs.entries()].map(([readingId,value])=>({...value,readingId})),conversations:[...state.conversations.values()]});
+          existingSummary:state.summary,readingJobs:[...state.readingJobs.entries()].map(([readingId,value])=>({...value,readingId})),readingRepeats:[...state.readingRepeats.values()],conversations:[...state.conversations.values()]});
       }
       if(method==="GET"&&endpoint.startsWith("ai/operations/")){
         const value=state.ops.get(endpoint.split("/").at(-1));return value?send(value):send({error:"operation_not_found"},404);
@@ -150,9 +153,17 @@ const server=http.createServer((req,res)=>{
         state.conversations.set(result.id,result);state.ops.set(body.operationId,result);
       }else if(endpoint==="ai/audio"&&method==="POST"){
         const kind=url.searchParams.get("kind"),conversationId=url.searchParams.get("conversationId");
-        result=job(kind,{conversationId,origin:"asr"});
-        if(kind==="reading")state.readingJobs.set(url.searchParams.get("readingId"),result);
-        else state.conversations.get(conversationId).pendingJob=result.id;
+        const readingId=url.searchParams.get("readingId"),sourceJobId=url.searchParams.get("sourceJobId");
+        let fragment;
+        if(sourceJobId){
+          const parent=state.jobs.get(sourceJobId),sourceRevision=Number(url.searchParams.get("sourceRevision")),differenceIndex=Number(url.searchParams.get("differenceIndex"));
+          if(parent?.result?.revision!==sourceRevision)return send({error:"reading_fragment_conflict"},409);
+          fragment={sourceJobId,sourceRevision,differenceIndex,text:parent.result.comparison[differenceIndex].expected,targetId:"target-"+sourceJobId+"-"+sourceRevision+"-"+differenceIndex,scopeVersion:"v1",sourceVersion:"v1"};
+        }
+        result=job(kind,{conversationId,origin:"asr",readingId,fragment});
+        if(kind==="reading"){
+          if(fragment)state.readingRepeats.set(fragment.targetId,result);else state.readingJobs.set(readingId,result);
+        }else state.conversations.get(conversationId).pendingJob=result.id;
         state.ops.set(url.searchParams.get("operationId"),result);
       }else if(endpoint.endsWith("/text")&&method==="POST"){
         const conversationId=endpoint.split("/")[2];
@@ -171,7 +182,7 @@ const server=http.createServer((req,res)=>{
       }else if(endpoint.endsWith("/report")&&method==="POST"){
         state.jobs.get(endpoint.split("/")[2]).reported=true;result={reported:true};
       }else if(endpoint==="ai/erase"&&method==="POST"){
-        assert.equal(body.confirm,true);state.erased=true;state.summary=null;state.readingJobs.clear();state.conversations.clear();state.jobs.clear();result={deleted:true,ordinaryProgressPreserved:true};
+        assert.equal(body.confirm,true);state.erased=true;state.summary=null;state.readingJobs.clear();state.readingRepeats.clear();state.conversations.clear();state.jobs.clear();result={deleted:true,ordinaryProgressPreserved:true};
       }else return send({error:"unexpected_test_endpoint"},500);
       if(state.dropAfterCommit){state.dropAfterCommit=false;return route.abort("connectionfailed");}
       return send(result);
@@ -432,6 +443,58 @@ const server=http.createServer((req,res)=>{
       assert.equal(await next.page.evaluate(()=>window.__urls.size===0&&window.__tracks.every(x=>x.readyState==="ended")),true);
       assert.equal(await next.page.evaluate(()=>sessionStorage.getItem("lexi-ai-pending-v1")),null);
       await next.close();console.log("PASS stale owner headers block JSON erase and raw audio; dispose resources, reconcile account, never retry");
+    }
+    {
+      const {page,state,open,close}=await fresh({fastPoll:true});
+      await click(page,"choose-reading");await click(page,"record-reading");
+      await page.locator("[data-ai-focus='stop-recording']").waitFor();await click(page,"stop-recording");await page.locator("audio").waitFor();
+      await click(page,"send-audio");await confirm(page);await page.locator("[data-ai-focus='edit-reading']").waitFor();
+      const parent=state.readingJobs.get("dlg001"),original=copy(parent.result);
+      await click(page,"phrase-0");
+      assert.equal(await page.locator("[data-ai-reading-reference='fragment']").innerText(),"Καλημέρα");
+      for(const language of ["ru","en","zh","ar","es","pt"]){
+        await page.locator("#lang").selectOption(language);
+        assert.equal(await page.locator("[data-ai-reading-reference='fragment']").innerText(),"Καλημέρα");
+        assert.equal(await page.locator("[data-ai-focus='whole-reading']").isVisible(),true);
+        await noOverflow(page,"fragment locale "+language);
+      }
+      await page.locator("#lang").selectOption("en");
+      assert.ok((await page.locator("#lesson-summary-ai").innerText()).includes("Read only this phrase"));
+      await click(page,"record-reading");await page.locator("[data-ai-focus='stop-recording']").waitFor();await click(page,"stop-recording");await page.locator("audio").waitFor();
+      state.dropAfterCommit=true;await click(page,"send-audio");await page.locator("[data-ai-focus='recover-operation']").waitFor();
+      const upload=state.calls.filter(x=>x.endpoint==="ai/audio").at(-1);
+      assert.equal(upload.query.sourceJobId,parent.id);assert.equal(upload.query.sourceRevision,"0");assert.equal(upload.query.differenceIndex,"0");
+      assert.equal(upload.query.reference,undefined);
+      await click(page,"recover-operation");await page.locator("[data-ai-focus='edit-reading']").waitFor();
+      const child=[...state.readingRepeats.values()][0];
+      assert.equal(child.result.reference,"Καλημέρα");assert.equal(child.result.matchingContent,true);assert.deepEqual(parent.result,original);
+      assert.equal(state.calls.filter(x=>x.endpoint==="ai/audio").length,2);
+      await page.reload();await page.locator("#lang").selectOption("en");await open();
+      await page.locator("[data-ai-focus='choose-reading']").waitFor();await click(page,"choose-reading");
+      assert.equal(await page.locator("[data-ai-reading-reference='whole']").innerText(),reading.text);
+      assert.ok((await page.locator(".lexi-ai-feedback").innerText()).includes(original.transcript));
+      await page.locator(".lexi-ai-saved-phrases summary").click();
+      assert.equal(await page.locator(".lexi-ai-saved-phrases [lang=el][dir=ltr]").innerText(),"Καλημέρα");
+      await click(page,"saved-phrase-"+child.id);
+      assert.equal(await page.locator("[data-ai-reading-reference='fragment']").innerText(),"Καλημέρα");
+      assert.ok((await page.locator(".lexi-ai-feedback").innerText()).includes("Καλημέρα"));
+      assert.equal(state.calls.filter(x=>x.endpoint==="ai/audio").length,2);
+      if(process.env.LEXI_ARTIFACT_DIR)await page.screenshot({path:path.join(process.env.LEXI_ARTIFACT_DIR,"ai_phrase_en_360.png"),fullPage:true});
+      await click(page,"whole-reading");assert.equal(await page.locator("[data-ai-reading-reference='whole']").innerText(),reading.text);
+      assert.deepEqual(parent.result,original);
+      await close();console.log("PASS true phrase reference in six locales, operation recovery, separate child result and refresh without another upload");
+    }
+    {
+      const {page,state,close}=await fresh({fastPoll:true});
+      await click(page,"choose-reading");await click(page,"record-reading");
+      await page.locator("[data-ai-focus='stop-recording']").waitFor();await click(page,"stop-recording");await page.locator("audio").waitFor();
+      await click(page,"send-audio");await confirm(page);await page.locator("[data-ai-focus='edit-reading']").waitFor();await click(page,"phrase-0");
+      await click(page,"record-reading");await page.locator("[data-ai-focus='stop-recording']").waitFor();await click(page,"stop-recording");await page.locator("audio").waitFor();
+      const parent=state.readingJobs.get("dlg001");parent.result.revision=1;
+      await click(page,"send-audio");await page.locator("[data-ai-reading-reference='whole']").waitFor();
+      assert.ok((await page.locator("#lesson-summary-ai").innerText()).includes("This feedback changed"));
+      assert.equal(state.readingRepeats.size,0);assert.equal(await page.evaluate(()=>window.__urls.size),0);
+      await close();console.log("PASS changed parent rejects stale phrase and discards clip before returning to refreshed whole reading");
     }
     assert.deepEqual(allErrors,[]);console.log("PASS no uncaught browser errors; all API/provider work mocked");
   }finally{

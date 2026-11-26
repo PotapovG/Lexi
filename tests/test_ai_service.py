@@ -39,6 +39,7 @@ class Provider:
     def __init__(self):
         self.text_calls = 0
         self.audio_calls = 0
+        self.transcript = "Καλημέρα."
         self.text_usage = {"input_tokens": 20, "output_tokens": 10}
         self.audio_usage = {"type": "duration", "seconds": 1}
         self.on_text = None
@@ -67,7 +68,7 @@ class Provider:
         self.audio_calls += 1
         if self.on_audio:
             self.on_audio()
-        return {"transcript": "Καλημέρα.", "origin": "asr", "edited": False}, copy.deepcopy(self.audio_usage)
+        return {"transcript": self.transcript, "origin": "asr", "edited": False}, copy.deepcopy(self.audio_usage)
 
 
 def wav():
@@ -635,6 +636,137 @@ class AIServiceTests(unittest.TestCase):
         self.error("operation_deleted", self.summary, "cached-summary-op")
 
 
+    def reading_with_difference(self):
+        self.context["readings"][0]["text"]="Καλημέρα. Με λένε Μαρία."
+        self.provider.transcript="Καλησπέρα. Με λένε Μαρία."
+        parent=self.reading()
+        self.service.process_one()
+        return self.service.get_job(self.uid,parent["id"])
+
+    def repeat_reading(self,parent,operation="phrase-repeat-operation",**changes):
+        fields={"reading_id":"reading-001","source_job_id":parent["id"],
+                "source_revision":parent["result"]["revision"],"difference_index":0}
+        fields.update(changes)
+        return self.service.upload(self.uid,"reading",self.run_id,"ru",operation,
+                                   self.audio,"audio/wav",**fields)
+
+    def test_phrase_repeat_compares_only_authoritative_fragment_and_keeps_original(self):
+        parent=self.reading_with_difference()
+        original=copy.deepcopy(parent["result"])
+        self.provider.transcript="Καλημέρα."
+        child=self.repeat_reading(parent)
+        self.assertNotEqual(child["id"],parent["id"])
+        self.assertEqual(child["fragment"]["text"],"Καλημέρα")
+        self.assertEqual(child["fragment"]["sourceJobId"],parent["id"])
+        self.assertEqual(child["fragment"]["sourceRevision"],0)
+        self.assertEqual(child["fragment"]["differenceIndex"],0)
+        self.assertEqual(child["fragment"]["scopeVersion"],self.context["hash"])
+        self.assertEqual(child["fragment"]["sourceVersion"],"synthetic-reading-001")
+        self.assertEqual(len(child["fragment"]["targetId"]),64)
+        self.service.process_one()
+        result=self.service.get_job(self.uid,child["id"])["result"]
+        self.assertEqual(result["reference"],"Καλημέρα")
+        self.assertTrue(result["matchingContent"])
+        self.assertEqual(result["comparison"],[])
+        self.assertFalse(result["pronunciationAssessed"])
+        self.assertEqual(self.service.get_job(self.uid,parent["id"])["result"],original)
+        self.assertEqual(self.provider.audio_calls,2)
+        options=self.service.options(self.uid,self.run_id,"ru")
+        self.assertEqual([x["id"] for x in options["readingJobs"]],[parent["id"]])
+        self.assertEqual([x["id"] for x in options["readingRepeats"]],[child["id"]])
+        self.assertEqual(self.service.find_operation(self.uid,"phrase-repeat-operation")["id"],child["id"])
+        edited=self.service.edit_transcript(self.uid,child["id"],"Καλημέρα",0,"phrase-edit-operation")
+        self.assertEqual(edited["result"]["fragment"],child["fragment"])
+        self.assertEqual(self.service.get_job(self.uid,parent["id"])["result"],original)
+
+    def test_phrase_replay_precedes_source_revision_check_and_new_stale_target_fails(self):
+        parent=self.reading_with_difference()
+        child=self.repeat_reading(parent)
+        self.service.process_one()
+        self.service.edit_transcript(self.uid,parent["id"],parent["result"]["reference"],0,"parent-edit-operation")
+        replay=self.repeat_reading(parent)
+        self.assertEqual(replay["id"],child["id"])
+        self.assertEqual(self.provider.audio_calls,2)
+        self.error("reading_fragment_conflict",self.repeat_reading,parent,"stale-phrase-operation")
+        self.error("operation_conflict",self.repeat_reading,parent,difference_index=1)
+        self.error("operation_conflict",self.repeat_reading,parent,source_revision=1)
+        self.assertEqual(len(self.service.options(self.uid,self.run_id,"ru")["readingRepeats"]),1)
+
+    def test_phrase_source_rejects_foreign_malformed_unavailable_and_mismatched_locators(self):
+        parent=self.reading_with_difference()
+        for changes in ({"source_revision":None},{"source_revision":-1},
+                        {"difference_index":-1},{"difference_index":2},{"difference_index":True},
+                        {"source_job_id":None}):
+            self.error("invalid_reading_fragment",self.repeat_reading,parent,**changes)
+        self.error("reading_fragment_unavailable",self.repeat_reading,parent,difference_index=1)
+        self.error("reading_fragment_unavailable",self.repeat_reading,parent,reading_id="reading-002")
+        self.error("job_not_found",self.repeat_reading,parent,source_job_id="unknown-owned-job")
+        self.error("job_not_found",self.service.upload,"foreign-owner","reading",self.run_id,"ru",
+                   "foreign-source-operation",self.audio,"audio/wav",reading_id="reading-001",
+                   source_job_id=parent["id"],source_revision=0,difference_index=0)
+        for run,lang in (("different-run-id","ru"),(self.run_id,"en")):
+            self.error("reading_fragment_unavailable",self.service.upload,self.uid,"reading",run,lang,
+                       "mismatched-source-operation",self.audio,"audio/wav",reading_id="reading-001",
+                       source_job_id=parent["id"],source_revision=0,difference_index=0)
+        queued=self.reading("not-yet-complete-operation")
+        self.error("reading_fragment_unavailable",self.repeat_reading,parent,source_job_id=queued["id"])
+        with self.service.db() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM ai_jobs").fetchone()[0],2)
+        self.assertEqual(self.provider.audio_calls,1)
+
+    def test_phrase_source_and_scope_versions_must_still_match(self):
+        parent=self.reading_with_difference()
+        self.context["hash"]="b"*64
+        self.error("reading_fragment_conflict",self.repeat_reading,parent)
+        self.context["hash"]="a"*64
+        self.context["readings"][0]["sourceVersion"]="replacement-source"
+        self.error("reading_fragment_conflict",self.repeat_reading,parent)
+        self.assertEqual(self.provider.audio_calls,1)
+        self.assertEqual(list(self.service.spool.glob("*.audio")),[])
+
+    def test_phrase_parent_edit_during_decode_is_rechecked_before_enqueue(self):
+        parent=self.reading_with_difference()
+        validate=ai_audio.validate_file
+        def edit_parent(*args):
+            info=validate(*args)
+            self.service.edit_transcript(self.uid,parent["id"],parent["result"]["reference"],0,"racing-parent-edit")
+            return info
+        with patch.object(ai_audio,"validate_file",side_effect=edit_parent):
+            self.error("reading_fragment_conflict",self.repeat_reading,parent)
+        self.assertEqual(list(self.service.spool.glob("*.audio")),[])
+        self.assertEqual(self.provider.audio_calls,1)
+        with self.service.db() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM ai_jobs").fetchone()[0],1)
+
+    def test_phrase_parent_expiry_during_decode_is_rechecked_before_enqueue(self):
+        parent=self.reading_with_difference()
+        validate=ai_audio.validate_file
+        def expire_parent(*args):
+            info=validate(*args)
+            with self.service.db(True) as db:
+                db.execute("UPDATE ai_jobs SET created=? WHERE id=?",
+                           (self.clock()-ai_service.TEXT_RETENTION-1,parent["id"]))
+            return info
+        with patch.object(ai_audio,"validate_file",side_effect=expire_parent):
+            self.error("operation_deleted",self.repeat_reading,parent)
+        self.assertEqual(list(self.service.spool.glob("*.audio")),[])
+        self.assertEqual(self.provider.audio_calls,1)
+
+    def test_phrase_erase_during_decode_never_recreates_child_or_audio(self):
+        parent=self.reading_with_difference()
+        validate=ai_audio.validate_file
+        def erase_parent(*args):
+            info=validate(*args)
+            self.service.erase(self.uid)
+            return info
+        with patch.object(ai_audio,"validate_file",side_effect=erase_parent):
+            self.error("operation_deleted",self.repeat_reading,parent)
+        self.assertEqual(list(self.service.spool.glob("*.audio")),[])
+        self.assertEqual(self.provider.audio_calls,1)
+        with self.service.db() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM ai_jobs WHERE status!='deleted'").fetchone()[0],0)
+
+
 class UsageParserTests(unittest.TestCase):
     def test_unexpected_usage_is_unknown_and_never_throws(self):
         values = [None, "", [], {}, {"input_tokens": -1, "output_tokens": 2},
@@ -726,6 +858,8 @@ class UsageParserTests(unittest.TestCase):
                 provider.text("test", {}, {})
         self.assertTrue(caught.exception.uncertain)
         self.assertIsNone(ai_provider.text_cost(caught.exception.usage))
+
+
 
 
 if __name__ == "__main__":

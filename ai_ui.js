@@ -71,7 +71,11 @@
     asrCaution:["Расхождение может быть ошибкой распознавания. Сначала проверь текст.","A difference may be a recognition error. Check the transcript first.","差异可能来自语音识别，请先核对文字。","قد يكون الاختلاف خطأ في التعرّف على الكلام. تحقّق من النص أولاً.","Una diferencia puede ser un error de reconocimiento. Comprueba primero el texto.","Uma diferença pode ser um erro de reconhecimento. Confere primeiro o texto."],
     moreDifferences:["Есть и другие различия; сейчас показаны два.","There are more differences; two are shown here.","还有其他差异，此处显示两项。","توجد اختلافات أخرى؛ يظهر هنا اثنان.","Hay más diferencias; aquí se muestran dos.","Há mais diferenças; aqui são mostradas duas."],
     repeatPhrase:["Повторить фрагмент","Practise this phrase","练习此片段","تدريب هذه العبارة","Practicar este fragmento","Praticar este trecho"],
-    focusPhrase:["Обрати внимание на этот фрагмент. Для сравнения снова прочитай весь текст.","Focus on this phrase. Read the whole text again for comparison.","请关注这个片段。再次比较时请朗读全文。","ركّز على هذه العبارة. اقرأ النص كاملاً مجدداً للمقارنة.","Fíjate en este fragmento. Lee de nuevo el texto completo para compararlo.","Presta atenção a este trecho. Lê novamente o texto completo para comparar."],
+    focusPhrase:["Прочитай только этот фрагмент. Запись сравнивается с ним; результат всего текста сохраняется отдельно.","Read only this phrase. Your recording is compared with it; the full-text result stays separate.","请只朗读此片段。录音将仅与此片段比较，全文结果会单独保留。","اقرأ هذه العبارة فقط. تُقارَن بها التسجيلات وتبقى نتيجة النص الكامل منفصلة.","Lee solo este fragmento. La grabación se compara con él; el resultado del texto completo se conserva aparte.","Lê apenas este trecho. A gravação é comparada com ele; o resultado do texto completo fica separado."],
+    wholeReading:["Вернуться к целому тексту","Back to the whole text","返回全文","العودة إلى النص الكامل","Volver al texto completo","Voltar ao texto completo"],
+    savedPhrases:["Сохранённые повторы фрагментов","Saved phrase practice","已保存的片段练习","تدريبات العبارات المحفوظة","Prácticas de fragmentos guardadas","Práticas de trechos guardadas"],
+    viewPhrase:["Открыть фрагмент","Open phrase","打开片段","فتح العبارة","Abrir fragmento","Abrir trecho"],
+    fragmentChanged:["Этот разбор изменился. Выбери фрагмент из обновлённого результата и запиши его снова.","This feedback changed. Choose a phrase from the updated result and record it again.","此反馈已更新。请从更新后的结果中选择片段并重新录音。","تغيّرت هذه الملاحظات. اختر عبارة من النتيجة المحدّثة وسجّلها مجدداً.","Estos comentarios cambiaron. Elige un fragmento del resultado actualizado y vuelve a grabarlo.","Estes comentários mudaram. Escolhe um trecho do resultado atualizado e grava-o novamente."],
     observation:["Наблюдение по уроку","Lesson observation","课程观察","ملاحظة عن الدرس","Observación de la lección","Observação da lição"],
     improvements:["Что стоит потренировать","What to practise next","接下来可练习的内容","ما يستحق التدريب","Qué conviene practicar","O que convém praticar"],
     example:["Пример из урока","Example from your lesson","课程中的例子","مثال من درسك","Ejemplo de tu lección","Exemplo da tua lição"],
@@ -140,7 +144,7 @@
     try{
       if(ctx?.operation){
         const op=ctx.operation;
-        sessionStorage.setItem(key,JSON.stringify({owner:ctx.owner,runId:ctx.runId,operationId:op.id,kind:op.kind,readingId:op.readingId,conversationId:op.conversationId}));
+        sessionStorage.setItem(key,JSON.stringify({owner:ctx.owner,runId:ctx.runId,operationId:op.id,kind:op.kind,readingId:op.readingId,conversationId:op.conversationId,sourceJobId:op.sourceJobId,sourceRevision:op.sourceRevision,differenceIndex:op.differenceIndex}));
       }else sessionStorage.removeItem(key);
     }catch{}
   }
@@ -148,7 +152,7 @@
     try{
       const saved=JSON.parse(sessionStorage.getItem(key)||"null");
       if(saved?.owner===ctx.owner&&saved.runId===ctx.runId&&typeof saved.operationId==="string"){
-        ctx.operation={id:saved.operationId,kind:saved.kind,readingId:saved.readingId,conversationId:saved.conversationId,restored:true};
+        ctx.operation={id:saved.operationId,kind:saved.kind,readingId:saved.readingId,conversationId:saved.conversationId,sourceJobId:saved.sourceJobId,sourceRevision:saved.sourceRevision,differenceIndex:saved.differenceIndex,restored:true};
       }
     }catch{}
   }
@@ -157,6 +161,7 @@
     if(error?.status===401||code==="login_required")return "login";
     if(["ai_budget_limit","ai_daily_limit","conversation_attempt_limit"].includes(code))return "limited";
     if(code==="ai_queue_full"||code==="ai_preparation_busy")return "queueFull";
+    if(["reading_fragment_conflict","reading_fragment_unavailable"].includes(code))return "fragmentChanged";
     if(["ai_unavailable","lesson_evidence_unavailable","reading_unavailable","scenario_unavailable","conversation_expired"].includes(code))return "unavailable";
     if(code==="audio_empty"||code==="audio_duration"||code==="asr_empty")return "emptyAudio";
     if(["audio_type","audio_decode","audio_decoder_unavailable"].includes(code))return "unsupported";
@@ -261,8 +266,26 @@
     if(accepted&&valid(ctx)){ctx.consents.add(kind);return true;}
     return false;
   }
-  const busy=ctx=>Boolean(ctx.posting||ctx.operation||ctx.needsConversationRefresh||ctx.media?.phase==="permission"||ctx.media?.phase==="recording"||activeStatus(ctx.dialogueJob)||activeStatus(ctx.summary)||[...ctx.readingJobs.values()].some(activeStatus));
-  function jobForReading(ctx){return ctx.readingJobs.get(ctx.readingId);}
+  const busy=ctx=>Boolean(ctx.posting||ctx.operation||ctx.needsConversationRefresh||ctx.media?.phase==="permission"||ctx.media?.phase==="recording"||activeStatus(ctx.dialogueJob)||activeStatus(ctx.summary)||[...ctx.readingJobs.values(),...ctx.readingRepeats.values()].some(activeStatus));
+  const sameFragment=(a,b)=>Boolean(a&&b&&a.sourceJobId===b.sourceJobId&&a.sourceRevision===b.sourceRevision&&a.differenceIndex===b.differenceIndex);
+  function jobForReading(ctx){return ctx.readingFragment?ctx.readingRepeats.get(ctx.fragmentJobId):ctx.readingJobs.get(ctx.readingId);}
+  function rememberReading(ctx,job,meta={}){
+    const fragment=job.fragment||job.result?.fragment;
+    const readingId=job.readingId||job.result?.readingId||meta.readingId||ctx.readingId;
+    if(fragment){
+      const previous=ctx.readingRepeats.get(job.id);
+      if(previous&&!activeStatus(previous)&&activeStatus(job))return;
+      ctx.readingRepeats.set(job.id,job);
+      if(meta.selectReading||meta.restored||ctx.fragmentJobId===job.id){
+        ctx.readingFragment=fragment;ctx.fragmentJobId=job.id;ctx.readingId=readingId;
+        if(meta.restored)ctx.mode="reading";
+      }
+    }else{
+      const previous=ctx.readingJobs.get(readingId);
+      if(previous?.id===job.id&&!activeStatus(previous)&&activeStatus(job))return;
+      ctx.readingJobs.set(readingId,job);
+    }
+  }
   function rememberConversation(ctx,conversation,select=true){
     if(select)ctx.conversation=conversation;
     const list=ctx.options.conversations||[];
@@ -298,11 +321,8 @@
       return;
     }
     if(value.kind==="summary")ctx.summary=value;
-    else if(value.kind==="reading"){
-      const readingId=meta.readingId||value.readingId||value.result?.readingId||
-        [...ctx.readingJobs.entries()].find(([,job])=>job.id===value.id)?.[0]||ctx.readingId;
-      ctx.readingJobs.set(readingId,value);
-    }else if(value.kind==="dialogue"||value.kind==="dialogue_edit"){
+    else if(value.kind==="reading")rememberReading(ctx,value,meta);
+    else if(value.kind==="dialogue"||value.kind==="dialogue_edit"){
       const conversationId=value.conversationId||meta.conversationId;
       if(!ctx.conversation&&meta.restored){
         const saved=ctx.options.conversations.find(x=>x.id===conversationId);
@@ -320,7 +340,7 @@
       }
     }
     render(ctx);
-    if(activeStatus(value))watchJob(ctx,value,meta);
+    if(activeStatus(value))watchJob(ctx,value,{...meta,selectReading:false,restored:false});
     else {
       const watch=ctx.watches.get(value.id);if(watch)clearTimeout(watch.timer);
       ctx.watches.delete(value.id);
@@ -338,7 +358,7 @@
         if(!valid(ctx,version))return;
         // Adopt without recursively resetting the bounded poll count.
         if(updated.kind==="summary")ctx.summary=updated;
-        else if(updated.kind==="reading")ctx.readingJobs.set(meta.readingId||updated.readingId||updated.result?.readingId||ctx.readingId,updated);
+        else if(updated.kind==="reading")rememberReading(ctx,updated);
         else if(ctx.conversation?.id===(updated.conversationId||meta.conversationId))ctx.dialogueJob=updated;
         if(activeStatus(updated)){render(ctx);watchJob(ctx,updated,meta,count+1);}
         else await adopt(ctx,updated,meta);
@@ -368,7 +388,7 @@
       const value=await request(ctx,operation.path,operation.body,operation.raw);
       if(!valid(ctx,version))return;
       ctx.operation=null;persist(ctx);ctx.posting=false;ctx.edit=null;stopMedia(ctx);
-      await adopt(ctx,value,operation);
+      await adopt(ctx,value,{...operation,selectReading:true});
     }catch(error){
       if(!valid(ctx,version))return;
       const known=error.status>=400&&error.status<500&&error.status!==408;
@@ -378,7 +398,9 @@
         operation.checkedMissing=true;ctx.error="queueFull";
       }else if(known){
         ctx.operation=null;persist(ctx);ctx.error=errorKey(error);
-        if(error.status===409&&ctx.conversation){ctx.notice="stale";await refreshConversation(ctx);}
+        if(["reading_fragment_conflict","reading_fragment_unavailable"].includes(error.body?.error)){
+          stopMedia(ctx);ctx.readingFragment=null;ctx.fragmentJobId=null;await reload(ctx);ctx.error="fragmentChanged";
+        }else if(error.status===409&&operation.conversationId&&ctx.conversation){ctx.notice="stale";await refreshConversation(ctx);}
       }else ctx.notice="unknown";
     }finally{if(valid(ctx,version)){ctx.posting=false;render(ctx);}}
   }
@@ -394,7 +416,7 @@
       const result=await request(ctx,"ai/operations/"+encodeURIComponent(op.id));
       if(!valid(ctx,version))return;
       ctx.operation=null;persist(ctx);ctx.posting=false;stopMedia(ctx);ctx.notice=null;
-      await adopt(ctx,result,op);
+      await adopt(ctx,result,{...op,selectReading:true});
     }catch(error){
       if(!valid(ctx,version))return;
       if(error.status===404){
@@ -412,11 +434,23 @@
       ctx.options=options;ctx.ready=true;ctx.error=null;
       ctx.summary=options.existingSummary||null;
       ctx.readingJobs=new Map((options.readingJobs||[]).map(job=>[job.readingId,job]));
+      ctx.readingRepeats=new Map((options.readingRepeats||[]).map(job=>[job.id,job]));
+      if(ctx.readingFragment){
+        const saved=[...ctx.readingRepeats.values()].find(job=>sameFragment(job.fragment,ctx.readingFragment));
+        if(saved){ctx.readingFragment=saved.fragment;ctx.fragmentJobId=saved.id;}
+        else{
+          const parent=ctx.readingJobs.get(ctx.readingId);
+          if(parent?.id!==ctx.readingFragment.sourceJobId||parent.result?.revision!==ctx.readingFragment.sourceRevision){
+            ctx.readingFragment=null;ctx.fragmentJobId=null;ctx.notice="fragmentChanged";
+          }
+        }
+      }
       if(!options.readings.some(x=>x.id===ctx.readingId))ctx.readingId=options.readings[0]?.id||null;
       if(ctx.conversation)ctx.conversation=options.conversations.find(x=>x.id===ctx.conversation.id)||null;
       render(ctx);
       if(activeStatus(ctx.summary))watchJob(ctx,ctx.summary);
       for(const [readingId,job] of ctx.readingJobs)if(activeStatus(job))watchJob(ctx,job,{readingId});
+      for(const job of ctx.readingRepeats.values())if(activeStatus(job))watchJob(ctx,job,{readingId:job.readingId});
       if(ctx.operation)await recover(ctx);
       else if(ctx.conversation?.pendingJob)await adopt(ctx,await request(ctx,"ai/jobs/"+encodeURIComponent(ctx.conversation.pendingJob)),{conversationId:ctx.conversation.id});
     }catch(error){if(valid(ctx,version)){ctx.error=errorKey(error);ctx.ready=true;render(ctx);}}
@@ -481,7 +515,14 @@
     if(!await consent(ctx,"audio")||!valid(ctx)||ctx.media!==media)return;
     const params=new URLSearchParams({kind:media.kind,runId:ctx.runId,lang:ctx.contentLang});
     const meta={};
-    if(media.kind==="reading"){params.set("readingId",ctx.readingId);meta.readingId=ctx.readingId;}
+    if(media.kind==="reading"){
+      params.set("readingId",ctx.readingId);meta.readingId=ctx.readingId;
+      if(ctx.readingFragment){
+        for(const key of ["sourceJobId","sourceRevision","differenceIndex"]){
+          params.set(key,ctx.readingFragment[key]);meta[key]=ctx.readingFragment[key];
+        }
+      }
+    }
     else{
       if(!ctx.conversation||ctx.conversation.status!=="active")return;
       params.set("conversationId",ctx.conversation.id);params.set("revision",ctx.conversation.revision);meta.conversationId=ctx.conversation.id;
@@ -543,7 +584,7 @@
     try{
       const value=await request(ctx,"ai/erase",{confirm:true});
       if(!valid(ctx))return;
-      if(value.deleted){ctx.erasing=null;ctx.erased=true;ctx.summary=null;ctx.dialogueJob=null;ctx.conversation=null;ctx.readingJobs.clear();ctx.options={readings:[],dialogues:[],conversations:[]};}
+      if(value.deleted){ctx.erasing=null;ctx.erased=true;ctx.summary=null;ctx.dialogueJob=null;ctx.conversation=null;ctx.readingJobs.clear();ctx.readingRepeats.clear();ctx.readingFragment=null;ctx.fragmentJobId=null;ctx.options={readings:[],dialogues:[],conversations:[]};}
       else ctx.erasing="unknown";
     }catch{if(valid(ctx))ctx.erasing="unknown";}
     finally{if(valid(ctx)){ctx.posting=false;render(ctx);}}
@@ -655,11 +696,35 @@
       const option=el("option",t("textNumber",{n:index+1,chapter:reading.chapter}));option.value=reading.id;select.append(option);
     });
     select.value=ctx.readingId;
-    select.addEventListener("change",()=>{stopMedia(ctx);ctx.readingId=select.value;ctx.edit=null;ctx.focusPhrase=null;ctx.error=null;ctx.notice=null;render(ctx);});
+    select.addEventListener("change",()=>{stopMedia(ctx);ctx.readingId=select.value;ctx.edit=null;ctx.readingFragment=null;ctx.fragmentJobId=null;ctx.error=null;ctx.notice=null;render(ctx);});
     group.append(label,select);panel.append(group);
-    const reading=readings.find(x=>x.id===ctx.readingId)||readings[0];
-    panel.append(greek(reading.text));
-    if(ctx.focusPhrase){panel.append(el("p",t("focusPhrase"),"lexi-ai-muted"));const focus=greek(ctx.focusPhrase);focus.classList.add("lexi-ai-focus-phrase");panel.append(focus);}
+    const reading=readings.find(x=>x.id===ctx.readingId)||readings[0],fragment=ctx.readingFragment;
+    if(fragment){
+      panel.append(el("p",t("focusPhrase"),"lexi-ai-notice"));
+      const whole=button(t("wholeReading"),()=>{
+        if(ctx.posting||ctx.operation)return;
+        stopMedia(ctx);ctx.readingFragment=null;ctx.fragmentJobId=null;ctx.edit=null;ctx.error=null;ctx.notice=null;render(ctx,true);
+      },"whole-reading");
+      whole.disabled=ctx.posting||Boolean(ctx.operation);panel.append(whole);
+    }
+    const reference=greek(fragment?fragment.text:reading.text);reference.dataset.aiReadingReference=fragment?"fragment":"whole";
+    if(fragment)reference.classList.add("lexi-ai-focus-phrase");panel.append(reference);
+    if(!fragment){
+      const saved=[...ctx.readingRepeats.values()].filter(job=>job.readingId===reading.id&&job.fragment&&job.status!=="deleted").slice(-20).reverse();
+      if(saved.length){
+        const details=el("details",undefined,"lexi-ai-saved-phrases");details.append(el("summary",t("savedPhrases")));
+        for(const job of saved){
+          const open=button(t("viewPhrase"),()=>{
+            if(ctx.posting||ctx.operation)return;
+            stopMedia(ctx);ctx.readingFragment=job.fragment;ctx.fragmentJobId=job.id;ctx.edit=null;ctx.error=null;ctx.notice=null;render(ctx,true);
+          },"saved-phrase-"+job.id);
+          const phrase=el("span",job.fragment.text);phrase.lang="el";phrase.dir="ltr";
+          open.append(document.createTextNode(" · "),phrase);
+          open.disabled=ctx.posting||Boolean(ctx.operation);details.append(open);
+        }
+        panel.append(details);
+      }
+    }
     const job=jobForReading(ctx);
     if(job)panel.append(jobStatus(ctx,job,{readingId:reading.id}));
     if(job?.status==="succeeded"&&job.result){
@@ -672,11 +737,19 @@
       if(result.matchingContent)feedback.append(el("p",t("sameContent"),"lexi-ai-positive"));
       else{
         feedback.append(el("h4",t("differences")),el("p",t("asrCaution"),"lexi-ai-muted"));
-        for(const difference of (result.comparison||[]).slice(0,2)){
+        for(const [index,difference] of (result.comparison||[]).slice(0,2).entries()){
           const box=el("div",undefined,"lexi-ai-comparison");
           box.append(el("span",t("reference"),"lexi-ai-label"),difference.expected?greek(difference.expected):el("p",t("noWords")));
           box.append(el("span",t("recognized"),"lexi-ai-label"),difference.recognized?greek(difference.recognized):el("p",t("noWords")));
-          if(difference.expected)box.append(button(t("repeatPhrase"),()=>{stopMedia(ctx);ctx.focusPhrase=difference.expected;ctx.edit=null;render(ctx,true);},"phrase-"+(++uid)));
+          if(difference.expected&&!fragment){
+            const repeat=button(t("repeatPhrase"),()=>{
+              if(busy(ctx))return;
+              stopMedia(ctx);ctx.readingFragment={sourceJobId:job.id,sourceRevision:result.revision||0,differenceIndex:index,text:difference.expected};
+              const saved=[...ctx.readingRepeats.values()].reverse().find(value=>sameFragment(value.fragment,ctx.readingFragment));
+              ctx.fragmentJobId=saved?.id||null;ctx.edit=null;ctx.error=null;ctx.notice=null;render(ctx,true);
+            },"phrase-"+index);
+            repeat.disabled=busy(ctx);box.append(repeat);
+          }
           feedback.append(box);
         }
         if(result.hasMoreDifferences)feedback.append(el("p",t("moreDifferences"),"lexi-ai-muted"));
@@ -850,7 +923,7 @@
     destroy();host.replaceChildren();host.hidden=true;
     const ctx={host,runId,owner:app()?.accountKey?.(),epoch:++epoch,contentLang:langs.includes(detail.lang)?detail.lang:lang(),caps:null,options:null,
       controllers:new Set(),watches:new Map(),pollPaused:new Set(),reported:new Set(),consents:new Set(),
-      mode:"overview",summary:null,readingJobs:new Map(),readingId:null,conversation:null,dialogueJob:null,
+      mode:"overview",summary:null,readingJobs:new Map(),readingRepeats:new Map(),readingId:null,readingFragment:null,fragmentJobId:null,conversation:null,dialogueJob:null,
       media:null,mediaEpoch:0,paused:false,posting:false,ready:false,error:null,notice:null,edit:null,typed:false,typedText:""};
     current=ctx;restore(ctx);
     try{

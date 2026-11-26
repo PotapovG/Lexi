@@ -210,5 +210,25 @@ class RoutesTests(unittest.TestCase):
         self.assertEqual(status,200)
         self.assertIsNone(json.loads(body)["lesson"])
 
+
+    def test_phrase_audio_route_passes_only_source_locator_and_revision(self):
+        service=self.enable_audio()
+        path=("/api/ai/audio?kind=reading&runId=owned-run&lang=ru&readingId=dlg001"
+              "&operationId=phrase-operation&sourceJobId=owned-parent"
+              "&sourceRevision=2&differenceIndex=1")
+        with patch.object(service,"upload",return_value={"id":"child","status":"queued"}) as upload:
+            status,_,_=self.request("POST",path,b"audio",headers={"Content-Type":"audio/wav"})
+            self.assertEqual(status,200)
+            self.assertEqual(upload.call_args.kwargs["source_job_id"],"owned-parent")
+            self.assertEqual(upload.call_args.kwargs["source_revision"],2)
+            self.assertEqual(upload.call_args.kwargs["difference_index"],1)
+            self.assertNotIn("reference",upload.call_args.kwargs)
+        with patch.object(service,"upload") as upload:
+            status,body,_=self.request("POST",path+"&reference=arbitrary",b"audio",
+                                     headers={"Content-Type":"audio/wav"})
+            self.assertEqual((status,json.loads(body)["error"]),(400,"invalid_ai_request"))
+            upload.assert_not_called()
+
+
 if __name__=="__main__":
     unittest.main(verbosity=2)

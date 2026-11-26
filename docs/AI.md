@@ -30,6 +30,13 @@ correction, and invites another attempt. Tonos, punctuation, orthographic
 homophones and ASR spelling are not pronunciation evidence. There is no
 pronunciation percentage, phoneme grade, acoustic diagnosis or invented timing.
 
+A repeat action switches the reference to the selected phrase. The learner
+records only that phrase and receives a separate comparison; the original
+full-reading result stays unchanged. Saved phrase attempts can be reopened
+without another upload or paid request, and the learner can return to the
+whole text. A changed or expired source asks the learner to select a current
+phrase again instead of silently comparing against a different reference.
+
 A dialogue uses voice input and text output, with explicit text entry as a
 meaning-only fallback. A meaningful but grammatically imperfect answer counts;
 an uncertain recognition does not silently consume a turn. The server owns the
@@ -202,6 +209,16 @@ Use the normal account cookie, not a new AI identity. There is no public audio
 download endpoint. Audio duration comes from bounded server decoding, not a
 client-supplied timer. Unsupported formats and silent recordings fail before
 any paid call.
+
+For a phrase repeat, `audio` keeps `kind=reading`, `runId`, `lang` and
+`readingId`, and adds `sourceJobId`, `sourceRevision` and `differenceIndex`.
+The server derives the phrase from its own successful full-reading result;
+client-provided reference text is rejected. Owner, run, locale, source revision,
+retention and curriculum versions are checked again inside the short enqueue
+transaction after decoding. Operation replay is resolved first, so a committed
+retry remains idempotent if the parent transcript was later edited. The child
+job preserves a `fragment` descriptor and its own reference. `options` returns
+full results in `readingJobs` and phrase attempts separately in `readingRepeats`.
 
 ## Pilot and release gates
 

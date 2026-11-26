@@ -82,6 +82,10 @@ def post(handler,app,path):
             raise AIError("audio_type",415)
         if path=="/api/ai/audio":
             query={k:v[-1] for k,v in parse_qs(urlparse(handler.path).query).items()}
+            allowed={"kind","runId","lang","operationId","readingId","conversationId",
+                     "revision","sourceJobId","sourceRevision","differenceIndex"}
+            if set(query)-allowed:
+                raise AIError("invalid_ai_request",400)
             kind=query.get("kind")
             if kind not in ("reading","dialogue"):
                 raise AIError("invalid_kind",400)
@@ -100,7 +104,9 @@ def post(handler,app,path):
                 uid,kind,query.get("runId",""),query.get("lang","ru"),
                 query.get("operationId",""),data,content_type,
                 reading_id=query.get("readingId"),conversation_id=query.get("conversationId"),
-                revision=int(query.get("revision",0)))
+                revision=int(query.get("revision",0)),source_job_id=query.get("sourceJobId"),
+                source_revision=int(query["sourceRevision"]) if "sourceRevision" in query else None,
+                difference_index=int(query["differenceIndex"]) if "differenceIndex" in query else None)
         else:
             body=json.loads(data)
             if not isinstance(body,dict):
