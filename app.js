@@ -498,33 +498,52 @@
     const snapshot=pendingRemoteSnapshot;
     pendingRemoteSnapshot=null;
     if(!snapshot||!state.remoteEnabled||!state.remoteSessionId)return remoteQueue;
-    const epoch=state.remoteEpoch;
-    const sid=state.remoteSessionId;
+    const epoch=state.remoteEpoch,sid=state.remoteSessionId;
     remoteQueue=remoteQueue.catch(()=>{}).then(async()=>{
       if(epoch!==state.remoteEpoch||!state.loggedIn)return;
-      const op=state.remoteRevision?'save':'start';
-      const body={op,sessionId:sid,deviceId,revision:state.remoteRevision||0,snapshot};
+      const owns=remote=>remote?.exists&&remote.ownerDevice===deviceId&&remote.sessionId===sid;
+      const newer=(local,remote)=>Number(local?.count||0)>=Number(remote?.count||0)&&Number(local?.savedAt||0)>Number(remote?.savedAt||0);
+      const retain=local=>{if(!pendingRemoteSnapshot||Number(local.savedAt)>Number(pendingRemoteSnapshot.savedAt))pendingRemoteSnapshot=local;};
+      const post=body=>api("session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+      const body={op:state.remoteRevision?"save":"start",sessionId:sid,deviceId,revision:state.remoteRevision||0,snapshot,requestId:newRequestId()};
       try{
-        const reply=await api("session",{method:"POST",
-          headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-        if(epoch===state.remoteEpoch&&sid===state.remoteSessionId){
-          state.remoteRevision=reply.revision;
-          state.remoteSynced=true;
+        let reply;
+        try{reply=await post(body);}catch(first){
+          if(first.message==="session_conflict"||first.status===401)throw first;
+          reply=await post(body); // Same body and UUID reconcile a lost HTTP response.
         }
+        if(epoch!==state.remoteEpoch||sid!==state.remoteSessionId)return;
+        state.remoteRevision=Math.max(state.remoteRevision||0,reply.revision||0);
+        if(reply.reconciled){
+          const local=pendingRemoteSnapshot&&newer(pendingRemoteSnapshot,snapshot)?pendingRemoteSnapshot:snapshot;
+          if(newer(local,reply.snapshot)){
+            if(pendingRemoteSnapshot===local)pendingRemoteSnapshot=null;
+            reply=await post({op:"save",sessionId:sid,deviceId,revision:state.remoteRevision,snapshot:local,requestId:newRequestId()});
+            if(epoch!==state.remoteEpoch||sid!==state.remoteSessionId)return;
+            state.remoteRevision=Math.max(state.remoteRevision||0,reply.revision||0);
+            if(reply.reconciled&&newer(local,reply.snapshot))retain(local);
+          }
+        }
+        state.remoteSynced=reply.saved!==false||!newer(snapshot,reply.snapshot);
       }catch(err){
         if(epoch!==state.remoteEpoch)return;
+        state.remoteSynced=false;retain(snapshot);
         if(err.message==="session_conflict"){
-          state.remoteLost=true;
-          if(!$("quiz").hidden){
-            state.finishing=true;clearInterval(state.timer);
-            window.LexiWordAudio?.stop();
-            show("quiz",false);show("setup",true);
-            txt("setup-error",t("handoffStopped"));show("setup-error",true);
+          let remote=null;try{remote=await api("session");}catch{}
+          if(owns(remote)){
+            state.remoteRevision=Math.max(state.remoteRevision||0,remote.revision||0);
+            if(pendingRemoteSnapshot&&!newer(pendingRemoteSnapshot,remote.snapshot))pendingRemoteSnapshot=null;
+            if(pendingRemoteSnapshot&&!remoteTimer)remoteTimer=setTimeout(flushRemoteSnapshot,200);
+          }else if(remote){
+            state.remoteLost=true;pendingRemoteSnapshot=null;
+            if(!$("quiz").hidden){
+              state.finishing=true;clearInterval(state.timer);window.LexiWordAudio?.stop();
+              $("listening-audio").pause();show("quiz",false);show("setup",true);
+              txt("setup-error",t("handoffStopped"));show("setup-error",true);
+            }
           }
-        }else{
-          state.remoteSynced=false;
-          if(!$("quiz").hidden)txt("resume-message",t("sessionSyncUnavailable"));
         }
+        if(!state.remoteLost&&!$("quiz").hidden)txt("resume-message",t("sessionSyncUnavailable"));
       }
     });
     return remoteQueue;
@@ -563,7 +582,7 @@
         try{
           await api("session",{method:"POST",headers:{"Content-Type":"application/json"},
             body:JSON.stringify({op:"clear",sessionId:sid,deviceId,
-                                 revision})});
+                                 revision,requestId:newRequestId()})});
         }catch{} // A transferred session must never be deleted by its former owner.
       });
     }
@@ -591,7 +610,7 @@
           const claimed=await api("session",{method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({op:"takeover",sessionId:remote.sessionId,deviceId,
-                                 revision:remote.revision})});
+                                 revision:remote.revision,requestId:newRequestId()})});
           saved=claimed.snapshot;transferred=true;
           state.remoteSessionId=remote.sessionId;
           state.remoteRevision=claimed.revision;
@@ -666,6 +685,7 @@
   const state={joinedLeaderboard:false,catalog:null,topicCatalog:null,cultureAssisted:{},exam:null,examIndex:0,examSkew:0,examBusy:false,profile:null,loggedIn:false,authMode:"register",questions:[],index:0,current:null,mode:"all",answered:false,busy:false,
     correct:0,wrong:0,seen:[],sessionSkills:{},count:0,deadline:0,started:0,timer:null,finishing:false,settings:null,
     remoteEpoch:0,remoteSessionId:null,remoteRevision:0,remoteEnabled:true,remoteSynced:false,remoteLost:false};
+  let accountEpoch=0,profileProbe=null;
   const t=key => I18N[$("lang").value]?.[key] ?? I18N.en[key] ?? key;
   const hint=(value,en)=>$("lang").value!=="en"&&en&&value.trim().toLowerCase()!==en.trim().toLowerCase()?value+" ("+en+")":value;
   const training=()=>document.querySelector('input[name=training]:checked')?.value||"textbook";
@@ -687,7 +707,7 @@
     show("personalized-status",personal);
     if(personal)updatePersonalizedStatus();
   }
-  const show=(id,visible)=>{$(id).hidden=!visible;};
+  const show=(id,visible)=>{if(id==="auth-gate"&&window.LexiUI){window.LexiUI.auth(visible);return;}$(id).hidden=!visible;};
   const txt=(id,value)=>{$(id).textContent=String(value);};
   const duration=()=>Number(document.querySelector('input[name=duration]:checked')?.value||20);
   const mode=()=>document.querySelector('input[name=scope]:checked')?.value||"pages";
@@ -695,14 +715,29 @@
   const listeningRange=()=>$("listening-range").value;
   const selectedListeningKinds=()=>Array.from($("listening-difficulty").querySelectorAll('input:checked')).map(x=>x.value);
   const selectedKinds=()=>Array.from($("kind-options").querySelectorAll('input:checked')).map(x=>x.value);
+  function accountChangedError(){
+    const error=new Error("account_changed");error.status=409;return error;
+  }
   async function api(path,options){
-    const res=await fetch("/greek/api/"+path,{credentials:"same-origin",cache:"no-store",...options});
-    if(!res.ok){
-      let message="HTTP "+res.status;
-      try{const body=await res.json();if(body?.error)message=body.error;}catch{}
-      throw new Error(message);
+    const endpoint=path.split("?")[0],authChange=["auth/register","auth/login"].includes(endpoint);
+    const write=(options?.method||"GET").toUpperCase()==="POST",epoch=accountEpoch;
+    const headers=new Headers(options?.headers);
+    if(write&&!authChange){
+      if(!state.loggedIn||!state.profile?.accountKey)throw accountChangedError();
+      // Explicit caller ownership (for example an AI context) is immutable.
+      if(!headers.has("X-Lexi-Owner"))headers.set("X-Lexi-Owner",state.profile.accountKey);
     }
-    return res.json();
+    const res=await fetch("/greek/api/"+path,{credentials:"same-origin",cache:"no-store",...options,headers});
+    if(!res.ok){
+      let message="HTTP "+res.status,body={};
+      try{body=await res.json();if(body?.error)message=body.error;}catch{}
+      if(!authChange&&epoch!==accountEpoch)throw accountChangedError();
+      if(message==="account_changed"&&!endpoint.startsWith("ai/"))reconcileAccount();
+      const error=new Error(message);error.status=res.status;error.body=body;throw error;
+    }
+    const result=await res.json();
+    if(!authChange&&epoch!==accountEpoch)throw accountChangedError();
+    return result;
   }
   function saveSettings(){
     try {localStorage.setItem(STORAGE,JSON.stringify({
@@ -764,6 +799,9 @@
     document.querySelector(".brand").setAttribute("aria-label",t("footerBrand"));
     if($("auth-lang"))$("auth-lang").value=$("lang").value;
     if(window.lexiVocab)window.lexiVocab.onLanguageChange();
+    if(state.loggedIn&&!$("board-view").hidden)window.lexiBoard?.onLanguageChange?.();
+    if(state.loggedIn&&!$("life-view").hidden)window.lexiLife?.onLanguageChange?.();
+    if(state.loggedIn&&!$("tracks-view").hidden)window.lexiTracks?.onOpen?.();
     window.lexiCulture?.onLanguageChange();
     if(state.catalog)renderChapters();
     showScope();
@@ -776,6 +814,7 @@
     show("translation-note",["zh","ar","es","pt"].includes($("lang").value));
     txt("translation-note",t("translationNote"));
     if(state.loggedIn)refreshStats();
+    window.LexiUI?.apply();
   }
   function showScope(){
     const value=mode();
@@ -852,12 +891,16 @@
     $("mode-login").classList.toggle("active",login);
     txt("auth-submit",t(login?"authSignIn":"authCreate"));
     show("auth-error",false);
+    $("auth-name").required=!login;$("auth-input-code").required=login;
+    $("auth-name").disabled=login;$("auth-input-code").disabled=!login;
+    $("mode-register").setAttribute("aria-pressed",String(!login));$("mode-login").setAttribute("aria-pressed",String(login));
   }
   function setAuthMode(value){
     state.authMode=value;
     show("auth-success",false);show("auth-modes",true);show("auth-form",true);showAuthMode();
+    if(!$("auth-gate").hidden)queueMicrotask(()=>$(value==="login"?"auth-input-code":"auth-name").focus());
   }
-  function showAccountCode(code){txt("account-code",code||"••••••••");}
+  function showAccountCode(code){txt("account-code","••••••••");$("account-reveal")?.setAttribute("aria-expanded","false");if($("account-reveal"))$("account-reveal").textContent=window.LexiUI.t("showCode");}
   function authError(err){
     const dict={nickname_taken:"authTaken",invalid_credentials:"authBadCode",rate_limited:"authLimit",nickname_invalid:"authBadNick"};
     txt("auth-error",dict[err.message]?t(dict[err.message]):t("failed")+err.message);show("auth-error",true);
@@ -875,14 +918,23 @@
       localStorage.setItem(ACCESS_CODE_KEY,savedCode);showAccountCode(savedCode);
       state.loggedIn=true;state.profile={registered:true,nickname:result.nickname,avatar:"🎓"};
       txt("student-nickname",result.nickname);await refreshStats();
-      if(login){show("auth-gate",false);setAuthMode("register");await restoreActiveSession();
-        if(!state.deadline)setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");}
+      if(login){show("auth-gate",false);setAuthMode("register");await enterLearning();}
       else{
         txt("auth-created-code",savedCode);
         show("auth-modes",false);show("auth-form",false);show("auth-success",true);
+        $("auth-enter").focus();
       }
     }catch(err){authError(err);}
     finally{$("auth-submit").disabled=false;}
+  }
+  async function enterLearning(){
+    show("auth-gate",false);window.LexiUI.shell("loading");
+    try{
+      if(!await loadProfile())return;
+      const examRestored=await restoreCultureExam();
+      if(!examRestored)await restoreActiveSession();
+      if(!state.deadline)setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");
+    }catch(error){window.LexiUI.shell("error",enterLearning);}
   }
   async function copyAccessCode(){
     const code=localStorage.getItem(ACCESS_CODE_KEY);
@@ -894,13 +946,14 @@
     if(!confirm(t("authConfirmLogout")))return;
     try{
       await api("auth/logout",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"});
+      document.dispatchEvent(new CustomEvent("lexi:logout"));window.LexiWordAudio?.stop();$("listening-audio").pause();
       clearActiveSession();
       state.exam=null;state.examBusy=false;
-      localStorage.removeItem(ACCESS_CODE_KEY);state.profile=null;state.loggedIn=false;state.cultureAssisted={};
+      localStorage.removeItem(ACCESS_CODE_KEY);sessionStorage.removeItem("lexi-board-pending-v1");sessionStorage.removeItem("lexi-life-pending-v1");sessionStorage.removeItem("lexi-life-scene-v1");sessionStorage.removeItem("lexi-life-defer-v1");sessionStorage.removeItem("lexi-vocab-session-v1");state.profile=null;state.loggedIn=false;state.cultureAssisted={};
       showAccountCode("");setPage("practice");show("setup",true);show("quiz",false);show("finished",false);
       clearInterval(state.timer);state.deadline=0;state.finishing=true;
       await loadProfile();
-    }catch(err){alert(t("failed")+err.message);}
+    }catch(err){if(err.message!=="account_changed")alert(t("failed")+err.message);}
   }
   function renderTopics(){
     if(!state.topicCatalog)return;
@@ -1030,18 +1083,29 @@
     finally{button.disabled=false;}
   }
   function setPage(page){
+    if(!state.loggedIn){for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life","board","culture"])show(id+"-view",false);return;}
     if(page==="culture"&&state.exam?.status==="active")page="practice";
+    const previous=state.page;
+    if(previous&&previous!==page){
+      document.dispatchEvent(new CustomEvent("lexi:page-leave",{detail:{page:previous,nextPage:page}}));
+      ({board:window.lexiBoard,life:window.lexiLife,tracks:window.lexiTracks,vocab:window.lexiVocab,culture:window.lexiCulture}[previous])?.onLeave?.();
+      window.LexiWordAudio?.stop();
+      if(previous==="practice"){$("listening-audio")?.pause();persistActiveSession();}
+    }
+    state.page=page;
+    $("lang").disabled=page==="practice"&&!$("quiz").hidden&&!state.finishing;
+    document.body.classList.remove("lesson-active");
     for(const id of ["practice","vocab","weak","stats","leaderboard","tracks","life","board","culture"])show(id+"-view",id===page);
     const extra=$("additional-modes");
     if(extra){
       extra.open=false;
       const more=$("additional-modes-label");
       if(more){
-        const section=["board","practice"].includes(page)?"":
+        const section=["board","vocab"].includes(page)?"":
           (document.querySelector('.tab[data-page="'+page+'"]')?.innerText||"");
         const locale=$("lang").value;
-        more.textContent=(locale==="ru"?"Другие режимы":"More")+
-          (section?" · "+section:"")+" ⌄";
+        more.textContent=window.LexiUI.t("more")+" ⌄";
+        more.setAttribute("aria-label",window.LexiUI.t("more")+(section?" · "+section:""));
       }
     }
     document.querySelectorAll(".tab").forEach(button=>{
@@ -1056,6 +1120,7 @@
     else if(page==="culture")window.lexiCulture?.onOpen();
     else if(page==="tracks")window.lexiTracks?.onOpen();
     else if(page!=="practice")refreshStats();
+    document.dispatchEvent(new CustomEvent("lexi:page-enter",{detail:{page,previousPage:previous}}));
   }
   async function loadQuestions(){
     const opts={...state.settings};
@@ -1687,7 +1752,7 @@
 
   async function choose(index,overrideSelected,replayId=null){
     const q=state.current;
-    if(!q||state.finishing||state.answered||state.busy)return;
+    if(!q||state.finishing||state.answered||state.busy||$("practice-view").hidden||!$("auth-gate").hidden)return;
     // A lost reply to an already-heard listening answer must be replayable
     // on the new device with the exact original request UUID; no new
     // listening answer can be submitted until audio was actually played.
@@ -1960,7 +2025,7 @@
     });
   }
   async function nextQuestion(){
-    if(!state.answered||state.finishing)return;
+    if(!state.answered||state.finishing||$("practice-view").hidden)return;
     if(state.current?.kind==="verb"&&state.verbStage===1&&state.mode!=="weak"){
       renderVerbTranslation();return;
     }
@@ -2071,9 +2136,30 @@
       bar.append(fill);div.append(date,bar,txtNode);el.append(div);
     });
   }
+  function renderProgressScopes(scopes){
+    const container=$("progress-scopes");if(!container)return;container.replaceChildren();
+    if(!scopes)return;
+    const ui=window.LexiUI;
+    for(const [id,title,primary,secondary] of [
+      ["board","lessons",["lessonsCompleted","lessonsCompleted"],["reviewDue","reviewDue"]],
+      ["vocabulary","vocabulary",["practicedWords","practicedWords"],["reviewDue","reviewDue"]],
+      ["life","family_life",["attempts","attempts"],["correct","correct"]]
+    ]){
+      const value=scopes[id];if(!value)continue;
+      const article=document.createElement("article");article.className="progress-scope";
+      const heading=document.createElement("h3");heading.textContent=ui.t(title);article.append(heading);
+      for(const [key,label] of [primary,secondary]){
+        const line=document.createElement("p"),number=document.createElement("strong");
+        number.textContent=String(value[key]||0);line.append(number,document.createTextNode(" · "+ui.t(label)));article.append(line);
+      }
+      const link=document.createElement("button");link.type="button";link.className="text-button";
+      link.textContent=ui.t("openActivity");link.addEventListener("click",()=>setPage(value.destination));article.append(link);container.append(article);
+    }
+  }
   async function refreshStats(){
     try{
       const s=await api("stats");
+      renderProgressScopes(s.progressScopes);
       txt("hero-accuracy",s.attempts?s.accuracy+"%":"—");
       txt("hero-weak",s.weak);txt("weak-bubble",s.weak);txt("weak-count",s.weak);
       txt("stat-attempts",s.attempts);txt("stat-correct",s.correct);
@@ -2180,26 +2266,93 @@
       txt("leader-enrollment-hint",t("failed")+err.message);
     }finally{button.disabled=false;}
   }
-  async function loadProfile(){
-    try{
-      state.profile=await api("profile");
-      state.loggedIn=Boolean(state.profile.registered);
-      if(state.loggedIn){
-        txt("student-avatar",state.profile.avatar);
-        txt("student-nickname",state.profile.nickname);
-        txt("account-code",localStorage.getItem("greek-login-code-v1")||"••••••••");
-        show("auth-gate",false);
-        await refreshStats();
-      }else{
-        txt("student-nickname","—");
-        show("auth-gate",true);
-        showAuthMode();
+  async function loadProfile(suppliedProfile=null,epoch=accountEpoch){
+    let profile=suppliedProfile;
+    if(!profile){
+      try{profile=await api("profile");}
+      catch(error){
+        if(error.message==="account_changed")return false;
+        if(error.status===401||error.message==="login_required")profile={registered:false};else throw error;
       }
-    }catch{
-      txt("student-nickname","—");
-      show("auth-gate",true);
+    }
+    if(epoch!==accountEpoch)return false;
+    state.profile=profile;state.loggedIn=Boolean(profile.registered);
+    window.LexiUI.shell("ready");
+    if(state.loggedIn){
+      txt("student-avatar",profile.avatar||"λ");txt("student-nickname",profile.nickname);
+      showAccountCode("");show("auth-gate",false);refreshStats();
+    }else{txt("student-nickname","—");show("auth-gate",true);showAuthMode();}
+    return state.loggedIn;
+  }
+  function invalidateAccount(){
+    const previous=state.page;
+    accountEpoch++;state.profile=null;state.loggedIn=false;state.page=null;
+    // Do not delete localStorage snapshots: another tab may already own them.
+    state.remoteEpoch++;state.remoteSessionId=null;state.remoteRevision=0;state.remoteLost=false;state.remoteSynced=false;
+    if(remoteTimer){clearTimeout(remoteTimer);remoteTimer=null;}pendingRemoteSnapshot=null;
+    clearInterval(state.timer);state.timer=null;state.deadline=0;state.finishing=true;
+    state.pendingAnswer=null;state.questions=[];state.current=null;state.busy=false;
+    state.exam=null;state.examBusy=false;state.cultureAssisted={};
+    document.body.classList.remove("lesson-active");
+    setPage("board");window.LexiUI.shell("loading");show("auth-gate",false);
+    document.dispatchEvent(new CustomEvent("lexi:page-leave",{detail:{page:previous,nextPage:null,reason:"account_changed"}}));
+    document.dispatchEvent(new CustomEvent("lexi:logout",{detail:{reason:"account_changed"}}));
+    window.LexiWordAudio?.stop();$("listening-audio").pause();
+    for(const key of ["lexi-board-pending-v1","lexi-life-pending-v1","lexi-life-scene-v1","lexi-life-defer-v1","lexi-vocab-session-v1"]){
+      try{sessionStorage.removeItem(key);}catch{}
+    }
+    for(const id of ["board-map","board-play","life-roleplay-content","life-content","track-content"])$(id)?.replaceChildren();
+    show("setup",true);show("quiz",false);show("finished",false);
+    show("vocab-controls",true);show("vocab-lesson",false);
+    $("account-menu").open=false;$("additional-modes").open=false;$("lang").disabled=false;
+    txt("student-nickname","—");txt("auth-created-code","");showAccountCode("");
+    return accountEpoch;
+  }
+  async function reconcileAccount(confirmedProfile=null){
+    const epoch=invalidateAccount();
+    try{
+      if(!await loadProfile(confirmedProfile,epoch)||epoch!==accountEpoch)return false;
+      state.finishing=false;setPage("board");
+      return true;
+    }catch(error){
+      if(epoch===accountEpoch)window.LexiUI.shell("error",()=>reconcileAccount());
+      return false;
     }
   }
+  function verifyAccountOnReturn(){
+    if(!state.loggedIn||!state.profile?.accountKey||profileProbe||!$("auth-gate").hidden)return profileProbe;
+    const epoch=accountEpoch,owner=state.profile.accountKey;
+    profileProbe=(async()=>{
+      try{
+        const profile=await api("profile");
+        if(epoch!==accountEpoch)return;
+        if(!profile.registered||profile.accountKey!==owner)await reconcileAccount(profile);
+        // A same-owner check preserves the lesson DOM, draft, selection and focus.
+      }catch(error){
+        if(epoch===accountEpoch&&(error.status===401||error.message==="login_required"))await reconcileAccount({registered:false});
+      }finally{profileProbe=null;}
+    })();
+    return profileProbe;
+  }
+  window.addEventListener("storage",event=>{
+    if(event.storageArea===localStorage&&(event.key===ACCESS_CODE_KEY||event.key===null))reconcileAccount();
+  });
+  window.addEventListener("focus",verifyAccountOnReturn);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)verifyAccountOnReturn();});
+  window.LexiApp={
+    api,reconcileAccount,loggedIn:()=>state.loggedIn,currentLang:()=>$("lang").value,
+    accountKey:()=>state.profile?.accountKey||null,setPage,
+    routeToExistingReview:targetCardId=>{
+      setPage("weak");
+      let note=$("review-route-note");
+      if(!note){note=document.createElement("p");note.id="review-route-note";note.className="notice";note.dataset.ui="reviewRouteInfo";$("weak-view").prepend(note);}
+      note.textContent=window.LexiUI.t("reviewRouteInfo");note.tabIndex=-1;note.focus();
+      return {destination:"weak",targetCardId,exact:false};
+    },
+    refreshProgress:()=>refreshStats(),
+    requireLogin:()=>{invalidateAccount();window.LexiUI.shell("ready");show("auth-gate",true);setAuthMode("login");}
+  };
+  document.addEventListener("lexi:progress",()=>{if(state.loggedIn)refreshStats();});
   window.lexiCultureBridge={
     api,loggedIn:()=>state.loggedIn,
     start:options=>startQuiz(options.mode==="weak",false,options),
@@ -2225,12 +2378,17 @@
     $("mode-register").addEventListener("click",()=>setAuthMode("register"));
     $("mode-login").addEventListener("click",()=>setAuthMode("login"));
     $("auth-form").addEventListener("submit",submitAuth);
-    $("auth-enter").addEventListener("click",()=>{
-      show("auth-gate",false);
-      setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");
-    });
+    $("auth-enter").addEventListener("click",enterLearning);
     $("auth-copy").addEventListener("click",copyAccessCode);
     $("account-copy").addEventListener("click",copyAccessCode);
+    $("account-reveal").addEventListener("click",()=>{
+      const visible=$("account-reveal").getAttribute("aria-expanded")==="true";
+      const code=localStorage.getItem(ACCESS_CODE_KEY);
+      txt("account-code",!visible&&code?code:"••••••••");
+      $("account-reveal").setAttribute("aria-expanded",String(!visible));
+      $("account-reveal").textContent=window.LexiUI.t(visible?"showCode":"hideCode");
+    });
+    $("account-menu").addEventListener("toggle",()=>{if(!$("account-menu").open)showAccountCode("");});
     $("account-logout").addEventListener("click",signOut);
     $("listening-range").addEventListener("change",()=>{showScope();saveSettings();});
     $("listening-difficulty").addEventListener("change",saveSettings);
@@ -2241,8 +2399,7 @@
     $("verb-max-unit").addEventListener("change",()=>{renderVerbReference();renderVerbStageSummary();saveSettings();});
     $("verb-group-options").addEventListener("change",()=>{renderVerbStageSummary();saveSettings();});
     $("level-options").addEventListener("change",()=>{renderVerbReference();renderVerbStageSummary();saveSettings();});
-    $("lang").addEventListener("change",()=>{updateLanguage();saveSettings();
-      if(!$("board-view").hidden)window.lexiBoard?.onOpen();});
+    $("lang").addEventListener("change",()=>{updateLanguage();saveSettings();});
     $("auth-lang").addEventListener("change",()=>{
       $("lang").value=$("auth-lang").value;updateLanguage();saveSettings();
     });
@@ -2287,7 +2444,7 @@
       else {show("finished",false);show("setup",true);}
     });
     window.addEventListener("keydown",event=>{
-      if($("quiz").hidden||event.altKey||event.ctrlKey||event.metaKey||["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName))return;
+      if($("practice-view").hidden||$("quiz").hidden||!$("auth-gate").hidden||event.altKey||event.ctrlKey||event.metaKey||["INPUT","TEXTAREA","SELECT","BUTTON","A","SUMMARY"].includes(document.activeElement?.tagName))return;
       if(state.exam?.status==="active"){
         if(/^[1-4]$/.test(event.key)){event.preventDefault();changeCultureExamAnswer(Number(event.key)-1);}
         else if(event.key==="ArrowLeft"){event.preventDefault();navigateCultureExam(-1);}
@@ -2311,11 +2468,18 @@
       $("topic-grid").querySelectorAll("input").forEach(x=>x.checked=topics.includes(x.value));
     }catch(err){txt("setup-error",t("failed")+err.message);show("setup-error",true);}
     updateLanguage();
-    await loadProfile();
-    const examRestored=await restoreCultureExam();
-    if(!examRestored)await restoreActiveSession();
-    if(!state.deadline)
-      setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");
+    async function finishStartup(){
+      window.LexiUI.shell("loading");
+      try{
+        if(!state.catalog){state.catalog=await api("catalog");renderChapters();}
+        if(!state.topicCatalog){state.topicCatalog=await api("topics");renderTopics();renderVerbReference();renderVerbStageSummary();}
+        if(!await loadProfile())return;
+        const examRestored=await restoreCultureExam();
+        if(!examRestored)await restoreActiveSession();
+        if(!state.deadline)setPage(localStorage.getItem("lexi-home-interface")==="practice"?"practice":"board");
+      }catch(error){window.LexiUI.shell("error",finishStartup);}
+    }
+    await finishStartup();
   }
   init();
 })();

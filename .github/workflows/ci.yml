@@ -18,6 +18,20 @@ jobs:
         run: python3 tests/test_board_chapter_scope.py
       - name: Real chapter catalog board audit (1–7)
         run: python3 qa_board_chapter_audit.py
+      - name: Learning composition, receipts, evidence and recovery
+        run: |
+          python3 tests/test_learning_audit.py
+          python3 tests/test_learning_reliability.py
+          python3 qa_lessons.py
+          python3 qa_greek_life.py
+          python3 qa_life_answer_check.py
+      - name: Optional AI offline safety and transport contracts
+        run: |
+          python3 tests/test_ai_curriculum.py
+          python3 tests/test_ai_service.py
+          python3 tests/test_ai_routes.py
+          python3 tests/test_ai_transport.py
+          python3 tests/test_ai_evaluation.py
       - name: Cyprus Culture content contract and regression tests
         run: |
           python3 culture_content.py
@@ -65,5 +79,56 @@ jobs:
           sh -n ops/lexi-instance.sh
       - name: Validate Docker Compose
         run: docker compose config --quiet
-      - name: Build container
-        run: docker compose build
+      - name: Build container and verify the shipped curriculum
+        run: |
+          python3 scripts/catalog_fingerprint.py > "$RUNNER_TEMP/catalog-source.json"
+          docker compose build
+          docker compose run --rm -T --no-deps -v "$PWD/scripts/catalog_fingerprint.py:/tmp/catalog_fingerprint.py:ro" lexi python3 /tmp/catalog_fingerprint.py --app-root /app > "$RUNNER_TEMP/catalog-image.json"
+          diff -u "$RUNNER_TEMP/catalog-source.json" "$RUNNER_TEMP/catalog-image.json"
+      - name: Browser audio formats with the optional decoder
+        run: |
+          docker build --build-arg WITH_AI_AUDIO=1 -t lexi-audio-test .
+          docker run --rm --read-only --tmpfs /tmp -v "$PWD/tests/test_ai_transport.py:/tmp/test_ai_transport.py:ro" -e PYTHONPATH=/app lexi-audio-test python3 /tmp/test_ai_transport.py
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install pinned browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/lexi-browser" --no-audit --no-fund playwright@1.56.1
+          "$RUNNER_TEMP/lexi-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Real learning journey and optional AI interface
+        env:
+          GREEK_DB: /tmp/lexi-browser-${{ github.run_id }}.sqlite3
+          GREEK_PEPPER: /tmp/lexi-browser-${{ github.run_id }}-pepper
+          GREEK_HOST: 127.0.0.1
+          GREEK_PORT: '18560'
+          GREEK_ORIGIN: http://localhost:18560
+          GREEK_LISTENING: 'off'
+          LEXI_AI_STAGE: disabled
+          LEXI_UI_FIXTURES: '1'
+          LEXI_BASE_URL: http://localhost:18560
+          LEXI_ARTIFACT_DIR: ${{ runner.temp }}/lexi-artifacts
+          NODE_PATH: ${{ runner.temp }}/lexi-browser/node_modules
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          mkdir -p "$LEXI_ARTIFACT_DIR"
+          python3 server.py > "$LEXI_ARTIFACT_DIR/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          python3 -c 'import urllib.request,time; exec("for _ in range(100):\n try:\n  urllib.request.urlopen(\"http://localhost:18560/health\",timeout=1); break\n except OSError: time.sleep(.1)\nelse: raise SystemExit(\"isolated server did not start\")")'
+          node tests/test_learning_ui.cjs
+          node tests/test_ai_ui.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lexi-browser-synthetic-results
+          path: ${{ runner.temp }}/lexi-artifacts
+          retention-days: 7

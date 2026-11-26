@@ -1,0 +1,17 @@
+# Optional override. The ordinary compose.yaml remains free of API requirements.
+# Use only after the quality/cohort gates in docs/AI.md.
+services:
+  lexi:
+    build:
+      context: .
+      args:
+        WITH_AI_AUDIO: "1"
+    environment:
+      LEXI_AI_STAGE: ${LEXI_AI_STAGE:-disabled}
+      LEXI_AI_FEATURES: ${LEXI_AI_FEATURES:-}
+      LEXI_AI_COHORT: ${LEXI_AI_COHORT:-}
+      LEXI_AI_SPEECH_VALIDATED: ${LEXI_AI_SPEECH_VALIDATED:-0}
+      LEXI_OPENAI_API_KEY: ${LEXI_OPENAI_API_KEY:-}
+      LEXI_AI_MONTH_USD: ${LEXI_AI_MONTH_USD:-10}
+      LEXI_AI_DAY_USD: ${LEXI_AI_DAY_USD:-0.50}
+      LEXI_AI_JOB_USD: ${LEXI_AI_JOB_USD:-0.10}

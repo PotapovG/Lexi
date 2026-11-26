@@ -40,8 +40,9 @@ exact browser origin.
 ### Optional Pocket TTS recordings
 
 Source installs do **not** contain ~200 MB of pre-rendered audio.
-All spoken Greek must be played from pre-rendered Pocket TTS WAV; device
-speech and paid API fallback are intentionally disabled.
+Greek playback uses pre-rendered Pocket TTS WAV; device speech and paid TTS
+fallback are disabled. Optional learner microphone input is a separate,
+default-off AI feature and does not replace Pocket playback.
 
 Without audio, **text exercises work** and the separate listening mode is
 disabled automatically. Use the [versioned audio release](https://github.com/PotapovG/Lexi/releases/tag/audio-v1)
@@ -65,6 +66,25 @@ docker compose restart lexi
 All media files are verified against the immutable SHA256 manifest shipped
 with the Git repository. See [media distribution](docs/MEDIA.md).
 Do not commit WAVs or model weights into ordinary Git history.
+
+### Learning journey and optional AI
+
+The existing lesson board is the main learning path: continue a saved lesson,
+choose an answer, check it, read the feedback and then continue. Practice,
+mistake review, the vocabulary catalog, Classic and Cyprus Culture remain
+available from the existing navigation. Scoped progress labels separate these
+learning areas. See [the actual chapter/lesson matrix](docs/LEARNING_PATH.md).
+
+Optional AI can summarize a completed lesson using retained first-answer
+evidence, compare a reading with an independently recognized transcript, and
+run a short voice-answer/text-response dialogue. It is **disabled by default**.
+The free ordinary course does not require an API key. ASR comparisons do not
+measure pronunciation; edited transcripts are explicitly identified.
+
+Read [configuration, privacy, limits and pilot gates](docs/AI.md) before enabling
+any feature. Real Greek speech quality, mobile microphone behavior and live
+provider cost remain release gates; automated fake-provider tests do not
+certify them.
 
 ### Public HTTPS
 

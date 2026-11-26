@@ -3,6 +3,7 @@
 Static contract only. Real mobile/accessibility QA remains in #41.
 """
 from pathlib import Path
+import re
 
 root=Path(__file__).parent
 app=(root/"app.js").read_text(encoding="utf-8")
@@ -19,7 +20,8 @@ assert html.count('id="answers"')==1, "must reuse existing answer choices"
 assert html.count('id="finished"')==1, "must reuse existing finish panel"
 assert 'id="culture-exam" disabled' in html, "initially fail closed until review gate"
 assert 'culture_ui.js?v=2' in html
-assert 'app.js?v=48' in html
+asset_version=re.search(r"app\.js\?v=(\d+)",html)
+assert asset_version and int(asset_version.group(1))>=48, "exam-capable app asset must invalidate older caches"
 
 for symbol in (
     "function enterCultureExam(", "function renderCultureExam(",

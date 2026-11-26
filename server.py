@@ -10,6 +10,8 @@ import random
 import re
 import secrets
 import sqlite3
+import sys
+import ai_routes as _ai_routes
 import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -48,6 +50,8 @@ import quiz_clock_balance as _clock_balance
 import mixed_review_selection as _mixed_review_selection
 import order_valid_permutations as _order_variants
 import answer_idempotency
+import learning_receipts as _receipts
+import lesson_evidence as _evidence
 import dialogue_translations as _dialogue_glosses
 import dialogue_full as _full_dialogues
 import lesson_session_sync as _lesson_sync
@@ -103,6 +107,11 @@ COOKIE = "greek_session"
 KINDS = ("word", "number", "letter", "phrase", "plural", "sentence", "accent", "verb", "dialogue", "article", "order", "syllable", "enclitic", "grammar", "listening", "clock")
 DIRECTIONS = ("mixed", "gr-ru", "ru-gr")
 COUNT_MAX = 60
+
+def profile_owner_key(uid):
+    """Non-secret browser context marker, separate from authentication."""
+    return hashlib.sha256(("lexi-ui-owner:"+uid).encode()).hexdigest()[:32]
+
 # No audio files in a fresh clone: hide listening mode until both complete
 # offline libraries have been installed (never fall back to device TTS).
 _MEDIA_COMPLETE = (len(LISTEN_CARDS) == 717 and len(listening.AUDIO) == 1266)
@@ -152,6 +161,8 @@ def init_db():
         if "assisted" not in columns:
             db.execute("ALTER TABLE attempts ADD COLUMN assisted INTEGER NOT NULL DEFAULT 0")
         answer_idempotency.schema(db)
+        _receipts.schema(db)
+        _evidence.schema(db)
         _lesson_sync.schema(db)
         _culture_exam.schema(db)
         auth.schema(db)
@@ -359,10 +370,8 @@ def valid_weak_entries(user_id, display_lang="ru", scope="book"):
             elif card["kind"]=="plural":allowed={"sg-pl","pl-sg"}
             else:allowed={"gr-ru","ru-gr"}
             if direction not in allowed:continue
-            source_lang=bits[2] if len(bits)==3 else ("ru" if card["kind"] not in ("accent","dialogue","article","order","syllable","enclitic","grammar") else display_lang)
-            if card["kind"]=="culture":
-                source_lang=display_lang if display_lang in ("ru","en") else "ru"
-            if source_lang not in ("ru","en","zh","ar","es","pt"):continue
+            source_lang=learning_engine.review_language(card,key,display_lang)
+            if source_lang is None:continue
             if card_key(card,direction,source_lang)!=key:continue
             results.append(dict(card=card,direction=direction,lang=source_lang,
                                 key=key,missDebt=row["miss_debt"],attempts=row["attempts"]))
@@ -543,34 +552,33 @@ def estimate_capacity(user_id,params):
 
 
 def make_srs_due_quiz(user_id,params,display_lang,count,exclude):
-    """Opt-in scheduled answer-direction review; never serves another account's data."""
+    """Scan the finite due snapshot after scope/exclusion/locale validation."""
     with conn() as db:
-        rows=learning_engine.due_entries(db,user_id)
         questions=[]
-        for row in rows:
+        available=0
+        for row in learning_engine.iter_due_entries(db,user_id,scope="book"):
             key=row['card_key']
-            if key.startswith(("cyq_","cyv_")) or key in exclude:continue
             bits=key.split(':')
             if len(bits) not in (2,3):continue
             cid,direction=bits[:2]
+            if key in exclude or cid in exclude:continue
             card=book_or_audio_card(cid)
             if card is None and cid.startswith('personal_'):
                 wid=cid[len('personal_'):]
                 if wid in vocab.VOCAB_BY_ID and personalized.is_learned(db,user_id,wid):
                     card=personalized.to_card(vocab.VOCAB_BY_ID[wid])
             if not card or card['kind']=='listening' and not LISTENING_ENABLED:continue
-            lang=bits[2] if len(bits)==3 else (
-                display_lang if card['kind'] in ('accent','dialogue','article','order','syllable') else 'ru')
-            if lang not in ('ru','en','zh','ar','es','pt'):continue
-            if card_key(card,direction,lang)!=key:continue
+            lang=learning_engine.review_language(card,key,display_lang)
+            if lang is None or card_key(card,direction,lang)!=key:continue
             try:
                 shape(card,direction,lang)
-                questions.append(format_question(card,direction,lang,weak=True,
-                    variant_index=row['attempts']%2 if card['kind']=='listening' else None))
+                if len(questions)<count:
+                    questions.append(format_question(card,direction,lang,weak=True,
+                        variant_index=row['attempts']%2 if card['kind']=='listening' else None))
             except (ValueError,IndexError,KeyError,TypeError):continue
-            if len(questions)>=count:break
-    return dict(questions=questions,available=len(rows),count=len(questions),
-                mode='srs_due',pagePrecision='approximate',lang=display_lang)
+            available+=1
+    return dict(questions=questions,available=available,count=len(questions),
+                scope="book",mode='srs_due',pagePrecision='approximate',lang=display_lang)
 
 
 def make_global_weak_quiz(user_id,params,display_lang,count,exclude):
@@ -600,7 +608,7 @@ def make_culture_quiz(user_id,params,lang,mode,count,exclude):
     with conn() as db:
         records=db.execute("""SELECT card_key,miss_debt,attempts FROM progress
              WHERE user_id=? AND substr(card_key,1,4)='cyq_'""",(user_id,)).fetchall()
-        due={r["card_key"] for r in learning_engine.due_entries(db,user_id)}
+        due={r["card_key"] for r in learning_engine.iter_due_entries(db,user_id,scope="culture")}
     debts={r["card_key"]:r["miss_debt"] for r in records}
     attempted={r["card_key"]:r["attempts"] for r in records}
     random.shuffle(cards)
@@ -1016,6 +1024,129 @@ def culture_stats(user_id):
                 masteredQuestionKeys=sum(bool(r["correct"]) for r in progress))
 
 
+def _board_materials():
+    return (PRACTICE_ALL+LISTEN_CARDS,vocab.VOCAB,format_question,
+            _grammar_guard.milestone,LISTENING_ENABLED,
+            lambda gr:_word_audio.lookup(gr,listening))
+
+
+def board_read(db,uid,lang):
+    result=_board.board_get(db,uid,lang,*_board_materials())
+    result["lastReceipt"]=_receipts.pending(db,uid,"board")
+    return result
+
+
+def board_write(db,uid,body):
+    lang=body.get("lang","ru")
+    if body.get("action")=="ack_feedback":
+        ack=_receipts.acknowledge(db,uid,"board",body.get("requestId"))
+        return dict(board_read(db,uid,lang),**ack)
+    def perform(token):
+        state,revision,_=_board._load(db,uid)
+        active=state.get("active")
+        original=(_board._view(state,revision,lang).get("lesson") if active else None)
+        result=_board.board_action(db,uid,lang,body,mark,_board_materials())
+        receipt=None
+        if body.get("action") in ("answer","skip") and active:
+            _evidence.record(db,uid,active,body,result,token)
+            receipt={"questionId":active["items"][active["at"]]["id"],
+                     "questionAt":active["at"],"lessonIndex":active["index"],
+                     "runId":active.get("runId"),"selected":body.get("selected"),
+                     "question":original["question"] if original else active["items"][active["at"]],
+                     "lesson":{k:v for k,v in (original or {}).items() if k!="question"},
+                     "feedback":result.get("feedback"),"revision":result["revision"]}
+        else:
+            updated,_,_=_board._load(db,uid)
+            _evidence.begin(db,uid,updated.get("active"))
+        _evidence.prune(db,uid)
+        return result,receipt
+    result=_receipts.commit(db,uid,"board",body,perform,
+        scope_id="" if body.get("action") in ("answer","skip") else None)
+    # A replay retains its original feedback while returning today's course
+    # position. Another tab may have advanced or paused after the first commit.
+    if result.get("replayed"):
+        fresh=board_read(db,uid,lang)
+        fresh.update({k:result[k] for k in ("feedback","lastReceipt","requestId","replayed") if k in result})
+        result=fresh
+    elif "lastReceipt" not in result:
+        result["lastReceipt"]=_receipts.pending(db,uid,"board")
+    return result
+
+
+def life_scene_read(db,uid,lang,sid):
+    result=_life.scene_get(db,uid,lang,sid)
+    result["lastReceipt"]=_receipts.pending(db,uid,"life",lang+":"+sid)
+    return result
+
+
+def life_scene_write(db,uid,body):
+    lang=body.get("lang","ru")
+    sid=body.get("id")
+    if not isinstance(sid,str):raise ValueError("invalid_scene")
+    scope=lang+":"+sid
+    if body.get("action")=="ack_feedback":
+        ack=_receipts.acknowledge(db,uid,"life",body.get("requestId"),scope)
+        return dict(life_scene_read(db,uid,lang,sid),**ack)
+    def perform(token):
+        original=_life.scene_get(db,uid,lang,sid)
+        result=_life.scene_answer(db,uid,lang,body)
+        receipt={"questionId":sid,"selected":body.get("answer"),
+                 "question":original,"feedback":dict(result),"revision":result["revision"]}
+        return result,receipt
+    return _receipts.commit(db,uid,"life",body,perform,scope_id=scope)
+
+
+def life_settings_write(db,uid,body):
+    lang=body.get("lang","ru")
+    def perform(token):
+        result=(_life.skip_scene(db,uid,lang,body) if body.get("action")=="skip"
+                else _life.update_settings(db,uid,lang,body))
+        return result,None
+    result=_receipts.commit(db,uid,"life-settings",body,perform)
+    if result.get("replayed"):
+        fresh=_life.current_settings(db,uid,lang)
+        fresh.update(requestId=result["requestId"],replayed=True)
+        result=fresh
+    return result
+
+
+def vocabulary_write(db,uid,body):
+    return _receipts.commit(db,uid,"vocabulary",body,
+                           lambda token:(vocab.answer(db,uid,body),None))
+
+
+def progress_scopes(db,uid):
+    """Separate read models: their counts overlap and must never be added."""
+    state,_,_=_board._load(db,uid)
+    lessons=state.get("lessons",[])
+    active=state.get("active")
+    records=lessons+([active] if active else [])
+    board={"lessonsCompleted":len(lessons),
+           "answers":sum(x.get("attempts",0) for x in records),
+           "correct":sum(x.get("correct",0) for x in records),
+           "errors":sum(x.get("errors",0) for x in records),
+           "unverifiedOrSkipped":sum(x.get("skips",0) for x in records),
+           "reviewDue":sum(bool(x.get("due")) for x in state.get("backlog",{}).values()),
+           "destination":"board"}
+    life={"attempts":0,"correct":0,"errors":0,"unverified":0,"skipped":0,"destination":"life"}
+    for row in db.execute("SELECT data FROM learning_tracks WHERE user_id=? AND name='life'",(uid,)):
+        values=json.loads(row["data"]).get("results",{}).values()
+        for item in values:
+            for name in ("attempts","correct","errors","skipped"):
+                life[name]+=item.get(name,0)
+            life["unverified"]+=max(0,item.get("attempts",0)-item.get("correct",0)-item.get("errors",0))
+    vocabulary={"attempts":0,"correct":0,"reviewDue":0,"practicedWords":0,"destination":"vocab"}
+    for row in db.execute("SELECT word_id,attempts,correct,miss_debt FROM vocab_progress WHERE user_id=?",(uid,)):
+        if row["word_id"] not in vocab.VOCAB_BY_ID:continue
+        vocabulary["attempts"]+=row["attempts"]
+        vocabulary["correct"]+=row["correct"]
+        vocabulary["reviewDue"]+=int(row["miss_debt"]>0)
+        vocabulary["practicedWords"]+=1
+    return {"countsAreAdditive":False,"quizCoverage":"scored_book_cards",
+            "quizIncludesBoardQuizAnswers":True,
+            "board":board,"life":life,"vocabulary":vocabulary}
+
+
 def stats(user_id,scope="book"):
     if scope=="culture":
         return culture_stats(user_id)
@@ -1059,6 +1190,7 @@ def stats(user_id,scope="book"):
     with conn() as db:
         srs_status=learning_engine.status(db,user_id,scope="book")
         detailed['vocabTopics']=learning_upgrade.vocabulary_knowledge(db,user_id,vocab.VOCAB_BY_ID)
+        scoped_progress=progress_scopes(db,user_id)
     actionable={x["key"] for x in valid}
     archive_count=total_weak-len(valid)
     return {
@@ -1068,7 +1200,8 @@ def stats(user_id,scope="book"):
         "recentAccuracy":round(100*sum(r["correct"] for r in rows[:30])/len(rows[:30])) if rows else 0,
         "categories":categories,"units":units,
         "mastery":learning_engine.mastery(rows,book_or_audio_card),
-        "details":detailed,
+        "details":detailed,"progressScopes":scoped_progress,
+        "scope":"scored_book_cards","historyWindow":20000,
         "daily":[{"date":d,**daily[d]} for d in sorted(daily)[-14:]],
         "weakest":[{"key":r["card_key"],"missDebt":r["miss_debt"],"attempts":r["attempts"]}
                     for r in debt if r["card_key"] in actionable][:12],
@@ -1182,7 +1315,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Referrer-Policy","no-referrer")
         self.send_header("X-Frame-Options","DENY")
         self.send_header("Cache-Control","public, max-age=300" if cache else "no-store")
-        self.send_header("Content-Security-Policy","default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self'; img-src 'self' data:; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'")
+        self.send_header("Content-Security-Policy","default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' blob:; img-src 'self' data:; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'")
         if fresh_cookie and user_id:
             self.send_header("Set-Cookie",f"{COOKIE}={user_id}; Path=/greek/; Max-Age=31536000; HttpOnly; Secure; SameSite=Lax")
         self.end_headers()
@@ -1206,7 +1339,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith('/pronunciation/'):
             return self.send_pronunciation(path[len('/pronunciation/'):],head=True)
         files = {"/":"index.html","/index.html":"index.html",
-                 "/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+                 "/app.js":"app.js","/ui.js":"ui.js","/ai_ui.js":"ai_ui.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css","/ai_ui.css":"ai_ui.css"}
         filename = files.get(path)
         if filename:
             file = ROOT / filename
@@ -1384,9 +1517,14 @@ class Handler(BaseHTTPRequestHandler):
         token,new=self.identity()
         with conn() as db:account=auth.current(db,token)
         uid=account["user_id"] if account else token
+        if path.startswith("/api/ai/"):
+            if not account:
+                return self.send_json(401,{"error":"login_required"},new,token)
+            return _ai_routes.get(self,sys.modules[__name__],uid,path,new,token)
         if path=="/api/profile":
             return self.send_json(200,dict(registered=bool(account),
                  nickname=account["nickname"] if account else None,
+                 accountKey=profile_owner_key(uid) if account else None,
                  avatar=pseudonym(uid)["avatar"] if account else None),new,token)
         if path in ("/api/culture/exam","/api/quiz","/api/capacity","/api/stats","/api/leaderboard","/api/vocab/lesson","/api/personalized/status","/api/srs/status","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene","/api/board") and not account:
             return self.send_json(401,{"error":"login_required"},new,token)
@@ -1402,10 +1540,7 @@ class Handler(BaseHTTPRequestHandler):
             qp=parse_qs(urlparse(self.path).query)
             language=qp.get("lang",["ru"])[0]
             with conn() as db:
-                result=_board.board_get(db,uid,language,
-                    PRACTICE_ALL+LISTEN_CARDS,vocab.VOCAB,format_question,
-                    _grammar_guard.milestone,LISTENING_ENABLED,
-                    lambda gr:_word_audio.lookup(gr,listening))
+                result=board_read(db,uid,language)
             return self.send_json(200,result,new,uid)
         if path=="/api/session":
             with conn() as db:result=_lesson_sync.read(db,uid)
@@ -1425,7 +1560,7 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 with conn() as db:
                     result=(_life.current_settings(db,uid,language) if path=="/api/life"
-                            else _life.scene_get(db,uid,language,qp.get("id",[""])[0]))
+                            else life_scene_read(db,uid,language,qp.get("id",[""])[0]))
             except ValueError as e:return self.send_json(403,{"error":str(e)},new,uid)
             return self.send_json(200,result,new,uid)
         if path in ("/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
@@ -1529,7 +1664,7 @@ class Handler(BaseHTTPRequestHandler):
                  listeningByChapter={str(n):sum(x["chapter"]==n for x in LISTEN_CARDS) for n in range(1,21)},
                  printedUnits=20,reviewUnits=[5,10,15,20],pdfOffset=2,
                  pagePrecision="approximate",source="Verified printed unit start/end and pedagogy from uploaded Patakis PDF; independently authored practice questions, approximate within-unit page anchors"),new,uid)
-        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css"}
+        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/ui.js":"ui.js","/ai_ui.js":"ai_ui.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css","/ai_ui.css":"ai_ui.css"}
         file=files.get(path)
         if file:
             b=(ROOT/file).read_bytes()
@@ -1539,6 +1674,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_json(404,{"error":"not found"},new,uid)
     def do_POST(self):
         path=request_path(self.path)
+        if path.startswith("/api/ai/"):
+            return _ai_routes.post(self,sys.modules[__name__],path)
         if path not in ("/api/culture/exam","/api/answer","/api/leaderboard/join","/api/leaderboard/leave",
                          "/api/auth/register","/api/auth/login","/api/auth/logout",
                          "/api/vocab/answer","/api/session","/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero","/api/life","/api/life/scene","/api/board"):
@@ -1572,6 +1709,10 @@ class Handler(BaseHTTPRequestHandler):
             with conn() as db:account=auth.current(db,token)
             if not account:return self.send_json(401,{"error":"login_required"},new,token)
             uid=account["user_id"]
+            expected_owner=self.headers.get("X-Lexi-Owner")
+            if expected_owner and not secrets.compare_digest(expected_owner.encode(),profile_owner_key(uid).encode()):
+                self.close_connection=True
+                return self.send_json(409,{"error":"account_changed"},new,token)
             if path=="/api/auth/logout":
                 with conn() as db:auth.logout(db,token)
                 return self.send_json(200,{"loggedOut":True},True,secrets.token_hex(16))
@@ -1581,10 +1722,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(200,result,new,uid)
             if path=="/api/board":
                 with conn() as db:
-                    result=_board.board_action(db,uid,body.get("lang","ru"),body,mark,
-                        (PRACTICE_ALL+LISTEN_CARDS,vocab.VOCAB,format_question,
-                         _grammar_guard.milestone,LISTENING_ENABLED,
-                         lambda gr:_word_audio.lookup(gr,listening)))
+                    result=board_write(db,uid,body)
                 return self.send_json(200,result,new,uid)
             if path=="/api/session":
                 with conn() as db:result=_lesson_sync.action(db,uid,body)
@@ -1592,13 +1730,8 @@ class Handler(BaseHTTPRequestHandler):
             if path in ("/api/life","/api/life/scene"):
                 language=body.get("lang","ru")
                 with conn() as db:
-                    response=(
-                        _life.skip_scene(db,uid,language,body)
-                        if path=="/api/life" and body.get("action")=="skip" else
-                        _life.update_settings(db,uid,language,body)
-                        if path=="/api/life" else
-                        _life.scene_answer(db,uid,language,body)
-                    )
+                    response=(life_settings_write(db,uid,body) if path=="/api/life"
+                              else life_scene_write(db,uid,body))
                 return self.send_json(200,response,new,uid)
             if path in ("/api/tracks/anki","/api/tracks/route","/api/tracks/likes","/api/tracks/periptero"):
                 language=body.get("lang","ru")
@@ -1615,7 +1748,8 @@ class Handler(BaseHTTPRequestHandler):
                         response=_games.store_action(db,uid,language,body,_life.ensure(db,uid,language,"periptero"))
                 return self.send_json(200,response,new,uid)
             if path=="/api/vocab/answer":
-                with conn() as db:return self.send_json(200,vocab.answer(db,uid,body),new,uid)
+                with conn() as db:response=vocabulary_write(db,uid,body)
+                return self.send_json(200,response,new,uid)
             if path in ("/api/leaderboard/join","/api/leaderboard/leave"):
                 with conn() as db:
                     if path.endswith("/join"):
@@ -1636,14 +1770,27 @@ class Handler(BaseHTTPRequestHandler):
         except (ValueError,json.JSONDecodeError) as error:
             self.close_connection=True
             reason=str(error)
-            status=429 if reason=="rate_limited" else 409 if reason in ("nickname_taken","already_registered","session_conflict","stale_track","active_culture_exam","stale_exam_revision") else 401 if reason=="invalid_credentials" else 400
-            return self.send_json(status,{"error":reason if reason in ("nickname_invalid","nickname_taken","already_registered","invalid_credentials","rate_limited","session_conflict","stale_track","active_culture_exam","stale_exam_revision","not_enough_reviewed_culture_facts","exam_already_finished") else "invalid request"})
+            status=429 if reason=="rate_limited" else 409 if reason in ("nickname_taken","already_registered","session_conflict","stale_track","active_culture_exam","stale_exam_revision","request_id_reused","receipt_expired") else 401 if reason=="invalid_credentials" else 400
+            return self.send_json(status,{"error":reason if reason in ("nickname_invalid","nickname_taken","already_registered","invalid_credentials","rate_limited","session_conflict","stale_track","active_culture_exam","stale_exam_revision","not_enough_reviewed_culture_facts","exam_already_finished","request_id_reused","receipt_expired") else "invalid request"})
         except Exception:
             self.close_connection=True
             return self.send_json(500,{"error":"write failed"})
 
 if __name__=="__main__":
     init_db()
+    # Retention maintenance is independent of paid features and starts even
+    # with AI disabled. Optional initialization cannot prevent ordinary lessons.
+    ai_engine = None
+    try:
+        ai_engine = _ai_routes.engine(sys.modules[__name__])
+    except Exception as error:
+        print("Optional AI initialization unavailable: " + type(error).__name__, file=sys.stderr)
     port=int(os.environ.get("GREEK_PORT","18560"))
-    ThreadingHTTPServer((os.environ.get("GREEK_HOST","127.0.0.1"),port),Handler).serve_forever()
+    httpd = ThreadingHTTPServer((os.environ.get("GREEK_HOST","127.0.0.1"),port),Handler)
+    try:
+        httpd.serve_forever()
+    finally:
+        httpd.server_close()
+        if ai_engine:
+            ai_engine.close()
 

@@ -54,12 +54,58 @@ def status(db,user_id,now=None,scope="all"):
                       FROM srs_schedule WHERE user_id=?"""+clause,(now,user_id)).fetchone()
     return dict(scheduled=row["total"],due=row["due"] or 0,optInOnly=True)
 
-def due_entries(db,user_id,now=None,limit=500):
-    now=now or dt.datetime.now(UTC).isoformat(timespec="seconds")
+def _due_cursor(db,user_id,now,scope):
+    if scope not in ("all","book","culture"):raise ValueError("invalid srs scope")
+    clause=("" if scope=="all" else
+            " AND substr(s.card_key,1,4) IN ('cyq_','cyv_')" if scope=="culture" else
+            " AND substr(s.card_key,1,4) NOT IN ('cyq_','cyv_')")
     return db.execute("""SELECT s.card_key AS card_key,COALESCE(p.attempts,0) AS attempts
           FROM srs_schedule s LEFT JOIN progress p ON p.user_id=s.user_id AND p.card_key=s.card_key
-          WHERE s.user_id=? AND s.due_at<=?
-          ORDER BY s.due_at ASC LIMIT ?""",(user_id,now,limit)).fetchall()
+          WHERE s.user_id=? AND s.due_at<=?"""+clause+
+          " ORDER BY s.due_at ASC,s.card_key ASC",(user_id,now))
+
+def iter_due_entries(db,user_id,now=None,scope="all",batch_size=200):
+    """Stream one finite SQLite snapshot; unavailable cards cannot hide later ones.
+
+    Callers apply catalog/exclude/media gates before counting available items.
+    Scope is filtered in SQL; memory is bounded without a raw 500-row window.
+    """
+    now=now or dt.datetime.now(UTC).isoformat(timespec="seconds")
+    if isinstance(batch_size,bool) or not isinstance(batch_size,int) or not 1<=batch_size<=1000:
+        raise ValueError("invalid srs batch size")
+    cursor=_due_cursor(db,user_id,now,scope)
+    try:
+        while True:
+            rows=cursor.fetchmany(batch_size)
+            if not rows:break
+            yield from rows
+    finally:
+        cursor.close()
+
+def due_entries(db,user_id,now=None,limit=500,scope="all"):
+    """Compatibility list API; new consumers should stream and gate eligibility."""
+    if isinstance(limit,bool) or not isinstance(limit,int) or not 1<=limit<=10000:
+        raise ValueError("invalid srs limit")
+    now=now or dt.datetime.now(UTC).isoformat(timespec="seconds")
+    cursor=_due_cursor(db,user_id,now,scope)
+    try:return cursor.fetchmany(limit)
+    finally:cursor.close()
+
+NEUTRAL_KEY_KINDS=frozenset(("accent","dialogue","article","order","syllable",
+                           "enclitic","grammar","clock","culture"))
+
+def review_language(card,key,display_lang):
+    """Resolve display language without changing any historical progress key."""
+    bits=key.split(":")
+    if len(bits) not in (2,3) or bits[0]!=card.get("id"):return None
+    kind=card.get("kind")
+    if kind=="culture":
+        return display_lang if display_lang in ("ru","en") and len(bits)==2 else None
+    if kind in NEUTRAL_KEY_KINDS:
+        return display_lang if display_lang in LANGS and len(bits)==2 else None
+    lang=bits[2] if len(bits)==3 else "ru"
+    return lang if lang in LANGS else None
+
 
 def pace_seconds(db,user_id):
     """Robust observed pace from nearby answers. Long breaks are ignored."""

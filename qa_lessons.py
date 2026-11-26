@@ -25,7 +25,9 @@ with tempfile.TemporaryDirectory() as td:
     def correct(q):
         if q["type"]=="life":return server._life.BY_ID[q["id"]]["accepted"][0]
         if q["type"]=="lexicon":return server.vocab.VOCAB_BY_ID[q["id"]][q["lang"]]
-        return server.shape(server.book_or_audio_card(q["id"]),q["direction"],q["lang"])[1]
+        card=server.book_or_audio_card(q["id"])
+        if q["kind"]=="accent":return str(card["accent_index"])
+        return server.shape(card,q["direction"],q["lang"])[1]
 
     initial=get()
     assert initial["schema"]==2 and initial["round"]==1
@@ -88,7 +90,7 @@ with tempfile.TemporaryDirectory() as td:
     assert passed["lesson"]["at"]==2 and passed["lesson"]["activeSeconds"]>=45
     assert passed["backlog"]["due"]==1 # review scheduled in later lesson
 
-    # Pause, resume and complete all eight full lessons in the first round.
+    # Pause, resume and complete eight scope-bounded lessons, including short Life.
     paused=action(dict(action="pause",revision=passed["revision"]))
     assert paused["lesson"]["paused"] is True
     saved=get()
@@ -105,7 +107,7 @@ with tempfile.TemporaryDirectory() as td:
         if state["lesson"] is None:
             state=action(dict(action="lesson_start",revision=state["revision"]))
         lesson=state["lesson"];q=lesson["question"]
-        assert lesson["count"]>=10
+        assert 1<=lesson["count"]<=board.TARGETS[lesson["index"]%8]
         assert lesson["index"]==state["position"]
         # The final question of lesson 1 is intentionally wrong: it must
         # *still* finalize that lesson and expose Finish lesson in the UI.
@@ -122,7 +124,8 @@ with tempfile.TemporaryDirectory() as td:
         attempts+=1
         assert attempts<160
     assert len(completed_lengths)==8,completed_lengths
-    assert sum(completed_lengths)>=90,completed_lengths
+    assert sum(completed_lengths)==attempts,completed_lengths
+    assert completed_lengths[-1]==1  # only the existing chapter-1 Life scene
     assert state["position"]==8 and state["roundReady"]
     assert state["roundStats"]["chapter"]==1
     assert state["roundStats"]["finished"]
@@ -158,6 +161,6 @@ with tempfile.TemporaryDirectory() as td:
         assert record["legacyBoard"]==old and record["schema"]==2
         assert db.execute("PRAGMA quick_check").fetchone()[0]=="ok"
 
-print("PASS eight 10–14-question lessons per round, locked titles, server-timed statistics")
+print("PASS eight scope-bounded lessons per round, honest counts, locked titles, approximate time")
 print("PASS final wrong answer advances once; delayed review backlog, pause/resume, round report")
 print("PASS progression gates, replay resistance, optional honest jump, v1 archive migration")

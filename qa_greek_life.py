@@ -87,14 +87,25 @@ with tempfile.TemporaryDirectory() as directory:
         assert life.ensure(db,"alice","ru","likes")==16
         assert "beef" in [x["id"] for x in practice_games.store_get(db,"alice","ru",16)["items"]]
 
-    # Existing main-quiz evidence and authored vocabulary course results adapt
-    # the same scene from guided to independent, but never unlock beyond scope.
+    # Historical unit values do not override the card's current chapter.
+    # Only known chapter-appropriate book evidence removes scene support.
     with server.conn() as db:
         for _ in range(12):
             db.execute("""INSERT INTO attempts(user_id,card_key,kind,unit,correct,created_at)
                 VALUES(?,?,?,?,?,?)""",("bob","w001:gr-ru","word",2,1,"2026-10-30"))
+    assert scene("home_city","bob")["difficulty"]=="guided"
+    assert scene("home_city","bob")["hint"] is not None
+    assert scene("meet","bob")["difficulty"]=="independent"
+    chapter2=next(c for c in server.ALL if c["kind"]=="word"
+                  and c["chapter"]==2 and c.get("source")=="original")
+    with server.conn() as db:
+        for _ in range(6):
+            db.execute("""INSERT INTO attempts(user_id,card_key,kind,unit,correct,created_at)
+                VALUES(?,?,?,?,?,?)""",("bob",chapter2["id"]+":gr-ru","word",-3,1,"2026-10-30"))
     assert scene("home_city","bob")["difficulty"]=="independent"
     assert scene("home_city","bob")["hint"] is None
+    row=next(x for x in overview("bob")["available"] if x["id"]=="home_city")
+    assert row["difficulty"]=="independent" and row["readinessReason"]=="chapter_practice"
     assert overview("bob")["maxChapter"]==6
     assert overview("alice","en")["maxChapter"]==6
     with server.conn() as db:

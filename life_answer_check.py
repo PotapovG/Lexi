@@ -11,6 +11,8 @@ from difflib import SequenceMatcher
 import unicodedata
 
 from study_tracks import _normalized
+import greek_variants
+from learning_locales import text as _text
 
 # Functional words whose differences can be explained specifically.
 _ARTICLES = {
@@ -41,10 +43,15 @@ def _nearest(text: str, candidates: tuple[str, ...]) -> str:
     ))
 
 
+def reviewed_answers(accepted):
+    """Only registry-reviewed surface variants; never fuzzy semantic aliases."""
+    return tuple(dict.fromkeys(form for answer in accepted
+                               for form in greek_variants.accepted(answer)))
+
 def evaluate(answer: str, accepted: tuple[str, ...], lang: str = "ru") -> dict:
     if not accepted:
         raise ValueError("no_reviewed_answers")
-    ru = lang == "ru"
+    accepted = reviewed_answers(accepted)
     selected = _plain_tokens(answer)
     correct_variant = next((s for s in accepted if selected == _plain_tokens(s)), None)
     if correct_variant is not None:
@@ -60,8 +67,7 @@ def evaluate(answer: str, accepted: tuple[str, ...], lang: str = "ru") -> dict:
             unicodedata.normalize("NFC",b).casefold()
             for a, b in zip(given_words, expected_words)
         ):
-            notes = (("Ответ засчитан. Обрати внимание на ударения: " if ru else
-                      "Accepted. Note the accent marks: ") + correct_variant)
+            notes = _text(lang,"accent_note",correct=correct_variant)
         return {"correct": True, "unverified": False, "explanation": None,
                 "orthographyNote": notes, "closest": correct_variant}
 
@@ -84,21 +90,17 @@ def evaluate(answer: str, accepted: tuple[str, ...], lang: str = "ru") -> dict:
             display_wanted = exemplar[i] if i < len(exemplar) else wanted
             if actual in _ARTICLES or wanted in _ARTICLES:
                 return _known(
-                    (f"Здесь нужна форма «{display_wanted}», а не «{display_actual}». Проверь предлог, род или падеж."
-                     if ru else f"Use «{display_wanted}» rather than «{display_actual}». Check the preposition, gender or case."),
+                    _text(lang,"wrong_form",wanted=display_wanted,actual=display_actual),
                     best
                 )
             if actual == "αρεσει" and wanted == "αρεσουν":
-                return _known("С несколькими предметами употребляется «αρέσουν»." if ru else
-                              "Use «αρέσουν» for plural things.", best)
+                return _known(_text(lang,"plural_likes"),best)
             if actual == "αρεσουν" and wanted == "αρεσει":
-                return _known("С одним предметом употребляется «αρέσει»." if ru else
-                              "Use «αρέσει» for singular things.", best)
+                return _known(_text(lang,"singular_likes"),best)
             ratio = SequenceMatcher(None, actual, wanted).ratio()
             if ratio >= 0.62 and len(wanted) >= 4:
                 return _known(
-                    (f"Похоже, опечатка в слове «{display_actual}». Проверь написание: «{display_wanted}»."
-                     if ru else f"Likely a typo in «{display_actual}». Check the spelling: «{display_wanted}»."),
+                    _text(lang,"typo",actual=display_actual,wanted=display_wanted),
                     best
                 )
             # An entirely different noun/verb may be a grammatical synonym;
@@ -113,17 +115,14 @@ def evaluate(answer: str, accepted: tuple[str, ...], lang: str = "ru") -> dict:
             remaining.remove(particle)
             if remaining == selected:
                 if particle == "να":
-                    return _known("Пропущена частица «να» перед глаголом." if ru else
-                                  "The particle «να» is missing before the verb.", best)
-                return _known("Пропущено отрицание «δεν», и смысл стал противоположным." if ru else
-                              "Missing «δεν» changes the sentence into an affirmative.", best)
+                    return _known(_text(lang,"missing_na"),best)
+                return _known(_text(lang,"missing_den"),best)
 
     if "δεν" in selected and "δεν" not in expected:
         remaining = list(selected)
         remaining.remove("δεν")
         if remaining == expected:
-            return _known("Лишнее отрицание «δεν» меняет смысл фразы." if ru else
-                          "Extra «δεν» changes the sentence's meaning.", best)
+            return _known(_text(lang,"extra_den"),best)
 
     # A missing article or preposition must be an actual *insertion*, not a
     # substituted form (στην is not 'missing στη') or a nearby spelling error.
@@ -132,8 +131,7 @@ def evaluate(answer: str, accepted: tuple[str, ...], lang: str = "ru") -> dict:
             if token in _ARTICLES and expected[:i] + expected[i+1:] == selected:
                 display = exemplar[i] if i < len(exemplar) else token
                 return _known(
-                    (f"Перед этим словом нужна форма «{display}» — проверь предлог и артикль."
-                     if ru else f"The form «{display}» is needed here. Check preposition and article."),
+                    _text(lang,"missing_article",wanted=display),
                     best)
 
     return _unknown(best, lang)
@@ -145,10 +143,5 @@ def _known(explanation: str, closest: str) -> dict:
 
 
 def _unknown(closest: str, lang: str) -> dict:
-    return {"correct": False, "unverified": True,
-            "explanation": (
-                "Этот вариант отличается от проверенных. Возможно, он допустим — не буду считать его грамматической ошибкой. Сравни с примером ниже."
-                if lang == "ru" else
-                "This wording differs from reviewed options. It might be valid; no grammar mistake will be recorded. Compare the example below."
-            ),
-            "orthographyNote": None, "closest": closest}
+    return {"correct":False,"unverified":True,"explanation":_text(lang,"unverified"),
+            "orthographyNote":None,"closest":closest}

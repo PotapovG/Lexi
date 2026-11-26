@@ -28,7 +28,7 @@ for chapter in range(1,8):
         assert all(q.get("family")==lesson["family"] for q in lesson["items"])
         assert sum(q.get("review",False) for q in lesson["items"])*5<=len(lesson["items"])
         primary={"Глаголы в действии":{"verb"},
-                 "Грамматика":{"grammar","article"},
+                 "Грамматика":{"grammar","article","accent","syllable","enclitic","order"},
                  "Слушаем греческий":{"listening"},
                  "Разговоры":{"dialogue"},
                  "Часы и расписание":{"clock"},

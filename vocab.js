@@ -32,144 +32,205 @@
      }
    });
  }
- let meta=null,words=[],pos=0,review=false,busy=false,correct=0,wrong=0,current=null;
- const englishHint=(value,en)=>$("lang").value!=="en"&&en&&value.trim().toLocaleLowerCase()!==en.trim().toLocaleLowerCase()?value+" ("+en+")":value;
- const tr=key=>(terms[$("lang").value]||terms.en)[key]||terms.en[key];
- const api=async(path,opts)=>{const res=await fetch("/greek/api/"+path,{credentials:"same-origin",cache:"no-store",...opts});if(!res.ok)throw Error("HTTP "+res.status);return res.json();};
- const set=(id,s)=>{$(id).textContent=s;};
+
+ let meta=null,words=[],pos=0,review=false,busy=false,correct=0,wrong=0,current=null,pending=null,receipt=null,selection=null,lessonLang="en",preview=false,loadedOwner=null,ownerGeneration=0;
+ const storageKey="lexi-vocab-session-v1";
+ const ui=(key,values)=>window.LexiUI.t(key,values);
+ const language=()=>$("lang").value;
+ const visible=()=>!$("vocab-view").hidden;
+ const uuid=()=>window.crypto?.randomUUID?.()||"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.floor(Math.random()*16);return(c==="x"?r:r&3|8).toString(16);});
+ const tr=key=>(terms[language()]||terms.en)[key]||terms.en[key];
+ const englishHint=(value,en)=>lessonLang!=="en"&&en&&value.trim().toLocaleLowerCase()!==en.trim().toLocaleLowerCase()?value+" ("+en+")":value;
+ const api=async(path,opts)=>{
+   const headers=new Headers(opts?.headers),owner=headers.get("X-Lexi-Owner")||window.LexiApp?.accountKey();
+   if((opts?.method||"GET").toUpperCase()==="POST"){
+     if(!window.LexiApp?.loggedIn()||!owner)throw Error("account_changed");
+     if(!headers.has("X-Lexi-Owner"))headers.set("X-Lexi-Owner",owner);
+   }
+   const response=await fetch("/greek/api/"+path,{credentials:"same-origin",cache:"no-store",...opts,headers});
+   const result=await response.json().catch(()=>({}));
+   if(owner!==window.LexiApp?.accountKey())throw Error("account_changed");
+   if(!response.ok){if(result.error==="account_changed")window.LexiApp?.reconcileAccount?.();const error=Error(result.error||"HTTP "+response.status);error.status=response.status;throw error;}
+   return result;
+ };
+ const set=(id,value)=>{$(id).textContent=value;};
  const show=(id,yes)=>{$(id).hidden=!yes;};
+ const node=(tag,value,css)=>{const el=document.createElement(tag);if(value!==undefined)el.textContent=String(value);if(css)el.className=css;return el;};
+ const focus=el=>{if(visible()){el.tabIndex=el.tabIndex<0?-1:el.tabIndex;el.focus({preventScroll:true});}};
+ function save(){
+   try{
+     if(words.length)sessionStorage.setItem(storageKey,JSON.stringify({owner:window.LexiApp?.accountKey(),words,pos,review,correct,wrong,pending,receipt,selection,lessonLang,preview}));
+     else sessionStorage.removeItem(storageKey);
+   }catch{}
+ }
+ function restore(){
+   const owner=window.LexiApp?.accountKey();
+   if(loadedOwner===owner)return;
+   loadedOwner=owner;words=[];pending=null;receipt=null;current=null;selection=null;pos=0;
+   try{
+     const stored=JSON.parse(sessionStorage.getItem(storageKey)||"null");
+     if(stored?.owner!==owner||!Array.isArray(stored.words))return;
+     ({words,pos,review,correct,wrong,pending,receipt,selection,lessonLang,preview}=stored);
+     if(pending&&!pending.owner)pending.owner=stored.owner;
+     pos=Number(pos)||0;correct=Number(correct)||0;wrong=Number(wrong)||0;
+   }catch{}
+ }
+ function message(value,retry,id="vocab-message"){
+   const target=$(id);target.replaceChildren();target.hidden=!value;target.setAttribute("role","status");
+   if(value)target.append(node("p",value));
+   if(retry){const button=node("button",ui("retry"),"secondary");button.type="button";button.addEventListener("click",retry);target.append(button);}
+ }
+ function failure(error,retry,id){
+   if(error.message==="account_changed")return;
+   if(error.status===401||error.message==="login_required"){window.LexiApp?.requireLogin();return;}
+   message(ui(pending?"unknown":"network"),retry,id);
+ }
  function renderMeta(){
    if(!meta)return;
    set("vocab-title",tr("title"));set("vocab-subtitle",tr("subtitle"));set("vocab-topic-label",tr("theme"));
    set("vocab-level-label",tr("level"));set("vocab-new",tr("new"));set("vocab-review",tr("review"));
-   set("vocab-source",tr("source")+" "+tr("coverage").replace("{count}",meta.offlineAudioWords??0));set("vocab-back",tr("back"));set("vocab-again",tr("again"));set("vocab-begin",tr("start"));
-   const select=$("vocab-topic"),prev=select.value;
-   select.replaceChildren();
+   set("vocab-source",tr("source"));set("vocab-back",tr("back"));set("vocab-again",tr("again"));set("vocab-begin",tr("start"));
+   const select=$("vocab-topic"),prev=select.value;select.replaceChildren();
    const topicLocales={
      zh:{everyday:"日常",shopping:"购物",road:"交通",home:"居家",food:"食物",family:"家庭",work:"工作",city:"城市",health:"健康",time:"时间",travel:"旅行",leisure:"休闲",nature:"自然"},
      ar:{everyday:"الحياة اليومية",shopping:"التسوق",road:"المواصلات",home:"المنزل",food:"الطعام",family:"العائلة",work:"العمل",city:"المدينة",health:"الصحة",time:"الوقت",travel:"السفر",leisure:"الترفيه",nature:"الطبيعة"},
      es:{everyday:"Vida cotidiana",shopping:"Compras",road:"Transporte",home:"Hogar",food:"Alimentación",family:"Familia",work:"Trabajo",city:"Ciudad",health:"Salud",time:"Tiempo",travel:"Viajes",leisure:"Ocio",nature:"Naturaleza"},
      pt:{everyday:"Dia a dia",shopping:"Compras",road:"Transportes",home:"Casa",food:"Alimentação",family:"Família",work:"Trabalho",city:"Cidade",health:"Saúde",time:"Tempo",travel:"Viagens",leisure:"Lazer",nature:"Natureza"}
    };
-   const lang=$("lang").value;
-   const allTopics={ru:"Все темы",en:"All topics",zh:"所有主题",ar:"كل المواضيع",es:"Todos los temas",pt:"Todos os temas"};
-   const any=document.createElement("option");any.value="all";any.textContent=allTopics[lang]||allTopics.en;select.append(any);
-   meta.topics.forEach(t=>{const o=document.createElement("option");o.value=t.id;o.textContent=(topicLocales[lang]?.[t.id]||(lang==="ru"?t.ru:t.en))+" · "+t.count;select.append(o);});
-   if(Array.from(select.options).some(o=>o.value===prev))select.value=prev;
+   const lang=language(),allTopics={ru:"Все темы",en:"All topics",zh:"所有主题",ar:"كل المواضيع",es:"Todos los temas",pt:"Todos os temas"};
+   const any=node("option",allTopics[lang]);any.value="all";select.append(any);
+   meta.topics.forEach(topic=>{const option=node("option",(topicLocales[lang]?.[topic.id]||(lang==="ru"?topic.ru:topic.en))+" · "+topic.count);option.value=topic.id;select.append(option);});
+   if(Array.from(select.options).some(option=>option.value===prev))select.value=prev;
    set("vocab-total",meta.count+" · A1 "+meta.levels.A1+" / A2 "+meta.levels.A2);
  }
  async function loadMeta(){
    try{meta=await api("vocab/meta");renderMeta();}
-   catch(err){set("vocab-message",tr("error")+err.message);}
+   catch(error){failure(error,loadMeta);}
  }
  function renderStats(data){
-   set("vocab-progress",tr("learned")+": "+data.learned+"  ·  "+tr("remaining")+": "+data.remaining+"  ·  "+tr("weak")+": "+data.weak);
+   set("vocab-progress",tr("learned")+": "+data.learned+" · "+tr("remaining")+": "+data.remaining+" · "+tr("weak")+": "+data.weak);
+ }
+ function renderPreview(){
+   preview=true;show("vocab-controls",false);show("vocab-lesson",true);show("vocab-word-preview",true);show("vocab-card",false);show("vocab-summary",false);
+   set("vocab-preview-audio-status","");set("vocab-preview-heading",tr("preview"));set("vocab-begin",tr("start"));
+   const list=$("vocab-preview-list");list.replaceChildren();
+   words.forEach(word=>{
+     const row=node("div",undefined,"topic-study-row"),greek=node("strong",[word.gr,...(word.greekVariants||[])].join(" / "));
+     greek.lang="el";greek.dir="ltr";
+     const translation=node("span",word.translation);translation.lang=word.untranslated?"en":lessonLang;translation.dir=translation.lang==="ar"?"rtl":"ltr";
+     const level=node("small",word.level+(word.untranslated?" · EN":""));
+     const sound=node("button","♪","vocab-audio-btn");sound.type="button";const ready=window.LexiWordAudio?.available(word.wordAudio)??false;
+     sound.disabled=!ready;sound.title=ready?tr("previewPlay"):ui("audioUnavailable");sound.setAttribute("aria-label",sound.title);
+     sound.addEventListener("click",()=>playWord(word,{statusId:"vocab-preview-audio-status"}));
+     row.append(greek,translation,level,sound);list.append(row);
+   });
+   save();focus($("vocab-preview-heading"));
  }
  async function loadLesson(isReview){
-   if(!meta)await loadMeta();
-   review=isReview;show("vocab-message",false);
-   const topic=$("vocab-topic").value||"all",level=$("vocab-level").value||"A1",lang=$("lang").value;
+   if(busy||pending)return;busy=true;const generation=ownerGeneration;message(ui("loading"));
    for(const id of ["vocab-new","vocab-review"])$(id).disabled=true;
    try{
-     const lesson=await api("vocab/lesson?"+new URLSearchParams({topic,level,lang,review:review?"1":"0"}));
-     renderStats(lesson);words=lesson.words;pos=0;correct=0;wrong=0;
-     if(!words.length){set("vocab-message",review?tr("noWeak"):tr("empty"));show("vocab-message",true);show("vocab-lesson",false);return;}
-     show("vocab-controls",false);show("vocab-lesson",true);show("vocab-word-preview",!review);
-     show("vocab-card",review);show("vocab-summary",false);
-     if(!review){
-       set("vocab-preview-audio-status","");
-       set("vocab-preview-heading",tr("preview"));
-       const list=$("vocab-preview-list");list.replaceChildren();
-       words.forEach(w=>{
-         const row=document.createElement("div");row.className="topic-study-row";
-         const gr=document.createElement("strong");gr.lang="el";gr.dir="ltr";
-         gr.textContent=[w.gr,...(w.greekVariants||[])].join(" / ");
-         const ar=document.createElement("span");ar.textContent=w.translation;
-         if(lang==="ar")ar.dir=w.untranslated?"ltr":"rtl";
-         const meta=document.createElement("small");meta.textContent=w.level+(w.untranslated?" · EN":"");
-         const sound=document.createElement("button");sound.type="button";sound.className="vocab-audio-btn";
-         const ready=window.LexiWordAudio?.available(w.wordAudio)??false;
-         sound.disabled=!ready;
-         sound.textContent=ready?"🔊":"🔇";
-         sound.title=ready?tr("previewPlay"):tr("unavailable");
-         sound.setAttribute("aria-label",sound.title);
-         sound.addEventListener("click",()=>playWord(w,{statusId:"vocab-preview-audio-status"}));
-         row.append(gr,ar,meta,sound);list.append(row);
-       });
-       set("vocab-begin",tr("start"));
-     }else renderCard();
-   }catch(err){set("vocab-message",tr("error")+err.message);show("vocab-message",true);}
-   finally{for(const id of ["vocab-new","vocab-review"])$(id).disabled=false;}
- }
- function button(choice,index){
-   const b=document.createElement("button");b.type="button";b.className="answer";
-   const n=document.createElement("span");n.className="key";n.textContent=String(index+1);
-   const label=document.createElement("span");
-   label.textContent=current.direction==="gr-target"?englishHint(choice,current.choicesEn?.[index]):choice;
-   if($("lang").value==="ar"&&current.direction==="gr-target")label.dir=current.untranslated?"ltr":"rtl";
-   b.append(n,label);b.addEventListener("click",()=>choose(index));return b;
+     if(!meta){meta=await api("vocab/meta");renderMeta();}
+     const topic=$("vocab-topic").value||"all",level=$("vocab-level").value||"A1",lang=language();
+     const lesson=await api("vocab/lesson?"+new URLSearchParams({topic,level,lang,review:isReview?"1":"0"}));
+     renderStats(lesson);words=lesson.words;review=isReview;pos=0;correct=0;wrong=0;current=null;receipt=null;selection=null;lessonLang=lang;
+     if(!words.length){message(review?tr("noWeak"):tr("empty"));show("vocab-lesson",false);show("vocab-controls",true);save();return;}
+     message("");show("vocab-controls",false);show("vocab-lesson",true);show("vocab-summary",false);
+     if(!review)renderPreview();else renderCard();
+   }catch(error){failure(error,()=>loadLesson(isReview));}
+   finally{if(generation===ownerGeneration){busy=false;for(const id of ["vocab-new","vocab-review"])$(id).disabled=false;}}
  }
  function renderCard(){
-   window.LexiWordAudio?.stop();
-   current=words[pos];busy=false;
-   set("vocab-audio-status","");
-   set("vocab-pronounce",tr("play"));
-   set("vocab-pronounce-slow",tr("slow"));
-   const ready=window.LexiWordAudio?.available(current?.wordAudio)??false;
-   $("vocab-pronounce").disabled=!ready;
-   $("vocab-pronounce-slow").disabled=!ready;
+   window.LexiWordAudio?.stop();preview=false;current=words[pos];
    if(!current){done();return;}
-   if(!ready)set("vocab-audio-status",tr("unavailable"));
-   show("vocab-word-preview",false);show("vocab-card",true);
+   show("vocab-controls",false);show("vocab-lesson",true);show("vocab-word-preview",false);show("vocab-summary",false);show("vocab-card",true);
+   set("vocab-audio-status","");set("vocab-pronounce",tr("play"));set("vocab-pronounce-slow",tr("slow"));
+   const ready=window.LexiWordAudio?.available(current.wordAudio)??false;
+   $("vocab-pronounce").disabled=!ready;$("vocab-pronounce-slow").disabled=!ready;
+   if(!ready)set("vocab-audio-status",ui("audioUnavailable"));
    show("vocab-feedback",false);show("vocab-next",false);
    set("vocab-question-count",(pos+1)+" / "+words.length);set("vocab-card-heading",tr("lesson"));
-   set("vocab-prompt",current.direction==="gr-target"
-     ?[current.gr,...(current.greekVariants||[])].join(" / ")
-     :englishHint(current.translation,current.english));
-   $("vocab-prompt").lang=current.direction==="gr-target"?"el":$("lang").value;
-   $("vocab-prompt").dir=current.direction==="gr-target"?"ltr":$("lang").value==="ar"&&!current.untranslated?"rtl":"ltr";
+   set("vocab-prompt",current.direction==="gr-target"?[current.gr,...(current.greekVariants||[])].join(" / "):englishHint(current.translation,current.english));
+   const prompt=$("vocab-prompt");prompt.lang=current.direction==="gr-target"?"el":current.untranslated?"en":lessonLang;prompt.dir=prompt.lang==="ar"?"rtl":"ltr";
    set("vocab-direction",current.direction==="gr-target"?"Ελληνικά → ?":"? → Ελληνικά");
-   const choices=$("vocab-choices");choices.replaceChildren();
-   current.choices.forEach((answer,i)=>choices.append(button(answer,i)));
-   choices.classList.toggle("wide-choices",current.choices.some(x=>x.length>35));
-   set("vocab-fallback",current.untranslated&&$("lang").value!=="en"?tr("fallback"):"");
+   const choices=$("vocab-choices");choices.replaceChildren();choices.classList.add("vocab-answer-container");
+   const form=node("form"),fieldset=node("fieldset",undefined,"lesson-choices");fieldset.append(node("legend",ui("choose"),"sr-only"));
+   const submit=node("button",ui("check"),"primary");submit.type="submit";submit.id="vocab-submit";submit.disabled=selection===null||Boolean(pending)||Boolean(receipt);
+   current.choices.forEach((choice,index)=>{
+     const label=node("label",undefined,"lesson-choice"),radio=node("input");radio.type="radio";radio.name="vocab-answer";radio.value=String(index);radio.checked=selection===index;radio.disabled=Boolean(pending)||Boolean(receipt);
+     const copy=node("span",current.direction==="gr-target"?englishHint(choice,current.choicesEn?.[index]):choice);
+     copy.lang=current.direction==="gr-target"?current.untranslated?"en":lessonLang:"el";copy.dir=copy.lang==="ar"?"rtl":"ltr";
+     radio.addEventListener("change",()=>{selection=index;submit.disabled=false;save();});label.append(radio,copy);fieldset.append(label);
+   });
+   form.append(fieldset,submit);form.addEventListener("submit",event=>{event.preventDefault();choose();});choices.append(form);
+   $("vocab-back").disabled=Boolean(pending);set("vocab-fallback",current.untranslated&&language()!=="en"?tr("fallback"):lessonLang!==language()?ui("translationUnavailable"):"");
+   save();focus(prompt);
+   if(receipt)renderFeedback(receipt.result);
+   else if(pending)message(ui("unknown"),sendPending,"vocab-feedback");
  }
- async function choose(i){
-   if(busy||!current)return;
-   busy=true;
-   const buttons=Array.from($("vocab-choices").children);buttons.forEach(b=>b.disabled=true);
-   const selected=current.choices[i];
+ function renderFeedback(result){
+   const panel=$("vocab-feedback");panel.replaceChildren();panel.hidden=false;panel.className="feedback "+(result.correct?"good":"bad");panel.setAttribute("role","status");panel.setAttribute("aria-live","polite");
+   const heading=node("h3",ui(result.correct?"correct":result.unverified?"unverified":"wrong"));heading.id="vocab-result-heading";panel.append(heading);
+   const at=current.choices.indexOf(result.answer),answer=current.direction==="gr-target"?englishHint(result.answer,current.choicesEn?.[at]):result.answer;
+   if(!result.correct){const line=node("p",ui("correction")+": "+answer);line.dir="auto";panel.append(line);}
+   for(const key of ["explanation","orthographyNote"]){if(result[key])panel.append(node("p",result[key]));}
+   if(result.greekVariants?.length){const line=node("p",ui("alternatives")+": "+result.greekVariants.join(" / "));line.dir="auto";panel.append(line);}
+   panel.append(node("p",ui("finalAnswer"),"quiet"));
+   $("vocab-choices").querySelectorAll("input,button").forEach(control=>control.disabled=true);
+   $("vocab-choices").querySelectorAll(".lesson-choice").forEach((label,index)=>{
+     if((result.acceptedAnswers||[result.answer]).includes(current.choices[index]))label.classList.add("is-correct");
+     if(index===selection&&!result.correct)label.classList.add("is-wrong");
+   });
+   set("vocab-next",pos===words.length-1?tr("done"):tr("next"));show("vocab-next",true);
+   $("vocab-next").setAttribute("aria-describedby","vocab-result-heading");$("vocab-back").disabled=false;focus($("vocab-next"));
+ }
+ async function choose(){
+   if(busy||!current||receipt)return;
+   if(!pending){
+     if(selection===null)return;
+     pending={owner:window.LexiApp?.accountKey(),body:{id:current.id,lang:lessonLang,direction:current.direction,selected:current.choices[selection],requestId:uuid()},pos};
+     save();
+   }
+   return sendPending();
+ }
+ async function sendPending(){
+   if(busy||!pending)return;busy=true;const generation=ownerGeneration;const submission=pending;
+   $("vocab-choices").querySelectorAll("input,button").forEach(control=>control.disabled=true);$("vocab-back").disabled=true;
+   message(ui("saving"),null,"vocab-feedback");
    try{
-    const result=await api("vocab/answer",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:current.id,lang:$("lang").value,direction:current.direction,selected})});
-    if(result.correct)correct++;else wrong++;
-    buttons.forEach((b,j)=>{if((result.acceptedAnswers||[result.answer]).includes(current.choices[j]))b.classList.add("is-correct");if(j===i&&!result.correct)b.classList.add("is-wrong");});
-    $("vocab-feedback").className="feedback "+(result.correct?"good":"bad");
-    const at=current.choices.indexOf(result.answer);
-    const display=current.direction==="gr-target"?englishHint(result.answer,current.choicesEn?.[at]):result.answer;
-    const variantLabel={ru:"Также употребляют",en:"Also used",zh:"另一种常见形式",
-      ar:"تُستعمل أيضاً",es:"También se utiliza",pt:"Também se usa"}[$("lang").value]||"Also used";
-    const variantText=result.greekVariants?.length?" · "+variantLabel+": "+result.greekVariants.join(" / "):"";
-    set("vocab-feedback",(result.correct?tr("correct"):tr("wrong")+display)+variantText);
-    show("vocab-feedback",true);set("vocab-next",pos===words.length-1?tr("done"):tr("next"));show("vocab-next",true);
-   }catch(err){set("vocab-feedback",tr("error")+err.message);show("vocab-feedback",true);buttons.forEach(b=>b.disabled=false);busy=false;}
+     const result=await api("vocab/answer",{method:"POST",headers:{"Content-Type":"application/json","X-Lexi-Owner":submission.owner},body:JSON.stringify(submission.body)});
+     if(!receipt||receipt.requestId!==submission.body.requestId){if(result.correct)correct++;else wrong++;}
+     receipt={requestId:submission.body.requestId,result};pending=null;save();
+     if(visible())renderFeedback(result);
+     document.dispatchEvent(new CustomEvent("lexi:progress"));
+   }catch(error){failure(error,sendPending,"vocab-feedback");}
+   finally{if(generation===ownerGeneration)busy=false;}
  }
  function done(){
-   window.LexiWordAudio?.stop();
-   show("vocab-card",false);show("vocab-summary",true);
-   set("vocab-complete",tr("done")+" · "+correct+"/"+words.length+"  ✓  "+wrong+"  ✕");
+   window.LexiWordAudio?.stop();show("vocab-card",false);show("vocab-word-preview",false);show("vocab-summary",true);show("vocab-controls",false);show("vocab-lesson",true);
+   set("vocab-complete",tr("done")+" · "+ui("correct")+": "+correct+" / "+words.length+" · "+ui("errors")+": "+wrong);save();focus($("vocab-complete"));
+   document.dispatchEvent(new CustomEvent("lexi:progress"));
  }
- function next(){pos++;renderCard();}
+ function next(){if(!receipt||busy)return;pos++;receipt=null;selection=null;pending=null;renderCard();}
  function back(){
-   window.LexiWordAudio?.stop();
-   show("vocab-lesson",false);show("vocab-controls",true);show("vocab-word-preview",false);show("vocab-card",false);
-   show("vocab-summary",false);loadMeta();
+   if(pending||busy)return;window.LexiWordAudio?.stop();words=[];current=null;receipt=null;selection=null;save();
+   show("vocab-lesson",false);show("vocab-controls",true);show("vocab-word-preview",false);show("vocab-card",false);show("vocab-summary",false);loadMeta();focus($("vocab-title"));
  }
  async function onOpen(){
-   if(!meta)await loadMeta();
-   else renderMeta();
+   if(window.LexiApp?.loggedIn()===false)return;restore();
+   if(!meta)await loadMeta();else renderMeta();
+   if(words.length){if(preview)renderPreview();else renderCard();}
  }
- function onLanguageChange(){if(meta)renderMeta();if(words.length&&!$("vocab-lesson").hidden){words=[];back();}}
- window.lexiVocab={onOpen,onLanguageChange};
+ function onLanguageChange(){
+   if(meta)renderMeta();if(words.length&&visible()){if(preview)renderPreview();else renderCard();}
+ }
+ window.lexiVocab={onOpen,onLanguageChange,onLeave:()=>{window.LexiWordAudio?.stop();save();}};
+ document.addEventListener("lexi:logout",()=>{
+   ownerGeneration++;busy=false;words=[];pending=null;receipt=null;current=null;loadedOwner=null;meta=null;
+   for(const id of ["vocab-new","vocab-review"])$(id).disabled=false;
+   $("vocab-progress").replaceChildren();
+ });
+ document.addEventListener("visibilitychange",()=>{if(document.hidden)window.LexiWordAudio?.stop();});
  $("vocab-new").addEventListener("click",()=>loadLesson(false));
  $("vocab-review").addEventListener("click",()=>loadLesson(true));
  $("vocab-begin").addEventListener("click",renderCard);

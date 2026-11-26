@@ -1,10 +1,17 @@
 # No heavyweight model runtime: the web application is Python stdlib only.
 FROM python:3.11-slim
+ARG WITH_AI_AUDIO=0
+RUN if [ "$WITH_AI_AUDIO" = "1" ]; then \
+      apt-get update && apt-get install -y --no-install-recommends ffmpeg ca-certificates \
+      && rm -rf /var/lib/apt/lists/*; \
+    fi
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     GREEK_HOST=0.0.0.0 GREEK_PORT=18560 \
     GREEK_DB=/data/progress.sqlite3 GREEK_PEPPER=/data/login-pepper
 WORKDIR /app
 COPY --chown=10001:10001 *.py *.js *.html *.css *.json *.tsv /app/
+COPY --chown=10001:10001 content/ /app/content/
+COPY --chown=10001:10001 dialogue_full_ru.txt dialogue_full_en.txt /app/
 COPY --chown=10001:10001 pocket-listening/manifest.json pocket-listening/source.json /app/pocket-listening/
 COPY --chown=10001:10001 pocket-pronunciation/manifest.json /app/pocket-pronunciation/
 RUN mkdir -p /data /app/pocket-listening/wav /app/pocket-pronunciation/wav \

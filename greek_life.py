@@ -10,6 +10,9 @@ import re
 import difflib
 import study_tracks as tracks
 import life_answer_check as _checker
+from catalog_v2 import ALL as _BOOK_CATALOG
+_BOOK_CARDS={card['id']:card for card in _BOOK_CATALOG}
+from learning_locales import text as _text, scene_text
 
 LANGS=tracks.LANGUAGES
 MAX_CHAPTER=20
@@ -89,13 +92,39 @@ def _initial():
 def _max(s):
     return max(1,min(MAX_CHAPTER,int(s.get("maxChapter",6))))
 
+def _chapter_evidence(db,uid,max_chapter):
+    """Normalize historical keys to known book chapters without rewriting rows.
+
+    Culture, unknown/archived cards and unrelated atlas mastery do not prove
+    a chapter skill. Only catalog-backed teaching evidence influences support.
+    """
+    evidence={}
+    rows=db.execute("""SELECT card_key,kind,COUNT(*) AS total,SUM(correct) AS good
+        FROM attempts WHERE user_id=? AND kind!='culture'
+        GROUP BY card_key,kind""",(uid,))
+    for row in rows:
+        card=_BOOK_CARDS.get(row["card_key"].split(":",1)[0])
+        if not card or card.get("kind")!=row["kind"]:continue
+        if card.get("source","original") not in (
+                "original","original-from-book-syllabus","review-original"):continue
+        chapter=card.get("chapter",0)
+        if not 1<=chapter<=max_chapter:continue
+        item=evidence.setdefault(chapter,{"unit":chapter,"total":0,"good":0})
+        item["total"]+=row["total"];item["good"]+=row["good"] or 0
+    return list(evidence.values())
+
+def _readiness(scene,progress,relevant):
+    demonstrated=sum(row["good"] for row in relevant if row["unit"]==scene["chapter"])
+    reason=("scene_success" if progress.get("correct",0)>=1 else
+            "chapter_practice" if demonstrated>=6 else "guided_practice")
+    return {"difficulty":"guided" if reason=="guided_practice" else "independent",
+            "readinessReason":reason,"demonstratedAnswers":demonstrated}
+
 def current_settings(db,uid,lang):
     if lang not in LANGS:raise ValueError("invalid_language")
     s,rev=tracks._load(db,uid,"life",lang,_initial)
     max_chapter=_max(s)
-    relevant=db.execute("""SELECT unit,COUNT(*) AS total,SUM(correct) AS good
-        FROM attempts WHERE user_id=? AND unit BETWEEN 1 AND ?
-        GROUP BY unit""",(uid,max_chapter)).fetchall()
+    relevant=_chapter_evidence(db,uid,max_chapter)
     weak_by_unit={r["unit"]:r["total"]-r["good"] for r in relevant}
     mastered_words=db.execute("""SELECT COUNT(*) FROM vocab_progress
         WHERE user_id=? AND correct>=2 AND miss_debt=0""",(uid,)).fetchone()[0]
@@ -108,13 +137,11 @@ def current_settings(db,uid,lang):
         if scene["chapter"]>max_chapter:continue
         result=s["results"].get(scene["id"],{})
         tries=result.get("attempts",0);errors=result.get("errors",0)
-        demonstrated=next((r["good"] for r in relevant if r["unit"]==scene["chapter"]),0)
-        ready=demonstrated>=6 or mastered_words>=30 or result.get("correct",0)>=1
-        difficulty="independent" if ready else "guided"
+        readiness=_readiness(scene,result,relevant)
         priority=(errors*4)+(weak_by_unit.get(scene["chapter"],0)//4)-tries
-        scenarios.append({"id":scene["id"],"name":scene["name"] if lang=="ru" else scene["en"],
+        scenarios.append({"id":scene["id"],"name":scene_text(scene,"name",lang),
             "chapter":scene["chapter"],"attempts":tries,"errors":errors,
-            "difficulty":difficulty,"priority":priority,"type":"roleplay"})
+            **readiness,"priority":priority,"type":"roleplay"})
     extras=[
         ("route",6,"Автобусные маршруты","Bus routes"),
         ("periptero",8,"Περίπτερο · магазин","Περίπτερο · mini market"),
@@ -122,7 +149,7 @@ def current_settings(db,uid,lang):
     ]
     for id,gate,ru,en in extras:
         if gate<=max_chapter:
-            scenarios.append({"id":id,"name":ru if lang=="ru" else en,
+            scenarios.append({"id":id,"name":_text(lang,id),
                 "chapter":gate,"type":"activity","difficulty":"guided",
                 "priority":0,"attempts":0,"errors":0})
     # Build one guided "next adventure" from all unlocked experiences. The
@@ -160,7 +187,8 @@ def current_settings(db,uid,lang):
             "available":scenarios,"recommended":recommended["id"] if recommended else None,
             "nextAdventure":recommended,
             "completedExperiences":distinct_done,"totalExperiences":len(scenarios),
-            "masteredWords":mastered_words,"observations":sum(r["total"] for r in relevant),
+            "masteredWords":mastered_words,"masteredWordsScope":"vocabulary_and_cards",
+            "observations":sum(r["total"] for r in relevant),"observationScope":"known_book_chapters",
             "printedChapterCount":MAX_CHAPTER}
 
 def update_settings(db,uid,lang,body):
@@ -168,7 +196,7 @@ def update_settings(db,uid,lang,body):
     chapter=body.get("maxChapter")
     if isinstance(chapter,bool) or not isinstance(chapter,int) or not 1<=chapter<=MAX_CHAPTER:
         raise ValueError("invalid_chapter")
-    db.execute("BEGIN IMMEDIATE")
+    if not db.in_transaction:db.execute("BEGIN IMMEDIATE")
     s,rev=tracks._load(db,uid,"life",lang,_initial)
     if body.get("revision")!=rev:raise ValueError("stale_track")
     s["maxChapter"]=chapter
@@ -176,10 +204,10 @@ def update_settings(db,uid,lang,body):
     return current_settings(db,uid,lang)
 
 def skip_scene(db,uid,lang,body):
-    """Skip an ambiguous response without marking any answer as correct/wrong."""
+    """Defer an assessed scene without adding a grade or granting mastery."""
     sid=body.get("id")
     if lang not in LANGS or sid not in BY_ID:raise ValueError("invalid_scene")
-    db.execute("BEGIN IMMEDIATE")
+    if not db.in_transaction:db.execute("BEGIN IMMEDIATE")
     state,rev=tracks._load(db,uid,"life",lang,_initial)
     if body.get("revision")!=rev:raise ValueError("stale_track")
     if BY_ID[sid]["chapter"]>_max(state):raise ValueError("chapter_not_unlocked")
@@ -211,15 +239,14 @@ def scene_get(db,uid,lang,scene_id):
     scene=BY_ID[scene_id]
     if scene["chapter"]>_max(state):raise ValueError("chapter_not_unlocked")
     progress=state["results"].get(scene_id,{})
-    demonstrated=db.execute("SELECT COUNT(*) FROM attempts WHERE user_id=? AND correct=1 AND unit<=?",
-                            (uid,scene["chapter"])).fetchone()[0]
-    experienced=demonstrated>=12 or progress.get("correct",0)>=1
+    readiness=_readiness(scene,progress,_chapter_evidence(db,uid,_max(state)))
+    experienced=readiness["difficulty"]=="independent"
     return {"id":scene_id,"revision":revision,
-            "chapter":scene["chapter"],"title":scene["name"] if lang=="ru" else scene["en"],
-            "prompt":scene["prompt"] if lang=="ru" else scene["promptEN"],
-            "promptLang":"ru" if lang=="ru" else "en",
+            "chapter":scene["chapter"],"title":scene_text(scene,"name",lang),
+            "prompt":scene_text(scene,"prompt",lang),
+            "promptLang":lang,
             "hint":None if experienced else scene["hint"],
-            "difficulty":"independent" if experienced else "guided",
+            **readiness,
             "attempts":progress.get("attempts",0),"correct":progress.get("correct",0),
             "errors":progress.get("errors",0)}
 
@@ -228,7 +255,7 @@ def scene_answer(db,uid,lang,body):
     sid=body.get("id")
     answer=body.get("answer")
     if sid not in BY_ID or not isinstance(answer,str) or len(answer)>320:raise ValueError("invalid_answer")
-    db.execute("BEGIN IMMEDIATE")
+    if not db.in_transaction:db.execute("BEGIN IMMEDIATE")
     state,rev=tracks._load(db,uid,"life",lang,_initial)
     scene=BY_ID[sid]
     if body.get("revision")!=rev:raise ValueError("stale_track")
@@ -246,11 +273,11 @@ def scene_answer(db,uid,lang,body):
             "orthographyNote":assessment["orthographyNote"],
             "closestAnswer":assessment["closest"],
             "answer":scene["accepted"][0],
-            "alternatives":list(scene["accepted"][1:]),
+            "alternatives":list(_checker.reviewed_answers(scene["accepted"]))[1:],
             "explanation":explanation,
-            "translation":scene["translation"] if lang=="ru" else scene["translationEN"],
-            "translationLang":"ru" if lang=="ru" else "en",
-            "difficulty":"independent" if history["correct"]>=1 else "guided",
+            "translation":scene_text(scene,"translation",lang),
+            "translationLang":lang,
+            **_readiness(scene,history,_chapter_evidence(db,uid,_max(state))),
             "attempts":history["attempts"]}
 
 def validate():

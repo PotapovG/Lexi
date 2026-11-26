@@ -16,7 +16,9 @@ These are **instructions to AI coding assistants and human contributors**, not a
 - Supported locales are `ru en zh ar es pt`. Never substitute English text as the translation for another locale. Require reviewed translations rather than guesses.
 - Never introduce future grammar early. Printed chapters 1–4 cover introductions, addresses, family/jobs and languages; printed chapter 5 reviews chapters 1–4. **No** future tense, aorist, subjunctive `να` or plural-noun drills in these chapters.
 - New cards get `cmNN_NNNN` IDs. IDs and answer text of existing cards must not be changed. A phrase with just a different proper name is not enough new pedagogical value.
-- Do not add microphone recognition, device TTS, paid model APIs, ads or a production dependency.
+- **Owner-approved narrow AI exception (2026-11-26, [AI epic #54](https://github.com/PotapovG/Lexi/issues/54)):** implement optional lesson summaries, reading aloud and 4–5-turn voice-answer/text-response practice inside the existing lesson completion experience. This authorizes microphone capture and a server-side optional paid API adapter for that scope only. Default AI is disabled; ordinary lessons, progress and Pocket playback need neither an API key nor a paid service. Activation requires configured credentials, budgets and the documented quality/cohort gates. Do not claim pronunciation assessment from an ASR transcript, or change first-attempt grading/SRS using AI advice.
+- The owner also authorized the audit/design backlog #66–88 on 2026-11-26. Preserve existing modes, learning material IDs, answer history and scoped progress.
+- Do not add device TTS, ads, compulsory paid services or other production dependencies. The AI exception does not authorize unrelated integrations or bypass of deployment guards.
 
 ## Validate before PR
 ```bash
