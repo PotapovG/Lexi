@@ -94,10 +94,13 @@ with tempfile.TemporaryDirectory() as td:
         assert db.execute("pragma quick_check").fetchone()[0]=="ok"
 
 js=Path(__file__).with_name("life.js").read_text()
-assert "const shown=result.closestAnswer||result.answer" in js
-assert "Другие допустимые формулировки" in js
+shared=Path(__file__).with_name("ui.js").read_text()
+# Keep the same feedback contract after the renderer/locales were reorganized.
+assert 'text("p",result.closestAnswer||result.answer,"life-feedback-greek")' in js
+assert 'text("summary",t("alternatives"))' in js
+assert "Другие допустимые варианты" in shared
 assert "life-orthography-note" in js
-assert "life-more-answers" in js
-print("PASS screenshot regression: valid στην, typo Λεθκώσια, nearest accepted wording")
+assert 'const details=text("details")' in js
+print("PASS accepted-answer regression: valid στην, typo Λεθκώσια, nearest accepted wording")
 print("PASS all scenes x six locales, missing preposition/particle, accent hints, no false penalties")
 print("PASS after-score-only feedback, translation and optional labelled alternatives")
