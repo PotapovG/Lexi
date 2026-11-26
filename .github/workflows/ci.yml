@@ -128,6 +128,27 @@ jobs:
           node tests/test_learning_ui.cjs
           node tests/test_learning_edges.cjs
           node tests/test_ai_ui.cjs
+      - name: Open navigation contrast, layout and keyboard
+        # Separate disposable state preserves production auth throttles without sharing signup quota.
+        env:
+          GREEK_DB: /tmp/lexi-navigation-${{ github.run_id }}.sqlite3
+          GREEK_PEPPER: /tmp/lexi-navigation-${{ github.run_id }}-pepper
+          GREEK_HOST: 127.0.0.1
+          GREEK_PORT: '18560'
+          GREEK_ORIGIN: http://localhost:18560
+          GREEK_LISTENING: 'off'
+          LEXI_AI_STAGE: disabled
+          LEXI_BASE_URL: http://localhost:18560
+          LEXI_ARTIFACT_DIR: ${{ runner.temp }}/lexi-artifacts/navigation
+          NODE_PATH: ${{ runner.temp }}/lexi-browser/node_modules
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          mkdir -p "$LEXI_ARTIFACT_DIR"
+          python3 server.py > "$LEXI_ARTIFACT_DIR/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true; wait "$server_pid" 2>/dev/null || true' EXIT
+          python3 -c 'import urllib.request,time; exec("for _ in range(100):\n try:\n  urllib.request.urlopen(\"http://localhost:18560/health\",timeout=1); break\n except OSError: time.sleep(.1)\nelse: raise SystemExit(\"isolated server did not start\")")'
+          node tests/test_navigation_ui.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

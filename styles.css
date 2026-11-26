@@ -928,14 +928,19 @@ h1:focus,h2:focus,h3:focus{outline:none}
 .intro{display:none}
 main{padding-block:0 28px}
 .tabs{display:flex;align-items:center;gap:6px;margin:0 0 28px;padding:10px 0;border-bottom:1px solid var(--line);overflow:visible}
-.tabs>.tab{padding:10px 15px;min-height:44px;min-width:0;border:0;border-radius:9px;background:transparent;color:var(--muted);font-size:15px}
+.tabs>.tab{width:auto;padding:10px 15px;min-height:44px;min-width:0;border:0;border-radius:9px;background:transparent;color:var(--muted);font-size:15px}
 .tabs>.tab.active{background:var(--accent-soft);color:var(--text)}
-.tab-more{margin-inline-start:auto;margin-left:0;width:auto;flex:none;grid-column:auto}
+.tab-more{margin:0;margin-inline-start:auto;width:auto;flex:none;grid-column:auto}
 .tab-more>summary{min-height:44px;border:0;background:transparent;color:var(--muted);border-radius:9px;padding:10px 13px;width:auto;font-size:14px;font-weight:600}
 .tab-more[open]>summary,.tab-more:has(.tab.active)>summary{color:var(--text);background:var(--surface);border-color:transparent}
-.tab-more-menu{inset-inline-end:0;right:auto;min-width:230px;max-width:min(300px,90vw);border-color:var(--line);background:var(--panel);box-shadow:var(--shadow);padding:8px;border-radius:12px}
-.tab-more-menu .tab{color:var(--muted);text-align:start;border:0;font-size:14px;border-radius:6px}
-.tab-more-menu .tab:hover,.tab-more-menu .tab.active{color:var(--text);background:var(--accent-soft)}
+/* Reset physical legacy offsets before logical anchoring; keep the open panel in the viewport. */
+.tab-more>summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.tab-more-menu{left:auto;right:auto;inset-inline-end:0;min-width:0;width:min(272px,calc(100vw - 30px));max-width:none;
+  max-height:min(28rem,calc(100dvh - 11rem));overflow-y:auto;overscroll-behavior:contain;
+  border-color:var(--line);background:var(--panel);box-shadow:var(--shadow);padding:6px;gap:2px;border-radius:12px}
+.tab-more-menu .tab{background:transparent;color:var(--text);text-align:start;border:0;font-size:14px;font-weight:500;line-height:1.45;min-height:44px;padding:10px 12px;gap:8px;border-radius:6px;overflow-wrap:anywhere}
+.tab-more-menu .tab:hover,.tab-more-menu .tab:focus-visible,.tab-more-menu .tab.active{color:var(--text);background:var(--accent-soft)}
+.tab-more-menu .tab.active{font-weight:650}
 .tab-more-menu .bubble{margin-inline-start:auto;background:var(--surface);color:var(--text)}
 .account-menu{position:relative}
 .account-menu>summary{list-style:none;width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-size:20px;cursor:pointer}

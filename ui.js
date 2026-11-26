@@ -983,6 +983,21 @@
     if(event.shiftKey&&(document.activeElement===first||!all.includes(document.activeElement))){event.preventDefault();last.focus();}
     else if(!event.shiftKey&&(document.activeElement===last||!all.includes(document.activeElement))){event.preventDefault();first.focus();}
   });
+  // Native disclosure navigation keeps normal Tab order, with predictable dismissal.
+  const popovers=[...document.querySelectorAll(".tab-more,.account-menu")];
+  for(const details of popovers){
+    details.addEventListener("toggle",()=>{
+      if(details.open)for(const other of popovers)if(other!==details)other.open=false;
+    });
+    details.addEventListener("keydown",event=>{
+      if(event.key!=="Escape"||!details.open)return;
+      event.preventDefault();details.open=false;
+      details.querySelector("summary")?.focus();
+    });
+  }
+  for(const type of ["click","focusin"])document.addEventListener(type,event=>{
+    for(const details of popovers)if(details.open&&!details.contains(event.target))details.open=false;
+  });
   const choice=document.getElementById("theme-select");
   let theme="system";try{theme=localStorage.getItem("lexi-theme")||theme;}catch{}
   if(choice){choice.value=theme;choice.addEventListener("change",()=>applyTheme(choice.value));}
