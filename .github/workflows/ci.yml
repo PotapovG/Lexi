@@ -90,7 +90,8 @@ jobs:
           docker build --build-arg WITH_AI_AUDIO=1 -t lexi-audio-test .
           docker run --rm --read-only --tmpfs /tmp -v "$PWD/tests/test_ai_transport.py:/tmp/test_ai_transport.py:ro" -e PYTHONPATH=/app lexi-audio-test python3 /tmp/test_ai_transport.py
   browser:
-    runs-on: ubuntu-latest
+    # Match the Noble browser runtime validated in the isolated harness.
+    runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4

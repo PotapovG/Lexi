@@ -55,11 +55,14 @@ class LearningAudit(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory()
         self.old_db=server.DB
+        self.old_secret=server.auth.SECRET_FILE
         server.DB=str(Path(self.temp.name)/"learning.sqlite3")
+        server.auth.SECRET_FILE=Path(self.temp.name)/"synthetic-pepper"
         server.init_db()
 
     def tearDown(self):
         server.DB=self.old_db
+        server.auth.SECRET_FILE=self.old_secret
         self.temp.cleanup()
 
     def get(self,uid="learner",lang="ru"):
