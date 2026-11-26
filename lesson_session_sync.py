@@ -9,6 +9,7 @@ import json
 import re
 import time
 from uuid import UUID
+import learning_receipts as receipts
 MAX_BYTES=245760
 
 def valid_uuid(text):
@@ -16,6 +17,7 @@ def valid_uuid(text):
     except (TypeError,ValueError,AttributeError):return False
 
 def schema(db):
+    receipts.schema(db)
     db.execute("""CREATE TABLE IF NOT EXISTS active_lesson_sessions (
       user_id TEXT PRIMARY KEY,
       session_id TEXT NOT NULL,
@@ -73,7 +75,7 @@ def read(db,uid):
             'ownerDevice':row['owner_device'],'revision':row['revision'],
             'snapshot':payload,'updatedAt':row['updated_at']}
 
-def action(db,uid,body):
+def _apply(db,uid,body):
     op=body.get('op')
     session=body.get('sessionId')
     device=body.get('deviceId')
@@ -85,7 +87,7 @@ def action(db,uid,body):
     if op!='start' and (type(revision)!=int or revision<1):
         raise ValueError('invalid session revision')
     raw=validate_snapshot(body.get('snapshot')) if op in ('start','save') else None
-    db.execute('BEGIN IMMEDIATE')
+    if not db.in_transaction:db.execute('BEGIN IMMEDIATE')
     row=row_for(db,uid)
     if op=='start':
         if row and json.loads(row['payload']).get('deadline',0)>time.time()*1000:
@@ -102,7 +104,10 @@ def action(db,uid,body):
           revision=excluded.revision,payload=excluded.payload,updated_at=excluded.updated_at""",
           (uid,session,device,1,raw,now_iso()))
         return {'saved':True,'revision':1,'sessionId':session}
-    if not row or row['session_id']!=session:
+    if not row:
+        if op=='clear':return {'cleared':True}
+        raise ValueError('session_conflict')
+    if row['session_id']!=session:
         raise ValueError('session_conflict')
     # Clearing your own completed session must still work when an in-flight
     # autosave incremented its revision. Another device cannot erase it.
@@ -110,7 +115,17 @@ def action(db,uid,body):
         if row['owner_device']!=device:raise ValueError('session_conflict')
         db.execute("DELETE FROM active_lesson_sessions WHERE user_id=?",(uid,))
         return {'cleared':True}
-    if row['revision']!=revision:raise ValueError('session_conflict')
+    if row['revision']!=revision:
+        if row['owner_device']!=device:raise ValueError('session_conflict')
+        if op=='takeover':
+            return {'takenOver':True,'revision':row['revision'],'sessionId':session,
+                    'ownerDevice':device,'snapshot':json.loads(row['payload'])}
+        # A response may have disappeared after our own commit. Identical
+        # snapshots are already saved. Different stale snapshots are never
+        # applied: return the authoritative state for explicit reconciliation.
+        return {'saved':row['payload']==raw,'reconciled':True,
+                'revision':row['revision'],'sessionId':session,
+                'ownerDevice':device,'snapshot':json.loads(row['payload'])}
     if op=='takeover':
         if json.loads(row['payload']).get('deadline',0)<=time.time()*1000:
             raise ValueError('session_conflict')
@@ -123,6 +138,20 @@ def action(db,uid,body):
         return {'takenOver':True,'revision':revision,'sessionId':session,
                 'snapshot':json.loads(row['payload'])}
     if row['owner_device']!=device:raise ValueError('session_conflict')
+    previous=json.loads(row['payload'])
+    incoming=body.get('snapshot',{})
+    old_count=previous.get('count',0)
+    new_count=incoming.get('count',0)
+    # Snapshot counters are UI state, never authoritative grades; they are
+    # still monotonic within one session and protect against delayed tabs.
+    if (isinstance(old_count,(int,float)) and isinstance(new_count,(int,float))
+            and (new_count<old_count or
+                 new_count==old_count and
+                 isinstance(previous.get('savedAt'),(int,float)) and
+                 isinstance(incoming.get('savedAt'),(int,float)) and
+                 incoming['savedAt']<previous['savedAt'])):
+        return {'saved':False,'reconciled':True,'revision':row['revision'],
+                'sessionId':session,'ownerDevice':device,'snapshot':previous}
     db.execute("""UPDATE active_lesson_sessions SET payload=?,revision=revision+1,
                   updated_at=? WHERE user_id=?""",(raw,now_iso(),uid))
     return {'saved':True,'revision':revision+1,'sessionId':session}
@@ -139,3 +168,29 @@ def assert_owner(db,uid,body):
     # once a row exists, a different device or lesson cannot keep scoring.
     if row and (row['session_id']!=session or row['owner_device']!=device):
         raise ValueError('session_conflict')
+
+
+def action(db,uid,body):
+    if not db.in_transaction:
+        db.execute("BEGIN IMMEDIATE")
+    row=row_for(db,uid)
+    op=body.get("op")
+    device=body.get("deviceId")
+    session=body.get("sessionId")
+    # A committed receipt is not permission to reclaim a session after a
+    # takeover. Verify current ownership before replaying save/start/clear.
+    live=row and json.loads(row["payload"]).get("deadline",0)>time.time()*1000
+    if row and (op in ("save","clear") or op=="start" and live):
+        if row["owner_device"]!=device or (op!="start" and row["session_id"]!=session):
+            raise ValueError("session_conflict")
+    result=receipts.commit(db,uid,"classic-session",body,
+                          lambda token:(_apply(db,uid,body),None))
+    current=row_for(db,uid)
+    if result.get("replayed") and current:
+        if current["session_id"]!=session or current["owner_device"]!=device:
+            raise ValueError("session_conflict")
+        result["revision"]=max(result.get("revision",0),current["revision"])
+        result["ownerDevice"]=device
+        if "snapshot" in result:
+            result["snapshot"]=json.loads(current["payload"])
+    return result

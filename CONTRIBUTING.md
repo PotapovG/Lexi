@@ -10,8 +10,12 @@ Thanks for helping improve accessible Greek practice.
 4. Add Greek accents carefully (tonos, final nu, enclitic stress), preserve
    the six supported locales (ru, en, zh, ar, es, pt), and give accepted
    spelling variants fair treatment.
-5. No microphone or speech-recognition feature. Keep sound Pocket TTS
-   pre-rendered only, with no device TTS fallback or paid API dependency.
+5. Ordinary lessons and playback remain independent of paid services.
+   Pocket TTS playback stays pre-rendered, without device TTS fallback.
+   The owner-approved optional AI scope (#54–65, 2026-11-26) permits microphone
+   capture, transcription and lesson feedback behind default-off feature,
+   budget and quality gates; see [AI operations](docs/AI.md). It adds no
+   standalone learner mode and cannot change first-attempt grades or SRS.
 6. Do not upload a purchased textbook, copied publisher exercises, user
    database, student names, access codes, generated model weights or huge WAV
    files. See CONTENT_RIGHTS.md.

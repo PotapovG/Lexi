@@ -9,6 +9,10 @@ import datetime as dt
 import hashlib
 import random
 import time
+import copy
+import uuid
+import mixed_review_selection
+from learning_locales import text as _text, scene_text, TEXT
 
 import greek_life
 import life_answer_check
@@ -18,16 +22,8 @@ FAMILIES=("book","lexicon","verb","grammar","listening","dialogue","clock","life
 PER_CHAPTER=8
 MAX_CHAPTER=20
 TARGETS=(14,14,12,12,12,12,12,10)
-TITLE={
-    "ru":{"book":"Учебник и фразы","lexicon":"Слова главы",
-          "verb":"Глаголы в действии","grammar":"Грамматика",
-          "listening":"Слушаем греческий","dialogue":"Разговоры",
-          "clock":"Часы и расписание","life":"Реальная жизнь"},
-    "en":{"book":"Textbook and phrases","lexicon":"Chapter vocabulary",
-          "verb":"Verbs in action","grammar":"Grammar",
-          "listening":"Greek listening","dialogue":"Conversations",
-          "clock":"Time and schedules","life":"Everyday life"}
-}
+TITLE={lang:{family:labels[family] for family in FAMILIES}
+       for lang,labels in TEXT.items()}
 DEFAULT={"schema":2,"chapterLimit":6,"position":0,"lessons":[],"backlog":{},
          "skips":0,"hasStarted":False,"active":None,"legacyBoard":None,"roundSeen":[]}
 
@@ -43,14 +39,18 @@ def _elapsed(start,end):
     except (TypeError,ValueError):return 0
 
 def _load(db,uid):
-    s,revision=tracks._load(db,uid,"board","shared",lambda:dict(DEFAULT))
+    s,revision=tracks._load(db,uid,"board","shared",lambda:copy.deepcopy(DEFAULT))
     if s.get("schema")==2:
         s.setdefault("roundSeen",[])
         # An unanswered pre-fix lesson is safe to rebuild. Retain sessions
         # with recorded answers to avoid rewriting an in-progress score.
         active=s.get("active")
-        if active and active.get("at",0)==0 and active.get("generatorVersion",0)<3:
+        if active and active.get("at",0)==0 and active.get("generatorVersion",0)<4:
             s["active"]=None
+            return s,revision,True
+        if active and not active.get("runId"):
+            active["runId"]=uuid.uuid5(uuid.NAMESPACE_URL,
+                f"lexi:board:{uid}:{active['index']}:{active.get('startedAt','')}").hex
             return s,revision,True
         return s,revision,False
     # v1's one-question board moves are not the equivalent of full lessons.
@@ -58,7 +58,7 @@ def _load(db,uid):
     old=dict(s)
     chapter=min(int(old.get("chapterLimit",6)),MAX_CHAPTER,
                 max(1,int(old.get("position",0))//PER_CHAPTER+1))
-    fresh=dict(DEFAULT)
+    fresh=copy.deepcopy(DEFAULT)
     fresh.update(chapterLimit=int(old.get("chapterLimit",6)),
                  position=(chapter-1)*PER_CHAPTER,skips=(chapter-1)*PER_CHAPTER,
                  legacyBoard=old,hasStarted=False)
@@ -76,25 +76,26 @@ def _pick(pool,rng,seen):
     if not options:return None
     return options[rng.randrange(len(options))]
 
+def _goal_key(family,chapter):
+    # Early fallback slots practise existing words/phrases; they must not
+    # promise untaught conjugation or clock reading.
+    if (family=="verb" and chapter<2) or (family=="clock" and chapter<6):
+        return "goal_book"
+    return "goal_"+family
+
 def _meta(s,pos,lang):
     chapter=pos//PER_CHAPTER+1
     family=FAMILIES[pos%PER_CHAPTER]
-    name=TITLE.get(lang,TITLE["en"])[family]
-    # Printed chapter 5 is a review of chapters 1–4, not new chapter-5
-    # vocabulary. Preserve the board slot identities, but label it honestly.
-    if chapter==5 and family=="book":
-        name="Повторение глав 1–4" if lang=="ru" else "Review chapters 1–4"
-    if chapter==5 and family=="lexicon":
-        name="Повторение слов" if lang=="ru" else "Vocabulary review"
-    if family=="clock" and chapter<6:
-        name="Практика фраз" if lang=="ru" else "Phrase practice"
-    if family=="grammar" and chapter<4:
-        name="Повторение языка" if lang=="ru" else "Language review"
-    if family=="verb" and chapter<2:
-        name="Повторение слов" if lang=="ru" else "Word review"
-    return dict(index=pos,chapter=chapter,family=family,
-                name=name,
+    key=family
+    if chapter==5 and family=="book":key="review_chapters"
+    if chapter==5 and family=="lexicon":key="review_words"
+    if family=="clock" and chapter<6:key="phrase_practice"
+    if family=="grammar" and chapter<4:key="language_review"
+    if family=="verb" and chapter<2:key="word_review"
+    return dict(index=pos,chapter=chapter,family=family,nameKey=key,
+                name=_text(lang,key),goal=_text(lang,_goal_key(family,chapter)),
                 target=TARGETS[pos%PER_CHAPTER])
+
 
 def _book_base(chapter,cards,ready):
     """Textbook-path candidates, not the unrelated A1/A2 vocabulary atlas.
@@ -125,8 +126,8 @@ def _candidates(family,chapter,cards,ready,listening_on):
                 and c.get("introducedUnit",99)<=chapter
                 and c.get("level")=="A1" and ready(c)<=chapter]
     if family=="grammar":
-        if chapter<4:return base
-        return [c for c in cards if c["kind"] in ("grammar","article")
+        return [c for c in cards if c["kind"] in
+                ("grammar","article","accent","syllable","enclitic","order")
                 and 1<=c.get("chapter",0)<=chapter and ready(c)<=chapter]
     if family=="listening":
         if not listening_on:
@@ -197,7 +198,10 @@ def _direction(card,rng):
     if kind=="verb":return "conjugate"
     if kind=="grammar":return "grammar_fill"
     if kind=="article":return "fill"
-    if kind=="listening":return "listen"
+    if kind=="accent":return "accent"
+    if kind=="syllable":return "stress_syllable"
+    if kind=="enclitic":return "stress_enclitic"
+    if kind=="order":return "arrange"
     return rng.choice(("gr-ru","ru-gr"))
 
 def _lexicon(vocab,uid,pos,slot,lang,audio,seen,allowed_words,fixed_id=None,focus=None):
@@ -232,18 +236,26 @@ def _life_scene(uid,pos,slot,chapter,lang,seen):
     rng=_rng(uid,pos,slot,"life")
     scene=_pick(current or choices,rng,seen)
     return dict(type="life",id=scene["id"],kind="life",chapter=scene["chapter"],
-                family="life",prompt=scene["prompt"] if lang=="ru" else scene["promptEN"],
-                promptLang="ru" if lang=="ru" else "en",lang=lang)
+                family="life",prompt=scene_text(scene,"prompt",lang),
+                promptLang=lang,lang=lang,typedAnswer=True)
 
-def _as_question(card,uid,pos,slot,lang,fmt,audio,chapter=None,cards=None):
-    direction=_direction(card,_rng(uid,pos,slot,"direction"))
+def _as_question(card,uid,pos,slot,lang,fmt,audio,chapter=None,cards=None,direction=None):
+    direction=direction or _direction(card,_rng(uid,pos,slot,"direction"))
     q=fmt(card,direction,lang)
     if chapter is not None and cards is not None:
         q=_scoped_quiz_options(q,card,chapter,cards,uid,pos,slot)
     if card["kind"]=="word" and direction=="gr-ru":
         q["wordAudio"]=audio(card["gr"])
+    if card["kind"]=="dialogue":
+        # The classic formatter has all gaps for local sequencing. Guided
+        # lessons sequence on the server, so no future answer key is public.
+        q.pop("dialogueGaps",None)
+        q.update(activeGap=int(direction[3:]),gapCount=len(card["gaps"]),
+                 gapIndices=[int(direction[3:])],filledGaps={},
+                 note=_text(lang,"dialogue_instruction"))
     q["type"]="quiz"
     return q
+
 
 def _review_candidates(s,chapter,cards,vocab,lang,fmt,audio):
     by_id={c["id"]:c for c in cards}
@@ -255,7 +267,7 @@ def _review_candidates(s,chapter,cards,vocab,lang,fmt,audio):
             choices.append((info["id"],info))
         elif info["kind"]=="life" and info["id"] in greek_life.BY_ID and greek_life.BY_ID[info["id"]]["chapter"]<=chapter:
             choices.append((info["id"],info))
-        elif info["id"] in by_id and by_id[info["id"]]["kind"] not in ("order","accent","syllable","enclitic"):
+        elif info["id"] in by_id:
             choices.append((info["id"],info))
     choices.sort(key=lambda x:(-x[1]["errors"],x[1]["lastWrong"],x[0]))
     return choices
@@ -266,92 +278,128 @@ def _build_lesson(s,uid,lang,cards,vocab,fmt,ready,listening_on,audio):
     chapter=meta["chapter"];family=meta["family"];target=meta["target"]
     base=_book_base(chapter,cards,ready)
     pool=_candidates(family,chapter,cards,ready,listening_on)
-    name=meta["name"]
-    # Family-specific content must NEVER be padded by random, unrelated A1
-    # words. A no-content family becomes an honestly named textbook drill.
-    if not pool and family not in ("life",):
-        pool=[c for c in base if c["kind"] in ("phrase","sentence")]
-        if not pool:pool=base
-        name=("Практика главы" if lang=="ru" else "Chapter practice")
-        family="book"
+    name_key=meta["nameKey"]
+    if not pool and family!="life":
+        pool=[c for c in base if c["kind"] in ("phrase","sentence")] or base
+        name_key="chapter_practice";family="book"
     elif family=="listening" and not listening_on:
-        name=("Практика фраз" if lang=="ru" else "Phrase practice")
-        family="book"
-    # Book vocabulary is a chapter-by-chapter subset of the independently
-    # authored catalog, NEVER every CEFR-A1 word in the separate atlas.
+        name_key="phrase_practice";family="book"
     allowed_words={c["gr"] for c in base if c["kind"]=="word"}
     scoped_vocab=[w for w in vocab if w.get("gr") in allowed_words]
-    used=set();items=[]
-    # Lesson's named skill is taught first; no review is allowed to displace it.
-    if family=="life":
-        for slot in range(min(target,len(greek_life.SCENES))):
-            q=_life_scene(uid,pos,slot,chapter,lang,used)
-            if not q:break
-            q["review"]=False;items.append(q);used.add(q["id"])
-    else:
-        ordered=[c for c in pool if c.get("chapter")==chapter]+[
-            c for c in pool if c.get("chapter")!=chapter]
-        for slot in range(target):
-            remaining=[c for c in ordered if c["id"] not in used]
-            if not remaining:break
-            # Prioritize introducing this chapter before revisiting prior units.
-            local=[c for c in remaining if c.get("chapter")==chapter]
-            choice_pool=local or remaining
-            rng=_rng(uid,pos,slot,family)
-            card=_pick(choice_pool,rng,used)
+    by_id={c["id"]:c for c in cards}
+    eligible_ids={c["id"] for c in pool}
+    by_vocab={w["id"]:w for w in scoped_vocab}
+
+    def question(card,slot,direction=None):
+        return _as_question(card,uid,pos,slot,lang,fmt,audio,chapter,
+            cards if card["kind"]=="listening" else base,direction)
+
+    # Reserve due responses before normal material is chosen. Only the same
+    # named skill and verified chapter scope can take up to 20% of the lesson.
+    reviews=[]
+    for rid,info in _review_candidates(s,chapter,cards,scoped_vocab,lang,fmt,audio):
+        if info.get("family")!=family:continue
+        try:
+            if info["kind"]=="lexicon":
+                if rid not in by_vocab:continue
+                q=_lexicon(scoped_vocab,uid,pos,len(reviews),lang,audio,set(),
+                           allowed_words,fixed_id=rid)
+                candidates=[q] if q else []
+            elif info["kind"]=="life":
+                scene=greek_life.BY_ID.get(rid)
+                if not scene or scene["chapter"]>chapter:continue
+                candidates=[dict(type="life",id=rid,kind="life",chapter=scene["chapter"],
+                    family=family,prompt=scene_text(scene,"prompt",lang),
+                    promptLang=lang,lang=lang,typedAnswer=True)]
+            else:
+                card=by_id.get(rid)
+                if not card or rid not in eligible_ids or ready(card)>chapter:continue
+                if card["kind"]=="listening" and not listening_on:continue
+                if card["kind"]=="dialogue":
+                    # Historical guided dialogues only assessed gap0. New
+                    # errors preserve their exact slot without renaming IDs.
+                    directions=info.get("dueDirections") or ["gap0"]
+                    candidates=[question(card,len(reviews),direction)
+                                for direction in directions
+                                if direction in {f"gap{i}" for i in range(len(card["gaps"]))}]
+                else:
+                    candidates=[question(card,len(reviews))]
+            for q in candidates:
+                q.update(family=family,review=True)
+                if q["kind"]=="dialogue":q["dialogueGroup"]=f"{pos}:review:{rid}"
+                reviews.append(q)
+                if len(reviews)==2:break
+        except (ValueError,KeyError,IndexError):continue
+        if len(reviews)==2:break
+
+    def normal_questions(limit,reserved):
+        used=set(reserved);items=[]
+        if family=="life":
+            for slot in range(limit):
+                q=_life_scene(uid,pos,slot,chapter,lang,used)
+                if not q:break
+                q.update(review=False,cardIndex=len(items))
+                items.append(q);used.add(q["id"])
+            return items
+        available=[c for c in pool if c["id"] not in used]
+        # Reuse the existing complete-block selector. A filtered/partial
+        # scenario never reappears in the ordinary random pool.
+        linked,ordinary=mixed_review_selection.select_block(
+            [(c,None,100 if c.get("chapter")==chapter else c.get("chapter",0))
+             for c in available],limit,_rng(uid,pos,0,"scenario"))
+        if linked:
+            block=[]
+            try:
+                for card,_,_ in linked:
+                    q=question(card,len(block))
+                    q.update(family=family,review=False,cardIndex=len(block))
+                    block.append(q)
+            except (ValueError,KeyError,IndexError):block=[]
+            if len(block)==5:
+                items.extend(block);used.update(q["id"] for q in block)
+        available=[c for c,_,_ in ordinary if c["id"] not in used]
+        card_index=len(items)
+        while available and len(items)<limit:
+            local=[c for c in available if c.get("chapter")==chapter]
+            card=_pick(local or available,_rng(uid,pos,len(used),family),used)
             if not card:break
+            used.add(card["id"])
+            available=[c for c in available if c["id"] not in used]
             try:
                 if family=="lexicon":
-                    q=_lexicon(scoped_vocab,uid,pos,slot,lang,audio,used,allowed_words,focus=card["gr"])
-                    if q is None:
-                        q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,base)
-                else:
-                    q=_as_question(card,uid,pos,slot,lang,fmt,audio,chapter,
-                                   cards if card["kind"]=="listening" else base)
-            except (ValueError,KeyError):
-                # Try another eligible card instead of introducing a future one.
-                used.add(card["id"])
-                continue
-            q["family"]=family
-            q["review"]=False;items.append(q)
-            used.add(q["id"])
-            if family=="lexicon":used.add(card["id"])
-    if not items:
-        raise ValueError("not_enough_lesson_material")
-    # A review item never accounts for more than 20% of a completed lesson.
-    # Legacy backlog is retained, but exercises with unverified syllabus
-    # eligibility (including old unrestricted atlas words) are not resurfaced.
-    by_id={c["id"]:c for c in cards}
-    by_vocab={w["id"]:w for w in scoped_vocab}
-    max_review=min(2,len(items)//4,target-len(items))
-    for rid,info in _review_candidates(s,chapter,cards,scoped_vocab,lang,fmt,audio):
-        if max_review<=0:break
-        if info.get("family")!=family:continue
-        if info["kind"]=="lexicon":
-            word=by_vocab.get(rid)
-            if not word:continue
-            q=_lexicon(scoped_vocab,uid,pos,len(items),lang,audio,used,allowed_words,fixed_id=rid)
-        elif info["kind"]=="life":
-            scene=greek_life.BY_ID.get(rid)
-            if not scene or scene["chapter"]>chapter:continue
-            q=dict(type="life",id=rid,kind="life",chapter=scene["chapter"],
-                   family=family,prompt=scene["prompt"] if lang=="ru" else scene["promptEN"],
-                   promptLang="ru" if lang=="ru" else "en",lang=lang)
-        else:
-            card=by_id.get(rid)
-            if (not card or card.get("chapter",99)>chapter or
-                    ready(card)>chapter):continue
-            if card["kind"] in ("word","number","phrase","sentence") and card not in base:
-                continue
-            try:
-                q=_as_question(card,uid,pos,len(items),lang,fmt,audio,chapter,
-                               cards if card["kind"]=="listening" else base)
-            except (ValueError,KeyError):continue
-        if not q or q["id"] in used:continue
-        q["family"]=family;q["review"]=True
-        items.append(q);used.add(q["id"]);max_review-=1
+                    q=_lexicon(scoped_vocab,uid,pos,len(items),lang,audio,used,
+                               allowed_words,focus=card["gr"])
+                    block=[q or question(card,len(items))]
+                elif card["kind"]=="dialogue":
+                    block=[question(card,len(items)+i,f"gap{i}")
+                           for i in range(len(card["gaps"]))]
+                    for q in block:q["dialogueGroup"]=f"{pos}:{card_index}:{card['id']}"
+                else:block=[question(card,len(items))]
+            except (ValueError,KeyError,IndexError):continue
+            if not block or len(items)+len(block)>limit:continue
+            for q in block:
+                q.update(family=family,review=False,cardIndex=card_index)
+                items.append(q);used.add(q["id"])
+            card_index+=1
+        return items
+
+    review_count=min(2,len(reviews),target//5)
+    while True:
+        selected=reviews[:review_count]
+        items=normal_questions(target-review_count,{q["id"] for q in selected})
+        if review_count==0 or len(items)>=4*review_count:break
+        review_count-=1
+    if not items:raise ValueError("not_enough_lesson_material")
+    next_card=max((q.get("cardIndex",i) for i,q in enumerate(items)),default=-1)+1
+    groups={}
+    for q in selected:
+        group=q.get("dialogueGroup") or (q["id"],q.get("direction"))
+        if group not in groups:groups[group]=next_card;next_card+=1
+        q["cardIndex"]=groups[group];items.append(q)
     stamp=_stamp()
-    return dict(index=pos,chapter=chapter,family=family,name=name,generatorVersion=3,
+    return dict(index=pos,chapter=chapter,family=family,nameKey=name_key,
+                name=_text(lang,name_key),goal=_text(lang,_goal_key(family,chapter)),
+                generatorVersion=4,runId=uuid.uuid4().hex,lang=lang,
                 items=items,at=0,startedAt=stamp,lastAt=stamp,activeSeconds=0,
                 attempts=0,errors=0,correct=0,skips=0,paused=False)
 
@@ -380,9 +428,30 @@ def _summary(s,lang):
     spent=sum(x["activeSeconds"] for x in results)
     elapsed=_elapsed(results[0]["startedAt"],results[-1]["finishedAt"]) if results else 0
     return {"chapter":shown,"finished":finished,"lessonsCompleted":len(results),
+            "scope":"completed_lessons_in_chapter","includesActiveLesson":False,
              "activeSeconds":spent,"elapsedSeconds":elapsed,"attempts":attempts,"errors":errors,
             "accuracy":round(100*(attempts-errors)/attempts) if attempts else None,
             "lessons":results}
+
+def _public_question(active):
+    if active["at"]>=len(active["items"]):return None
+    q=copy.deepcopy(active["items"][active["at"]])
+    q.pop("revealedAnswer",None)
+    q.pop("dialogueGaps",None)
+    if q["kind"]=="dialogue":
+        q.setdefault("activeGap",int(q.get("direction","gap0")[3:]))
+        q.setdefault("gapCount",len(active["items"][active["at"]].get("dialogueGaps",[])) or 1)
+        group=q.get("dialogueGroup")
+        filled={}
+        if group:
+            for prior in active["items"][:active["at"]]:
+                if prior.get("dialogueGroup")==group and "revealedAnswer" in prior:
+                    filled[str(prior["activeGap"])]=prior["revealedAnswer"]
+        q["filledGaps"]=filled
+        q["gapIndices"]=[q["activeGap"]]
+        if not q.get("allowRepeatChoices"):
+            q["choices"]=[value for value in q.get("choices",[]) if value not in filled.values()]
+    return q
 
 def _view(s,rev,lang):
     cap=_cap(s)
@@ -403,30 +472,41 @@ def _view(s,rev,lang):
         family=FAMILIES[i%PER_CHAPTER]
         node={"index":i,"number":i%PER_CHAPTER+1,"state":status}
         if status in ("completed","current"):
-            if status=="completed" and i in done:node["name"]=done[i]["name"]
+            if status=="completed" and i in done:node["name"]=_text(lang,done[i]["nameKey"]) if done[i].get("nameKey") else done[i]["name"]
             else:node["name"]=_meta(s,i,lang)["name"]
             node["family"]=family
+            if status=="current":node["goal"]=_text(lang,_goal_key(family,chapter))
         if status=="completed":
             info=done[i]
             node["stats"]={k:info[k] for k in ("attempts","errors","activeSeconds","correct")}
         nodes.append(node)
     active=s.get("active")
-    task=(active["items"][active["at"]] if active and active["at"]<len(active["items"]) else None)
+    task=_public_question(active) if active else None
+    card_count=(len({q.get("cardIndex",i) for i,q in enumerate(active["items"])})
+                if active else 0)
+    card_at=(task.get("cardIndex",active["at"]) if task else card_count)
     return {"schema":2,"revision":rev,"position":s["position"],"chapterLimit":cap,
             "round":shown_ch,"finished":finished,"nodes":nodes,
             "hasStarted":s["hasStarted"],"canJump":s["position"]==0 and not s["lessons"] and not s.get("active"),
         "roundReady":waiting_round,
-            "lesson":({"index":active["index"],"name":active["name"],"family":active["family"],
+            "lesson":({"index":active["index"],"runId":active.get("runId"),
+                       "name":_text(lang,active["nameKey"]) if active.get("nameKey") else active["name"],
+                       "family":active["family"],"goal":_text(lang,_goal_key(active["family"],active["chapter"])),
+                       "lang":active.get("lang",task.get("lang") if task else lang),
+                       "cardAt":card_at,"cardCount":card_count,"progressUnit":"responses",
                        "chapter":active["chapter"],"at":active["at"],"count":len(active["items"]),
                        "activeSeconds":active["activeSeconds"],"attempts":active["attempts"],
                        "errors":active["errors"],"correct":active["correct"],
                        "paused":active["paused"],"question":task}
                       if active and not finished else None),
             "roundStats":_summary(s,lang),"backlog":_backlog_view(s),
-            "totals":{"lessons":len(s["lessons"]),
-                      "activeSeconds":sum(x["activeSeconds"] for x in s["lessons"]),
-                      "answers":sum(x["attempts"] for x in s["lessons"]),
-                      "errors":sum(x["errors"] for x in s["lessons"])}}
+            "lastCompletedLesson":copy.deepcopy(s["lessons"][-1]) if s["lessons"] else None,
+            "progressScope":"guided_lessons","timeEstimate":True,
+            "totals":{"scope":"guided_lessons","includesActiveLesson":bool(active),
+                      "answerUnit":"graded_responses","lessons":len(s["lessons"]),
+                      "activeSeconds":sum(x["activeSeconds"] for x in s["lessons"])+(active["activeSeconds"] if active else 0),
+                      "answers":sum(x["attempts"] for x in s["lessons"])+(active["attempts"] if active else 0),
+                      "errors":sum(x["errors"] for x in s["lessons"])+(active["errors"] if active else 0)}}
 
 def _retitle_current(view,lang,materials):
     """Preview the *actual* lesson family instead of a misleading locked title.
@@ -440,17 +520,18 @@ def _retitle_current(view,lang,materials):
         meta=_meta(None,node["index"],lang)
         family=meta["family"]
         if not _candidates(family,meta["chapter"],cards,ready,listening_on) and family!="life":
-            node["name"]="Практика главы" if lang=="ru" else "Chapter practice"
+            node["name"]=_text(lang,"chapter_practice")
             node["family"]="book"
         elif family=="listening" and not listening_on:
-            node["name"]="Практика фраз" if lang=="ru" else "Phrase practice"
+            node["name"]=_text(lang,"phrase_practice")
             node["family"]="book"
+        node["goal"]=_text(lang,_goal_key(node["family"],meta["chapter"]))
     return view
 
 
 def board_get(db,uid,lang,*_ignored):
     if lang not in tracks.LANGUAGES:raise ValueError("invalid_language")
-    db.execute("BEGIN IMMEDIATE")
+    if not db.in_transaction:db.execute("BEGIN IMMEDIATE")
     s,rev,migrate=_load(db,uid)
     if migrate:
         tracks._save(db,uid,"board","shared",s,rev);rev+=1
@@ -463,11 +544,19 @@ def _record_error(s,q,chapter):
         "chapter":chapter,"family":q.get("family",q["kind"]),"prompt":q["prompt"],
         "errors":0,"due":True,"lastWrong":_stamp()})
     row["errors"]+=1;row["due"]=True;row["lastWrong"]=_stamp()
+    if q["kind"]=="dialogue":
+        due=row.setdefault("dueDirections",[])
+        if q["direction"] not in due:due.append(q["direction"])
     return key
 
 def _review_success(s,q):
     key=q["kind"]+":"+q["id"]
-    if q.get("review") and key in s["backlog"]:s["backlog"][key]["due"]=False
+    if q.get("review") and key in s["backlog"]:
+        row=s["backlog"][key]
+        if q["kind"]=="dialogue" and row.get("dueDirections"):
+            row["dueDirections"]=[d for d in row["dueDirections"] if d!=q["direction"]]
+            row["due"]=bool(row["dueDirections"])
+        else:row["due"]=False
 
 def _update_time(active):
     now=_stamp()
@@ -479,7 +568,7 @@ def _update_time(active):
 
 def board_action(db,uid,lang,body,scorer,materials=None):
     if lang not in tracks.LANGUAGES:raise ValueError("invalid_language")
-    db.execute("BEGIN IMMEDIATE")
+    if not db.in_transaction:db.execute("BEGIN IMMEDIATE")
     s,rev,migrate=_load(db,uid)
     if body.get("revision")!=rev:raise ValueError("stale_track")
     action=body.get("action")
@@ -542,8 +631,11 @@ def board_action(db,uid,lang,body,scorer,materials=None):
                 scene=greek_life.BY_ID[q["id"]]
                 result=life_answer_check.evaluate(selected,scene["accepted"],q["lang"])
                 feedback={"correct":result["correct"],"unverified":result["unverified"],
-                          "answer":result["closest"],"explanation":result["explanation"],
-                          "translation":scene["translation"] if q["lang"]=="ru" else scene["translationEN"]}
+                          "answer":result["closest"],"closestAnswer":result["closest"],
+                          "explanation":result["explanation"],"orthographyNote":result["orthographyNote"],
+                          "alternatives":list(life_answer_check.reviewed_answers(scene["accepted"])),
+                          "translation":scene_text(scene,"translation",q["lang"]),
+                          "translationLang":q["lang"]}
                 s["canSkip"]=bool(result["unverified"])
             elif q["type"]=="lexicon":
                 if selected not in q["choices"]:raise ValueError("invalid_choice")
@@ -552,17 +644,23 @@ def board_action(db,uid,lang,body,scorer,materials=None):
                 correct=tracks._normalized(selected)==tracks._normalized(original[q["lang"]])
                 feedback={"correct":correct,"answer":original[q["lang"]],
                           "explanation":None if correct else
-                          ("Запомни перевод; слово появится снова в повторении." if q["lang"]=="ru" else
-                           "Review this meaning; the word will return.")}
+                          _text(q["lang"],"lexicon_review")}
                 s["canSkip"]=False
             else:
                 # Grammar-fill cards may use an authored free-text answer,
                 # with no multiple-choice options at all.
-                if not q.get("typedAnswer") and selected not in q.get("choices",[]):
+                if (not q.get("typedAnswer") and q["kind"] not in ("order","accent")
+                        and selected not in _public_question(active).get("choices",[])):
                     raise ValueError("invalid_choice")
                 feedback=scorer(uid,{"id":q["id"],"direction":q["direction"],"lang":q["lang"],
                               "selected":selected},injected_db=db)
                 s["canSkip"]=False
+            if q["kind"]=="dialogue":
+                q["revealedAnswer"]=feedback.get("answer",selected)
+                if q.get("activeGap",0)<q.get("gapCount",1)-1:
+                    for key in ("dialogueFullTemplate","dialogueFullGlosses","dialogueFullLang"):
+                        feedback.pop(key,None)
+                feedback.update(activeGap=q.get("activeGap",0),gapCount=q.get("gapCount",1))
             # One submission = one finalized question. The learner sees the
             # correction, then moves on with Next; repeating the just-shown
             # correct option is not evidence of learning. Incorrect items
@@ -583,10 +681,14 @@ def board_action(db,uid,lang,body,scorer,materials=None):
             s["canSkip"]=False
         if active["at"]>=len(active["items"]):
             complete=dict(index=active["index"],chapter=active["chapter"],family=active["family"],
-                          name=active["name"],attempts=active["attempts"],errors=active["errors"],
+                          name=active["name"],nameKey=active.get("nameKey"),
+                          runId=active.get("runId"),lang=active.get("lang",lang),
+                          attempts=active["attempts"],errors=active["errors"],
                           correct=active["correct"],skips=active["skips"],
                           activeSeconds=active["activeSeconds"],startedAt=active["startedAt"],
-                          finishedAt=_stamp(),total=len(active["items"]))
+                          finishedAt=_stamp(),total=len(active["items"]),
+                          cardCount=len({q.get("cardIndex",i) for i,q in enumerate(active["items"])}),
+                          progressUnit="responses")
             s["lessons"].append(complete)
             s["position"]+=1
             s["active"]=None;s["canSkip"]=False
