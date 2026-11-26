@@ -113,14 +113,21 @@ and scorers and covered:
 - typed Greek draft preservation across English/Arabic switches;
 - all dialogue gaps and the visible active gap;
 - Life answer recovery and honest deferral;
-- immutable vocabulary retry and hidden Classic keyboard isolation;
-- temporary profile 503 recovery;
+- immutable vocabulary retry and hidden Classic keyboard isolation on Board,
+  Life, Vocabulary, Culture and Statistics, both before and after an answer;
+- Classic autosave after a real commit and lost response, immutable retry bodies,
+  newer draft preservation, unchanged deadlines and real second-device takeover;
+- slow profile startup, unavailable API, profile 503 and an expired account cookie
+  followed by login and restoration of the existing session;
+- cross-tab account changes with held old profile/answer responses, immediate
+  invalidation and rejection of stale-owner writes;
 - real authored order/stress cards and agenda `g2261021_281`;
 - 320/360/1280px layouts, both themes, six locales and RTL/LTR.
 
-The AI interface has a separate fake-provider browser suite. Server tests cover
-owner isolation, atomic reservations/receipts, immutable evidence, cancellation,
-deletion and late results. Actual WebM/Ogg/M4A decoding is checked with synthetic
+The AI interface has a separate fake-provider browser suite, including true
+phrase-only reading retries, refresh without another upload and preservation
+of the original full-reading result. Server tests cover owner isolation, atomic
+reservations/receipts, immutable evidence, cancellation, deletion and late results. Actual WebM/Ogg/M4A decoding is checked with synthetic
 tone audio. See [AI operations and pilot gates](AI.md).
 
 CI runs the browser suite on pull requests and pushes and uploads synthetic

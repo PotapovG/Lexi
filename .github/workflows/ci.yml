@@ -126,6 +126,7 @@ jobs:
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           python3 -c 'import urllib.request,time; exec("for _ in range(100):\n try:\n  urllib.request.urlopen(\"http://localhost:18560/health\",timeout=1); break\n except OSError: time.sleep(.1)\nelse: raise SystemExit(\"isolated server did not start\")")'
           node tests/test_learning_ui.cjs
+          node tests/test_learning_edges.cjs
           node tests/test_ai_ui.cjs
       - uses: actions/upload-artifact@v4
         if: always()

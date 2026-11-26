@@ -550,7 +550,9 @@
   }
   function queueRemoteSnapshot(snapshot){
     if(!state.remoteEnabled||!state.remoteSessionId||state.remoteLost)return;
-    pendingRemoteSnapshot=snapshot;
+    // Draft arrays remain editable while a save is in flight. Capture their
+    // values now so retries keep the exact payload under the original UUID.
+    pendingRemoteSnapshot=JSON.parse(JSON.stringify(snapshot));
     if(remoteTimer)clearTimeout(remoteTimer);
     remoteTimer=setTimeout(flushRemoteSnapshot,200);
   }
