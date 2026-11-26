@@ -1339,7 +1339,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith('/pronunciation/'):
             return self.send_pronunciation(path[len('/pronunciation/'):],head=True)
         files = {"/":"index.html","/index.html":"index.html",
-                 "/app.js":"app.js","/ui.js":"ui.js","/ai_ui.js":"ai_ui.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css","/ai_ui.css":"ai_ui.css"}
+                 "/app.js":"app.js","/ui.js":"ui.js","/ai_ui.js":"ai_ui.js","/culture_ui.js":"culture_ui.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css","/ai_ui.css":"ai_ui.css"}
         filename = files.get(path)
         if filename:
             file = ROOT / filename
@@ -1664,7 +1664,7 @@ class Handler(BaseHTTPRequestHandler):
                  listeningByChapter={str(n):sum(x["chapter"]==n for x in LISTEN_CARDS) for n in range(1,21)},
                  printedUnits=20,reviewUnits=[5,10,15,20],pdfOffset=2,
                  pagePrecision="approximate",source="Verified printed unit start/end and pedagogy from uploaded Patakis PDF; independently authored practice questions, approximate within-unit page anchors"),new,uid)
-        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/ui.js":"ui.js","/ai_ui.js":"ai_ui.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css","/ai_ui.css":"ai_ui.css"}
+        files={"/":"index.html","/index.html":"index.html","/app.js":"app.js","/ui.js":"ui.js","/ai_ui.js":"ai_ui.js","/culture_ui.js":"culture_ui.js","/vocab.js":"vocab.js","/tracks.js":"tracks.js","/board.js":"board.js","/life.js":"life.js","/life_art.js":"life_art.js","/greek_word_audio.js":"greek_word_audio.js","/styles.css":"styles.css","/ai_ui.css":"ai_ui.css"}
         file=files.get(path)
         if file:
             b=(ROOT/file).read_bytes()
