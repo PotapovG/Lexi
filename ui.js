@@ -990,12 +990,19 @@
       if(details.open)for(const other of popovers)if(other!==details)other.open=false;
     });
     details.addEventListener("keydown",event=>{
-      if(event.key!=="Escape"||!details.open)return;
-      event.preventDefault();details.open=false;
-      details.querySelector("summary")?.focus();
+      if(!details.open)return;
+      if(event.key==="Escape"){
+        event.preventDefault();details.open=false;
+        details.querySelector("summary")?.focus();
+      }else if(event.key==="Tab"){
+        // Dismiss on user navigation, not delayed content moving focus while a menu is opening.
+        requestAnimationFrame(()=>{
+          if(details.open&&!details.contains(document.activeElement))details.open=false;
+        });
+      }
     });
   }
-  for(const type of ["click","focusin"])document.addEventListener(type,event=>{
+  document.addEventListener("click",event=>{
     for(const details of popovers)if(details.open&&!details.contains(event.target))details.open=false;
   });
   const choice=document.getElementById("theme-select");

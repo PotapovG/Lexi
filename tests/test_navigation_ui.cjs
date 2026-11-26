@@ -165,17 +165,35 @@ function measureNavigation(){
       check(await page.locator("#vocab-topic").evaluate(el=>el===document.activeElement),
         "Outside click retains destination focus");
       await page.keyboard.press("Escape"); // Dismiss a native select popup if the browser opened it.
-      await openMore();await page.locator("#vocab-topic").focus();
-      check(!await isOpen(more),"Moving keyboard focus outside closes More");
-      check(await page.locator("#vocab-topic").evaluate(el=>el===document.activeElement),
-        "Focus-out dismissal does not steal focus");
+      // A deliberate Tab departure dismisses the menu without redirecting the user's focus.
+      await openMore();await more.locator(".tab:visible").last().focus();
+      await page.keyboard.press("Tab");
+      await page.waitForFunction(()=>!document.querySelector("#additional-modes").open);
+      check(!await more.evaluate(el=>el.contains(document.activeElement)),
+        "Tab departure keeps focus outside More");
 
       await openMore();await account.locator(":scope > summary").click();
-      await page.waitForFunction(()=>document.querySelector("#account-menu").open);
+      await page.waitForFunction(()=>document.querySelector("#account-menu").open&&!document.querySelector("#additional-modes").open);
       check(!await isOpen(more),"Opening Account closes More");
-      // The account popover can cover the navigation visually; use normal keyboard focus.
+
+      // Delayed content rendering can focus a background heading; that is not a user dismissal.
+      await page.locator("#vocab-title").evaluate(el=>{el.tabIndex=-1;el.focus();});
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      check(await page.locator("#vocab-title").evaluate(el=>el===document.activeElement),
+        "Regression probe really moved focus to the background heading");
+      check(await isOpen(account),"Background content focus does not close Account");
+      check(await page.locator("#account-logout").isVisible(),"Logout remains visible after background focus");
+      await page.locator("#account-logout").click({trial:true}); // Check actionability without logging out.
+      await account.locator(":scope > summary").focus();await page.keyboard.press("Escape");
+      await page.waitForFunction(()=>!document.querySelector("#account-menu").open);
+      check(await account.locator(":scope > summary").evaluate(el=>el===document.activeElement),
+        "Account Escape returns focus to its summary");
+
+      await account.locator(":scope > summary").click();
+      await page.waitForFunction(()=>document.querySelector("#account-menu").open);
+      // The account popover can cover navigation; ordinary focus + Enter opens More explicitly.
       await summary.focus();await page.keyboard.press("Enter");
-      await page.waitForFunction(()=>document.querySelector("#additional-modes").open);
+      await page.waitForFunction(()=>document.querySelector("#additional-modes").open&&!document.querySelector("#account-menu").open);
       check(!await isOpen(account),"Opening More closes Account");
 
       await more.locator('.tab[data-page="stats"]').click();
