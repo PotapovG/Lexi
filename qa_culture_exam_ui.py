@@ -19,7 +19,8 @@ assert html.count('id="quiz"')==1, "must reuse existing Lexi quiz card"
 assert html.count('id="answers"')==1, "must reuse existing answer choices"
 assert html.count('id="finished"')==1, "must reuse existing finish panel"
 assert 'id="culture-exam" disabled' in html, "initially fail closed until review gate"
-assert 'culture_ui.js?v=2' in html
+culture_asset_version=re.search(r"culture_ui\.js\?v=(\d+)",html)
+assert culture_asset_version and int(culture_asset_version.group(1))>=2, "Culture UI must keep a current cache revision"
 asset_version=re.search(r"app\.js\?v=(\d+)",html)
 assert asset_version and int(asset_version.group(1))>=48, "exam-capable app asset must invalidate older caches"
 

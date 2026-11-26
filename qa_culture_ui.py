@@ -4,6 +4,7 @@ This is a static integration guard; browser accessibility and mobile QA still
 need real-device checks. It does not approve unpublished Culture questions.
 """
 from pathlib import Path
+import re
 
 root=Path(__file__).parent
 html=(root/"index.html").read_text(encoding="utf-8")
@@ -14,7 +15,8 @@ adapter=(root/"culture_adapter.py").read_text(encoding="utf-8")
 
 assert html.count('data-page="culture"')==1, "one navigation entry, not parallel learner modes"
 assert html.count('id="culture-view"')==1
-assert 'culture_ui.js?v=2' in html
+culture_asset_version=re.search(r"culture_ui\.js\?v=(\d+)",html)
+assert culture_asset_version and int(culture_asset_version.group(1))>=2, "Culture UI must keep a current cache revision"
 for element in ("culture-start","culture-review","culture-exam","culture-status",
                 "culture-topics","culture-duration","culture-lang","culture-srs"):
     assert html.count('id="'+element+'"')==1, element
