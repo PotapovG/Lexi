@@ -12,6 +12,7 @@ assert all(any(x["chapter"]==n for x in life.SCENES) for n in (1,2,3,4,6,7,8,9,1
 
 with tempfile.TemporaryDirectory() as directory:
     server.DB=str(Path(directory)/"progress.sqlite3")
+    server.auth.SECRET_FILE=Path(directory)/"synthetic-pepper"
     server.init_db()
 
     def overview(uid="alice",lang="ru"):

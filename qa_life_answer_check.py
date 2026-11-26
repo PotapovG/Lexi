@@ -68,6 +68,7 @@ for scene in life.SCENES:
 
 with tempfile.TemporaryDirectory() as td:
     server.DB=str(Path(td)/"test.sqlite3")
+    server.auth.SECRET_FILE=Path(td)/"synthetic-pepper"
     server.init_db()
     def answer(txt,uid="user"):
         with server.conn() as db:

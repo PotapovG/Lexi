@@ -12,6 +12,7 @@ assert board.MAX_CHAPTER==20
 
 with tempfile.TemporaryDirectory() as td:
     server.DB=str(Path(td)/"test.sqlite3")
+    server.auth.SECRET_FILE=Path(td)/"synthetic-pepper"
     server.init_db()
     args=(server.PRACTICE_ALL+server.LISTEN_CARDS,server.vocab.VOCAB,
           server.format_question,server._grammar_guard.milestone,
